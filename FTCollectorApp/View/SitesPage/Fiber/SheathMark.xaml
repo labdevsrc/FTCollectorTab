@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.SitesPage.Fiber.SheathMark">
+    <ContentPage.Content>
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <ScrollView>
+                    <StackLayout Padding="20" VerticalOptions="CenterAndExpand">
+                        <Label Text="sheath Mark"  HorizontalOptions="Center" FontSize="Large" />
+
+                        <Label Text="Created Sheath Mark's"  />
+                        <local:Dropdown x:Name="pSheathMark" Title="Select"/>
+
+                        <Label Text="Type" />
+                        <local:Dropdown x:Name="pSheathType" Title="Select">
+                            <Picker.Items>
+                                <x:String>Site</x:String>
+                                <x:String>Equipment</x:String>
+                            </Picker.Items>
+                        </local:Dropdown>
+
+
+                        <Label Text="Which Duct? *" />
+                        <local:Dropdown x:Name="pWDuct" ItemsSource="{Binding DuctConduitDatas}" ItemDisplayBinding="{Binding WhichDucts}"  SelectedIndexChanged="OnIndexChanged"  />
+                        <Label Text="Usage" Grid.Column="1" Grid.Row="5" />
+                        <local:BorderColorEntry Grid.Column="1" Grid.Row="6" x:Name="txtUsage" IsEnabled="False"/>
+
+                        <Label Text="Color" />
+                        <local:BorderEntry x:Name="txtColor" IsEnabled="False"/>
+                        <Label Text="Size" />
+                        <local:BorderColorEntry  x:Name="txtSize" IsEnabled="False"/>
+
+                        <Label Text="What Cable ? *"/>
+                        <local:Dropdown2 Grid.Column="0" Grid.Row="10" x:Name="pCableId" 
+                                 ItemsSource="{Binding aFiberCableList}" ItemDisplayBinding="{Binding CableIdDesc}"
+                                 SelectedIndexChanged="OnIndexChanged"
+                                 />
+                        
+                        <Label Text="Rack"  />
+                        <Label Text="Chassis"  />
+
+                        <local:Dropdown x:Name="pRack" />
+                        <local:Dropdown x:Name="pChassis" />
+                        <Label Text="Unit Measure" />
+                        <local:Dropdown2 Grid.Column="1" Grid.Row="2" x:Name="pUOM" 
+                                 ItemsSource="{Binding UnitOfMeasures}" ItemDisplayBinding="{Binding UOMUnit}"
+                                 />
+
+                        <Button Text="Save and Continue" x:Name="btnSaveStart" Command="{Binding ClosePageCommand}"/>
+
+                        <Button Text="Finished Sheath Mark" x:Name="btnFinishMark" Command="{Binding ClosePageCommand}"/>
+                        <Button Text="Update" x:Name="btnUpdate" Clicked="btnUpdate_Clicked"/>
+
+                    </StackLayout>
+
+                </ScrollView>
+
+            </StackLayout>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

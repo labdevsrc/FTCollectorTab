@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage Title="{Binding CrewName}" xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             x:Class="FTCollectorApp.View.OdometerPopup">
+    <ContentPage.Content>
+        <StackLayout 
+        Margin="12"
+        Padding="24"
+        BackgroundColor="White"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"     
+            >
+            <Label Text="Odometer:"/>
+            <Entry x:Name="entryOdometer" Keyboard="Numeric" />
+            <Grid ColumnDefinitions="100, 100, 100">
+                <Button x:Name="btnSave" Grid.Column="1" Text="Save" Clicked="btnSave_Clicked">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button"
+                    Binding="{Binding Source={x:Reference entryOdometer},
+                                    Path=Text.Length}"
+                    Value="0">
+                            <Setter Property="IsEnabled" Value="False" />
+                            <Setter Property="BackgroundColor" Value="Gray"/>
+
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+                <Button x:Name="btnClose" Grid.Column="2" Text="Close">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button"
+                        Binding="{Binding Source={x:Reference entryOdometer},
+                                        Path=Text.Length}"
+                        Value="0">
+                            <Setter Property="IsEnabled" Value="False" />
+                            <Setter Property="BackgroundColor" Value="Gray"/>
+
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</pages:PopupPage>

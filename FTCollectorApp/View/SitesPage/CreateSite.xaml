@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage Title="Site" xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:FTCollectorApp.Utils;assembly=FTCollectorApp"
+             xmlns:fa="clr-namespace:FontAwesome"
+             x:Class="FTCollectorApp.View.SitesPage.CreateSite">
+    <!--<ContentPage.ToolbarItems>
+        <ToolbarItem  Command="{Binding DisplayGPSOption}" Text="GPS"
+
+                      Order="Primary"
+                 Priority="0">
+
+        </ToolbarItem>
+        <ToolbarItem Command="{Binding UserActivityCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="{StaticResource FontAwesomeSolid}"
+                    Glyph="{x:Static fa:FontAwesomeIcons.User}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>-->
+    <ContentPage.Content>
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <ScrollView>
+                    <StackLayout Padding="20" VerticalOptions="CenterAndExpand">
+                        <!--<StackLayout Padding="20" VerticalOptions="CenterAndExpand">-->
+                        <Label Text="Site" FontSize="Large" HorizontalOptions="Center"/>
+                        <Label Text="Major Site Type*" HorizontalOptions="Start"/>
+                        <Picker SelectedItem="{Binding SelectedMajorType, Mode=TwoWay}"
+                         ItemsSource="{Binding MajorSiteList}"  />
+                        <Label Text="Minor Site Type*" HorizontalOptions="Start"/>
+                        <Picker SelectedItem="{Binding SelectedMinorType, Mode=TwoWay}"
+                         ItemsSource="{Binding MinorSiteList}" />
+                        <Label Text="Enter PC tag" HorizontalOptions="Start"/>
+                        <local:BorderEntry Placeholder="tag number" Text="{Binding TagNumber, Mode=TwoWay}"  />
+                        <Label Text="Re-Enter PC tag" HorizontalOptions="Start"/>
+                        <local:BorderEntry Placeholder="tag number" Text="{Binding ReEnterTagNumber, Mode=TwoWay}"  />
+                        <Label Text="{Binding ReEnterStatus}" HorizontalOptions="Start"/>
+                        <Label Text="Stage" HorizontalOptions="Start"  />
+                        <local:BorderColorEntry IsReadOnly="True" Text="{Binding Stage}"/>
+                        <Label Text="Accuracy" HorizontalOptions="Start" />
+                        <local:BorderColorEntry IsReadOnly="True" Text="{Binding Accuracy}"/>
+                        <Label Text="Station Number" />
+                        <local:BorderColorEntry IsReadOnly="True"/>
+                        <Label Text="Plan Sheet" />
+                        <local:BorderColorEntry IsReadOnly="True"/>
+                        <Label Text="Plan Sheet Item" />
+                        <local:BorderColorEntry  IsReadOnly="True"/>
+                        <Button  Command="{Binding RecordGPSCommand}" IsEnabled="{Binding IsTagNumberMatch}" 
+                                 Text="Record GPS"  >
+                            <!--<Button.Triggers>
+                                <DataTrigger TargetType="Button"
+                     Binding="{Binding Source={x:Reference entryTagNum2},
+                                       Path=Text.Length}"
+                     Value="0">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="BackgroundColor" Value="Gray"/>
+                                </DataTrigger>
+                            </Button.Triggers>-->
+
+                        </Button>
+
+                        <Button Command="{Binding OpenGPSOffsetPopupCommand}" IsEnabled="{Binding IsTagNumberMatch}" 
+                            Text="User GPS Offset"  >
+                            <!--<Button.Triggers>
+                                <DataTrigger TargetType="Button"
+                     Binding="{Binding Source={x:Reference entryTagNum2},
+                                       Path=Text.Length}"
+                     Value="0">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="BackgroundColor" Value="Gray"/>
+                                </DataTrigger>
+                            </Button.Triggers>-->
+
+                        </Button>
+                    </StackLayout>
+
+                </ScrollView>
+
+            </StackLayout>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

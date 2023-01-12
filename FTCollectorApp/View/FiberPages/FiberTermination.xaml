@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.FiberPages.FiberTermination">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Fiber Termination" FontSize="Large"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            <Label Text="Created Termination's" />
+            <local:Dropdown Title="Select" />
+            <Grid RowDefinitions="0.5*,0.5*,0.5*,0.5*,0.5*,0.5*,0.5*,0.5*,0.5*"
+                  ColumnDefinitions="*,*" >
+                <Label Text="From Duct*"/>
+                <Label Text="To Rack Number*" Grid.Column="1"/>
+                <local:Dropdown Title="Select" ItemsSource="{Binding DuctLists}"
+                                ItemDisplayBinding="{Binding WhichDucts}" 
+                                SelectedItem="{Binding SelectedDuct, Mode=TwoWay}"
+                                Grid.Row="1"
+                                />
+
+                <local:Dropdown Title="Select" ItemsSource="{Binding RackNumbers}"
+                                SelectedItem="{Binding SelectedRackNumber, Mode=TwoWay}"
+                                Grid.Row="1" Grid.Column="1">
+                    <Picker.Items>
+                        <x:String>1</x:String>
+                        <x:String>2</x:String>
+                        <x:String>3</x:String>
+                        <x:String>4</x:String>
+                        <x:String>5</x:String>
+                        <x:String>6</x:String>
+                        <x:String>7</x:String>
+                        <x:String>8</x:String>
+                        <x:String>9</x:String>
+                        <x:String>10</x:String>
+                    </Picker.Items>
+                </local:Dropdown>
+                                
+
+                <Label Text="From Cable*" Grid.Row="2" />
+                <Label Text="To Enclosure*" Grid.Row="2" Grid.Column="1"/>
+                <local:Dropdown Title="Select" ItemsSource="{Binding aFiberCableList}"
+                                ItemDisplayBinding="{Binding CableIdDesc}"
+                                SelectedItem="{Binding SelectedCable, Mode=TwoWay}"
+                                Grid.Row="3" 
+                                />
+                <local:Dropdown Title="Select" ItemsSource="{Binding EnclosureList}"
+                                SelectedItem="{Binding SelectedEnclosure, Mode=TwoWay}"
+                                Grid.Row="3" Grid.Column="1"
+                                />
+
+                <Label Text="From Buffer*" Grid.Row="4" />
+                <Label Text="To Slot/Tray*" Grid.Row="4" Grid.Column="1"/>
+                <Button Command="{Binding ShowPopupCommand}" BackgroundColor="{Binding SelectedColor.ColorHex}"
+                            Text="{Binding SelectedColor.ColorName}" TextColor="Black" Grid.Row="5"/>
+                
+                <local:Dropdown Title="Select" ItemsSource="{Binding SlotTrayList}"
+                                SelectedItem="{Binding SelectedSlotTray, Mode=TwoWay}"
+                                Grid.Row="5" Grid.Column="1">
+                    <Picker.Items>
+                        <x:String>1</x:String>
+                        <x:String>2</x:String>
+                        <x:String>3</x:String>
+                        <x:String>4</x:String>
+                        <x:String>5</x:String>
+                        <x:String>6</x:String>
+                        <x:String>7</x:String>
+                        <x:String>8</x:String>
+                        <x:String>9</x:String>
+                        <x:String>10</x:String>
+                    </Picker.Items>
+                </local:Dropdown>
+                                
+
+                <Label Text="Sheath*" Grid.Row="6" />
+                <Label Text="UOM*" Grid.Row="6" Grid.Column="1"/>
+                <local:Dropdown Title="Select" SelectedItem="{Binding SelectedCable, Mode=TwoWay}"
+                                Grid.Row="7" >
+                    <Picker.Items>
+                        <x:String>1</x:String>
+                        <x:String>2</x:String>
+                        <x:String>3</x:String>
+                        <x:String>4</x:String>
+                        <x:String>5</x:String>
+                        <x:String>6</x:String>
+                        <x:String>7</x:String>
+                        <x:String>8</x:String>
+                        <x:String>9</x:String>
+                        <x:String>10</x:String>
+                    </Picker.Items>
+                </local:Dropdown>
+
+                <local:Dropdown Title="Select" ItemsSource="{Binding UOMList}"
+                                SelectedItem="{Binding SelectedUOM, Mode=TwoWay}"
+                                Grid.Row="7" Grid.Column="1"
+                                />
+                <Button Text="Terminate Entire Buffer" Grid.ColumnSpan="2" Grid.Row="8" />
+                
+                <Label Text="From Fiber*" Grid.Row="9" />
+                <Label Text="To Port*" Grid.Row="9" Grid.Column="1"/>
+                <Button Command="{Binding ShowPopupCommand}" BackgroundColor="{Binding SelectedColor.ColorHex}"
+                            Text="{Binding SelectedColor.ColorName}" TextColor="Black" Grid.Row="10"/>           
+                <local:Dropdown Title="Select" SelectedItem="{Binding SelectedPort, Mode=TwoWay}"
+                                Grid.Row="10" Grid.Column="1">
+                    <Picker.Items>
+                        <x:String>1</x:String>
+                        <x:String>2</x:String>
+                        <x:String>3</x:String>
+                        <x:String>4</x:String>
+                        <x:String>5</x:String>
+                        <x:String>6</x:String>
+                        <x:String>7</x:String>
+                        <x:String>8</x:String>
+                        <x:String>9</x:String>
+                        <x:String>10</x:String>
+                    </Picker.Items>
+                </local:Dropdown>
+
+            </Grid>
+            <Button Text="Terminate This Fiber" />
+            <Button Text="Done Terminating" />
+            <Button Text="Update" />            
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

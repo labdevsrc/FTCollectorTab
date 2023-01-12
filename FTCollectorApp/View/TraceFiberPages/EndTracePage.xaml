@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.TraceFiberPages.EndTracePage"
+             >
+    <ContentPage.Content>
+        <ScrollView>
+        <StackLayout Padding="10">
+            <Label Text="End Trace" FontSize="Large" HorizontalOptions="Center" Padding="10" />
+            <Grid RowDefinitions="0.1*,0.2*, 0.2*, 0.2*, 0.2*,0.1*" ColumnDefinitions="*,*, 0.4*">
+                <Label Text="From Site" />
+                    <Entry Grid.Row="1"  Grid.Column="0" Text="{Binding SearchFromSite, Mode=TwoWay}" />
+                <ListView Grid.Row="2" Grid.RowSpan="3" IsVisible="{Binding IsSearching1, Mode=TwoWay}"
+                    ItemsSource="{Binding SelectedCableList}" SelectedItem="{Binding SelectedBeginSite, Mode=TwoWay}" 
+                      
+                       BackgroundColor="LightGray">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextCell Text="{Binding from_site}"  />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+
+                <Label Grid.Row="0" Grid.Column="1" Text="End of Site" />
+                <Entry Grid.Row="1"  Grid.Column="1" Text="{Binding SearchTag, Mode=TwoWay}" />
+                <Button  Grid.Row="1" Grid.Column="2" Text="New" Command="{Binding CreateNewCommand}"/>
+                <ListView Grid.Row="2" Grid.Column="1"  Grid.RowSpan="3" IsVisible="{Binding IsSearching2, Mode=TwoWay}"
+                    ItemsSource="{Binding EndSiteListView}" SelectedItem="{Binding SelectedSiteIn, Mode=TwoWay}"                       
+                       BackgroundColor="LightGray">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextCell Text="{Binding HosTagNumber}"  />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>            
+            
+            
+            
+
+            <!--<Grid RowDefinitions="0.2*,0.5*, 0.2*, 0.2*, 0.2*,0.1*" ColumnDefinitions="*,*">
+                <Label Text="Type End of Site" />
+                <Entry Grid.Row="1" Text="{Binding SearchTag, Mode=TwoWay}" />
+                <Label Text="Click here > Complete" Grid.Column="1" />
+                <Button  Grid.Row="1" Grid.Column="1" Text="New Site" Command="{Binding CreateNewCommand}"/>
+
+                <ListView Grid.Row="2" Grid.RowSpan="3" IsVisible="{Binding IsSearching, Mode=TwoWay}"
+                    ItemsSource="{Binding SiteInListView}" SelectedItem="{Binding SelectedSiteIn, Mode=TwoWay}" 
+                      
+                       BackgroundColor="LightGray">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextCell Text="{Binding HosTagNumber}"  />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>-->
+
+            
+            <Grid RowDefinitions="0.2*,0.5*,0.2*,0.5*,0.2*,0.5*,0.2*,0.5*" ColumnDefinitions="*,*" IsVisible="{Binding IsEntriesDiplayed, Mode=TwoWay}">
+                    <Label Text="Site type" />
+                    <local:BorderColorEntry Grid.Row="1" x:Name="txtSiteType" 
+                                            Text="{Binding SelectedSiteIn.HostType}"  IsEnabled="False"/>
+
+                    <Label Text="Site name"  Grid.Row="2" Grid.ColumnSpan="2"/>
+                    <local:BorderColorEntry  Grid.Row="3" Grid.ColumnSpan="2" x:Name="txtSiteName" 
+                                Text="{Binding SelectedSiteIn.HostType}" IsEnabled="False"/>
+
+                    <Label Text="Which Duct? *" Grid.Row="4" />
+                    <Label Text="Usage" Grid.Column="1" Grid.Row="4" />
+                    <local:Dropdown Grid.Column="0" Grid.Row="5" x:Name="pWDuct" 
+                                 ItemsSource="{Binding DuctConduitDatas}" 
+                                 ItemDisplayBinding="{Binding WhichDucts}"
+                                 SelectedItem="{Binding SelectedDuct}"                            
+                                 />
+                    <local:BorderColorEntry Grid.Column="1" Grid.Row="5" Text="{Binding SelectedDuct.DuctUsage}" IsEnabled="False"/>
+
+                    <Label Text="Color" Grid.Column="0" Grid.Row="6" />
+                    <Label Text="Size" Grid.Column="1" Grid.Row="6" />
+                    <local:BorderEntry Grid.Column="0" Grid.Row="7" Text="{Binding SelectedDuct.ColorName}" 
+                                            BackgroundColor="{Binding SelectedDuct.ColorHex}" IsEnabled="False"/>
+                    <local:BorderColorEntry Grid.Column="1" Grid.Row="7" Text="{Binding SelectedDuct.DuctSize}" IsEnabled="False"/>
+
+
+
+            </Grid>
+            <ListView 
+                    ItemsSource="{Binding SelectedCableListView}" SelectedItem="{Binding SelectedFromSelCable, Mode=TwoWay}" 
+                      HasUnevenRows="True"
+                      BackgroundColor="Transparent">
+                <ListView.Header>
+                    <Grid ColumnDefinitions="0.1*,*,0.3*" Padding="10">
+                            <Label Grid.Column="0" Text="#" />
+                            <Label Grid.Column="1" Text="Cable" />
+                            <Label Grid.Column="2" Text="S-I" />
+                    </Grid>
+                </ListView.Header>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>                       
+                        <ViewCell>
+                            <Grid RowDefinitions="0.2*,0.2" ColumnDefinitions="0.1*,*,0.4*" Padding="10">
+                                <Label Grid.Column="0" IsEnabled="False" Text="{Binding AWSid2}" />
+                                <Label Grid.Column="1" IsEnabled="False" Text="{Binding cable_id}" />
+                                <local:BorderEntry Grid.Column="2" Text="{Binding SheathIn, Mode=TwoWay}" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+
+
+            <Button Text="Complete Fiber Trace section" Command="{Binding CompleteFiberCommand}" />
+            <Button Text="Suspend" Command="{Binding SuspendCommand}" />
+
+            <Button Text="Broken Trace Wire" Command="{Binding BrokenTraceWireCommand}" />
+            <Button Text="Delete This Trace" Command="{Binding DeleteTraceCommand}" />
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

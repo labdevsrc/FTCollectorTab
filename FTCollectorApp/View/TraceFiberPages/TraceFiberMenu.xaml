@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FTCollectorApp.View.TraceFiberPages.TraceFiberMenu">
+    <ContentPage.Content>
+      <StackLayout Padding="10">
+            <Label Padding="0,20,0,20" Text="Trace Fiber" FontSize="Large" />
+            <Button Padding="10" Text="Select a Duct to Trace" Clicked="btnSelectDuct"/>
+            <Button Padding="10" x:Name="btnStart" Text="Start a Trace" Clicked="btnStart_Clicked"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

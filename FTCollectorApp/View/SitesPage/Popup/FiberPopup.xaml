@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"                 
+             x:Class="FTCollectorApp.View.SitesPage.Popup.FiberPopup">
+    <ContentPage.Content>
+        <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1"
+                    WidthRequest="500"
+                    Padding="30"
+                    BackgroundColor="White"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+
+                <Label Padding="0,50,0, 100" Text="Fiber" HorizontalOptions="Center" FontSize="Large"/>
+                <Button Text="Cable" HorizontalOptions="Center" Command="{Binding FiberCableBtnCommand}" />
+                <Button Text="Sheath Mark" Command="{Binding SheathMarkBtnCommand}" />
+                <Button Text="Slack" Command="{Binding SlackBtnCommand}" />
+                <Button Text="Trace Fiber" Command="{Binding TraceFiberCommand}" />
+                <Button Text="Enclosure" Command="{Binding EnclosureCommand}"/>
+                <Button Text="Save" Command="{Binding SaveCommand}" />
+        </StackLayout>
+    </ContentPage.Content>
+</pages:PopupPage>

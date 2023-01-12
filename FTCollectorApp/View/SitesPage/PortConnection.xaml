@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.SitesPage.PortConnection">
+    <ContentPage.Content>
+        <StackLayout Padding="20">
+            <Label Text="Port Connection" FontSize="Large"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            <Label Text="Port Connections" />
+            <local:Dropdown  SelectedItem="{Binding SelectedPortConnection, Mode=TwoWay}" >
+                <Picker.Items>
+                    <x:String>1</x:String>
+                    <x:String>2</x:String>
+                    <x:String>3</x:String>
+                    <x:String>4</x:String>
+                    <x:String>5</x:String>
+                    <x:String>6</x:String>
+                    <x:String>7</x:String>
+                    <x:String>8</x:String>
+                    <x:String>9</x:String>
+                    <x:String>10</x:String>
+                </Picker.Items>
+            </local:Dropdown>
+            <Grid RowDefinitions="0.1*,0.2*,0.1*,0.3*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*" ColumnDefinitions="*,*">
+                <Label Text="From Rack" />
+                <local:Dropdown Grid.Row="1" ItemsSource="{Binding FromRackRailShelfs}"
+                                ItemDisplayBinding="{Binding Racknumber}"
+                                SelectedItem="{Binding SelectedFromRack, Mode=TwoWay}" />
+
+                <Label Text="To Rack" Grid.Column="1"/>
+                <local:Dropdown Grid.Column="1" Grid.Row="1"
+                    ItemsSource="{Binding ToRackRailShelfs}"
+                                ItemDisplayBinding="{Binding Racknumber}"
+                                SelectedItem="{Binding SelectedToRack, Mode=TwoWay}" />
+
+                <Label Text="From Chassis" Grid.Row="2"/>
+                <local:Dropdown Grid.Row="3" ItemsSource="{Binding FromChassisList}"
+                                ItemDisplayBinding="{Binding Model}"
+                                SelectedItem="{Binding SelectedFromChassis, Mode=TwoWay}" />
+
+                <Label Text="To Chassis" Grid.Row="2" Grid.Column="1"/>
+                <local:Dropdown Grid.Row="3" Grid.Column="1" 
+                    ItemsSource="{Binding ToChassisList}"
+                                ItemDisplayBinding="{Binding Model}"
+                                SelectedItem="{Binding SelectedToChassis, Mode=TwoWay}" />
+
+                <Label Text="From Blade" Grid.Row="4"/>
+                <local:Dropdown Grid.Row="5" ItemsSource="{Binding FromBladeList}"
+                                ItemDisplayBinding="{Binding slot_or_blade_number}"
+                                SelectedItem="{Binding SelectedFromBlade, Mode=TwoWay}" />
+
+                <Label Text="To Blade" Grid.Row="4" Grid.Column="1"/>
+                <local:Dropdown Grid.Row="5" Grid.Column="1" 
+                    ItemsSource="{Binding ToBladeList}"
+                                ItemDisplayBinding="{Binding slot_or_blade_number}"
+                                SelectedItem="{Binding SelectedToBlade, Mode=TwoWay}" />
+
+                <Label Text="From Port" Grid.Row="6"/>
+                <local:Dropdown Grid.Row="7" ItemsSource="{Binding FromPortKeyList}"
+                                ItemDisplayBinding="{Binding port_number}"
+                                SelectedItem="{Binding SelectedFromPort, Mode=TwoWay}" />
+
+                <Label Text="To Port" Grid.Row="6" Grid.Column="1"/>
+                <local:Dropdown Grid.Row="7" Grid.Column="1" 
+                    ItemsSource="{Binding ToPortKeyList}"
+                                ItemDisplayBinding="{Binding port_number}"
+                                SelectedItem="{Binding SelectedToPort, Mode=TwoWay}" />
+
+                <Label Text="Jumper Length" Grid.Row="8"/>
+                <local:Dropdown Grid.Row="9" SelectedItem="{Binding SelectedJumperLen, Mode=TwoWay}" >
+                    <Picker.Items>
+                        <x:String>1</x:String>
+                        <x:String>2</x:String>
+                        <x:String>3</x:String>
+                        <x:String>4</x:String>
+                        <x:String>5</x:String>
+                        <x:String>6</x:String>
+                        <x:String>7</x:String>
+                        <x:String>8</x:String>
+                        <x:String>9</x:String>
+                        <x:String>10</x:String>
+                    </Picker.Items>
+                </local:Dropdown>
+
+            </Grid>
+            <Button Text="Connect This Ports" Command="{Binding ConnectCommand}"/>
+            <Button Text="Print Label" Command="{Binding PrintLabelCommand}"/>
+            <Button Text="Done This Ports" Command="{Binding BackCommand}"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

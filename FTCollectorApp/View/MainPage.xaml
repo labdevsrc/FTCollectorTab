@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FTCollectorApp.View.MainPage"
+             xmlns:local="clr-namespace:FTCollectorApp.Utils;assembly=FTCollectorApp"
+             NavigationPage.HasNavigationBar="False" 
+             >
+
+    <StackLayout VerticalOptions="CenterAndExpand" Margin="20" Padding="5,20,5,20">
+        <Image Source="logo.png" HorizontalOptions="Center"/>
+        <local:BorderEntry x:Name="entryEmail" Placeholder="Username" 
+            Keyboard="Email" 
+            HorizontalOptions="FillAndExpand" 
+            TextChanged="entryEmail_TextChanged"/>
+        <local:BorderEntry x:Name="entryPassword" Placeholder="Password"  
+               IsPassword="true" HorizontalOptions="FillAndExpand" 
+               TextChanged="entryPassword_TextChanged"/>
+
+        <!--<Entry Placeholder="Username" Text="{Binding Email, Mode=TwoWay}" 
+        Keyboard="Email" HorizontalOptions="FillAndExpand" TextChanged="entryEmail_TextChanged"/>-->
+        <!--<Entry Placeholder="Password"  Text="{Binding Email, Mode=TwoWay}" IsPassword="true" 
+        HorizontalOptions="FillAndExpand" TextChanged="entryPassword_TextChanged"/>-->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <local:BorderColorEntry Margin="0,0,5,0" Grid.Column="0" Text="" x:Name="txtFirstName" IsEnabled="False"/>
+            <local:BorderColorEntry Margin="5,0,0,0" Grid.Column="1"  x:Name="txtLastName" IsEnabled="False" />
+        </Grid>
+        <Button x:Name="btnLogin" Text="Sign In"  HorizontalOptions="FillAndExpand" 
+            BackgroundColor="{StaticResource blueColor}" TextColor="White" Clicked="btnLogin_Clicked">
+            <Button.Triggers>
+                <DataTrigger TargetType="Button"
+                    Binding="{Binding Source={x:Reference txtFirstName},
+                                    Path=Text.Length}"
+                    Value="0">
+                    <Setter Property="IsEnabled" Value="False" />
+                    <Setter Property="BackgroundColor" Value="Gray" />
+                    <!-- multiple Setters elements are allowed -->
+                </DataTrigger>
+            </Button.Triggers>
+
+        </Button>
+    </StackLayout>
+
+</ContentPage>

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FTCollectorApp.View.StartTimePage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Button">
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="BackgroundColor" Value="Gray"/>
+                <Setter Property="CornerRadius" Value="15"/>
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout x:Name="stackLayout" Padding="20" >
+            <ListView ItemsSource="{Binding CrewRoles}" SelectedItem="{Binding SelectedCrewRole, Mode=TwoWay}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Padding="30">
+                                <Button BackgroundColor="Gray"  TextColor="White"
+                                       Text="{Binding CrewRoles.EmployeeName}"
+                                       Command="{Binding ShowStartTimePopUp}"
+                                       />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

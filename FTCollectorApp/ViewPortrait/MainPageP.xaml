@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FTCollectorApp.ViewPortrait.MainPageP"
+             xmlns:local="clr-namespace:FTCollectorApp.Utils;assembly=FTCollectorApp" 
+             xmlns:fa="clr-namespace:FontAwesome"
+             Shell.NavBarIsVisible="{Binding IsNavBarDisplayed}"
+             Shell.TabBarIsVisible="{Binding IsTabBarDisplayed}"
+             >
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command ="{Binding GPSSettingCommand}"
+                 Order="Primary"
+                 Priority="0" >
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FontAwesome6Solid" 
+                                 Color="Black"
+                                 Glyph="{x:Static fa:FontAwesomeIcons.LocationPin}"
+                                 >
+                </FontImageSource>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem Command ="{Binding SettingCommand}"
+                 Order="Primary"
+                 Priority="0" >
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FontAwesome6Solid" 
+                                 Color="Black"
+                                 Glyph="{x:Static fa:FontAwesomeIcons.Gear}"
+                                 >
+                </FontImageSource>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <StackLayout  VerticalOptions="FillAndExpand" Margin="10">
+            <StackLayout VerticalOptions="CenterAndExpand" Margin="10" >
+                <Image Source="logo.png" HorizontalOptions="Center" />
+                <StackLayout Padding="20" >
+                    <StackLayout IsVisible="{Binding IsBusy, Mode=TwoWay}" Padding="12"
+                         AbsoluteLayout.LayoutFlags="PositionProportional"
+                         AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+                        <ActivityIndicator IsRunning="{Binding IsBusy, Mode=TwoWay}"  Color="Orange" />
+                        <Label x:Name="txtLoading" Text="{Binding LoadingText}" HorizontalOptions="Center" TextColor="Black"/>
+                    </StackLayout>
+
+                    <StackLayout IsVisible="{Binding IsLoginVisible}" WidthRequest="400"  HorizontalOptions="CenterAndExpand" >
+                        <Entry Placeholder="Email or Username" Keyboard="Email" Text="{Binding EmailText, Mode=TwoWay}"
+                                FontSize="Large"/>
+                        <Entry Placeholder="Password" 
+                                    Text="{Binding PasswordText, Mode=TwoWay}"
+                                    IsPassword="true" FontSize="Large"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <local:BorderColorEntry Margin="0,0,5,0" Grid.Column="0" Text="{Binding FirstName, Mode=TwoWay}" IsEnabled="False"/>
+                            <local:BorderColorEntry Margin="5,0,0,0" Grid.Column="1" Text="{Binding LastName, Mode=TwoWay}" IsEnabled="False" />
+                        </Grid>
+                        <Button BackgroundColor="Blue" Text="LOGIN" Command="{Binding LoginCommand}"  
+                                HorizontalOptions="Center" />
+                    </StackLayout>
+                    <Button BackgroundColor="Green" Text="LOGOUT" Command="{Binding LogoutCommand}"  IsVisible="{Binding IsLogoutBtnVisible}"
+                                HorizontalOptions="Center" />
+
+                    <Button Text="DB Download"   Command="{Binding DownloadTablesCommand}" 
+                                IsVisible="{Binding IsDownloadBtnVisible, Mode=TwoWay}"  HorizontalOptions="Center" BackgroundColor="Green" />
+                    <Label VerticalOptions="End" HorizontalOptions="Center" Text="{Binding ApkVersion}"/>
+
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+
+    </ContentPage.Content>
+</ContentPage>    

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage Title="Begin Work"  xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:FTCollectorApp.View"
+            xmlns:fa="clr-namespace:FontAwesome"
+             x:Class="FTCollectorApp.View.BeginWorkPage" x:Name="TabItem">
+
+    <!--<ContentPage Title="BeginWork">-->
+        <ContentPage.Resources>
+            <ResourceDictionary>
+                <Style TargetType="Button">
+                    <Setter Property="TextColor" Value="White"/>
+                    <Setter Property="BackgroundColor" Value="Gray"/>
+                    <Setter Property="CornerRadius" Value="15"/>
+                </Style>
+
+            </ResourceDictionary>
+        </ContentPage.Resources>
+        <ContentPage.Content>
+        <StackLayout Padding="20" >
+            <Button x:Name="btnCrewList" Text="Crew List"/>
+            <Button x:Name="btnEqCheckOut" Text="Equipment CheckOut" />
+            <Button x:Name="btnEqCheckIn" Text="Equipment CheckIn" />
+            <Button x:Name="btnOdometer" Text="Odometer Input" />         
+            
+        </StackLayout>
+        </ContentPage.Content>
+        
+    </ContentPage>
+
+    <!--<local:MapPage Title="Find Me" x:Name="TabMap"/>
+    <ContentPage Title="LogOut">
+        <StackLayout Padding="20" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+            <Button x:Name="btnLogOut" Text="LOG OUT" Clicked="btnLogOut_Clicked"/>
+        </StackLayout>
+    </ContentPage>
+ </ContentPage>-->

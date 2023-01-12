@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             x:Class="FTCollectorApp.View.TraceFiberPages.FiberOpticCablePage">
+    <ContentPage.Content>
+        <ScrollView>
+        <StackLayout Padding="20">
+            <Label Text="Fiber Optic Cable" FontSize="Large" HorizontalOptions="Center" Padding="20" />
+            <Label Text="Enter cable Id" HorizontalOptions="Start" />
+                <Picker x:Name="pCableId" HorizontalOptions="FillAndExpand" 
+                                ItemsSource="{Binding aFiberCableList}"
+                                ItemDisplayBinding="{Binding CableIdDesc}"
+                                SelectedItem="{Binding SelectedFiberCable, Mode=TwoWay}"
+                                                            Title="Select  Fiber Cable"
+                            TitleColor="Gray" />
+                <local:BorderEntry Placeholder="Enter cable id" PlaceholderColor="Gray" x:Name="nwCableName" IsVisible="false" 
+                                   Text="{Binding NewCableName, Mode=TwoWay}">
+                    <Entry.Triggers>
+
+                        <DataTrigger TargetType="Entry"
+                    Binding="{Binding Source={x:Reference pCableId},
+                                    Path=SelectedIndex  }"
+                    Value="0">
+
+                            <Setter Property="IsVisible" Value="true"/>
+                        </DataTrigger>
+                    </Entry.Triggers>
+
+                </local:BorderEntry>
+
+             <Label Text="Cable Type" HorizontalOptions="Start" />
+             <!--<local:BorderColorEntry Text="{Binding SelectedFiberCable.CableIdDesc}" />-->
+                <local:Dropdown x:Name="pCableType" HorizontalOptions="FillAndExpand" Title="{Binding SelectedFiberCable.CableTypeDesc}"
+                        SelectedItem="{Binding SelectedCableType, Mode=TwoWay}"
+                        ItemsSource="{Binding CableTypeList}" 
+                        ItemDisplayBinding="{Binding CodeCableDesc}" IsEnabled="{Binding NewFiber}"/>
+                <Label Text="Manufacturer" HorizontalOptions="Start" />
+                <Picker x:Name="pManufacturer" HorizontalOptions="FillAndExpand" IsEnabled="{Binding NewFiber}"
+                    
+                            ItemsSource="{Binding ManufacturerList} " 
+                            SelectedItem="{Binding SelectedManufacturer, Mode=TwoWay}"
+                            ItemDisplayBinding="{Binding ManufName}"
+                            Title="{Binding SelectedFiberCable.Manufacturer}"
+                            TitleColor="Gray" />
+                <Label Text="Model" HorizontalOptions="Start" />
+                <Picker x:Name="pModel"  IsEnabled="{Binding NewFiber}"
+                           ItemsSource="{Binding ModelDetailList}" 
+                            SelectedItem="{Binding SelectedModelDetail, Mode=TwoWay}"
+                            ItemDisplayBinding="{Binding ModelNumber}"
+                            HorizontalOptions="FillAndExpand"
+                            Title="{Binding SelectedFiberCable.Model}"
+                            TitleColor="Gray" />                            
+            <Label Text="Enter Label" HorizontalOptions="Start" />
+            <local:BorderEntry x:Name="entryLabel" HorizontalOptions="FillAndExpand" Text="{Binding TextLabel, Mode=TwoWay}"
+                               Placeholder="{Binding SelectedFiberCable.label}" IsEnabled="{Binding NewFiber}"
+                               />
+            <Label Text="Enter single-mode strand count" HorizontalOptions="Start"/>
+                <local:Dropdown x:Name="pSingleModeCount" WidthRequest="100"
+                        SelectedItem="{Binding SMCount, Mode=TwoWay}"  Title="{Binding SelectedFiberCable.SMCount}" IsEnabled="{Binding NewFiber}" >
+                    
+                    <Picker.Items>
+                        <x:String>2</x:String>
+                        <x:String>6</x:String>
+                        <x:String>12</x:String>
+                        <x:String>24</x:String>
+                        <x:String>30</x:String>
+                        <x:String>36</x:String>
+                        <x:String>48</x:String>
+                        <x:String>144</x:String>
+                    </Picker.Items>
+                </local:Dropdown> 
+            <Label Text="Enter multi-mode strand count" HorizontalOptions="Start"/>
+                <local:Dropdown x:Name="pMultiModeCount"  WidthRequest="100"
+                        SelectedItem="{Binding MMCount, Mode=TwoWay}" Title="{Binding SelectedFiberCable.MMCount}" IsEnabled="{Binding NewFiber}">
+                    <Picker.Items>
+                        <x:String>4</x:String>
+                        <x:String>6</x:String>
+                        <x:String>8</x:String>
+                        <x:String>10</x:String>
+                        <x:String>12</x:String>
+                        <x:String>24</x:String>
+                        <x:String>30</x:String>
+                    </Picker.Items>
+
+                </local:Dropdown>
+            <Label Text="Enter buffer count" HorizontalOptions="Start"/>
+                <local:Dropdown x:Name="pBufferCount" WidthRequest="100"
+                        SelectedItem="{Binding SelectedBufferCnt, Mode=TwoWay}"   Title="{Binding SelectedFiberCable.buffer_count}" IsEnabled="{Binding NewFiber}" >
+                    <Picker.Items>
+                        <x:String>1</x:String>
+                        <x:String>2</x:String>
+                        <x:String>3</x:String>
+                        <x:String>4</x:String>
+                        <x:String>5</x:String>
+                        <x:String>6</x:String>
+                        <x:String>7</x:String>
+                        <x:String>8</x:String>
+                        <x:String>9</x:String>
+                        <x:String>10</x:String>
+                        <x:String>11</x:String>
+                        <x:String>12</x:String>
+                        <x:String>13</x:String>
+                        <x:String>14</x:String>
+                        <x:String>15</x:String>
+                    </Picker.Items>
+                </local:Dropdown>
+            <Label Text="Multi-Mode Diameter" HorizontalOptions="Start"/>
+                <local:Dropdown x:Name="pMultimodeDia" 
+                                ItemsSource="{Binding ClrCodeList}" ItemDisplayBinding="{Binding ClrName}"
+                                BackgroundColor="{Binding SelectedColor.ClrHex}"
+                                SelectedItem="{Binding SelectedColor, Mode=TwoWay, FallbackValue=''}"
+                                HorizontalOptions="FillAndExpand"
+                                Title="--Select  Color--"
+                                TitleColor="Gray"
+                                />
+
+                <Label Text="Sheath Type" HorizontalOptions="Start" />
+            <local:Dropdown x:Name="pSheathTpe" HorizontalOptions="FillAndExpand"
+                            ItemsSource="{Binding SheathList}" 
+                            Title="{Binding SelectedFiberCable.SheathType}"
+                            SelectedItem="{Binding SelectedSheath, Mode=TwoWay, FallbackValue=''}"
+                            ItemDisplayBinding="{Binding SheathType}"/>
+            <Label Text="Manufactured at" HorizontalOptions="Start" />
+            <DatePicker HorizontalOptions="FillAndExpand" 
+                        Date="{Binding SelectedManufacturedDate, Mode=TwoWay, Source={x:Static system:DateTime.Now},StringFormat=Date: {0:yyyy-MM-dd}}"                       
+                        />
+            <Label Text="Enter reel id" HorizontalOptions="Start" />
+            <local:Dropdown ItemsSource="{Binding ReelIdList}" 
+                            ItemDisplayBinding="{Binding ReelNumber}" 
+                            SelectedItem="{Binding SelectedReelId, Mode=TwoWay, FallbackValue=''}"
+                            HorizontalOptions="FillAndExpand"/>
+            <Label Text="Installed at" HorizontalOptions="Start" />
+            <DatePicker HorizontalOptions="FillAndExpand" 
+                        Date="{Binding SelectedInstalledAt, Mode=TwoWay , Source={x:Static system:DateTime.Now}, StringFormat=Date: {0:yyyy-MM-dd}}"
+                       />
+            <Label Text="Install Type" HorizontalOptions="Start" />
+            <local:Dropdown HorizontalOptions="FillAndExpand"
+                             ItemsSource="{Binding InstallTypeList}" 
+                            ItemDisplayBinding="{Binding FbrInstallDesc}" 
+                            SelectedItem="{Binding SelectedInstallType, Mode=TwoWay, FallbackValue=''}"                           
+                            
+                            />
+                <Button Text="Save and Continue" HorizontalOptions="FillAndExpand" Command="{Binding SaveCommand}"/>
+                <Button Text="Return to Main Menu" HorizontalOptions="FillAndExpand"  Command="{Binding ReturnToMainCommand}"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage Title="{Binding CrewName}" xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             x:Class="FTCollectorApp.View.StartTimePopupView">
+    <ContentPage.Content>
+        <StackLayout 
+        Margin="12"
+        Padding="24"
+        BackgroundColor="White"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"     
+            >
+            <Label Text="{Binding CrewName}" Padding="20" FontSize="Large"/>
+            <Label Text="Time:"/>
+            <Entry x:Name="entryStartTime" 
+                   Placeholder="StartTime" TextChanged="entryStartTime_TextChanged"/>
+            <Label Text="Per Diem:"/>
+            <Picker x:Name="pickPerDiem" FontSize="Medium" TextColor="Black" >
+                <Picker.Items>
+                    <x:String>No per diem</x:String>
+                    <x:String>Full day per diem</x:String>
+                    <x:String>Half day per diem</x:String>
+                </Picker.Items>
+            </Picker>
+            <Grid ColumnDefinitions="*,*,*">
+                <Button x:Name="btnSave" Grid.Column="1" Text="Save" Clicked="btnSave_Clicked"/>
+                <Button x:Name="btnClose" Grid.Column="2" Text="Close" />
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</pages:PopupPage>

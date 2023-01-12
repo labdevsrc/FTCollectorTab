@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.CablePages.PullCablePage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid RowDefinitions="2*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*" ColumnDefinitions="*,*,*">
+                <Label Text="Pull Cable" HorizontalOptions="Center" FontSize="Large"/>
+
+                <Label Text="Cable Type" Grid.Row="1"/>
+                <local:Dropdown x:Name="pCableType" Grid.Row="2" Grid.ColumnSpan="3" />
+                
+                <Label Text="Install Method" Grid.Row="3"/>
+                <local:Dropdown x:Name="pInstallMethod" Grid.Row="4" Grid.ColumnSpan="3" />
+
+                <Label Text="Site Out" Grid.Row="5"/>
+                <local:Dropdown x:Name="pSiteOut" Grid.Row="6" Grid.ColumnSpan="3" />
+
+                <Label Text="Duct Out" Grid.Row="7"/>
+                <local:Dropdown x:Name="pDuctOut" Grid.Row="8" Grid.ColumnSpan="3" />
+
+                <Label Text="Sheath Out" Grid.Row="9"/>
+                <local:Dropdown x:Name="pSheathOut" Grid.Row="10" Grid.ColumnSpan="3" />
+
+                <Label Text="Site In" Grid.Row="11"/>
+                <local:Dropdown x:Name="pSiteIn" Grid.Row="12" Grid.ColumnSpan="3" />
+
+                <Label Text="Duct In" Grid.Row="13"/>
+                <local:Dropdown x:Name="pDuctIn" Grid.Row="14" Grid.ColumnSpan="3" />
+
+                <Label Text="Sheath In" Grid.Row="15"/>
+                <local:Dropdown2 x:Name="pSheathIn" Grid.Row="16" Grid.ColumnSpan="3" />
+            </Grid>
+            <Button Text="Save and Continue" HorizontalOptions="FillAndExpand" x:Name="btnSave" Clicked="OnClicked"/>
+            <Button Text="New Fiber Cable"  HorizontalOptions="FillAndExpand" x:Name="btnNewFiber" Clicked="btnNewFiber_Clicked"/>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

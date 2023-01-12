@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.TraceFiberPages.DuctTracePage">
+    <ContentPage.Content>
+
+            <ScrollView>
+            <StackLayout Padding="20">
+                <Label Text="Duct Trace"  HorizontalOptions="Center" FontSize="Large" Padding="20" />
+
+                <Grid RowDefinitions="0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*" ColumnDefinitions="*,*">
+
+                    <Label Text="Beginning Tag Number *" Grid.Column="0" Grid.Row="0" />
+
+                    <Entry Grid.Row="1" Text="{Binding SearchTag, Mode=TwoWay}" />
+                    <!--<local:Dropdown2 Grid.Column="0" Grid.Row="2" x:Name="pTagNumber" 
+                                ItemsSource="{Binding BeginningSiteList}" ItemDisplayBinding="{Binding HosTagNumber}"
+                                    SelectedItem="{Binding SelectedTagNum}"
+                                />-->
+                    <Label Text="--Select--" Grid.Column="1" Grid.Row="0" IsVisible="{Binding IsSearching}" />
+                    <ListView Grid.Column="1" Grid.Row="1" Grid.RowSpan="5" ItemsSource="{Binding SiteInListView}" SelectedItem="{Binding SelectedTagNum, Mode=TwoWay}"                     
+                      BackgroundColor="LightGray" IsVisible="{Binding IsSearching}" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextCell Text="{Binding HosTagNumber}"  />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <Label Text="Site type" Grid.Column="0" Grid.Row="2" />
+                    <local:BorderColorEntry Grid.Column="0" Grid.Row="3" x:Name="txtSiteType" 
+                                            Text="{Binding SelectedTagNum.HostType}"  IsEnabled="False"/>
+
+                        <Label Text="Site name"  Grid.Row="4" />
+                        <local:BorderColorEntry  Grid.Row="5" x:Name="txtSiteName" 
+                                Text="{Binding SelectedTagNum.HostType}" IsEnabled="False"/>
+
+                        <Label Text="Which Duct? *" Grid.Column="0" Grid.Row="6" />
+                        <Label Text="Usage" Grid.Column="1" Grid.Row="6" />
+                        <local:Dropdown Grid.Column="0" Grid.Row="7" 
+                                 ItemsSource="{Binding DuctConduitDatas}" 
+                                 ItemDisplayBinding="{Binding WhichDucts}"
+                                 SelectedItem="{Binding SelectedDuct,Mode=TwoWay}"
+                                 />
+                        <local:BorderColorEntry Grid.Column="1" Grid.Row="7" Text="{Binding SelectedDuct.DuctUsage}" IsEnabled="False"/>
+
+                        <Label Text="Color" Grid.Column="0" Grid.Row="8" />
+                        <Label Text="Size" Grid.Column="1" Grid.Row="8" />
+                    <local:BorderEntry Grid.Column="0" Grid.Row="9" Text="{Binding SelectedDuct.ColorName}" BackgroundColor="{Binding SelectedDuct.ColorHex}" IsEnabled="False"/>
+                        <local:BorderColorEntry Grid.Column="1" Grid.Row="9" Text="{Binding SelectedDuct.DuctSize}" IsEnabled="False"/>
+
+                    </Grid>
+                <Grid RowDefinitions="0.1*,0.2*,0.1*,0.2*,0.2*  ,0.1*,0.2*,0.1*,0.2*,0.2*,   0.1*,0.2*,0.1*,0.2*,0.2*,    0.1*,0.2*,0.1*,0.2*,0.2*" ColumnDefinitions="2*,0.5*,*,*">
+                        <Label Text="#1 What Cable ? *"  />
+                        <Entry Grid.Row="1" Text="{Binding SearchCable1, Mode=TwoWay}" />
+                         <ListView  Grid.Row="2" Grid.RowSpan="2" ItemsSource="{Binding aFiberCableList1}" SelectedItem="{Binding SelectedCable1, Mode=TwoWay}"                     
+                          BackgroundColor="LightGray" IsVisible="{Binding IsSearchingCable1}" >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                <TextCell Text="{Binding CableIdDesc}"  />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Button Grid.Column="1" Grid.Row="1" Text="X" Command="{Binding RemoveCable1Command}"/>
+
+                        <Label Text="Sheath Out" Grid.Column="2" Grid.ColumnSpan="2" />
+                        <local:BorderEntry Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding SheathMark1, Mode=TwoWay}"/>
+                    
+                        <Label Text="SM Cnt" Grid.Row="2" Grid.Column="2"  />
+                        <local:BorderColorEntry Grid.Row="3" Grid.Column="2" Text="{Binding SelectedCable1.SMCount}" IsEnabled="False"/>
+
+                        <Label Text="MM Cnt" Grid.Row="2" Grid.Column="3" />
+                        <local:BorderColorEntry Grid.Row="3" Grid.Column="3" Text="{Binding SelectedCable1.MMCount}" IsEnabled="False"/>
+
+                        <!-- #2 -->
+                        <Label Grid.Row="5" Text="#2 What Cable ? *"  />
+                        <Entry Grid.Row="6" Text="{Binding SearchCable2, Mode=TwoWay}" />
+                        <ListView  Grid.Row="7" Grid.RowSpan="2" ItemsSource="{Binding aFiberCableList2}" SelectedItem="{Binding SelectedCable2, Mode=TwoWay}"                     
+                              BackgroundColor="LightGray" IsVisible="{Binding IsSearchingCable2}" >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextCell Text="{Binding CableIdDesc}"  />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Button Grid.Column="1" Grid.Row="6" Text="X" Command="{Binding RemoveCable2Command}"/>
+
+                        <Label Text="Sheath Out" Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" />
+                        <local:BorderEntry Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding SheathMark2, Mode=TwoWay}"/>
+
+                        <Label Text="SM Cnt" Grid.Row="7" Grid.Column="2"  />
+                        <local:BorderColorEntry Grid.Row="8" Grid.Column="2" Text="{Binding SelectedCable2.SMCount}" IsEnabled="False"/>
+
+                        <Label Text="MM Cnt" Grid.Row="7" Grid.Column="3" />
+                        <local:BorderColorEntry Grid.Row="8" Grid.Column="3" Text="{Binding SelectedCable2.MMCount}" IsEnabled="False"/>
+
+                        <!-- #3 -->
+                        <Label Grid.Row="10" Text="#3 What Cable ? *"  />
+                        <Entry Grid.Row="11" Text="{Binding SearchCable3, Mode=TwoWay}" />
+                        <ListView  Grid.Row="12" Grid.RowSpan="2" ItemsSource="{Binding aFiberCableList3}" SelectedItem="{Binding SelectedCable3, Mode=TwoWay}"                     
+                                  BackgroundColor="LightGray" IsVisible="{Binding IsSearchingCable3}" >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextCell Text="{Binding CableIdDesc}"  />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Button Grid.Column="1" Grid.Row="11" Text="X" Command="{Binding RemoveCable3Command}"/>
+
+                        <Label Text="Sheath Out" Grid.Row="10" Grid.Column="2" Grid.ColumnSpan="2" />
+                        <local:BorderEntry Grid.Row="11" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding SheathMark3, Mode=TwoWay}"/>
+
+                        <Label Text="SM Cnt" Grid.Row="12" Grid.Column="2"  />
+                        <local:BorderColorEntry Grid.Row="13" Grid.Column="2" Text="{Binding SelectedCable3.SMCount}" IsEnabled="False"/>
+
+                        <Label Text="MM Cnt" Grid.Row="12" Grid.Column="3" />
+                        <local:BorderColorEntry Grid.Row="13" Grid.Column="3" Text="{Binding SelectedCable3.MMCount}" IsEnabled="False"/>
+
+
+                    <!-- #4 -->
+                    <Label Grid.Row="15" Text="#4 What Cable ? *"  />
+                    <Entry Grid.Row="16" Text="{Binding SearchCable4, Mode=TwoWay}" />
+                    <ListView  Grid.Row="17" Grid.RowSpan="2" ItemsSource="{Binding aFiberCableList4}" SelectedItem="{Binding SelectedCable4, Mode=TwoWay}"                     
+                                  BackgroundColor="LightGray" IsVisible="{Binding IsSearchingCable4}" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextCell Text="{Binding CableIdDesc}"  />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Button Grid.Column="1" Grid.Row="16" Text="X" Command="{Binding RemoveCable4Command}"/>
+
+                    <Label Text="Sheath Out" Grid.Row="15" Grid.Column="2" Grid.ColumnSpan="2" />
+                    <local:BorderEntry Grid.Row="16" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding SheathMark4, Mode=TwoWay}"/>
+
+                    <Label Text="SM Cnt" Grid.Row="17" Grid.Column="2"  />
+                    <local:BorderColorEntry Grid.Row="18" Grid.Column="2" Text="{Binding SelectedCable4.SMCount}" IsEnabled="False"/>
+
+                    <Label Text="MM Cnt" Grid.Row="17" Grid.Column="3" />
+                    <local:BorderColorEntry Grid.Row="18" Grid.Column="3" Text="{Binding SelectedCable4.MMCount}" IsEnabled="False"/>
+
+                    <!--<Label Text="#2 What Cable ? *"  Grid.Row="5" />
+                        <Entry Grid.Row="6" Text="{Binding SearchCable2, Mode=TwoWay}" />
+                        <ListView  Grid.Row="7" Grid.RowSpan="3" ItemsSource="{Binding aFiberCableList}" SelectedItem="{Binding SelectedCable2, Mode=TwoWay}"                     
+                              BackgroundColor="LightGray" IsVisible="{Binding IsSearchingCable2}" >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextCell Text="{Binding CableIdDesc}"  />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Label Text="Sheath Out" Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" />
+                        <Label Text="SM Cnt" Grid.Row="7" Grid.Column="2"  />
+                        <Label Text="MM Cnt" Grid.Row="7" Grid.Column="3" />
+                    <Button Grid.Column="1" Grid.Row="5" Text="X" Command="{Binding RemoveCable2Command}"/>
+                    <local:BorderEntry Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding SheathMark2, Mode=TwoWay}"/>
+                        <local:BorderColorEntry Grid.Row="7" Grid.Column="2" Text="{Binding SelectedCable2.SMCount}" IsEnabled="False"/>
+                        <local:BorderColorEntry Grid.Row="7" Grid.Column="3" Text="{Binding SelectedCable2.MMCount}" IsEnabled="False"/>
+
+                        <Label Text="#3 What Cable ? *"  Grid.Row="10" />
+                        <Entry Grid.Row="11" Text="{Binding SearchCable2, Mode=TwoWay}" />
+                        <ListView  Grid.Row="12" Grid.RowSpan="3" ItemsSource="{Binding aFiberCableList}" SelectedItem="{Binding SelectedCable2, Mode=TwoWay}"                     
+                                  BackgroundColor="LightGray" IsVisible="{Binding IsSearchingCable2}" >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextCell Text="{Binding CableIdDesc}"  />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        
+                        <Label Text="Sheath Out" Grid.Row="11" Grid.Column="2" Grid.ColumnSpan="2" />
+                        <Label Text="SM Cnt" Grid.Row="11" Grid.Column="2"  />
+                        <Label Text="MM Cnt" Grid.Row="11" Grid.Column="3" />
+                        <Button Grid.Column="1" Grid.Row="9" Text="X" Command="{Binding RemoveCable3Command}"/>
+                        <local:BorderEntry Grid.Row="9" Grid.Column="2" Grid.ColumnSpan="2"  Text="{Binding SheathMark3, Mode=TwoWay}"/>
+                        <local:BorderColorEntry Grid.Row="12" Grid.Column="2" Text="{Binding SelectedCable3.SMCount}" IsEnabled="False"/>
+                        <local:BorderColorEntry Grid.Row="12" Grid.Column="3" Text="{Binding SelectedCable3.MMCount}" IsEnabled="False"/>
+
+                    
+                    
+                        <Label Text="#4 What Cable ? *"  Grid.Row="12" />
+                    <ListView  Grid.Row="7" Grid.RowSpan="3" ItemsSource="{Binding aFiberCableList}" SelectedItem="{Binding SelectedCable2, Mode=TwoWay}"                     
+                                  BackgroundColor="LightGray" IsVisible="{Binding IsSearchingCable2}" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextCell Text="{Binding CableIdDesc}"  />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Label Text="Sheath Out" Grid.Row="12" Grid.Column="2" Grid.ColumnSpan="2" />
+                        <Label Text="SM Cnt" Grid.Row="14" Grid.Column="2"  />
+                        <Label Text="MM Cnt" Grid.Row="14" Grid.Column="3" />
+                        <local:Dropdown2 Grid.Row="13" 
+                                 ItemsSource="{Binding aFiberCableList}" ItemDisplayBinding="{Binding CableIdDesc}"
+                                 SelectedItem="{Binding SelectedCable4, Mode=TwoWay}"/>
+                        <Button Grid.Column="1" Grid.Row="13" Text="X" Command="{Binding RemoveCable4Command}"/>
+                        <local:BorderEntry Grid.Row="13" Grid.Column="2" Grid.ColumnSpan="2"  Text="{Binding SheathMark4, Mode=TwoWay}"/>
+                        <local:BorderColorEntry Grid.Row="15" Grid.Column="2" Text="{Binding SelectedCable4.SMCount}" IsEnabled="False"/>
+                        <local:BorderColorEntry Grid.Row="15" Grid.Column="3" Text="{Binding SelectedCable4.MMCount}" IsEnabled="False"/>-->
+
+                    </Grid>
+
+                    <Grid RowDefinitions="0.1*,0.2*,0.2*, 0.2*,0.2*" ColumnDefinitions="*,*">
+                        <Label Text="Install Method" />
+                    <Entry Grid.Row="1" Text="{Binding SearchInstallType, Mode=TwoWay}" />
+                        <ListView  Grid.Row="2" Grid.RowSpan="2" ItemsSource="{Binding DuctInstallList}" SelectedItem="{Binding SelectedDuctInstall, Mode=TwoWay}"                     
+                                  BackgroundColor="LightGray" IsVisible="{Binding IsSearchInstallType}" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextCell Text="{Binding DuctInstallDesc}"  />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                        
+                    <!-- UOM --> 
+                    <Label Text="UoM" Grid.Column="1" />
+                    <Entry Grid.Row="1" Grid.Column="1"  Text="{Binding SearchUOM, Mode=TwoWay}" />
+                    <ListView  Grid.Row="2" Grid.Column="1"  Grid.RowSpan="2" ItemsSource="{Binding UnitOfMeasures}" SelectedItem="{Binding SelectedUOM, Mode=TwoWay}"                     
+                                  BackgroundColor="LightGray" IsVisible="{Binding IsSearchingUOM}" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextCell Text="{Binding UOMUnit}"  />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                        
+
+                    </Grid>
+
+                <Button Text="Save and Start Tracing" Command="{Binding SaveAndContinueCommand}"/>
+                <Button Text="Return to Main Menu" Command="{Binding ReturnToMainCommand}"/>                
+                <!--<Button Text="Save Locally "  Command="{Binding SaveLocallyCommand}"/>
+                <Button Text="Show Pending List " Command="{Binding DisplayTaskCommand}"/>-->
+
+            </StackLayout>
+            </ScrollView>
+
+    </ContentPage.Content>
+</ContentPage>

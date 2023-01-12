@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             x:Class="FTCollectorApp.View.SitesPage.MMColorCodePopUp"
+                 Title="Color Code Select">
+
+    <StackLayout Padding="20" HorizontalOptions="CenterAndExpand" BackgroundColor="Gray">
+        <ListView SeparatorVisibility="Default" SeparatorColor="White" x:Name="listViewColorList" 
+                  ItemsSource="{Binding MMColorCode}" ItemSelected="listViewColorList_ItemSelected" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal" Padding="10" >
+                            <Label HorizontalOptions="Start" Text="{Binding ColorName}" FontSize="Medium"/>
+                            <BoxView HorizontalOptions="End" BackgroundColor="{Binding ColorHex}" />
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button x:Name="btnSave" Text="Save and Back" Clicked="btnSave_Clicked" />
+    </StackLayout>
+</pages:PopupPage>

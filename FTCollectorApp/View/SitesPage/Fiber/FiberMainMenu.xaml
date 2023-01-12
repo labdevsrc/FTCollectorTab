@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FTCollectorApp.View.SitesPage.Fiber.FiberMainMenu">
+    <ContentPage.Content>
+        <StackLayout Padding="20">
+            <Label Padding="0,50,0, 100" Text="Fiber" HorizontalOptions="Center" FontSize="Large"/>
+            <Button Text="Cable" HorizontalOptions="Center" x:Name="btnCable" Clicked="btnCable_Clicked" />
+            <Button Text="Sheath Mark" x:Name="btnSheathMark" Clicked="btnSheathMark_Clicked" />
+            <Button Text="Slack" x:Name="btnSlack" Clicked="btnSlack_Clicked" />
+            <Button Text="Trace Fiber" x:Name="btnTraceFiber" Clicked="btnTraceFiber_Clicked" />
+            <Button Text="Enclosure" x:Name="btnEnclosure" Clicked="btnEnclosure_Clicked" />
+            <Button Text="Save and Continue" x:Name="btnSaveContinue" Clicked="btnSaveContinue_Clicked" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

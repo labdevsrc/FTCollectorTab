@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:FTCollectorApp.ViewModel"
+             xmlns:fa="clr-namespace:FontAwesome"
+             x:Name="MainSyncPage"
+             x:Class="FTCollectorApp.View.SyncPages.SyncPage">
+    <ContentPage.Content>
+        <ScrollView>
+            <ListView ItemsSource="{Binding TaskList}" 
+                      SelectedItem="{Binding SelectedTask, Mode=TwoWay}" 
+                      HasUnevenRows="True"
+                      BackgroundColor="Transparent"
+                 >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell >
+                            <!--<TextCell Text="{Binding StartTime, StringFormat='TaskStart @ {0}'}" >-->
+                            <ViewCell.ContextActions>
+                                    <MenuItem Text="SEND" Command="{Binding Source={x:Reference MainSyncPage}, Path=BindingContext.SendCommand}"
+                                              CommandParameter="{Binding .}"/>
+                                    <MenuItem Text="REMOVE" Command="{Binding Source={x:Reference MainSyncPage}, Path=BindingContext.RemoveCommand}"
+                                              CommandParameter="{Binding .}" />
+                            </ViewCell.ContextActions>
+
+                            <Frame CornerRadius="5" HasShadow="True">
+
+                                <Grid Padding="10" RowDefinitions="*,*,*" ColumnDefinitions="*,*,50">
+                                    <Label Text="{Binding TargetTable}"  />
+                                    <Label Grid.Column="1" Text="{Binding Status}"   />
+                                    <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding StartTime, StringFormat='TaskStart @ {0}'}"  />
+                                    <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding EndTime, StringFormat='TaskEnd @ {0}'}"  />
+                                    <Button Grid.Row="1"  Grid.Column="2" Grid.RowSpan="2"  FontFamily="FontAwesome6Solid"
+                                            FontSize="Large"
+                                        Text="{x:Static fa:FontAwesomeIcons.ArrowRight}" 
+                                        IsVisible="{Binding Source={x:Reference MainSyncPage}, Path=BindingContext.IsButtonSendEnable}" 
+                                        CommandParameter="{Binding .}"
+                                        Command="{Binding Source={x:Reference MainSyncPage}, Path=BindingContext.SendCommand}"    
+                                    />
+
+                                </Grid>
+
+
+                            <!--<Label Text="{Binding TargetTable}"  FontSize="Medium"/>
+                                <Label Grid.Row="1"  Text="{Binding Status}"  FontSize="Medium" />
+
+                                <Label Grid.Row="2" Text="{Binding StartTime, StringFormat='TaskStart @ {0}'}" />-->
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

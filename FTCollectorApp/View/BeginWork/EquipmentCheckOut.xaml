@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage Title ="CheckOut Equipment" xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"                 
+             xmlns:local="clr-namespace:FTCollectorApp.Utils;assembly=FTCollectorApp"
+             x:Class="FTCollectorApp.View.BeginWork.EquipmentCheckOut">
+    <StackLayout
+        BackgroundColor="White"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"
+        >
+
+        <Grid RowDefinitions="3*,0.4*,*,*,*,*,*,*" ColumnDefinitions="150,150,150" Padding="20">        
+        <!--<Grid RowDefinitions="3*,0.4*,*,*,*,*,*,*" ColumnDefinitions="*,*,*" Padding="5,10,10,5">-->
+            <Label Grid.Row="0" Grid.ColumnSpan="3" Text="Equipment CheckOut" FontSize="Medium"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" />
+                <Label Grid.Row="1" Grid.Column="0" Text="Type*" />
+                <Label Grid.Row="1" Grid.Column="1" Text="Asset" />
+                <Label Grid.Row="1" Grid.Column="2" Text="Equipment*" />
+
+                <Picker Grid.Row="2" Grid.Column="0" Margin="5,5,10,5"
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"
+                                x:Name="pType1" SelectedIndexChanged="OnIndexChanged" />
+                <Picker Grid.Row="2" Grid.Column="1" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentDetailAssets}" 
+                                ItemDisplayBinding="{Binding EquipmentNumber}" 
+                                x:Name="pAsset1" />
+                <Picker Grid.Row="2" Grid.Column="2" Margin="5,5,10,5" x:Name="pDesc1" ItemDisplayBinding="{Binding EquipmentDesc}" />
+
+
+                <Picker Grid.Row="3" Grid.Column="0" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"                                                                
+                                x:Name="pType2" SelectedIndexChanged="OnIndexChanged" />
+                <Picker Grid.Row="3" Grid.Column="1" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentDetailAssets}" 
+                                ItemDisplayBinding="{Binding EquipmentNumber}"                                 
+                                x:Name="pAsset2" />
+                <Picker Grid.Row="3" Grid.Column="2" Margin="5,5,10,5" x:Name="pDesc2" ItemDisplayBinding="{Binding EquipmentDesc}" />
+
+
+                <Picker Grid.Row="4" Grid.Column="0" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"                                                                
+                                x:Name="pType3" />
+                <Picker Grid.Row="4" Grid.Column="1" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentDetailAssets}" 
+                                ItemDisplayBinding="{Binding EquipmentNumber}"                                       
+                                x:Name="pAsset3" />
+                <Picker Grid.Row="4" Grid.Column="2" Margin="5,5,10,5"  x:Name="pDesc3" ItemDisplayBinding="{Binding EquipmentDesc}"  />
+
+
+                <Picker Grid.Row="5" Grid.Column="0" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"                                                                
+                                x:Name="pType4" />
+                <Picker Grid.Row="5" Grid.Column="1" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentDetailAssets}" 
+                                ItemDisplayBinding="{Binding EquipmentNumber}"  
+                                x:Name="pAsset4" />
+                <Picker Grid.Row="5" Grid.Column="2" Margin="5,5,10,5" x:Name="pDesc4" ItemDisplayBinding="{Binding EquipmentDesc}"  />
+
+
+                <Picker Grid.Row="6" Grid.Column="0" Margin="5,5,10,5" 
+                                    ItemsSource="{Binding EquipmentTypes}"
+                                    ItemDisplayBinding="{Binding EquipCodeDesc}"                                                                   
+                                    x:Name="pType5" />
+                <Picker Grid.Row="6" Grid.Column="1" Margin="5,5,10,5" 
+                                    ItemsSource="{Binding EquipmentDetailAssets}" 
+                                    ItemDisplayBinding="{Binding EquipmentNumber}"                                                                  
+                                    x:Name="pAsset5" />
+                <Picker Grid.Row="6" Grid.Column="2" Margin="5,5,10,5"  x:Name="pDesc5" ItemDisplayBinding="{Binding EquipmentDesc}"  />
+
+
+                <Picker Grid.Row="6" Grid.Column="0" Margin="5,5,10,5" 
+                                    ItemsSource="{Binding EquipmentTypes}"
+                                    ItemDisplayBinding="{Binding EquipCodeDesc}"                                                                    
+                                    x:Name="pType6" />
+                <Picker Grid.Row="6" Grid.Column="1" Margin="5,5,10,5" 
+                                    ItemsSource="{Binding EquipmentDetailAssets}" 
+                                    ItemDisplayBinding="{Binding EquipmentNumber}"                                                                  
+                                    x:Name="pAsset6" />
+                <Picker Grid.Row="6" Grid.Column="2" Margin="5,5,10,5" x:Name="pDesc6" ItemDisplayBinding="{Binding EquipmentDesc}"  />
+
+            </Grid>
+        <Button x:Name="btnFinish" Text="Finished Packing Equipment" Clicked="btnFinish_Clicked" Padding="20"/>
+        </StackLayout>
+
+</pages:PopupPage>  

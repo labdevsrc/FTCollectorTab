@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.TraceFiberPages.LocatePointPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem  Command="{Binding CaptureCommand}"  IconImageSource="cam_white.png" 
+                 Order="Primary"
+                 Priority="0" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <StackLayout  VerticalOptions="FillAndExpand" Padding="20">
+            <Label Text="Locate Point" FontSize="Large"
+                HorizontalOptions="CenterAndExpand" />
+
+            <Label Text="Accuraccy" />
+            <local:BorderColorEntry Text="{Binding GPSAccuracy, Mode=TwoWay}" IsEnabled="False"/>
+            <Grid ColumnDefinitions="*,*" RowDefinitions="0.2*,0.5*">
+                <Label Text="Point Number" />
+                <local:BorderColorEntry Grid.Row="1" Text="{Binding CurLocPoint}" IsEnabled="False"/>
+                <Label Text="Site Type" Grid.Column="1"/>
+                <local:Dropdown Grid.Column="1" Grid.Row="1" 
+                                ItemsSource="{Binding LocatePointType}" 
+                                ItemDisplayBinding="{Binding description}"
+                                SelectedItem="{Binding SelectedSiteType, Mode=TwoWay}"/>
+            </Grid>
+            <Label Text="Comment" />
+            <Editor HeightRequest="300" Keyboard="Plain" AutoSize="TextChanges" MaxLength="300" 
+                    Text="{Binding CommentText, Mode=TwoWay}"
+                    />
+            <!--<local:BorderEntry
+                HeightRequest="300" 
+                Text="{Binding CommentText, Mode=TwoWay}"/>-->
+
+            <Button Text="Record a Locate Point" Command="{Binding RecordCommand}"/>
+            <Button Text="Use GPS Offset for this Point" Command="{Binding OpenGPSOffsetPopupCommand}"/>
+            <Button Text="Finished Tracking" Command="{Binding FinishCommand}"/>            
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

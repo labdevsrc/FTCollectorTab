@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FTCollectorApp.App">
+    <Application.Resources>
+        
+        <ResourceDictionary>
+            <Style TargetType="Button" >
+                <Setter Property="FontSize" Value="Small" />
+                <!--<Setter Property="BackgroundColor" Value="#1976D2" />-->
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="CornerRadius" Value="5" />
+                <Style.Triggers>
+                    <Trigger TargetType="Button" Property="IsEnabled" Value="True">
+                        <Setter Property="BackgroundColor" Value="#1976D2" />
+                    </Trigger>
+                    <Trigger TargetType="Button" Property="IsEnabled" Value="False">
+                        <Setter Property="BackgroundColor" Value="Gray" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style TargetType="Entry" >
+                <Style.Triggers>
+                    <Trigger TargetType="Entry" Property="IsReadOnly" Value="True">
+                        <Setter Property="BackgroundColor" Value="Gray" />
+                    </Trigger>
+                    <Trigger TargetType="Entry" Property="IsEnabled" Value="False">
+                        <Setter Property="BackgroundColor" Value="Gray" />
+                    </Trigger>
+
+                </Style.Triggers>
+            </Style>            <Style TargetType="Picker" >
+                <Setter Property="FontSize" Value="Small" />
+                <Setter Property="TitleColor" Value="Blue" />
+                <Setter Property="TextColor" Value="Black" />
+            </Style>
+
+            <Color x:Key="blueColor">#1E90FF</Color>
+            <Color x:Key="amberNice">#FFBF00</Color>
+            <!--<OnPlatform x:TypeArguments="x:String" 
+                x:Key="FontAwesomeBrands">
+                <On Platform="Android" 
+          Value="FontAwesome5Brands.otf#Regular" />
+                <On Platform="iOS" 
+          Value="FontAwesome5Brands-Regular" />
+            </OnPlatform>
+
+            <OnPlatform x:TypeArguments="x:String" 
+                x:Key="FontAwesomeSolid">
+                <On Platform="Android" 
+          Value="FontAwesome5Solid.otf#Regular" />
+                <On Platform="iOS" 
+          Value="FontAwesome5Free-Solid" />
+            </OnPlatform>
+
+            <OnPlatform x:TypeArguments="x:String" 
+                x:Key="FontAwesomeRegular">
+                <On Platform="Android" 
+          Value="FontAwesome5Regular.otf#Regular" />
+                <On Platform="iOS" 
+          Value="FontAwesome5Free-Regular" />
+            </OnPlatform>-->
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

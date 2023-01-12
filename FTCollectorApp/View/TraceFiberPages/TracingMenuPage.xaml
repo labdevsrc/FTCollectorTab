@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FTCollectorApp.View.TraceFiberPages.TracingMenuPage">
+    <ContentPage.Content>
+      <StackLayout Padding="20">
+            <Label Padding="0,20,0,20" Text="Tracing" FontSize="Large" HorizontalOptions="Center"/>
+            <Button Padding="10" Text="Start a Trace"  Command="{Binding StartTracerCommand}"/>
+            <Button Padding="10" x:Name="btnStart" Text="Resume a Trace"  Command="{Binding ResumeTracerCommand}"/>
+      </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

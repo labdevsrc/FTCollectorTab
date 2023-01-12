@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             NavigationPage.HasNavigationBar="False"
+             xmlns:local="clr-namespace:FTCollectorApp.Utils;assembly=FTCollectorApp" 
+             xmlns:b="http://xamarin.com/schemas/2020/toolkit"
+             x:Class="FTCollectorApp.View.LoginPage">
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="CenterAndExpand" Margin="20" Padding="5,20,5,20">
+            <Image Source="logo.png" HorizontalOptions="Center"/>
+            <Entry x:Name="entryEmail" Placeholder="Email or Username" Keyboard="Email" 
+                HorizontalOptions="FillAndExpand" Text="{Binding EmailText, Mode=TwoWay}">
+                <!--<Entry.Behaviors>
+                    <b:EventToCommandBehavior EventName="TextChanged"
+                                              Command="{Binding CheckEntryCommand}"
+                                              CommandParameter="Text"/>
+                </Entry.Behaviors>-->
+            </Entry>
+            <Entry x:Name="entryPassword" Placeholder="Password"  
+                                Text="{Binding PasswordText, Mode=TwoWay}"
+                                IsPassword="true" HorizontalOptions="FillAndExpand">
+                <!--<Entry.Behaviors>
+                    <b:EventToCommandBehavior EventName="TextChanged"
+                                              Command="{Binding CheckEmailCommand}"
+                                              CommandParameter="Text"/>
+                </Entry.Behaviors>-->
+            </Entry>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <local:BorderColorEntry Margin="0,0,5,0" Grid.Column="0" x:Name="firstnameTxt" Text="{Binding FirstName, Mode=TwoWay}" IsEnabled="False"/>
+                <local:BorderColorEntry Margin="5,0,0,0" Grid.Column="1" Text="{Binding LastName, Mode=TwoWay}" IsEnabled="False" />
+            </Grid>
+            <Button x:Name="btnLogin" Text="Sign In"  HorizontalOptions="FillAndExpand" 
+            BackgroundColor="{StaticResource blueColor}"                    
+                    TextColor="White" Command="{Binding LoginCommand}"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

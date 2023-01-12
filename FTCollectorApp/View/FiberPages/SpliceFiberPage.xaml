@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.FiberPages.SpliceFiberPage">
+    <ContentPage.Content>
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <ScrollView>
+                    <StackLayout Padding="20" VerticalOptions="CenterAndExpand">
+                        <Label Text="Fiber Splice" FontSize="Large" HorizontalOptions="Center"/>
+                        <Label Text="Site" Padding="5" />
+                        <local:Dropdown x:Name="pTagNumber" SelectedIndexChanged="OnIndexChanged" ItemsSource="{Binding SitebyJobOwnerCreated}"
+                            ItemDisplayBinding =" {Binding TagNumber}" />
+
+                        <Label Text="Site Name" Padding="5" />
+                        <local:Dropdown x:Name="pSiteName" SelectedIndexChanged="OnIndexChanged" ItemsSource="{Binding SitebyJobOwnerCreated}"
+                                        ItemDisplayBinding =" {Binding SiteName}" />
+
+                        <Label Text="Site Type" Padding="5" />
+                        <local:Dropdown x:Name="pSiteType" SelectedIndexChanged="OnIndexChanged" ItemsSource="{Binding SitebyJobOwnerCreated}"
+                                        ItemDisplayBinding =" {Binding SiteTypeDesc}" />
+
+
+                        <Label Text="From Cable" Padding="5" />
+                        <local:Dropdown x:Name="pFromCable" SelectedIndexChanged="OnIndexChanged" ItemsSource="{Binding aFiberCableList}"
+                                        ItemDisplayBinding =" {Binding CableIdDesc}" />
+
+                        <Label Text="To Cable" Padding="5" />
+                        <local:Dropdown x:Name="pToCable" SelectedIndexChanged="OnIndexChanged" ItemsSource="{Binding aFiberCableList}"
+                                        ItemDisplayBinding =" {Binding CableIdDesc}" />
+
+                        <Label Text="From Cable Sheath Mark" Padding="5" />
+                        <local:Dropdown x:Name="pFromSheathMark" SelectedIndexChanged="OnIndexChanged" />
+                        <Label Text="From Cable Sheath Mark Eom" Padding="5" />
+                        <local:Dropdown x:Name="pFromSheathMarkEom" SelectedIndexChanged="OnIndexChanged" />
+
+                        <Label Text="To Cable Sheath Mark" Padding="5" />
+                        <local:Dropdown x:Name="pToSheathMark" SelectedIndexChanged="OnIndexChanged" />
+                        <Label Text="To Cable Sheath Mark Eom" Padding="5" />
+                        <local:Dropdown x:Name="pToSheathMarkEom" SelectedIndexChanged="OnIndexChanged" />
+
+                        <Label Text="To Chassis Sheath Mark" Padding="5" />
+                        <local:Dropdown x:Name="pToChassisMark" SelectedIndexChanged="OnIndexChanged" />
+                        <Label Text="To Chassis Sheath Mark Eom" Padding="5" />
+                        <local:Dropdown x:Name="pToChassisMarkEom" SelectedIndexChanged="OnIndexChanged" />
+                    </StackLayout>
+                </ScrollView>
+            </StackLayout>
+          </AbsoluteLayout>    
+    </ContentPage.Content>
+</ContentPage>

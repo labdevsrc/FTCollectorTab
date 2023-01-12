@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.SitesPage.Fiber.FiberOpticCable">
+    <ContentPage.Content>
+        <ScrollView>
+        <StackLayout Padding="20">
+            <Label Text="Fiber Optic Cable" FontSize="Large" HorizontalOptions="Center" WidthRequest="80" />
+            <Label Text="Enter cable Id" HorizontalOptions="Start" />
+                <local:Dropdown x:Name="pCableId" HorizontalOptions="FillAndExpand" ItemDisplayBinding="{Binding CableIdDesc}"/>
+                <Label Text="Cable Type" HorizontalOptions="Start" />
+            <local:Dropdown x:Name="pCableType" HorizontalOptions="FillAndExpand"
+                            ItemsSource="{Binding CableTypeList}" ItemDisplayBinding="{Binding CodeCableDesc}"/>
+            <Label Text="Manufacturer" HorizontalOptions="Start" />
+            <local:Dropdown x:Name="pManufacturer" HorizontalOptions="FillAndExpand"
+                            ItemsSource="{Binding ManufacturerList}" 
+                            SelectedItem="{Binding SelectedManuf}"
+                            ItemDisplayBinding="{Binding ManufName}"/>
+            <Label Text="Model" HorizontalOptions="Start" />
+            <local:Dropdown x:Name="pModel" 
+                           ItemsSource="{Binding ModelDetailList}" ItemDisplayBinding="{Binding ModelDescription}"
+                            HorizontalOptions="FillAndExpand"/>
+            <Label Text="Enter Label" HorizontalOptions="Start" />
+            <local:BorderEntry x:Name="entryLabel" HorizontalOptions="FillAndExpand"/>
+            <Label Text="Enter single-mode strand count" HorizontalOptions="Start"/>
+            <local:Dropdown x:Name="pSingleModeCount" WidthRequest="100" />
+            <Label Text="Enter multi-mode strand count" HorizontalOptions="Start"/>
+            <local:Dropdown x:Name="pMultiModeCount" WidthRequest="100" />
+            <Label Text="Enter buffer count" HorizontalOptions="Start"/>
+            <local:Dropdown x:Name="pBufferCount" WidthRequest="100" />
+            <Label Text="Multi-Mode Diameter" HorizontalOptions="Start"/>
+                <Button Text="{Binding SelectedColor.ColorName}" BackgroundColor="{Binding }"></Button>
+            <!--<local:Dropdown x:Name="pMultimodeDia" HorizontalOptions="FillAndExpand"/>-->
+            
+            <Label Text="Sheath Type" HorizontalOptions="Start" />
+            <local:Dropdown x:Name="pSheathTpe" HorizontalOptions="FillAndExpand"
+                            ItemsSource="{Binding SheathList}" ItemDisplayBinding="{Binding SheathType}"/>
+            <Label Text="Manufactured at" HorizontalOptions="Start" />
+            <DatePicker x:Name="pManufacturedAt" HorizontalOptions="FillAndExpand" DateSelected="OnDateSelected"/>
+            <Label Text="Enter reel id" HorizontalOptions="Start" />
+            <local:Dropdown x:Name="pReelId" ItemsSource="{Binding ReelIdList}" ItemDisplayBinding="{Binding ReelNumber}" 
+                            HorizontalOptions="FillAndExpand"/>
+            <Label Text="Installed at" HorizontalOptions="Start" />
+            <DatePicker x:Name="pInstalledAt" HorizontalOptions="FillAndExpand" DateSelected="OnDateSelected"/>
+            <Label Text="Install Type" HorizontalOptions="Start" />
+            <local:Dropdown x:Name="pInstallType" HorizontalOptions="FillAndExpand"/>
+                <Button x:Name="btnSave"  Text="Save and Continue" HorizontalOptions="FillAndExpand" Clicked="btnSave_Clicked"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

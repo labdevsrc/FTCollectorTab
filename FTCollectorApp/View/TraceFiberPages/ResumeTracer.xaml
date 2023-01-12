@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.TraceFiberPages.ResumeTracer">
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+
+            <Label Padding="0,20,0,20" Text="Resume Tracer" FontSize="Large" HorizontalOptions="Center" />
+            <Label Text="TagNumber" />
+            <Picker Grid.Column="0" Grid.Row="7" 
+                                 ItemsSource="{Binding DuctTagList}" 
+                                 ItemDisplayBinding="{Binding from_site}" SelectedItem="{Binding SelectedBeginSite}" />
+            
+            <Label Padding="0,20,0,20" Text="Duct" />
+            <local:Dropdown Grid.Column="0" Grid.Row="7" 
+                                 ItemsSource="{Binding DuctConduitDatas}" 
+                                 ItemDisplayBinding="{Binding WhichDucts}"
+                                 SelectedItem="{Binding SelectedDuct,Mode=TwoWay}"
+                                 />
+            <Label Padding="0,20,0,20" Text="Fiber Cable" />
+            <local:BorderColorEntry Text="{Binding DuctTagList.cable_id}" />
+
+
+            <Button Padding="10" Text="Resume Tracing" Command="{Binding ResumeCommand}"/>
+            <Button Padding="10" Text="View Suspended fiber tracig activity" Command="{Binding ViewSuspendedCommand}"/>
+            <Grid ColumnDefinitions="0.1*,*, *,0.3*" Padding="10" IsVisible="{Binding IsViewing, Mode=TwoWay}">
+                <Label Grid.Column="0" Text="#" />
+                <Label Grid.Column="1" Text="Site" />
+                <Label Grid.Column="2" Text="Cable" />
+                <Label Grid.Column="3" Text="S-O" />
+            </Grid>
+            <ListView IsVisible="{Binding IsViewing, Mode=TwoWay}"
+                    ItemsSource="{Binding SelectedCableListView}" SelectedItem="{Binding SelectedFromSelCable, Mode=TwoWay}" 
+                      HasUnevenRows="True"
+                      BackgroundColor="Transparent">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid RowDefinitions="0.2*,0.2" ColumnDefinitions="0.1*,*,*,0.3*" Padding="10">
+                                <Label Grid.Column="0" IsEnabled="False" Text="{Binding AWSid2}" />
+                                <Label Grid.Column="1" IsEnabled="False" Text="{Binding from_site}" />
+                                <Label Grid.Column="2" IsEnabled="False" Text="{Binding cable_id}" />
+                                <Label Grid.Column="3" IsEnabled="False"  Text="{Binding sheath_out}" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

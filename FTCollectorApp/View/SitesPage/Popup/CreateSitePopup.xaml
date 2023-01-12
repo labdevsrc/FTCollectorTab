@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage Title="Create Site"  xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             x:Class="FTCollectorApp.View.SitesPage.Popup.CreateSitePopup">
+        <StackLayout WidthRequest="500"
+                    Margin="20"
+                    Padding="20"
+                    BackgroundColor="White"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                    <Label Text="Create Site" FontSize="Large"/>
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="*,*,*,*,*,*,*,*,*,*" >
+                        <Label Text="Major Site Type*" HorizontalOptions="Start"/>
+                        <Picker Grid.Column="1" SelectedItem="{Binding SelectedMajorType, Mode=TwoWay}"
+                                                 ItemsSource="{Binding MajorSiteList}"  />
+                        <Label Grid.Row="1" Text="Minor Site Type*" HorizontalOptions="Start"/>
+                        <Picker Grid.Row="1" Grid.Column="1" SelectedItem="{Binding SelectedMinorType, Mode=TwoWay}"
+                                                 ItemsSource="{Binding MinorSiteList}" />
+                        <Label Grid.Row="2" Text="Enter PC tag" HorizontalOptions="Start"/>
+                        <Label Grid.Row="2" Grid.Column="1" Text="{Binding ReEnterStatus}" HorizontalOptions="End"/>
+
+                        <Entry Grid.Row="3" Placeholder="Tag Number ex 34675 or H1.562" Text="{Binding TagNumber, Mode=TwoWay}"  />
+                        <Entry Grid.Row="3" Grid.Column="1" Placeholder="Re-Enter TagNumber" Text="{Binding ReEnterTagNumber, Mode=TwoWay}"  />
+                        <Label Grid.Row="4" Text="Stage" HorizontalOptions="Start"  />
+                        <Entry Grid.Row="4" Grid.Column="1" Text="{Binding Stage, Mode=TwoWay}"/>
+                        <Label Grid.Row="5" Text="Accuracy" HorizontalOptions="Start" />
+                        <Entry Grid.Row="5" Grid.Column="1" Text="{Binding Accuracy}"/>
+                        <Label Grid.Row="6" Text="Station Number" />
+                        <Entry Grid.Row="6" Grid.Column="1" />
+                        <Label Grid.Row="7" Text="Plan Sheet" />
+                        <Entry Grid.Row="7" Grid.Column="1" />
+                        <Label Grid.Row="8" Text="Plan Sheet Item" />
+                        <Entry Grid.Row="8" Grid.Column="1" />
+                    </Grid>
+                    <Button  Command="{Binding RecordGPSCommand}" IsEnabled="{Binding IsTagNumberMatch}" 
+                                 Text="Record GPS"  >
+                        </Button>
+
+                    <Button Command="{Binding OpenGPSOffsetPopupCommand}" IsEnabled="{Binding IsTagNumberMatch}" 
+                        Text="User GPS Offset"  >
+                    </Button>
+            </StackLayout>
+</pages:PopupPage>

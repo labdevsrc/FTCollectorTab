@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:FTCollectorApp.Utils;assembly=FTCollectorApp"
+             xmlns:fa="clr-namespace:FontAwesome"
+             Shell.NavBarIsVisible="False"
+             x:Class="FTCollectorApp.View.VerifyJobPage">
+    <ContentPage.Content>
+    <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <StackLayout Orientation="Vertical" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+            <StackLayout Padding="20" >
+                    <Label Text="Verify Job" HorizontalOptions="Center"/>
+                    <Label Text="Owner*"/>
+                    <Picker ItemsSource="{Binding OwnerList}" ItemDisplayBinding="{Binding OwnerName}" 
+                                SelectedItem="{Binding SelectedOwner, Mode=TwoWay}" TextColor="Black" />
+                    <Label Text="Job Number*"/>
+                    <Picker ItemsSource="{Binding JobNumbers}" ItemDisplayBinding="{Binding JobNumber}" 
+                                SelectedItem="{Binding SelectedJob, Mode=TwoWay}" TextColor="Black" />
+                    <Label Text="Job Location *"/>
+                    <local:BorderColorEntry Text="{Binding SelectedJob.JobLocation}"   IsEnabled="False"/>
+                    <Label Text="Contact Name *"/>
+                    <local:BorderColorEntry Text="{Binding SelectedJob.ContactName}"   IsEnabled="False"/>
+                    <Label Text="Customer Name *"/>
+                    <local:BorderColorEntry x:Name="custName" Text="{Binding SelectedJob.CustomerName}" IsEnabled="False"/>
+                    <Label Text="Phone *"/>
+                    <local:BorderColorEntry Text="{Binding SelectedJob.CustomerPhone}"  IsEnabled="True"/>
+                    <Button Text="Verify" HorizontalOptions="EndAndExpand" BackgroundColor="{StaticResource blueColor}"
+                    Command="{Binding ContinueCommand}"/>
+            </StackLayout>
+
+            <StackLayout Padding="20"  IsVisible="{Binding IsDisplayBeginWork}" >
+                <Label Text="Begin Work" HorizontalOptions="Center"/>
+                <Button Text="Crew List" Command="{Binding ToggleCrewListCommand}"/>
+                    <StackLayout IsVisible="{Binding IsDisplayCrewList}">
+                        <Grid Padding="20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Grid.ColumnSpan="3" FontSize="40" Text="Select Crew" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+
+
+                            <Label Grid.Row="2" Grid.ColumnSpan="3" FontSize="Medium" 
+                   x:Name="txtCrewLeader" 
+                   VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+
+                            <Label Grid.Row="3" Grid.Column="0" FontSize="20" Grid.ColumnSpan="2" Text="Employee"/>
+                            <Label Grid.Row="3"  Grid.Column="1" FontSize="20" Text="Labor Class"/>
+                            <Label Grid.Row="3"  Grid.Column="2" FontSize="20" Text="Driver"/>
+
+                            <Picker Grid.Row="4" Grid.Column="0" x:Name="employeePicker1" Title="Select Employee" FontSize="Small" TextColor="Black"></Picker>
+                            <Picker  Grid.Row="4" Grid.Column="1" x:Name="laborPicke1r" Title="Select labor" FontSize="Medium" TextColor="Black" >
+                                <Picker.Items>
+                                    <x:String>Installer</x:String>
+                                    <x:String>Technician</x:String>
+                                    <x:String>CADD operator</x:String>
+                                    <x:String>RCDD</x:String>
+                                    <x:String>Designer</x:String>
+                                </Picker.Items>
+                            </Picker>
+
+                            <Picker  Grid.Row="4" Grid.Column="2"  x:Name="driverPicker1" Title="Select driver" FontSize="Medium" TextColor="Black"  >
+                                <Picker.Items>
+                                    <x:String>Driver</x:String>
+                                    <x:String>Passenger</x:String>
+                                </Picker.Items>
+                            </Picker>
+
+                            <Picker Grid.Row="5" Grid.Column="0" x:Name="employeePicker2" Title="Select Employee" FontSize="Small" TextColor="Black"></Picker>
+                            <Picker Grid.Row="5" Grid.Column="1" x:Name="laborPicker2" Title="Select labor" FontSize="Medium" TextColor="Black" >
+                                <Picker.Items>
+                                    <x:String>Installer</x:String>
+                                    <x:String>Technician</x:String>
+                                    <x:String>CADD operator</x:String>
+                                    <x:String>RCDD</x:String>
+                                    <x:String>Designer</x:String>
+                                </Picker.Items>
+                            </Picker>
+                            <Picker Grid.Row="5" Grid.Column="2"  x:Name="driverPicker2" Title="Select driver" FontSize="Medium" TextColor="Black"  >
+                                <Picker.Items>
+                                    <x:String>Driver</x:String>
+                                    <x:String>Passenger</x:String>
+                                </Picker.Items>
+                            </Picker>
+
+                            <Picker Grid.Row="6" Grid.Column="0" x:Name="employeePicker3" Title="Select Employee" FontSize="Small" TextColor="Black" ></Picker>
+                            <Picker Grid.Row="6" Grid.Column="1" x:Name="laborPicker3" Title="Select labor" FontSize="Medium" TextColor="Black">
+                                <Picker.Items>
+                                    <x:String>Installer</x:String>
+                                    <x:String>Technician</x:String>
+                                    <x:String>CADD operator</x:String>
+                                    <x:String>RCDD</x:String>
+                                    <x:String>Designer</x:String>
+                                </Picker.Items>
+                            </Picker>
+                            <Picker Grid.Row="6" Grid.Column="2"  x:Name="driverPicker3" Title="Select driver" FontSize="Medium" TextColor="Black" >
+                                <Picker.Items>
+                                    <x:String>Driver</x:String>
+                                    <x:String>Passenger</x:String>
+                                </Picker.Items>
+                            </Picker>
+
+                            <Picker Grid.Row="7" Grid.Column="0" x:Name="employeePicker4" Title="Select Employee" FontSize="Small" TextColor="Black" ></Picker>
+                            <Picker Grid.Row="7" Grid.Column="1" x:Name="laborPicker4" Title="Select labor" FontSize="Medium" TextColor="Black" >
+                                <Picker.Items>
+                                    <x:String>Installer</x:String>
+                                    <x:String>Technician</x:String>
+                                    <x:String>CADD operator</x:String>
+                                    <x:String>RCDD</x:String>
+                                    <x:String>Designer</x:String>
+                                </Picker.Items>
+                            </Picker>
+                            <Picker Grid.Row="7" Grid.Column="2"  x:Name="driverPicker4" Title="Select driver" FontSize="Medium" TextColor="Black"  >
+                                <Picker.Items>
+                                    <x:String>Driver</x:String>
+                                    <x:String>Passenger</x:String>
+                                </Picker.Items>
+                            </Picker>
+
+                            <Picker Grid.Row="8" Grid.Column="0" x:Name="employeePicker5" Title="Select Employee" FontSize="Small" TextColor="Black" ></Picker>
+                            <Picker Grid.Row="8" Grid.Column="1" x:Name="laborPicker5" Title="Select labor" FontSize="Medium" TextColor="Black">
+                                <Picker.Items>
+                                    <x:String>Installer</x:String>
+                                    <x:String>Technician</x:String>
+                                    <x:String>CADD operator</x:String>
+                                    <x:String>RCDD</x:String>
+                                    <x:String>Designer</x:String>
+                                </Picker.Items>
+                            </Picker>
+                            <Picker Grid.Row="8" Grid.Column="2"  x:Name="driverPicker5" Title="Select driver" FontSize="Medium" TextColor="Black"  >
+                                <Picker.Items>
+                                    <x:String>Driver</x:String>
+                                    <x:String>Passenger</x:String>
+                                </Picker.Items>
+                            </Picker>
+
+                            <Picker Grid.Row="9" Grid.Column="0" x:Name="employeePicker6" Title="Select Employee" FontSize="Small" TextColor="Black"  ></Picker>
+                            <Picker Grid.Row="9" Grid.Column="1" x:Name="laborPicker6" Title="Select labor" FontSize="Medium" TextColor="Black">
+                                <Picker.Items>
+                                    <x:String>Installer</x:String>
+                                    <x:String>Technician</x:String>
+                                    <x:String>CADD operator</x:String>
+                                    <x:String>RCDD</x:String>
+                                    <x:String>Designer</x:String>
+                                </Picker.Items>
+                            </Picker>
+                            <Picker Grid.Row="9" Grid.Column="2"  x:Name="driverPicker6" Title="Select driver" FontSize="Medium" TextColor="Black"  >
+                                <Picker.Items>
+                                    <x:String>Driver</x:String>
+                                    <x:String>Passenger</x:String>
+                                </Picker.Items>
+                            </Picker>
+                            <Button Grid.Row="9" Grid.Column="2"   
+                                    Text="Save" Command="{Binding CrewSaveCommand}" BackgroundColor="{StaticResource blueColor}"/>
+                        </Grid>
+
+                    </StackLayout>
+
+                <Button Text="Equipment CheckOut" Command="{Binding DisplayEquipmentCheckOutCommand}" />
+                <Button Text="Equipment CheckIn"  Command="{Binding DisplayEquipmentCheckInCommand}"/>
+                <Button Text="Odometer Input" Command="{Binding ODOPopupCommand}"/>
+
+            </StackLayout>
+
+                <!-- obsolete 
+            <Grid Padding="20" RowDefinitions="2*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,*"
+                     ColumnDefinitions="*,*,*" >
+                <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="Owner*"/>
+                <Label Grid.Row="1"  Grid.Column="2" Text="Job Number*"/>
+                <Picker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                    ItemsSource="{Binding OwnerList}" ItemDisplayBinding="{Binding OwnerName}" 
+                                SelectedItem="{Binding SelectedOwner, Mode=TwoWay}" TextColor="Black" />
+                <Picker Grid.Row="2" Grid.Column="2" 
+                    ItemsSource="{Binding JobNumbers}" ItemDisplayBinding="{Binding JobNumber}" 
+                                SelectedItem="{Binding SelectedJob, Mode=TwoWay}" TextColor="Black" />
+
+
+                <Picker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="jobOwnersPicker" Title="Select Owner" SelectedIndexChanged="jobOwnersPicker_SelectedIndexChanged" >
+                </Picker>
+
+                <Picker Grid.Row="2" Grid.Column="2"  x:Name="jobNumbersPicker" Title="Select JobNum" SelectedIndexChanged ="jobNumbersPicker_SelectedIndexChanged"  >
+                        <Picker.SelectedIndex>0</Picker.SelectedIndex>
+                </Picker>
+                <Label Grid.Row="3" Grid.ColumnSpan="2" Text="Job Location *"/>
+                <local:BorderColorEntry Text="{Binding SelectedJob.JobLocation}"   Grid.Row="4" Grid.ColumnSpan="3" IsEnabled="False"/>
+                <Label Grid.Row="5" Grid.ColumnSpan="2" Text="Contact Name *"/>
+                <local:BorderColorEntry Text="{Binding SelectedJob.ContactName}"   Grid.Row="6" Grid.ColumnSpan="3" IsEnabled="False"/>
+                <Label Grid.Row="7" Grid.ColumnSpan="2" Text="Customer Name *"/>
+                <local:BorderColorEntry x:Name="custName" Text="{Binding SelectedJob.CustomerName}"   Grid.Row="8" Grid.ColumnSpan="3" IsEnabled="False"/>
+            
+                <Label Grid.Row="9" Grid.ColumnSpan="2" Text="Phone *"/>
+                <local:BorderColorEntry Text="{Binding SelectedJob.CustomerPhone}"  x:Name="custPhoneNum" Grid.Row="10" Grid.ColumnSpan="3" IsEnabled="True"/>
+            
+                <Button x:Name="submit"  Grid.Row="12" Grid.ColumnSpan="3"  Text="Verify and Continue" HorizontalOptions="EndAndExpand" BackgroundColor="{StaticResource blueColor}"
+                    Command="{Binding ContinueCommand}">
+                </Button>
+                </Grid> -->
+            </StackLayout>
+
+        <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" Color ="{StaticResource blueColor}"/>
+
+            <Label Text="Loading..." HorizontalOptions="Center" TextColor="White"/>
+
+        </StackLayout>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage Title ="CheckIn Equipment" xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             NavigationPage.HasNavigationBar="False"
+             x:Class="FTCollectorApp.View.EqCheckInPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Button">
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="BackgroundColor" Value="Gray"/>
+                <Setter Property="CornerRadius" Value="10"/>
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>    
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            <Grid RowDefinitions="3*,0.4*,*,*,*,*,*,*" ColumnDefinitions="*,*,*" Padding="5,10,10,5">
+                <Label Grid.Row="0" Grid.ColumnSpan="3" Text="Equipment Check Out" FontSize="30"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" />
+                <Label Grid.Row="1" Grid.Column="0" Text="Type*" />
+                <Label Grid.Row="1" Grid.Column="1" Text="Asset" />
+                <Label Grid.Row="1" Grid.Column="2" Text="Equipment*" />
+                <local:Dropdown Grid.Row="2" Grid.Column="0" Margin="5,5,10,5"
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"
+                                x:Name="pType1" />
+                <local:Dropdown Grid.Row="2" Grid.Column="1" Margin="5,5,10,5" x:Name="pEquipment1" />
+                <CheckBox Grid.Row="2" Grid.Column="2" Margin="5,5,10,5" x:Name="check1" />
+
+
+                <local:Dropdown Grid.Row="3" Grid.Column="0" Margin="5,5,10,5"
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"                                                                
+                                x:Name="pType2" />
+                <local:Dropdown Grid.Row="3" Grid.Column="1" Margin="5,5,10,5" x:Name="pEquipment2" />
+                <CheckBox Grid.Row="3" Grid.Column="2" Margin="5,5,10,5" x:Name="check2" />
+
+
+                <local:Dropdown Grid.Row="4" Grid.Column="0" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"                                                                
+                                x:Name="pType3" />
+                <local:Dropdown Grid.Row="4" Grid.Column="1" Margin="5,5,10,5" x:Name="pEquipment3" />
+                <CheckBox Grid.Row="4" Grid.Column="2" Margin="5,5,10,5" x:Name="check3" />
+
+
+                <local:Dropdown Grid.Row="5" Grid.Column="0" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"                                                                
+                                x:Name="pType4" />
+                <local:Dropdown Grid.Row="5" Grid.Column="1" Margin="5,5,10,5" x:Name="pEquipment4" />
+                <CheckBox Grid.Row="5" Grid.Column="2" Margin="5,5,10,5" x:Name="check4" />
+
+
+                <local:Dropdown Grid.Row="6" Grid.Column="0" Margin="5,5,10,5"
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"                                                                
+                                x:Name="pType5" />
+                <local:Dropdown Grid.Row="6" Grid.Column="1" Margin="5,5,10,5" x:Name="pEquipment5" />
+                <CheckBox Grid.Row="6" Grid.Column="2" Margin="5,5,10,5" x:Name="check5" />
+
+                <local:Dropdown Grid.Row="7" Grid.Column="0" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"                                                                
+                                x:Name="pType6" />
+                <local:Dropdown Grid.Row="7" Grid.Column="1" Margin="5,5,10,5" x:Name="pEquipment6" />
+                <CheckBox Grid.Row="7" Grid.Column="2" Margin="5,5,10,5" x:Name="check6" />
+            </Grid>
+            <Button x:Name="btnFinish" Text="Back" Clicked="btnFinish_Clicked"/>
+            <Button x:Name="btnLogOut" Text="LogOut" Clicked="btnLogOut_Clicked"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

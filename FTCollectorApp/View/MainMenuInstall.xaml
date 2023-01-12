@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FTCollectorApp.View.MainMenuInstall">
+    <ContentPage.Content>
+        <StackLayout Padding="20">
+            <Label Text="Main Menu" FontSize="Large" HorizontalOptions="Center" Padding="0,20,0,20"/>
+            <Button x:Name="btnSite" Text="Site" Clicked="btnSite_Clicked"  
+                    HorizontalOptions="FillAndExpand" Padding="0,10,0,10"/>
+            <Button x:Name="btnNewCable" Text="New Cable" Clicked="gotoFOCablePage"  
+                    HorizontalOptions="FillAndExpand" Padding="0,10,0,10"/>
+            <Button x:Name="btnPullCable" Text="Pull a cable" Clicked="btnPullCable_Clicked"  
+                    HorizontalOptions="FillAndExpand" Padding="0,10,0,10"/>
+            <Button x:Name="btnSpliceCable" Text="Splice a fiber" Clicked="btnSpliceCable_Clicked"  
+                    HorizontalOptions="FillAndExpand" Padding="0,10,0,10"/>
+            <Button x:Name="btnTerminateCable" Text="Terminate a fiber" Clicked="btnTerminate_Clicked"  HorizontalOptions="FillAndExpand"/>
+            <Button x:Name="btnTraceFiber" Text="Trace a fiber" Clicked="btnTraceFiber_Clicked" 
+                    HorizontalOptions="FillAndExpand" Padding="0,10,0,10"/>            
+            <Button x:Name="btnInstallDev" Text="Install devices" Clicked="btnInstallDev_Clicked"  HorizontalOptions="FillAndExpand"/>
+            <Button x:Name="btnOTDRtest" Text="Perform OTDR test" Clicked="OTDR_Clicked"  HorizontalOptions="FillAndExpand"/>
+            <Button x:Name="btnInstallDevices" Text="Install Devices" Clicked="Install_Clicked"  HorizontalOptions="FillAndExpand"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

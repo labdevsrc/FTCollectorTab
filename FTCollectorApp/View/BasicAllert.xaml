@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage  Title="{Binding TitlePopUp, Mode=TwoWay}" 
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             NavigationPage.HasNavigationBar="False"
+             x:Class="FTCollectorApp.View.BasicAllert">
+
+        <StackLayout
+                Margin="20"
+                Padding="20"
+                BackgroundColor="White"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+        <Label Text="{Binding MessageTxt, Mode=TwoWay}"  FontSize="Medium"
+               Padding="20"
+                    VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="Start" TextColor="Black"/>
+
+        <Grid  ColumnDefinitions="*,*" >
+            <Button Text="OK" Clicked="OnOK" VerticalOptions="End" />
+            <Button Text="Cancel" Clicked="OnCancel" VerticalOptions="End" Grid.Column="1"/>
+        </Grid>
+    </StackLayout>
+
+</pages:PopupPage>

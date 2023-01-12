@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:forms="clr-namespace:SignaturePad.Forms;assembly=SignaturePad.Forms" 
+             x:Class="FTCollectorApp.View.EquipmenReturnPage">
+
+    <ContentPage.Content>
+        <StackLayout Padding="20">
+            <Label FontSize="Large" Text="Equipment Return" HorizontalOptions="Center"/>
+            <Picker x:Name="eqIncharge"/>
+            <forms:SignaturePadView x:Name="signaturePad"  BackgroundImage="sign_bg.png"
+      BackgroundColor="LightGray"  
+      StrokeColor="Black"  
+      StrokeWidth="3"  
+      WidthRequest="280"  
+      HeightRequest="120"/>
+            <Button x:Name="SaveBtn"  
+                  Text="Save and Continue"  
+                  BackgroundColor="Gray"  
+                  Clicked="SaveBtn_Clicked"/>
+            <Button x:Name="ClearBtn"  
+                  Text="Reset"  
+                  BackgroundColor="Gray"  
+                  Clicked="ClearBtn_Clicked"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

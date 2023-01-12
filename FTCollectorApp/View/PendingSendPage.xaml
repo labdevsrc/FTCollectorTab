@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:fa="clr-namespace:FontAwesome"
+             x:Class="FTCollectorApp.View.PendingSendPage">
+    <ContentPage.Content>
+        <ListView x:Name="listviewPost" ItemSelected="listviewPost_ItemSelected" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal">
+                            <Label x:Name="txtTaskId" HorizontalOptions="StartAndExpand"/>
+                            <Button x:Name="delWorkItem" Clicked="delWorkItem_Clicked"
+                                    Text="{x:Static fa:FontAwesomeIcons.Trash}"
+                                   FontFamily="{StaticResource FontAwesomeSolid}"
+                                   HorizontalOptions="EndAndExpand"
+                                    WidthRequest="50"  >
+
+                            </Button>
+                            <Button x:Name="syncWorkItem" Clicked="syncWorkItem_Clicked"
+                               Text="{x:Static fa:FontAwesomeIcons.NfcSymbol}"
+                               FontFamily="FontAwesome6Solid"
+                               HorizontalOptions="End" WidthRequest="50" />
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>
