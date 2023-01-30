@@ -35,13 +35,13 @@ namespace FTCollectorApp
                 Routes.Add(nameof(BeginWorkPage), typeof(BeginWorkPage));
                 Routes.Add(nameof(VerifyJobPage), typeof(VerifyJobPage));
                 //Routes.Add(nameof(SelectCrewPage), typeof(SelectCrewPage));
-                Routes.Add(nameof(AsBuiltDocMenu), typeof(AsBuiltDocMenu));
-                Routes.Add(nameof(MainMenuInstall), typeof(MainMenuInstall));
+                //Routes.Add(nameof(AsBuiltDocMenu), typeof(AsBuiltDocMenu));
+                //Routes.Add(nameof(MainMenuInstall), typeof(MainMenuInstall));
                 Routes.Add(nameof(MainSitePage), typeof(MainSitePage));
                
                 //Routes.Add(nameof(CreateSite), typeof(CreateSite));
                 
-                Routes.Add(nameof(BdSiteNew), typeof(BdSiteNew));
+                Routes.Add(nameof(BdSiteNew), typeof(BdSiteNew)); // Portrait, 3 columns of BdSite
                 Routes.Add(nameof(CabinetSitePageView), typeof(CabinetSitePageView));
                 Routes.Add(nameof(PullBoxSitePageView), typeof(PullBoxSitePageView));
                 Routes.Add(nameof(StructureSitePageView), typeof(StructureSitePageView));

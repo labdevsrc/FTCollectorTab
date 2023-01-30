@@ -28,16 +28,32 @@ namespace FTCollectorApp.ViewModel
         bool isDisplayBeginWork = false;
 
         //[ObservableProperty]
-        bool isVerifyBtnEnable = false;
-        public bool IsVerifyBtnEnable {
-            get => isVerifyBtnEnable;
+        bool isVerified = false;
+        public bool IsVerified{
+            get => isVerified;
             set {
-                SetProperty(ref isVerifyBtnEnable, value);
-                (ContinueCommand as Command).ChangeCanExecute();
+                SetProperty(ref isVerified, value);
+                (ODOPopupCommand as Command).ChangeCanExecute();
+                (DisplayEquipmentCheckInCommand as Command).ChangeCanExecute();
+                (DisplayEquipmentCheckOutCommand as Command).ChangeCanExecute();
+                (ToggleCrewListCommand as Command).ChangeCanExecute();
                 Console.WriteLine();
             }
         }
 
+
+        bool isVerifyBtnEnable = false;
+        public bool IsVerifyBtnEnable
+        {
+            get => isVerifyBtnEnable;
+            set
+            {
+                SetProperty(ref isVerifyBtnEnable, value);
+                (ContinueCommand as Command).ChangeCanExecute();
+
+                Console.WriteLine();
+            }
+        }
 
 
         Job selectedJob;
@@ -164,6 +180,7 @@ namespace FTCollectorApp.ViewModel
         public ICommand ContinueCommand { get; set; }
 
         public ICommand ToggleCrewListCommand { get; set; }
+        public ICommand ToggleJobEntriesCommand { get; set; }
 
         public ICommand ODOPopupCommand { get; set; }
         public ICommand DisplayEquipmentCheckInCommand { get; set; }
@@ -172,11 +189,23 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         bool isDisplayCrewList = false;
 
+        [ObservableProperty]
+        bool isDisplayJobEntries = false;
+
+        [ObservableProperty]
+        string verified = string.Empty;
+
         private void ToggleExecute()
         {
             IsDisplayCrewList = !IsDisplayCrewList;
         }
-         
+
+        private void ToggleJobEntriesExecute()
+        {
+            IsDisplayJobEntries = !IsDisplayJobEntries;
+        }
+
+
         public VerifyJobViewModel()
         {
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
@@ -189,10 +218,54 @@ namespace FTCollectorApp.ViewModel
             Console.WriteLine();
 
             GPSSettingCommand = new Command(() => DisplayGPSSettingCommand());
-            ToggleCrewListCommand = new Command(() => ToggleExecute());
-            ODOPopupCommand  = new Command(() => XQtODOPopupCommand());
-            DisplayEquipmentCheckInCommand = new Command(() => DisplayEquipmentCheckIn());
-            DisplayEquipmentCheckOutCommand = new Command(() => DisplayEquipmentCheckOut());
+            ToggleJobEntriesCommand = new Command(() => ToggleJobEntriesExecute());
+
+            ToggleCrewListCommand = new Command(
+                execute: () => {
+                    IsDisplayCrewList = !IsDisplayCrewList;
+                },
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return IsVerified;
+                }
+            );
+
+            ODOPopupCommand = new Command(
+                execute: async () =>
+                {
+                    await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new OdometerPopup());
+                },
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return IsVerified;
+                }
+            );
+
+            DisplayEquipmentCheckInCommand = new Command(
+                execute: () => 
+                {
+                    DisplayEquipmentCheckIn();
+                },
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return IsVerified;
+                }
+            );
+
+            DisplayEquipmentCheckOutCommand = new Command(
+                execute: () =>
+                {
+                    DisplayEquipmentCheckOut();
+                },
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return IsVerified;
+                }
+            );
 
             ContinueCommand = new Command(
                 execute: async () => {
@@ -205,7 +278,8 @@ namespace FTCollectorApp.ViewModel
                         speaker?.Speak("Job verified!");
 
                         Application.Current.Properties["PageNumber"] = 3;
-                        IsDisplayBeginWork = true;
+                        IsVerified = true; // enable EqIn, EqOut, ODO input button
+                        Verified = "Verified";
                     }
                     catch
                     {
@@ -247,17 +321,5 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-
-
-
-
-        /// start select crew
-        /// 
-
-
-
-
-
-        //stop select crew
     }
 }

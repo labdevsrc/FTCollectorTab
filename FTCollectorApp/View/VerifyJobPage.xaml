@@ -1,36 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:local="clr-namespace:FTCollectorApp.Utils;assembly=FTCollectorApp"
              xmlns:fa="clr-namespace:FontAwesome"
              Shell.NavBarIsVisible="False"
              x:Class="FTCollectorApp.View.VerifyJobPage">
     <ContentPage.Content>
-    <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <AbsoluteLayout VerticalOptions="CenterAndExpand" >
         <StackLayout Orientation="Vertical" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
-            <StackLayout Padding="20" >
-                    <Label Text="Verify Job" HorizontalOptions="Center"/>
-                    <Label Text="Owner*"/>
-                    <Picker ItemsSource="{Binding OwnerList}" ItemDisplayBinding="{Binding OwnerName}" 
-                                SelectedItem="{Binding SelectedOwner, Mode=TwoWay}" TextColor="Black" />
-                    <Label Text="Job Number*"/>
-                    <Picker ItemsSource="{Binding JobNumbers}" ItemDisplayBinding="{Binding JobNumber}" 
-                                SelectedItem="{Binding SelectedJob, Mode=TwoWay}" TextColor="Black" />
-                    <Label Text="Job Location *"/>
-                    <local:BorderColorEntry Text="{Binding SelectedJob.JobLocation}"   IsEnabled="False"/>
-                    <Label Text="Contact Name *"/>
-                    <local:BorderColorEntry Text="{Binding SelectedJob.ContactName}"   IsEnabled="False"/>
-                    <Label Text="Customer Name *"/>
-                    <local:BorderColorEntry x:Name="custName" Text="{Binding SelectedJob.CustomerName}" IsEnabled="False"/>
-                    <Label Text="Phone *"/>
-                    <local:BorderColorEntry Text="{Binding SelectedJob.CustomerPhone}"  IsEnabled="True"/>
-                    <Button Text="Verify" HorizontalOptions="EndAndExpand" BackgroundColor="{StaticResource blueColor}"
-                    Command="{Binding ContinueCommand}"/>
-            </StackLayout>
 
-            <StackLayout Padding="20"  IsVisible="{Binding IsDisplayBeginWork}" >
-                <Label Text="Begin Work" HorizontalOptions="Center"/>
-                <Button Text="Crew List" Command="{Binding ToggleCrewListCommand}"/>
+
+            <StackLayout Padding="50"   >
+                    <xct:BadgeView Text="{Binding Verified}" BackgroundColor="Green" BorderColor="White" HorizontalOptions="CenterAndExpand">
+                        <Button Text="Input Job" Command="{Binding ToggleJobEntriesCommand}" />
+                    </xct:BadgeView>
+                    <StackLayout Padding="20" IsVisible="{Binding IsDisplayJobEntries}" >
+                        <Label Text="Owner*"/>
+                        <Picker ItemsSource="{Binding OwnerList}" ItemDisplayBinding="{Binding OwnerName}" 
+                                SelectedItem="{Binding SelectedOwner, Mode=TwoWay}" TextColor="Black" />
+                        <Label Text="Job Number*"/>
+                        <Picker ItemsSource="{Binding JobNumbers}" ItemDisplayBinding="{Binding JobNumber}" 
+                                SelectedItem="{Binding SelectedJob, Mode=TwoWay}" TextColor="Black" />
+                        <Label Text="Job Location *"/>
+                        <local:BorderColorEntry Text="{Binding SelectedJob.JobLocation}"   IsEnabled="False"/>
+                        <Label Text="Contact Name *"/>
+                        <local:BorderColorEntry Text="{Binding SelectedJob.ContactName}"   IsEnabled="False"/>
+                        <Label Text="Customer Name *"/>
+                        <local:BorderColorEntry x:Name="custName" Text="{Binding SelectedJob.CustomerName}" IsEnabled="False"/>
+                        <Label Text="Phone *"/>
+                        <local:BorderColorEntry Text="{Binding SelectedJob.CustomerPhone}"  IsEnabled="True"/>
+                        <Button Text="Verify" HorizontalOptions="EndAndExpand" BackgroundColor="{StaticResource blueColor}"
+                    Command="{Binding ContinueCommand}"/>
+                    </StackLayout>
+
+
+                    <Button Text="Crew List" Command="{Binding ToggleCrewListCommand}"/>
                     <StackLayout IsVisible="{Binding IsDisplayCrewList}">
                         <Grid Padding="20">
                             <Grid.RowDefinitions>

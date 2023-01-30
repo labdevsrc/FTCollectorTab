@@ -1,14 +1,6 @@
-﻿using FTCollectorApp.Model;
-using FTCollectorApp.Service;
-using FTCollectorApp.View.SitesPage;
+﻿using FTCollectorApp.Service;
 using Rg.Plugins.Popup.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace FTCollectorApp.View
@@ -27,20 +19,22 @@ namespace FTCollectorApp.View
             try
             {
                 await CloudDBService.PostJobEvent(entryOdometer.Text);
-                bool answer = await DisplayAlert("Confirm", "Confirm and go to Site menu page?", "OK", "Cancel");
-                if (answer)
+
+
+                /* Tab Navigation */
+                await DisplayAlert("Job Event", "Job uploade. Please Continue to Site Menu", "CLOSE");
+                /*if (answer)
                 {
                     if (Session.stage =="A")
                         await Navigation.PushAsync(new AsBuiltDocMenu());
                     if (Session.stage == "I")
                         await Navigation.PushAsync(new MainMenuInstall());
-                }
-                //await Task.Delay(500);
-                await PopupNavigation.Instance.PopAsync(true);
+                }*/
+                //await PopupNavigation.Instance.PopAsync(true);
             }
             catch
             {
-                await DisplayAlert("Error", "Update JobEvent table failed", "OK");
+                await DisplayAlert("Error", "Update JobEvent table failed. Check again internet connection", "CLOSE");
             }
             IsBusy = false;
         }

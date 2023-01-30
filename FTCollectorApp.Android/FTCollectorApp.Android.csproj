@@ -39,7 +39,7 @@
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidSupportedAbis>x86</AndroidSupportedAbis>
     <AndroidKeyStore>true</AndroidKeyStore>
-    <AndroidSigningKeyStore>C:\Users\TSUKUBA\ftapps.keystore</AndroidSigningKeyStore>
+    <AndroidSigningKeyStore>C:\Key\ftapps.keystore</AndroidSigningKeyStore>
     <AndroidSigningStorePass>ftapps123</AndroidSigningStorePass>
     <AndroidSigningKeyAlias>ftapps</AndroidSigningKeyAlias>
     <AndroidApkSignerAdditionalArguments>
@@ -191,7 +191,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties XamarinHotReloadWrongLinkerErrorInfoBarFTCollectorAppAndroidHideInfoBar="True" XamarinHotReloadDebuggerTimeoutExceptionFTCollectorAppAndroidHideInfoBar="True" />
+      <UserProperties XamarinHotReloadDebuggerTimeoutExceptionFTCollectorAppAndroidHideInfoBar="True" XamarinHotReloadWrongLinkerErrorInfoBarFTCollectorAppAndroidHideInfoBar="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
