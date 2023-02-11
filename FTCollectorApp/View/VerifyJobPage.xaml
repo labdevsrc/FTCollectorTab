@@ -3,19 +3,54 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:local="clr-namespace:FTCollectorApp.Utils;assembly=FTCollectorApp"
-             xmlns:fa="clr-namespace:FontAwesome"
+             xmlns:fa="clr-namespace:FontAwesome" 
              Shell.NavBarIsVisible="False"
              x:Class="FTCollectorApp.View.VerifyJobPage">
     <ContentPage.Content>
-        <AbsoluteLayout VerticalOptions="CenterAndExpand" >
-        <StackLayout Orientation="Vertical" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+        
+        <AbsoluteLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" >
 
+            <StackLayout Orientation="Vertical" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <StackLayout Padding="50"   >
+                    <StackLayout Orientation="Horizontal" >
+                        <StackLayout Orientation="Vertical">
+                            <!--<xct:BadgeView Text="{Binding VerifyStatusBadge, Mode=TwoWay}">
+                            </xct:BadgeView>-->
+                            <Button Text="{x:Static fa:FontAwesomeIcons.User}" FontSize="60"
+                                        FontFamily="FontAwesome6Solid" HeightRequest="120" WidthRequest="120" Command="{Binding ToggleJobEntriesCommand}" />
 
-            <StackLayout Padding="50"   >
-                    <xct:BadgeView Text="{Binding Verified}" BackgroundColor="Green" BorderColor="White" HorizontalOptions="CenterAndExpand">
-                        <Button Text="Input Job" Command="{Binding ToggleJobEntriesCommand}" />
-                    </xct:BadgeView>
+                            <Label HorizontalOptions="Center" Text="Verify Job"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Vertical">                        
+                            <Button Text="{x:Static fa:FontAwesomeIcons.Users}" FontSize="60"
+                                           FontFamily="FontAwesome6Solid" HeightRequest="120" WidthRequest="120" Command="{Binding ToggleCrewListCommand}" />
+
+                            <Label HorizontalOptions="Center" Text="Enter Crew"/>
+                        </StackLayout>
+
+                        <!--Equipment Checkout-->
+                        <StackLayout Orientation="Vertical">
+                            <Button Text="{x:Static fa:FontAwesomeIcons.UserGear}" FontSize="60"
+                                       FontFamily="FontAwesome6Solid" HeightRequest="120" WidthRequest="120" Command="{Binding DisplayEquipmentCheckOutCommand}" />
+                            <Label HorizontalOptions="Center" Text="Eq. Checkout"/>
+                        </StackLayout>
+                        <!--Equipment Checkin-->
+                        <StackLayout Orientation="Vertical">
+                            <Button Text="{x:Static fa:FontAwesomeIcons.Gears}" FontSize="60"
+                                       FontFamily="FontAwesome6Solid" HeightRequest="120" WidthRequest="120" Command="{Binding DisplayEquipmentCheckInCommand}" />                        
+                            <Label HorizontalOptions="Center" Text="Eq. Checkin"/>
+                        </StackLayout>
+                        <!--Odometer-->
+                        <StackLayout Orientation="Vertical">
+
+                            <Button Text="{x:Static fa:FontAwesomeIcons.GaugeHigh}" FontSize="60"
+                                       FontFamily="FontAwesome6Solid" HeightRequest="120" WidthRequest="120" Command="{Binding ODOPopupCommand}" />
+                            <Label HorizontalOptions="Center" Text="Odometer In"/>
+                        </StackLayout>
+
+                    </StackLayout>
                     <StackLayout Padding="20" IsVisible="{Binding IsDisplayJobEntries}" >
+                        <Label Text="Verify Job" FontSize="30"  HorizontalOptions="Center"/>
                         <Label Text="Owner*"/>
                         <Picker ItemsSource="{Binding OwnerList}" ItemDisplayBinding="{Binding OwnerName}" 
                                 SelectedItem="{Binding SelectedOwner, Mode=TwoWay}" TextColor="Black" />
@@ -30,12 +65,17 @@
                         <local:BorderColorEntry x:Name="custName" Text="{Binding SelectedJob.CustomerName}" IsEnabled="False"/>
                         <Label Text="Phone *"/>
                         <local:BorderColorEntry Text="{Binding SelectedJob.CustomerPhone}"  IsEnabled="True"/>
-                        <Button Text="Verify" HorizontalOptions="EndAndExpand" BackgroundColor="{StaticResource blueColor}"
+                        <Button Text="{Binding TextStatus, Mode=TwoWay}" HorizontalOptions="EndAndExpand" BackgroundColor="{StaticResource blueColor}"
                     Command="{Binding ContinueCommand}"/>
                     </StackLayout>
+                    
+                    <Grid ColumnDefinitions="2*,5*,2*" IsVisible="{Binding IsDisplayOdo}" Padding="40">
+                        <Label FontSize="Large"  HorizontalOptions="Start" Text="Odometer:" VerticalOptions="Center"/>
+                        <Entry FontSize="Large"  VerticalOptions="Center" Grid.Column="1" Text="{Binding EntryOdometer, Mode=TwoWay}"  Keyboard="Numeric" />
+                        <Button Grid.Column="2" Text="Save" VerticalOptions="Center" Command="{Binding ODOSaveCommand} "/>
+                    </Grid>
 
-
-                    <Button Text="Crew List" Command="{Binding ToggleCrewListCommand}"/>
+                    <!--<Button Text="Crew List" Command="{Binding ToggleCrewListCommand}"/>-->
                     <StackLayout IsVisible="{Binding IsDisplayCrewList}">
                         <Grid Padding="20">
                             <Grid.RowDefinitions>
@@ -57,7 +97,7 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Row="0" Grid.ColumnSpan="3" FontSize="40" Text="Select Crew" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+                            <Label Grid.Row="0" Grid.ColumnSpan="3" FontSize="30" Text="Select Crew" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
 
 
                             <Label Grid.Row="2" Grid.ColumnSpan="3" FontSize="Medium" 
@@ -176,45 +216,12 @@
 
                     </StackLayout>
 
-                <Button Text="Equipment CheckOut" Command="{Binding DisplayEquipmentCheckOutCommand}" />
+                <!--<Button Text="Equipment CheckOut" Command="{Binding DisplayEquipmentCheckOutCommand}" />
                 <Button Text="Equipment CheckIn"  Command="{Binding DisplayEquipmentCheckInCommand}"/>
-                <Button Text="Odometer Input" Command="{Binding ODOPopupCommand}"/>
+                <Button Text="Odometer Input" Command="{Binding ODOPopupCommand}"/>-->
 
             </StackLayout>
 
-                <!-- obsolete 
-            <Grid Padding="20" RowDefinitions="2*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,*"
-                     ColumnDefinitions="*,*,*" >
-                <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="Owner*"/>
-                <Label Grid.Row="1"  Grid.Column="2" Text="Job Number*"/>
-                <Picker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                    ItemsSource="{Binding OwnerList}" ItemDisplayBinding="{Binding OwnerName}" 
-                                SelectedItem="{Binding SelectedOwner, Mode=TwoWay}" TextColor="Black" />
-                <Picker Grid.Row="2" Grid.Column="2" 
-                    ItemsSource="{Binding JobNumbers}" ItemDisplayBinding="{Binding JobNumber}" 
-                                SelectedItem="{Binding SelectedJob, Mode=TwoWay}" TextColor="Black" />
-
-
-                <Picker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="jobOwnersPicker" Title="Select Owner" SelectedIndexChanged="jobOwnersPicker_SelectedIndexChanged" >
-                </Picker>
-
-                <Picker Grid.Row="2" Grid.Column="2"  x:Name="jobNumbersPicker" Title="Select JobNum" SelectedIndexChanged ="jobNumbersPicker_SelectedIndexChanged"  >
-                        <Picker.SelectedIndex>0</Picker.SelectedIndex>
-                </Picker>
-                <Label Grid.Row="3" Grid.ColumnSpan="2" Text="Job Location *"/>
-                <local:BorderColorEntry Text="{Binding SelectedJob.JobLocation}"   Grid.Row="4" Grid.ColumnSpan="3" IsEnabled="False"/>
-                <Label Grid.Row="5" Grid.ColumnSpan="2" Text="Contact Name *"/>
-                <local:BorderColorEntry Text="{Binding SelectedJob.ContactName}"   Grid.Row="6" Grid.ColumnSpan="3" IsEnabled="False"/>
-                <Label Grid.Row="7" Grid.ColumnSpan="2" Text="Customer Name *"/>
-                <local:BorderColorEntry x:Name="custName" Text="{Binding SelectedJob.CustomerName}"   Grid.Row="8" Grid.ColumnSpan="3" IsEnabled="False"/>
-            
-                <Label Grid.Row="9" Grid.ColumnSpan="2" Text="Phone *"/>
-                <local:BorderColorEntry Text="{Binding SelectedJob.CustomerPhone}"  x:Name="custPhoneNum" Grid.Row="10" Grid.ColumnSpan="3" IsEnabled="True"/>
-            
-                <Button x:Name="submit"  Grid.Row="12" Grid.ColumnSpan="3"  Text="Verify and Continue" HorizontalOptions="EndAndExpand" BackgroundColor="{StaticResource blueColor}"
-                    Command="{Binding ContinueCommand}">
-                </Button>
-                </Grid> -->
             </StackLayout>
 
         <StackLayout IsVisible="{Binding IsBusy}" Padding="12"

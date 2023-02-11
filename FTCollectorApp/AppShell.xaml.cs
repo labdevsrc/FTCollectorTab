@@ -7,6 +7,7 @@ using Xamarin.Forms;
 using FTCollectorApp.View;
 using FTCollectorApp.View.SitesPage;
 using FTCollectorApp.ViewPortrait;
+using FTCollectorApp.View.FormStyle;
 
 namespace FTCollectorApp
 {
@@ -38,9 +39,9 @@ namespace FTCollectorApp
                 //Routes.Add(nameof(AsBuiltDocMenu), typeof(AsBuiltDocMenu));
                 //Routes.Add(nameof(MainMenuInstall), typeof(MainMenuInstall));
                 Routes.Add(nameof(MainSitePage), typeof(MainSitePage));
-               
+                Routes.Add(nameof(CommonSite), typeof(CommonSite)); // Feb-8, 2023
                 //Routes.Add(nameof(CreateSite), typeof(CreateSite));
-                
+
                 Routes.Add(nameof(BdSiteNew), typeof(BdSiteNew)); // Portrait, 3 columns of BdSite
                 Routes.Add(nameof(CabinetSitePageView), typeof(CabinetSitePageView));
                 Routes.Add(nameof(PullBoxSitePageView), typeof(PullBoxSitePageView));

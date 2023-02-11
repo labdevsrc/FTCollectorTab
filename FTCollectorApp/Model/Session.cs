@@ -78,6 +78,9 @@ namespace FTCollectorApp.Model
         public static int ActiveDeviceCount { get; set; } = 0;
         public static int SiteCreateCnt { get; set; } = 0;
         public static int DuctSaveCount { get; set; } = 0;
+
+        public static bool IsVerified { get; set; } = false;
+
         public static List<UnSyncTaskList?> TaskPendingList { get; set; }
 
         public static int MAX_DIR_CNT { get; set; } = 0;

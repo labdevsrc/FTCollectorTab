@@ -21939,28 +21939,31 @@ namespace FTCollectorApp.Droid
 			public const int portconnection = 2131165356;
 			
 			// aapt resource value: 0x7F0700AD
-			public const int rack2 = 2131165357;
+			public const int pullbox = 2131165357;
 			
 			// aapt resource value: 0x7F0700AE
-			public const int rack3 = 2131165358;
+			public const int rack2 = 2131165358;
 			
 			// aapt resource value: 0x7F0700AF
-			public const int selectcrew = 2131165359;
-			
-			// aapt resource value: 0x7F0700B1
-			public const int signature_pad_background = 2131165361;
+			public const int rack3 = 2131165359;
 			
 			// aapt resource value: 0x7F0700B0
-			public const int sign_bg = 2131165360;
+			public const int selectcrew = 2131165360;
 			
 			// aapt resource value: 0x7F0700B2
-			public const int test_custom_background = 2131165362;
+			public const int signature_pad_background = 2131165362;
+			
+			// aapt resource value: 0x7F0700B1
+			public const int sign_bg = 2131165361;
 			
 			// aapt resource value: 0x7F0700B3
-			public const int tooltip_frame_dark = 2131165363;
+			public const int test_custom_background = 2131165363;
 			
 			// aapt resource value: 0x7F0700B4
-			public const int tooltip_frame_light = 2131165364;
+			public const int tooltip_frame_dark = 2131165364;
+			
+			// aapt resource value: 0x7F0700B5
+			public const int tooltip_frame_light = 2131165365;
 			
 			static Drawable()
 			{

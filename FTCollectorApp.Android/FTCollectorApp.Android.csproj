@@ -45,7 +45,7 @@
     <AndroidApkSignerAdditionalArguments>
     </AndroidApkSignerAdditionalArguments>
     <AndroidSigningKeyPass>ftapps123</AndroidSigningKeyPass>
-    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <MandroidI18n />
     <AndroidLinkSkip>FTCollectorApp</AndroidLinkSkip>
@@ -75,6 +75,7 @@
     <AndroidLinkTool>r8</AndroidLinkTool>
     <AndroidLinkMode>None</AndroidLinkMode>
     <AndroidLinkSkip>FTCollectorApp</AndroidLinkSkip>
+    <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -187,6 +188,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="fragment\" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\pullbox.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>

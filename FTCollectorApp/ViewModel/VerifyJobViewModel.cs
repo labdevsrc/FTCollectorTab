@@ -27,6 +27,39 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         bool isDisplayBeginWork = false;
 
+        [ObservableProperty]
+        bool isJobChanged = false;
+
+        [ObservableProperty]
+        bool isJobChanging = false;
+
+        string verifyStatusBadge = string.Empty;
+        public string VerifyStatusBadge{
+            get => verifyStatusBadge;
+            set
+            {
+                if(IsVerified)
+                    SetProperty(ref textStatus, "OK");
+                else if (IsJobChanging)
+                    SetProperty(ref textStatus, "");
+            }
+        }
+
+
+        //[ObservableProperty]
+        string textStatus = "Verify";
+        public string TextStatus
+        {
+            get => textStatus;
+            set
+            {
+                if(isVerified || IsJobChanged)
+                    SetProperty(ref textStatus, "Verified");
+                else if (IsJobChanging)
+                    SetProperty(ref textStatus, "Verify");
+            }
+        }
+
         //[ObservableProperty]
         bool isVerified = false;
         public bool IsVerified{
@@ -183,6 +216,9 @@ namespace FTCollectorApp.ViewModel
         public ICommand ToggleJobEntriesCommand { get; set; }
 
         public ICommand ODOPopupCommand { get; set; }
+
+        public ICommand ODOSaveCommand { get; set; }
+        
         public ICommand DisplayEquipmentCheckInCommand { get; set; }
         public ICommand DisplayEquipmentCheckOutCommand { get; set; }
 
@@ -191,6 +227,9 @@ namespace FTCollectorApp.ViewModel
 
         [ObservableProperty]
         bool isDisplayJobEntries = false;
+
+        [ObservableProperty]
+        bool isDisplayOdo = false;
 
         [ObservableProperty]
         string verified = string.Empty;
@@ -202,9 +241,28 @@ namespace FTCollectorApp.ViewModel
 
         private void ToggleJobEntriesExecute()
         {
+            IsDisplayCrewList = false;
+            IsDisplayOdo = false;
             IsDisplayJobEntries = !IsDisplayJobEntries;
         }
 
+        [ObservableProperty]
+        Color clrBkgndJob = Color.LightBlue;
+
+        [ObservableProperty]
+        Color clrBkgndCrew = Color.LightBlue;
+
+        [ObservableProperty]
+        Color clrBkgndECheckin = Color.LightBlue;
+
+        [ObservableProperty]
+        Color clrBkgndEChkOut = Color.LightBlue;
+
+        [ObservableProperty]
+        Color clrBkgndODO = Color.LightBlue;
+
+        [ObservableProperty]
+        string entryOdometer;
 
         public VerifyJobViewModel()
         {
@@ -222,7 +280,15 @@ namespace FTCollectorApp.ViewModel
 
             ToggleCrewListCommand = new Command(
                 execute: () => {
+                    IsDisplayJobEntries = false;
+                    IsDisplayOdo = false;
                     IsDisplayCrewList = !IsDisplayCrewList;
+                    clrBkgndJob = Color.LightBlue;
+                    clrBkgndCrew = Color.Green;
+                    clrBkgndECheckin = Color.LightBlue;
+                    clrBkgndEChkOut = Color.LightBlue;
+                    clrBkgndODO = Color.LightBlue;
+
                 },
                 canExecute: () =>
                 {
@@ -234,19 +300,65 @@ namespace FTCollectorApp.ViewModel
             ODOPopupCommand = new Command(
                 execute: async () =>
                 {
-                    await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new OdometerPopup());
+                    IsDisplayOdo = !IsDisplayOdo;
+                    IsDisplayCrewList = false;
+                    IsDisplayJobEntries = false;
+                    clrBkgndJob = Color.LightBlue;
+                    clrBkgndCrew = Color.LightBlue;
+                    clrBkgndECheckin = Color.LightBlue;
+                    clrBkgndEChkOut = Color.LightBlue;
+                    clrBkgndODO = Color.Green;
                 },
                 canExecute: () =>
                 {
                     Console.WriteLine();
                     return IsVerified;
                 }
+
+
+            );
+            ODOSaveCommand = new Command(
+                execute: async () =>
+                { 
+                    IsBusy = true;
+                    try
+                    {
+                        await CloudDBService.PostJobEvent(EntryOdometer);
+
+
+                        /* Tab Navigation */
+                        await Application.Current.MainPage.DisplayAlert("Job Event", "Job uploaded. Please Continue to Site Menu", "CLOSE");
+
+                        
+                        /*if (answer)
+                        {
+                            if (Session.stage =="A")
+                                await Navigation.PushAsync(new AsBuiltDocMenu());
+                            if (Session.stage == "I")
+                                await Navigation.PushAsync(new MainMenuInstall());
+                        }*/
+                        //await PopupNavigation.Instance.PopAsync(true);
+                    }
+                    catch
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Error", "Update JobEvent table failed. Check again internet connection", "CLOSE");
+                    }
+                    IsBusy = false;
+
+                    //await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new OdometerPopup());
+                }
+
             );
 
             DisplayEquipmentCheckInCommand = new Command(
                 execute: () => 
                 {
                     DisplayEquipmentCheckIn();
+                    clrBkgndJob = Color.LightBlue;
+                    clrBkgndCrew = Color.LightBlue;
+                    clrBkgndECheckin = Color.Green;
+                    clrBkgndEChkOut = Color.LightBlue;
+                    clrBkgndODO = Color.LightBlue;
                 },
                 canExecute: () =>
                 {
@@ -259,6 +371,11 @@ namespace FTCollectorApp.ViewModel
                 execute: () =>
                 {
                     DisplayEquipmentCheckOut();
+                    clrBkgndJob = Color.LightBlue;
+                    clrBkgndCrew = Color.LightBlue;
+                    clrBkgndECheckin = Color.LightBlue;
+                    clrBkgndEChkOut = Color.Green;
+                    clrBkgndODO = Color.LightBlue;
                 },
                 canExecute: () =>
                 {
@@ -278,7 +395,10 @@ namespace FTCollectorApp.ViewModel
                         speaker?.Speak("Job verified!");
 
                         Application.Current.Properties["PageNumber"] = 3;
+
+                        IsJobChanged = IsVerified; // condition when job changed
                         IsVerified = true; // enable EqIn, EqOut, ODO input button
+                        Session.IsVerified = true; // singleton session instance to notify Verify job done
                         Verified = "Verified";
                     }
                     catch

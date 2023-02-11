@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:fa="clr-namespace:FontAwesome"             
+             x:Class="FTCollectorApp.View.FormStyle.CommonSite"
+             x:Name="CommonSitePage"
+             >
+    <ContentPage.Content>
+        <StackLayout HorizontalOptions="Start" >
+            <Label FontSize="30" VerticalOptions="Start" Padding="20">
+                <MultiBinding StringFormat="{} Site : {0} - {1}">
+                    <Binding Path="SelectedMajorType" />
+                    <Binding Path="SelectedMinorType" />
+                </MultiBinding>
+            </Label>
+
+            <StackLayout Orientation="Horizontal" Padding="20">
+                <StackLayout Orientation="Vertical">
+                    <Button Text="{x:Static fa:FontAwesomeIcons.Building}" FontSize="60"
+                            HeightRequest="120" WidthRequest="120" BackgroundColor="{Binding BckgdBtnColorB}"
+                    FontFamily="FontAwesome6Solid"   Command ="{Binding BldBtnClickedCmd}"/>
+
+                    <Label Text="Building" HorizontalOptions="Center"/>
+                </StackLayout>
+                <StackLayout Orientation="Vertical">
+                    <Button Text="{x:Static fa:FontAwesomeIcons.Building}" FontSize="60"
+                            HeightRequest="120" WidthRequest="120" BackgroundColor="{Binding BckgdBtnColorC}"
+                        FontFamily="FontAwesome6Solid" Command="{Binding CabBtnClickedCmd}" />
+                    <Label Text="Cabinet" HorizontalOptions="Center"/>
+                </StackLayout>
+
+                <StackLayout Orientation="Vertical">
+                    <!--<ImageButton Source="pullbox.jpg" Padding="20"  HeightRequest="120" WidthRequest="120" 
+                                 Command="{Binding PullBoxBtnClickedCmd}"
+                                 CornerRadius="25"/>-->
+                    <Button Text="{x:Static fa:FontAwesomeIcons.AddressBook}" FontSize="60"
+                            HeightRequest="120" WidthRequest="120" BackgroundColor="{Binding BckgdBtnColorPb}"
+                            FontFamily="FontAwesome6Regular" Command="{Binding PullBoxBtnClickedCmd}" />
+                    <Label Text="PullBox" HorizontalOptions="Center"/>
+                </StackLayout>
+
+                <StackLayout Orientation="Vertical">
+                    <Button Text="{x:Static fa:FontAwesomeIcons.BuildingFlag}" FontSize="60"
+                            HeightRequest="120" WidthRequest="120" BackgroundColor="{Binding BckgdBtnColorS}"
+                            FontFamily="FontAwesome6Solid" Command="{Binding StructBtnClickedCmd}" />
+                    <Label Text="Structure" HorizontalOptions="Center" />
+                </StackLayout>
+                <StackLayout Orientation="Vertical" Padding="10" HorizontalOptions="FillAndExpand">
+                    <Label Text="Detail Site Type*" HorizontalOptions="Start"/>
+                    <Picker SelectedItem="{Binding SelectedMinorType, Mode=TwoWay}" Title="{Binding SelectedMajorType, StringFormat='Select Detail Site : {0} here'}"
+                            ItemsSource="{Binding MinorSiteList}" />
+                    <Label FontSize="Medium" >
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="SelectedMajorType" />
+                            <Binding Path="SelectedMinorType" />
+                        </MultiBinding>
+                    </Label>
+                </StackLayout>
+            </StackLayout>
+            <Grid Padding="20" ColumnDefinitions="2*,5*,5*,2*" >
+                <Label Text="Enter PC tag" HorizontalOptions="Start" FontSize="Medium"/>
+                <Entry Grid.Column="1" Placeholder="Ex : 34675 or H1.562" Text="{Binding TagNumber, Mode=TwoWay}"  FontSize="Medium"/>
+                <Entry Grid.Column="2" Placeholder="Re-Enter TagNumber" Text="{Binding ReEnterTagNumber, Mode=TwoWay}" FontSize="Medium" />
+                <Label Grid.Column="3" Text="{Binding ReEnterStatus}" HorizontalOptions="End" FontSize="Medium"/>
+            </Grid>
+
+            <Grid Padding="20"  RowDefinitions="*,*" ColumnDefinitions="*">
+                <Label  Text="Additional Entries" ></Label>
+                <Picker Grid.Row="0" Grid.Column="1" ItemsSource="{Binding SiteColNamesList}" SelectedItem="{Binding SelectedColToAdd, Mode=TwoWay}"                    
+                    ItemDisplayBinding="{Binding ColName}" />
+            </Grid>
+
+            <ListView x:Name="DetailSiteInfo" HeightRequest="200" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.ContextActions>
+                                <MenuItem 
+                                    Command="{Binding 
+                                    Source={x:Reference CommonSitePage},Path=BindingContext.RemoveDetailInfoCmd}" CommandParameter="{Binding .}"
+                                    Text="Delete" IsDestructive="True" />
+                            </ViewCell.ContextActions>
+                            <StackLayout Padding="15">
+                                <Label Text="{Binding UserSelectList.ColName}" FontSize="Medium" />
+                                <Label Text="{Binding UserSelectList.ColType}" FontSize="Medium" />                                
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
+            <StackLayout x:Name="newEntries">
+                <Label Text="{Binding SelectedColToAdd.ColName}" />
+                <!--<Entry IsVisible="{Binding EntryType}" Text="{Binding Params, Mode=TwoWay}" />-->
+            </StackLayout>
+
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

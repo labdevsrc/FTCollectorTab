@@ -6,6 +6,7 @@
        xmlns:views="clr-namespace:FTCollectorApp.View"
               xmlns:fa="clr-namespace:FontAwesome"
        xmlns:viewsite="clr-namespace:FTCollectorApp.View.SitesPage"   
+       xmlns:gformpage="clr-namespace:FTCollectorApp.View.FormStyle"          
        xmlns:viewsitep ="clr-namespace:FTCollectorApp.ViewPortrait"          
        x:Class="FTCollectorApp.AppShell"
        x:Name="shell"
@@ -77,7 +78,9 @@
         <controls:FlyoutFooter />
     </Shell.FlyoutFooter>
 
+    <TabBar>
 
+    </TabBar>
 
     <FlyoutItem Title="+"
                 FlyoutDisplayOptions="AsMultipleItems">
@@ -117,6 +120,27 @@
 
         </Tab>
 
+        <Tab Title="SITE-F" 
+             Route="CommonSite">
+            <Tab.Icon>
+                <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.GooglePlay}"/>
+            </Tab.Icon>
+
+            <ShellContent Route="Common Site"
+                          Style="{StaticResource DomesticShell}"
+                          Title="COMMON SITE"
+                          ContentTemplate="{DataTemplate gformpage:CommonSite}" >
+                <ShellContent.Icon>
+                    <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.Building}"/>
+                </ShellContent.Icon>
+            </ShellContent>
+
+        </Tab>        
+        
         <Tab Title="SITE" 
              Route="MainSitePage">
             <Tab.Icon>

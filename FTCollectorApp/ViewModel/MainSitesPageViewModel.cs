@@ -233,8 +233,9 @@ namespace FTCollectorApp.ViewModel
         string siteCategory = Session.site_major;
 
 
-        //public BuildingSitePageViewModel(string siteType, string tagNumber)
-        public MainSitesPageViewModel()
+
+    //public BuildingSitePageViewModel(string siteType, string tagNumber)
+    public MainSitesPageViewModel()
         {
             Console.WriteLine();
 
@@ -246,6 +247,8 @@ namespace FTCollectorApp.ViewModel
             Session.current_page = "building";
             Session.site_major = string.Empty;
             Session.site_minor = string.Empty;
+
+            CheckJobVerified();
 
             ShowDuctPageCommand = new Command(
                 execute: async () => {
@@ -326,6 +329,17 @@ namespace FTCollectorApp.ViewModel
         }
 
 
+        // VERY IMPORTANT !!
+        // Must check Job verified or not
+        // if not verified Block user input
+        // 
+        async void CheckJobVerified()
+        {
+            if (!Session.IsVerified)
+            {
+                await Application.Current.MainPage.DisplayAlert("Warning", "Uploading Data Done", "OK");
+            }
+        }
 
 
 
