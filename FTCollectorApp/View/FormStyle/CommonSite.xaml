@@ -6,7 +6,8 @@
              x:Name="CommonSitePage"
              >
     <ContentPage.Content>
-        <StackLayout HorizontalOptions="Start" >
+        <StackLayout>
+
             <Label FontSize="30" VerticalOptions="Start" Padding="20">
                 <MultiBinding StringFormat="{} Site : {0} - {1}">
                     <Binding Path="SelectedMajorType" />
@@ -14,18 +15,21 @@
                 </MultiBinding>
             </Label>
 
+
             <StackLayout Orientation="Horizontal" Padding="20">
                 <StackLayout Orientation="Vertical">
                     <Button Text="{x:Static fa:FontAwesomeIcons.Building}" FontSize="60"
                             HeightRequest="120" WidthRequest="120" BackgroundColor="{Binding BckgdBtnColorB}"
-                    FontFamily="FontAwesome6Solid"   Command ="{Binding BldBtnClickedCmd}"/>
-
+                        FontFamily="FontAwesome6Solid"   Command ="{Binding SiteClickedCmd}"
+                            CommandParameter="Building" />
                     <Label Text="Building" HorizontalOptions="Center"/>
                 </StackLayout>
                 <StackLayout Orientation="Vertical">
                     <Button Text="{x:Static fa:FontAwesomeIcons.Building}" FontSize="60"
                             HeightRequest="120" WidthRequest="120" BackgroundColor="{Binding BckgdBtnColorC}"
-                        FontFamily="FontAwesome6Solid" Command="{Binding CabBtnClickedCmd}" />
+                        FontFamily="FontAwesome6Solid" Command="{Binding SiteClickedCmd}" 
+                            CommandParameter="Cabinet" 
+                            />
                     <Label Text="Cabinet" HorizontalOptions="Center"/>
                 </StackLayout>
 
@@ -35,14 +39,18 @@
                                  CornerRadius="25"/>-->
                     <Button Text="{x:Static fa:FontAwesomeIcons.AddressBook}" FontSize="60"
                             HeightRequest="120" WidthRequest="120" BackgroundColor="{Binding BckgdBtnColorPb}"
-                            FontFamily="FontAwesome6Regular" Command="{Binding PullBoxBtnClickedCmd}" />
+                            FontFamily="FontAwesome6Regular" Command="{Binding SiteClickedCmd}"
+                            CommandParameter="PullBox" 
+                            />
                     <Label Text="PullBox" HorizontalOptions="Center"/>
                 </StackLayout>
 
                 <StackLayout Orientation="Vertical">
                     <Button Text="{x:Static fa:FontAwesomeIcons.BuildingFlag}" FontSize="60"
                             HeightRequest="120" WidthRequest="120" BackgroundColor="{Binding BckgdBtnColorS}"
-                            FontFamily="FontAwesome6Solid" Command="{Binding StructBtnClickedCmd}" />
+                            FontFamily="FontAwesome6Solid" Command="{Binding SiteClickedCmd}"
+                            CommandParameter="Structure" 
+                            />
                     <Label Text="Structure" HorizontalOptions="Center" />
                 </StackLayout>
                 <StackLayout Orientation="Vertical" Padding="10" HorizontalOptions="FillAndExpand">
@@ -56,21 +64,152 @@
                         </MultiBinding>
                     </Label>
                 </StackLayout>
+
             </StackLayout>
-            <Grid Padding="20" ColumnDefinitions="2*,5*,5*,2*" >
-                <Label Text="Enter PC tag" HorizontalOptions="Start" FontSize="Medium"/>
-                <Entry Grid.Column="1" Placeholder="Ex : 34675 or H1.562" Text="{Binding TagNumber, Mode=TwoWay}"  FontSize="Medium"/>
-                <Entry Grid.Column="2" Placeholder="Re-Enter TagNumber" Text="{Binding ReEnterTagNumber, Mode=TwoWay}" FontSize="Medium" />
-                <Label Grid.Column="3" Text="{Binding ReEnterStatus}" HorizontalOptions="End" FontSize="Medium"/>
-            </Grid>
 
-            <Grid Padding="20"  RowDefinitions="*,*" ColumnDefinitions="*">
-                <Label  Text="Additional Entries" ></Label>
-                <Picker Grid.Row="0" Grid.Column="1" ItemsSource="{Binding SiteColNamesList}" SelectedItem="{Binding SelectedColToAdd, Mode=TwoWay}"                    
-                    ItemDisplayBinding="{Binding ColName}" />
-            </Grid>
+                <Grid Padding="20,5,20,5" ColumnDefinitions="2*,5*,5*,2*" >
+                    <Label Text="Enter PC tag" HorizontalOptions="Start" FontSize="Medium"/>
+                    <Entry Grid.Column="1" Placeholder="Ex : 34675 or H1.562" Text="{Binding TagNumber, Mode=TwoWay}"  FontSize="Medium"/>
+                    <Entry Grid.Column="2" Placeholder="Re-Enter TagNumber" Text="{Binding ReEnterTagNumber, Mode=TwoWay}" FontSize="Medium" />
+                    <Label Grid.Column="3" Text="{Binding ReEnterStatus}" HorizontalOptions="End" FontSize="Medium"/>
+                </Grid>
 
-            <ListView x:Name="DetailSiteInfo" HeightRequest="200" >
+          <AbsoluteLayout BackgroundColor="LightGray">
+                <!--Building Entries Start -->
+                <Grid Padding="20,5,20,5" 
+                      ColumnDefinitions="*, *, *" IsVisible="{Binding IsBuildingSelected}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Label Text="Enter site name" HorizontalOptions="Start"/>
+                    <Entry Grid.Column="1" Text="{Binding SiteName, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
+                    <Label Grid.Row="1" Text="Enter Street Address" HorizontalOptions="Start"/>
+                    <Entry Grid.Row="1" Grid.Column="1" Text="{Binding StreetAddress, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
+
+                    <Label Grid.Row="2" Text="Building Classification"/>
+                    <Picker Grid.Row="2" Grid.Column="1" ItemsSource="{Binding BuildingTypeList}" ItemDisplayBinding="{Binding TYPE_DESC}" 
+                                SelectedItem="{Binding SelectedBuilding, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
+                    <!--<Grid IsVisible="{Binding IsRoadwaySelected}" ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*,0.2*,0.2*,0.2*,0.2*">-->
+                    <Label Grid.Row="3" Text="Choose a roadway"/>
+                    <Label Grid.Row="3" Grid.Column="2" IsVisible="{Binding IsSearchingRoadway}" />
+                    <Entry Grid.Row="3" Grid.Column="1" Text="{Binding SearchRoadway, Mode=TwoWay}" Placeholder="type roadway" PlaceholderColor="aqua"/>
+                    <ListView  Grid.Row="3" Grid.Column="2" Grid.RowSpan="5" IsVisible="{Binding IsSearchingRoadway}"
+                        ItemsSource="{Binding RoadwayList}" SelectedItem="{Binding SelectedRoadway, Mode=TwoWay}"                     
+                        BackgroundColor="LightGray"  >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextCell Text="{Binding RoadwayName}"  />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <Label Grid.Row="4"  Text="Choose an intersection"/>
+                    <Picker Grid.Row="4" Grid.Column="1"  Title="Select Intersection" ItemsSource="{Binding IntersectionList}" 
+                            ItemDisplayBinding="{Binding IntersectionName}"
+                                    SelectedItem="{Binding SelectedIntersection, Mode=TwoWay}"
+                                HorizontalOptions="FillAndExpand" />
+                    <!--</Grid>-->
+                    <Label Grid.Row="5" Text="Direction of Travel" />
+                    <Picker Grid.Row="5" Grid.Column="1" ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}" 
+                            SelectedItem="{Binding SelectedTravelDirection, Mode=TwoWay}"   HorizontalOptions="FillAndExpand" />
+                    <Label Grid.Row="6" Text="Orientation" />
+                    <Picker Grid.Row="6" Grid.Column="1" ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}"
+                            SelectedItem="{Binding SelectedOrientation, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+
+                    <Label Grid.Row="7"  Text="{Binding SelectedMajorType, StringFormat='{0} Additional Detail' }"  FontSize="Medium" ></Label>
+                    <Picker Grid.Row="7" Grid.Column="1" 
+                        FontSize="Medium"     
+                        ItemsSource="{Binding BuildingColNamesList}" SelectedItem="{Binding SelectedColToAdd, Mode=TwoWay}"                    
+                        ItemDisplayBinding="{Binding ColName}" />
+                </Grid>
+                <!--Building Entries End -->
+
+                <!--Cabinet Entries Start -->
+                <Grid Padding="20,5,20,5" ColumnDefinitions="*,*" IsVisible="{Binding IsCabinetSelected}">
+                    <Label  Text="{Binding SelectedMajorType, StringFormat='{0} Additional Detail' }"  FontSize="Medium" ></Label>
+                    <Picker Grid.Row="0" Grid.Column="1" 
+                        FontSize="Medium"     
+                        ItemsSource="{Binding CabinetColNamesList}" SelectedItem="{Binding SelectedColToAdd, Mode=TwoWay}"                    
+                        ItemDisplayBinding="{Binding ColName}" />
+                </Grid>
+                <!--Cabinet Entries End -->
+
+                <!--Pull box Entries Start -->
+                <Grid Padding="20,5,20,5" ColumnDefinitions="*,*" IsVisible="{Binding IsPulboxSelected}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label Text="Enter owners tag number" HorizontalOptions="Start"/>
+                    <Entry Grid.Column="1" Text="{Binding SiteName, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
+                    <Label Grid.Row="1" Text="Enter location" HorizontalOptions="Start"/>
+                    <Entry Grid.Row="1" Grid.Column="1" Text="{Binding StreetAddress, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
+
+                    <Label Grid.Row="2" Text="Enter site name" HorizontalOptions="Start"/>
+                    <Entry Grid.Row="2" Grid.Column="1" Text="{Binding SiteName, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
+
+                    <Label Grid.Row="3" Text="Choose a roadway"/>
+                    <Label Grid.Row="3" Grid.Column="1" IsVisible="{Binding IsSearchingRoadway}" />
+                    <Entry Grid.Row="4" Text="{Binding SearchRoadway, Mode=TwoWay}" Placeholder="type roadway" PlaceholderColor="aqua"/>
+                    <ListView  Grid.Row="4" Grid.RowSpan="2" ItemsSource="{Binding RoadwayList}" SelectedItem="{Binding SelectedRoadway, Mode=TwoWay}"                     
+                    BackgroundColor="LightGray" 
+                               ItemSelected="{Binding ReturnFocusCmd}"
+                               IsVisible="{Binding IsSearchingRoadway}" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextCell Text="{Binding RoadwayName}"  />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Label Grid.Row="5"  Text="Choose an intersection"/>
+                    <Picker Grid.Row="5" Grid.Column="1"  Title="Select Intersection" ItemsSource="{Binding IntersectionList}" 
+                        ItemDisplayBinding="{Binding IntersectionName}"
+                                SelectedItem="{Binding SelectedIntersection, Mode=TwoWay}"
+                            HorizontalOptions="FillAndExpand" />
+                    <Label Grid.Row="6" Text="Direction of Travel" />
+                    <Picker Grid.Row="6" Grid.Column="1" ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}" 
+                        SelectedItem="{Binding SelectedTravelDirection, Mode=TwoWay}"   HorizontalOptions="FillAndExpand" />
+                    <Label Grid.Row="7" Text="Orientation" />
+                    <Picker Grid.Row="7" Grid.Column="1" ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}"
+                        SelectedItem="{Binding SelectedOrientation, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+                    <Label  Grid.Row="8" Text="{Binding SelectedMajorType, StringFormat='{0} Additional Detail' }"  FontSize="Medium" ></Label>
+                    <Picker Grid.Row="8" Grid.Column="1" 
+                        FontSize="Medium"     
+                        ItemsSource="{Binding PBColNamesList}" SelectedItem="{Binding SelectedColToAdd, Mode=TwoWay}"                    
+                        ItemDisplayBinding="{Binding ColName}" />
+                </Grid>
+                <!--Pull box Entries End -->
+
+                <!--Structure Entries Start -->
+                <Grid Padding="20,5,20,5" ColumnDefinitions="*,*" IsVisible="{Binding IsStructureSelected}">
+                    <Label  Text="{Binding SelectedMajorType, StringFormat='{0} Additional Detail' }"  FontSize="Medium" ></Label>
+                    <Picker Grid.Row="0" Grid.Column="1" 
+                        FontSize="Medium"     
+                        ItemsSource="{Binding StructureColNamesList}" SelectedItem="{Binding SelectedColToAdd, Mode=TwoWay}"                    
+                        ItemDisplayBinding="{Binding ColName}" />
+                </Grid>
+            </AbsoluteLayout>
+
+            <StackLayout HeightRequest="200">
+            <ListView                
+                ItemsSource="{Binding UserSelectedList}"
+                RowHeight="80" 
+                x:Name="DetailSiteInfo"  HasUnevenRows="False">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -80,21 +219,30 @@
                                     Source={x:Reference CommonSitePage},Path=BindingContext.RemoveDetailInfoCmd}" CommandParameter="{Binding .}"
                                     Text="Delete" IsDestructive="True" />
                             </ViewCell.ContextActions>
-                            <StackLayout Padding="15">
-                                <Label Text="{Binding UserSelectList.ColName}" FontSize="Medium" />
-                                <Label Text="{Binding UserSelectList.ColType}" FontSize="Medium" />                                
+                            <StackLayout Padding="20,5,20,5"  
+                                         Orientation="Horizontal">
+                                <Label Text="{Binding ColName}" 
+                                       VerticalOptions="Center" FontSize="Large" HorizontalOptions="Start" />
+                                <AbsoluteLayout VerticalOptions="Center" HorizontalOptions="End">
+                                    <Switch IsVisible="{Binding IsSwitch}" />
+                                    <Entry IsVisible="{Binding IsEntry}" 
+                                           
+                                           Text="{Binding EntryText, Mode=TwoWay}" FontSize="Medium" 
+                                            Placeholder="{Binding SelectedColToAdd.ColName, StringFormat='Enter here {0} '}"/>
+                                    <Picker IsVisible="{Binding IsDropDown}" 
+                                            ItemsSource="{Binding RoadwayList}" 
+                                             />
+                                </AbsoluteLayout>
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            
-            <StackLayout x:Name="newEntries">
-                <Label Text="{Binding SelectedColToAdd.ColName}" />
-                <!--<Entry IsVisible="{Binding EntryType}" Text="{Binding Params, Mode=TwoWay}" />-->
             </StackLayout>
+            <StackLayout x:Name="newEntries">
+                <Label Text="{Binding SelectedColToAdd.ColName, StringFormat='Current selected item {0}'}" />
 
-
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
