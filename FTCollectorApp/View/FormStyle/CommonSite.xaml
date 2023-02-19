@@ -168,7 +168,6 @@
                     <Entry Grid.Row="4" Text="{Binding SearchRoadway, Mode=TwoWay}" Placeholder="type roadway" PlaceholderColor="aqua"/>
                     <ListView  Grid.Row="4" Grid.RowSpan="2" ItemsSource="{Binding RoadwayList}" SelectedItem="{Binding SelectedRoadway, Mode=TwoWay}"                     
                     BackgroundColor="LightGray" 
-                               ItemSelected="{Binding ReturnFocusCmd}"
                                IsVisible="{Binding IsSearchingRoadway}" >
                         <ListView.ItemTemplate>
                             <DataTemplate>
