@@ -86,7 +86,7 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
+
                     </Grid.RowDefinitions>
 
                     <Label Text="Enter site name" HorizontalOptions="Start"/>
@@ -124,35 +124,25 @@
                     <Picker Grid.Row="6" Grid.Column="1" ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}"
                             SelectedItem="{Binding SelectedOrientation, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
 
-                    <Label Grid.Row="7"  Text="{Binding SelectedMajorType, StringFormat='{0} Additional Detail' }"  FontSize="Medium" ></Label>
-                    <Picker Grid.Row="7" Grid.Column="1" 
-                        FontSize="Medium"     
-                        ItemsSource="{Binding BuildingColNamesList}" SelectedItem="{Binding SelectedColToAdd, Mode=TwoWay}"                    
-                        ItemDisplayBinding="{Binding ColName}" />
                 </Grid>
                 <!--Building Entries End -->
 
                 <!--Cabinet Entries Start -->
                 <Grid Padding="20,5,20,5" ColumnDefinitions="*,*" IsVisible="{Binding IsCabinetSelected}">
-                    <Label  Text="{Binding SelectedMajorType, StringFormat='{0} Additional Detail' }"  FontSize="Medium" ></Label>
-                    <Picker Grid.Row="0" Grid.Column="1" 
-                        FontSize="Medium"     
-                        ItemsSource="{Binding CabinetColNamesList}" SelectedItem="{Binding SelectedColToAdd, Mode=TwoWay}"                    
-                        ItemDisplayBinding="{Binding ColName}" />
                 </Grid>
                 <!--Cabinet Entries End -->
 
                 <!--Pull box Entries Start -->
                 <Grid Padding="20,5,20,5" ColumnDefinitions="*,*" IsVisible="{Binding IsPulboxSelected}">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
                     <Label Text="Enter owners tag number" HorizontalOptions="Start"/>
@@ -186,54 +176,58 @@
                     <Label Grid.Row="7" Text="Orientation" />
                     <Picker Grid.Row="7" Grid.Column="1" ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}"
                         SelectedItem="{Binding SelectedOrientation, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
-                    <Label  Grid.Row="8" Text="{Binding SelectedMajorType, StringFormat='{0} Additional Detail' }"  FontSize="Medium" ></Label>
-                    <Picker Grid.Row="8" Grid.Column="1" 
-                        FontSize="Medium"     
-                        ItemsSource="{Binding PBColNamesList}" SelectedItem="{Binding SelectedColToAdd, Mode=TwoWay}"                    
-                        ItemDisplayBinding="{Binding ColName}" />
                 </Grid>
                 <!--Pull box Entries End -->
 
                 <!--Structure Entries Start -->
                 <Grid Padding="20,5,20,5" ColumnDefinitions="*,*" IsVisible="{Binding IsStructureSelected}">
-                    <Label  Text="{Binding SelectedMajorType, StringFormat='{0} Additional Detail' }"  FontSize="Medium" ></Label>
-                    <Picker Grid.Row="0" Grid.Column="1" 
-                        FontSize="Medium"     
-                        ItemsSource="{Binding StructureColNamesList}" SelectedItem="{Binding SelectedColToAdd, Mode=TwoWay}"                    
-                        ItemDisplayBinding="{Binding ColName}" />
                 </Grid>
             </AbsoluteLayout>
+
+            <Grid ColumnDefinitions="*,*" >
+                <Label   Text="{Binding SelectedMajorType, StringFormat='{0} Additional Detail' }"  FontSize="Medium" ></Label>
+                <Picker Grid.Column="1" 
+                            FontSize="Medium"     
+                            ItemsSource="{Binding BufSiteColNamesList}" SelectedItem="{Binding SelectedColToAdd, Mode=TwoWay}"                    
+                            ItemDisplayBinding="{Binding ColName}" />
+            </Grid>
 
             <StackLayout HeightRequest="200">
             <ListView                
                 ItemsSource="{Binding UserSelectedList}"
-                RowHeight="80" 
+                RowHeight="60" 
                 x:Name="DetailSiteInfo"  HasUnevenRows="False">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <ViewCell.ContextActions>
+                            <!--<ViewCell.ContextActions>
                                 <MenuItem 
                                     Command="{Binding 
                                     Source={x:Reference CommonSitePage},Path=BindingContext.RemoveDetailInfoCmd}" CommandParameter="{Binding .}"
                                     Text="Delete" IsDestructive="True" />
-                            </ViewCell.ContextActions>
-                            <StackLayout Padding="20,5,20,5"  
-                                         Orientation="Horizontal">
-                                <Label Text="{Binding ColName}" 
+                            </ViewCell.ContextActions>-->
+                                <StackLayout >
+
+                                    <Grid Padding="20,5,20,5" ColumnDefinitions ="*,*,0.2*" >
+
+                                        <Label Text="{Binding ColName}" 
                                        VerticalOptions="Center" FontSize="Large" HorizontalOptions="Start" />
-                                <AbsoluteLayout VerticalOptions="Center" HorizontalOptions="End">
-                                    <Switch IsVisible="{Binding IsSwitch}" />
-                                    <Entry IsVisible="{Binding IsEntry}" 
-                                           
-                                           Text="{Binding EntryText, Mode=TwoWay}" FontSize="Medium" 
+                                        <!--<AbsoluteLayout VerticalOptions="Center" HorizontalOptions="End">
+                                                                </AbsoluteLayout>-->
+                                        <Switch Grid.Column="1"  IsVisible="{Binding IsSwitch}" />
+                                        <Entry Grid.Column="1" IsVisible="{Binding IsEntry}" 
+                                            Text="{Binding EntryText, Mode=TwoWay}" FontSize="Medium" 
                                             Placeholder="{Binding SelectedColToAdd.ColName, StringFormat='Enter here {0} '}"/>
-                                    <Picker IsVisible="{Binding IsDropDown}" 
-                                            ItemsSource="{Binding RoadwayList}" 
-                                             />
-                                </AbsoluteLayout>
-                            </StackLayout>
-                        </ViewCell>
+                                        <Picker Grid.Column="1" IsVisible="{Binding IsDropDown}" ItemsSource="{Binding RoadwayList}" />
+                                        <Button Padding="20,5,20,5"
+                                        Grid.Column="2" CornerRadius="30" FontFamily="FontAwesome6Solid"  
+                                            HeightRequest="10" WidthRequest="10" BackgroundColor="Red"
+                                            Command ="{Binding Source={x:Reference CommonSitePage},Path=BindingContext.RemoveDetailInfoCmd}" CommandParameter="{Binding .}"                                         
+                                            FontSize="20" Text="{x:Static fa:FontAwesomeIcons.Xmark}" />
+
+                                    </Grid>
+                                </StackLayout>
+                            </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

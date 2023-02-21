@@ -33,23 +33,48 @@ namespace FTCollectorApp.ViewModel
     public partial class CommonsiteVM : ObservableObject
     {
         static string BUILDING_SITE = "Building";
-        static string 
-            
-            CABINET_SITE = "Cabinet";
+        static string CABINET_SITE = "Cabinet";
         static string PULLBOX_SITE = "PullBox";
         static string STRUCTURE_SITE = "Structure";
 
         [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(BufSiteColNamesList))]
         bool isBuildingSelected = false;
 
         [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(BufSiteColNamesList))]
         bool isCabinetSelected = false;
 
         [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(BufSiteColNamesList))]
         bool isPulboxSelected = false;
 
         [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(BufSiteColNamesList))]
         bool isStructureSelected = false;
+
+
+        public ObservableCollection<SiteColsType> BufSiteColNamesList
+        {
+            get
+            {
+                Console.WriteLine();
+                if (SelectedMajorType.Equals(BUILDING_SITE))
+                    return new ObservableCollection<SiteColsType>(BuildingColsTypes);
+                else if (SelectedMajorType.Equals(CABINET_SITE))
+                    return new ObservableCollection<SiteColsType>(CabinetColsTypes);
+                else if (SelectedMajorType.Equals(BUILDING_SITE))
+                    return new ObservableCollection<SiteColsType>(PullBoxColsTypes);
+                else if (SelectedMajorType.Equals(STRUCTURE_SITE))
+                    return new ObservableCollection<SiteColsType>(StructureColsTypes);
+                else
+                {
+                    Console.WriteLine();
+                    return new ObservableCollection<SiteColsType>();
+                }
+            }
+        }
+
 
         ObservableCollection<SiteColsType> userAddSiteDetailInfo = new ObservableCollection<SiteColsType>();
 
@@ -73,16 +98,24 @@ namespace FTCollectorApp.ViewModel
             get => selectedColToAdd;
             set
             {
+                Console.WriteLine();
+                // cek existence item
+                /*if (userAddSiteDetailInfo.Count > 0) {
+                    if (userAddSiteDetailInfo.Contains(value))
+                    {
+                        Console.WriteLine();
+                        Application.Current.MainPage.DisplayAlert("Warning","This item already Existed.","CLOSE");
+                        return;
+                    }
+                }*/
+
                 SetProperty(ref selectedColToAdd, value);
-                Console.WriteLine();
                 userAddSiteDetailInfo.Add(value);
-
-                IsRoadwaySelected = value.ColType == 22 ? true: false;
+                OnPropertyChanged(nameof(UserSelectedList));
 
                 Console.WriteLine();
-                OnPropertyChanged(nameof(UserSelectedList));   
-                Console.WriteLine();
-  
+
+
             }
         }
 
@@ -91,7 +124,8 @@ namespace FTCollectorApp.ViewModel
 
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(MinorSiteList))]
-        string selectedMajorType;
+        [AlsoNotifyChangeFor(nameof(BufSiteColNamesList))]
+        string selectedMajorType = string.Empty;
 
         [ObservableProperty]
         string selectedMinorType;
@@ -152,42 +186,6 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        public ObservableCollection<SiteColsType> SiteColNamesList
-        {
-            get
-            {
-                Console.WriteLine();
-                return new ObservableCollection<SiteColsType>(BuildingColsTypes);
-            }
-        }
-
-        public ObservableCollection<SiteColsType> CabinetColNamesList
-        {
-            get
-            {
-                Console.WriteLine();
-                return new ObservableCollection<SiteColsType>(CabinetColsTypes);
-            }
-        }
-
-        public ObservableCollection<SiteColsType> PBColNamesList
-        {
-            get
-            {
-                Console.WriteLine();
-                return new ObservableCollection<SiteColsType>(PullBoxColsTypes);
-            }
-        }
-
-        public ObservableCollection<SiteColsType> StructureColNamesList
-        {
-            get
-            {
-                Console.WriteLine();
-                return new ObservableCollection<SiteColsType>(StructureColsTypes);
-            }
-        }
-
         // Tag number confirmation - end
 
 
@@ -237,9 +235,7 @@ namespace FTCollectorApp.ViewModel
                 // Drop down
                 new SiteColsType{ ColName= "Enter electric site key ", ColType = 20, IsDropDown=true},
                 new SiteColsType{ ColName= "Enter the dot disctrict ", ColType = 21, IsDropDown=true},
-                new SiteColsType{ ColName= "Height", ColType = 22, IsDropDown=true},
-                new SiteColsType{ ColName= "Depth", ColType = 23, IsDropDown=true},
-                new SiteColsType{ ColName= "Width", ColType = 24, IsDropDown=true},
+                new SiteColsType{ ColName= "Height - Depth - Width", ColType = 22, IsDropDown=true},
                 new SiteColsType{ ColName= "Material", ColType = 25, IsDropDown=true},
                 new SiteColsType{ ColName= "Mounting", ColType = 26, IsDropDown=true},
                 new SiteColsType{ ColName= "Filter Type", ColType = 27, IsDropDown=true},
