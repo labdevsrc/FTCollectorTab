@@ -1,4 +1,9 @@
-﻿using System;
+﻿//// Obsolete ui
+///  PCS 
+
+
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -17,17 +22,12 @@ using Xamarin.Forms;
 using FTCollectorApp.Model.Reference;
 using System.ComponentModel;
 
+
+
 namespace FTCollectorApp.ViewModel
 {
 
-    public class SiteColsType
-    {
-        public string ColName { get; set; }
-        public int ColType { get; set; }
-        public bool IsSwitch { get; set; } = false;
-        public bool IsEntry { get; set; } = false;
-        public bool IsDropDown { get; set; } = false;
-    }
+
 
 
     public partial class CommonsiteVM : ObservableObject

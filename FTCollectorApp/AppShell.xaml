@@ -121,7 +121,7 @@
         </Tab>
 
         <Tab Title="SITE" 
-             Route="CommonSite">
+             Route="MainSitePageX">
             <Tab.Icon>
                 <FontImageSource FontFamily="FontAwesome6Solid"
                      Color="Black"                                
@@ -131,7 +131,7 @@
             <ShellContent Route="Common Site"
                           Style="{StaticResource DomesticShell}"
                           Title="COMMON SITE"
-                          ContentTemplate="{DataTemplate gformpage:CommonSite}" >
+                          ContentTemplate="{DataTemplate viewsite:MainSitePageX}" >
                 <ShellContent.Icon>
                     <FontImageSource FontFamily="FontAwesome6Solid"
                      Color="Black"                                

@@ -39,7 +39,8 @@ namespace FTCollectorApp
                 //Routes.Add(nameof(AsBuiltDocMenu), typeof(AsBuiltDocMenu));
                 //Routes.Add(nameof(MainMenuInstall), typeof(MainMenuInstall));
                 Routes.Add(nameof(MainSitePage), typeof(MainSitePage));
-                Routes.Add(nameof(CommonSite), typeof(CommonSite)); // Feb-8, 2023
+                Routes.Add(nameof(MainSitePageX), typeof(MainSitePageX));
+                //Routes.Add(nameof(CommonSite), typeof(CommonSite)); // Start develope Feb-8, 2023, state : obsolete
                 //Routes.Add(nameof(CreateSite), typeof(CreateSite));
 
                 Routes.Add(nameof(BdSiteNew), typeof(BdSiteNew)); // Portrait, 3 columns of BdSite

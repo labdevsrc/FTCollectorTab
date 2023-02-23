@@ -260,6 +260,9 @@
     <Compile Update="View\SitesPage\BdSiteNew.xaml.cs">
       <DependentUpon>BdSiteNew.xaml</DependentUpon>
     </Compile>
+    <Compile Update="View\SitesPage\MainSitePageX.xaml.cs">
+      <DependentUpon>MainSitePageX.xaml</DependentUpon>
+    </Compile>
     <Compile Update="View\SitesPage\DuctColorCodePopUp.xaml.cs">
       <DependentUpon>DuctColorCodePopUp.xaml</DependentUpon>
     </Compile>
