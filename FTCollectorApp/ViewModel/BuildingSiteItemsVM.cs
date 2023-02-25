@@ -3,6 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using SQLite;
+using FTCollectorApp.Model.Reference;
+using System.Collections.ObjectModel;
+using System.Linq;
+using FTCollectorApp.Model;
 
 namespace FTCollectorApp.ViewModel
 {
@@ -127,6 +131,19 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+        public ObservableCollection<BuildingType> BuildingTypeList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<BuildingType>();
+                    var bdClassiTable = conn.Table<BuildingType>().ToList();
+                    return new ObservableCollection<BuildingType>(bdClassiTable);
+                }
+            }
+        }
+
 
         /// new feature 2102
         /// add exclude cols
@@ -232,6 +249,10 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         bool isserial_numberVisible = false;
 
+        public BuildingSiteItemsVM()
+        {
+            PopulateVisibleVars();
+        }
 
         void PopulateVisibleVars()
         {
@@ -240,31 +261,31 @@ namespace FTCollectorApp.ViewModel
                 conn.CreateTable<ExcludeSite>();
                 var vars = conn.Table<ExcludeSite>().First();
 
-                IsSiteNameVisible = vars.SiteName.Equals("1") ? true : false;
-                Isproperty_idVisible = vars.property_id.Equals("1") ? true : false;
-                IsintersectionVisible = vars.intersection.Equals("1") ? true : false;
-                IsroadwayVisible = vars.roadway.Equals("1") ? true : false;
-                Isdirection_of_travelVisible = vars.direction_of_travel.Equals("1") ? true : false;
-                IsorientationVisible = vars.orientation.Equals("1") ? true : false;
-                Issite_street_addressVisible = vars.site_street_address.Equals("1") ? true : false;
-                IsdescriptionVisible = vars.description.Equals("1") ? true : false;
+                IsSiteNameVisible = vars.SiteName.Equals("0");
+                Isproperty_idVisible = vars.property_id.Equals("0");
+                IsintersectionVisible = vars.intersection.Equals("0");
+                IsroadwayVisible = vars.roadway.Equals("0");
+                Isdirection_of_travelVisible = vars.direction_of_travel.Equals("0");
+                IsorientationVisible = vars.orientation.Equals("0");
+                Issite_street_addressVisible = vars.site_street_address.Equals("0");
+                IsdescriptionVisible = vars.description.Equals("0");
 
-                IsheightVisible = vars.height.Equals("1") ? true : false;
-                IsweightVisible = vars.weight.Equals("1") ? true : false;
-                IswidthVisible = vars.width.Equals("1") ? true : false;
-                IsdepthVisible = vars.depth.Equals("1") ? true : false;
-                IsmountingVisible = vars.mounting.Equals("1") ? true : false;
-                Ishas_apronVisible = vars.has_apron.Equals("1") ? true : false;
-                Isapron_widthVisible = vars.apron_width.Equals("1") ? true : false;
-                Isapron_heightVisible = vars.apron_height.Equals("1") ? true : false;
-                Isgravel_bottomVisible = vars.gravel_bottom.Equals("1") ? true : false;
-                IsHasGroundRodVisible = vars.has_ground_rod.Equals("1") ? true : false;
+                IsheightVisible = vars.height.Equals("0");
+                IsweightVisible = vars.weight.Equals("0");
+                IswidthVisible = vars.width.Equals("0");
+                IsdepthVisible = vars.depth.Equals("0");
+                IsmountingVisible = vars.mounting.Equals("0");
+                Ishas_apronVisible = vars.has_apron.Equals("0");
+                Isapron_widthVisible = vars.apron_width.Equals("0");
+                Isapron_heightVisible = vars.apron_height.Equals("0");
+                Isgravel_bottomVisible = vars.gravel_bottom.Equals("0");
+                IsHasGroundRodVisible = vars.has_ground_rod.Equals("0");
 
-                IsHaveSunShield = vars.has_ground_rod.Equals("1") ? true : false;
+                IsHaveSunShield = vars.has_ground_rod.Equals("0");
 
-                IsUDS_ownerVisible = vars.UDS_owner.Equals("1") ? true : false;
-                IsUDS_nameVisible = vars.UDS_name.Equals("1") ? true : false;
-                Isserial_numberVisible = vars.serial_number.Equals("1") ? true : false;
+                IsUDS_ownerVisible = vars.UDS_owner.Equals("0");
+                IsUDS_nameVisible = vars.UDS_name.Equals("0");
+                Isserial_numberVisible = vars.serial_number.Equals("0");
 
             }
         }

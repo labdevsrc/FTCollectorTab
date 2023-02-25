@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FTCollectorApp.View.JobPages.EndOfDayForm">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="By signing this daily time report, \n
+                   I verify that my individual hours are correctly reported,\n
+                   and I also acknowledge that I have not been involved \n
+                   in a vehicle accident, incident or work related injury \n
+                   during this work period. I understand that falsification of \n
+                   any information or making false statements will be considered grounds \n
+                   for dismissal."
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            <Grid ColumnDefinitions="*,*"  HeightRequest="100" Padding="20">
+                <Label Text="Clock in time" HorizontalOptions="Start" HeightRequest="80" VerticalOptions="Center" />
+                <Entry Text="{Binding ClockIntime}" IsEnabled="False" />
+            </Grid>
+            <Grid ColumnDefinitions="*,*"  HeightRequest="100" Padding="20">
+                <Label Text="Lunch out time" HorizontalOptions="Start" HeightRequest="80" VerticalOptions="Center" />
+                <Entry Text="{Binding LunchOutTime}" IsEnabled="False" />
+            </Grid>
+            <Grid ColumnDefinitions="*,*"  HeightRequest="100" Padding="20">
+                <Label Text="Lunch in time" HorizontalOptions="Start" HeightRequest="80" VerticalOptions="Center" />
+                <Entry Text="{Binding LunchIntime}" IsEnabled="False" />
+            </Grid>
+            <Grid ColumnDefinitions="*,*"  HeightRequest="100" Padding="20">
+                <Label Text="Clock out time" HorizontalOptions="Start" HeightRequest="80" VerticalOptions="Center" />
+                <Entry Text="{Binding ClockOutTime}" IsEnabled="False" />
+            </Grid>
+            <Grid ColumnDefinitions="*,*"  HeightRequest="100" Padding="20">
+                <Label Text="Total Hours for Today" HorizontalOptions="Start" HeightRequest="80" VerticalOptions="Center" />
+                <Entry Text="{Binding TotalHoursForToday}" IsEnabled="False" />
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

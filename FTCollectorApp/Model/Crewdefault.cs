@@ -10,6 +10,7 @@ namespace FTCollectorApp.Model
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
         public int crew_leader { get; set; }
+
         public string team_member { get; set; }
         public string created_on { get; set; }
 

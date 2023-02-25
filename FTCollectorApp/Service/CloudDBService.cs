@@ -100,7 +100,6 @@ namespace FTCollectorApp.Service
                 // xSaveJobEvents.php Line 74 : $latitude =$_POST['lattitude2'];
                 new KeyValuePair<string, string>("lattitude2", Session.live_lattitude),
                 new KeyValuePair<string, string>("longitude2", Session.live_lattitude),
-                new KeyValuePair<string, string>("odometer", Session.event_type),
                 new KeyValuePair<string, string>("evtype", Session.event_type),
                 new KeyValuePair<string, string>("odometer", param2.ToString()), // only for sending odometer 
                 

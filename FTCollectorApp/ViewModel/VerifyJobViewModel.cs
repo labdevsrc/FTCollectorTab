@@ -14,6 +14,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -32,6 +34,17 @@ namespace FTCollectorApp.ViewModel
 
         [ObservableProperty]
         bool isJobChanging = false;
+
+
+        [ObservableProperty]
+        bool isDisplayEndOfDay = false;
+
+        [ObservableProperty]
+        bool isDisplayEndOfDayForm = false;
+
+        [ObservableProperty]
+        string crewLeader = Session.crew_leader;
+
 
         string verifyStatusBadge = string.Empty;
         public string VerifyStatusBadge{
@@ -127,8 +140,8 @@ namespace FTCollectorApp.ViewModel
                     Session.OwnerName = value.OwnerName;
 
                     // Put to property location
-                    Application.Current.Properties[JobNumberKey] = value.JobNumber;
-                    Application.Current.Properties[JobOwnerKey] = value.OwnerName;
+                    //Application.Current.Properties[JobNumberKey] = value.JobNumber;
+                    //Application.Current.Properties[JobOwnerKey] = value.OwnerName;
                 }
                 catch(Exception e)
                 {
@@ -204,11 +217,6 @@ namespace FTCollectorApp.ViewModel
 
         private ObservableCollection<Job> _jobdetails = new ObservableCollection<Job>();
 
-        private const int PageNumber = 3;
-        private const string PageNumberKey = "PageNumber";
-        private const string JobOwnerKey = "JobOwner";
-        private const string JobNumberKey = "JobNumber";
-
         public ICommand GPSSettingCommand { get; set; }
         public ICommand ContinueCommand { get; set; }
 
@@ -218,7 +226,14 @@ namespace FTCollectorApp.ViewModel
         public ICommand ODOPopupCommand { get; set; }
 
         public ICommand ODOSaveCommand { get; set; }
-        
+        public ICommand LunchOutCommand { get; set; }
+        public ICommand LunchInCommand { get; set; }
+        public ICommand ToggleEndofDayCommand { get; set; }
+        public ICommand TriggerEndOfDayCommand { get; set; }
+        public ICommand CrewSaveCommand { get; set; }
+
+
+
         public ICommand DisplayEquipmentCheckInCommand { get; set; }
         public ICommand DisplayEquipmentCheckOutCommand { get; set; }
 
@@ -234,16 +249,32 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         string verified = string.Empty;
 
+        [ObservableProperty]
+        bool isLunchOut = true;
+
+        [ObservableProperty]
+        bool isLunchIn = false;
+
         private void ToggleExecute()
         {
             IsDisplayCrewList = !IsDisplayCrewList;
+            IsDisplayEndOfDayForm = false;
         }
 
         private void ToggleJobEntriesExecute()
         {
             IsDisplayCrewList = false;
             IsDisplayOdo = false;
+            IsDisplayEndOfDayForm = false;
             IsDisplayJobEntries = !IsDisplayJobEntries;
+        }
+
+        private void ToggleEndofDayExecute()
+        {
+            IsDisplayCrewList = false;
+            IsDisplayOdo = false;
+
+            IsDisplayEndOfDayForm = !IsDisplayEndOfDayForm;
         }
 
         [ObservableProperty]
@@ -264,6 +295,28 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         string entryOdometer;
 
+        [ObservableProperty] int perDiemEmp1;
+
+        [ObservableProperty] int perDiemEmp2;
+
+        [ObservableProperty] int perDiemEmp3;
+
+        [ObservableProperty] int perDiemEmp4;
+
+        [ObservableProperty] int perDiemEmp5;
+
+        [ObservableProperty] string startTimeEmp1;
+        [ObservableProperty] string startTimeEmp2;
+        [ObservableProperty] string startTimeEmp3;
+        [ObservableProperty] string startTimeEmp4;
+        [ObservableProperty] string startTimeEmp5;
+
+        [ObservableProperty] string employee1Labor;
+        [ObservableProperty] string employee2Labor;
+        [ObservableProperty] string employee3Labor;
+        [ObservableProperty] string employee4Labor;
+        [ObservableProperty] string employee5Labor;
+
         public VerifyJobViewModel()
         {
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
@@ -277,46 +330,149 @@ namespace FTCollectorApp.ViewModel
 
             GPSSettingCommand = new Command(() => DisplayGPSSettingCommand());
             ToggleJobEntriesCommand = new Command(() => ToggleJobEntriesExecute());
-
-            ToggleCrewListCommand = new Command(
-                execute: () => {
-                    IsDisplayJobEntries = false;
-                    IsDisplayOdo = false;
-                    IsDisplayCrewList = !IsDisplayCrewList;
-                    clrBkgndJob = Color.LightBlue;
-                    clrBkgndCrew = Color.Green;
-                    clrBkgndECheckin = Color.LightBlue;
-                    clrBkgndEChkOut = Color.LightBlue;
-                    clrBkgndODO = Color.LightBlue;
-
-                },
-                canExecute: () =>
-                {
-                    Console.WriteLine();
-                    return IsVerified;
-                }
-            );
-
-            ODOPopupCommand = new Command(
-                execute: async () =>
-                {
-                    IsDisplayOdo = !IsDisplayOdo;
-                    IsDisplayCrewList = false;
-                    IsDisplayJobEntries = false;
-                    clrBkgndJob = Color.LightBlue;
-                    clrBkgndCrew = Color.LightBlue;
-                    clrBkgndECheckin = Color.LightBlue;
-                    clrBkgndEChkOut = Color.LightBlue;
-                    clrBkgndODO = Color.Green;
-                },
-                canExecute: () =>
-                {
-                    Console.WriteLine();
-                    return IsVerified;
-                }
+            ToggleEndofDayCommand = new Command(() => ToggleEndofDayExecute());
 
 
-            );
+            try
+            {
+                ToggleCrewListCommand = new Command(
+                    execute: () =>
+                    {
+                        IsDisplayJobEntries = false;
+                        IsDisplayOdo = false;
+                        IsDisplayCrewList = !IsDisplayCrewList;
+                        clrBkgndJob = Color.LightBlue;
+                        clrBkgndCrew = Color.Green;
+                        clrBkgndECheckin = Color.LightBlue;
+                        clrBkgndEChkOut = Color.LightBlue;
+                        clrBkgndODO = Color.LightBlue;
+
+                    },
+                    canExecute: () =>
+                    {
+                        Console.WriteLine();
+                        return IsVerified;
+                    }
+                );
+
+                CrewSaveCommand = new Command(
+                    execute: async () =>
+                    {
+                        string curHHMM = DateTime.Now.ToString("H:m");
+                        string curHour = DateTime.Now.ToString("H");
+                        string curMinute = DateTime.Now.ToString("m");
+                        // preserve LunchOut time here
+                        IsLunchOut = true;
+                        IsLunchIn = false;
+                        (LunchInCommand as Command).ChangeCanExecute();
+                        Console.WriteLine();
+                        Application.Current.Properties["ClockInHH"] = curHour;
+                        Application.Current.Properties["ClockInMM"] = curMinute;
+                        Session.event_type = "15"; // Clock In
+                        /*if (Employee1Name != null && StartTimeEmp1.Length > 2)
+                            await JobSaveEvent(PerDiemEmp1, curHHMM);
+                        await JobSaveEvent(PerDiemEmp2, curHHMM);
+                        await JobSaveEvent(PerDiemEmp3, curHHMM);
+                        await JobSaveEvent(PerDiemEmp4, curHHMM);
+                        await JobSaveEvent(PerDiemEmp5, curHHMM);*/
+
+                    },
+                    canExecute: () =>
+                    {
+                        Console.WriteLine();
+                        return Employee1Name.FullName.Length > 1;
+                    }
+                );
+
+
+                LunchOutCommand = new Command(
+                    execute: async () =>
+                    {
+                        string curHHMM = DateTime.Now.ToString("H:m");
+                        string curHour = DateTime.Now.ToString("H");
+                        string curMinute = DateTime.Now.ToString("m");
+
+                        IsLunchOut = true;
+                        IsLunchIn = false;
+                        (LunchInCommand as Command).ChangeCanExecute();
+                        Console.WriteLine();
+                        Application.Current.Properties["LunchOutHH"] = curHour;
+                        Application.Current.Properties["LunchOutMM"] = curMinute;
+                        Session.event_type = "13"; // Lunch in
+                        LunchOutTime = DateTime.Now.ToString("HH:mm");
+                        await JobSaveEvent(0, "");
+
+                    },
+                    canExecute: () =>
+                    {
+                        Console.WriteLine();
+                        return IsLunchIn;
+                    }
+                );
+
+                LunchInCommand = new Command(
+                    execute: async () =>
+                    {
+
+                        IsLunchOut = false;
+                        IsLunchIn = true;
+
+                        (LunchOutCommand as Command).ChangeCanExecute();
+                        LunchInTime = DateTime.Now.ToString("HH:mm");
+                        Session.event_type = "14"; // Lunch in
+                        await JobSaveEvent(0, LunchInTime);
+
+                    },
+                    canExecute: () =>
+                    {
+                        Console.WriteLine();
+                        return IsLunchOut;
+                    }
+                );
+
+                TriggerEndOfDayCommand = new Command(
+                    execute: async () =>
+                    {
+
+                        ClockOutTime = DateTime.Now.ToString("HH:mm");
+                        Session.event_type = "16"; // ClockOut
+                        await JobSaveEvent(0, ClockOutTime);
+
+                    },
+                    canExecute: () =>
+                    {
+                        Console.WriteLine();
+                        return IsLunchOut;
+                    }
+                );
+
+                ODOPopupCommand = new Command(
+                    execute: async () =>
+                    {
+                        IsDisplayOdo = !IsDisplayOdo;
+                        IsDisplayCrewList = false;
+                        IsDisplayJobEntries = false;
+                        clrBkgndJob = Color.LightBlue;
+                        clrBkgndCrew = Color.LightBlue;
+                        clrBkgndECheckin = Color.LightBlue;
+                        clrBkgndEChkOut = Color.LightBlue;
+                        clrBkgndODO = Color.Green;
+                    },
+                    canExecute: () =>
+                    {
+                        Console.WriteLine();
+                        return IsVerified;
+                    }
+
+
+                );
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("Exception "+e);
+            }
+
+
             ODOSaveCommand = new Command(
                 execute: async () =>
                 { 
@@ -417,6 +573,157 @@ namespace FTCollectorApp.ViewModel
 
         }
 
+        [ObservableProperty]
+        CrewInfoDetail selectedCrewForEndOfDay;
+
+        public ObservableCollection<CrewInfoDetail> SelectedCrewInfoDetails = new ObservableCollection<CrewInfoDetail>();
+
+        private CrewInfoDetail employee1Name;
+        public CrewInfoDetail Employee1Name
+        {
+            get => employee1Name;
+            set
+            {
+                SetProperty(ref employee1Name, value);
+                // Check Existense before insert
+                if (!SelectedCrewInfoDetails.Contains(value))
+                {
+                    SelectedCrewInfoDetails.Add(new CrewInfoDetail
+                    {
+                        id=1,
+                        FullName = value.FullName,
+                        TeamUserKey = value.TeamUserKey
+                    });
+                    Console.WriteLine();
+                }
+            }
+        }
+
+        private CrewInfoDetail employee2Name;
+        public CrewInfoDetail Employee2Name
+        {
+            get => employee2Name;
+            set
+            {
+                SetProperty(ref employee2Name, value);
+                // Check Existense before insert
+                if (!SelectedCrewInfoDetails.Contains(value))
+                {
+                    SelectedCrewInfoDetails.Add(new CrewInfoDetail
+                    {
+                        id = 2,
+                        FullName = value.FullName,
+                        TeamUserKey = value.TeamUserKey
+                    });
+                    Console.WriteLine();
+                }
+            }
+        }
+
+        private CrewInfoDetail employee3Name;
+        public CrewInfoDetail Employee3Name
+        {
+            get => employee3Name;
+            set
+            {
+                SetProperty(ref employee3Name, value);
+                // Check Existense before insert
+                if (!SelectedCrewInfoDetails.Contains(value))
+                {
+                    SelectedCrewInfoDetails.Add(new CrewInfoDetail
+                    {
+                        id = 3,
+                        FullName = value.FullName,
+                        TeamUserKey = value.TeamUserKey
+                    });
+                    Console.WriteLine();
+                }
+            }
+        }
+
+        private CrewInfoDetail employee4Name;
+        public CrewInfoDetail Employee4Name
+        {
+            get => employee4Name;
+            set
+            {
+                SetProperty(ref employee4Name, value);
+                // Check Existense before insert
+                if (!SelectedCrewInfoDetails.Contains(value))
+                {
+                    SelectedCrewInfoDetails.Add(new CrewInfoDetail
+                    {
+                        id = 4,
+                        FullName = value.FullName,
+                        TeamUserKey = value.TeamUserKey
+                    });
+                    Console.WriteLine();
+                }
+            }
+        }
+
+        private CrewInfoDetail employee5Name;
+        public CrewInfoDetail Employee5Name
+        {
+            get => employee4Name;
+            set
+            {
+                SetProperty(ref employee5Name, value);
+                // Check Existense before insert
+                if (!SelectedCrewInfoDetails.Contains(value))
+                {
+                    SelectedCrewInfoDetails.Add(new CrewInfoDetail
+                    {
+                        id = 5,
+                        FullName = value.FullName,
+                        TeamUserKey = value.TeamUserKey
+                    });
+                    Console.WriteLine();
+                }
+            }
+        }
+
+        [ObservableProperty] string startTime1;
+
+        [ObservableProperty] string clockIntime;
+
+        [ObservableProperty] string lunchOutTime;
+
+        [ObservableProperty] string lunchInTime;
+
+        [ObservableProperty] string clockOutTime;
+
+        [ObservableProperty] string totalHoursForToday;
+
+        public ObservableCollection<CrewInfoDetail> SelectableCrewList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<User>();
+                    var table = conn.Table<User>();
+                    List<CrewInfoDetail> temp = new List<CrewInfoDetail>();
+                    foreach (var col in table)
+                    {
+                        temp.Add(new CrewInfoDetail
+                        {
+                            FullName = col.first_name + " " + col.last_name,
+                            TeamUserKey = col.UserKey
+                        });
+                        // table.Select(a => a.first_name).First() + " " + table.Select(a => a.last_name).First(),
+                        // TeamUserKey = table.Select(c => c.UserKey).First()
+                    }
+
+                    Console.WriteLine();
+                    return new ObservableCollection<CrewInfoDetail>(temp);
+                }
+            } 
+        }
+
+        private ObservableCollection<Crewdefault> Crewtable = new ObservableCollection<Crewdefault>();
+
+
 
         private async void DisplayGPSSettingCommand()
         {
@@ -440,6 +747,38 @@ namespace FTCollectorApp.ViewModel
             await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new OdometerPopup());
         }
 
+
+
+        async Task JobSaveEvent(int perDiemIdx, string sStartTime)
+        {
+            //Session.event_type = Session.ClockIn;
+
+            await LocationService.GetLocation();
+
+            Session.accuracy = String.Format("{0:0.######}", LocationService.Coords.Accuracy);
+            //Session.longitude2 = String.Format("{0:0.######}", LocationService.Coords.Longitude);
+            //Session.lattitude2 = String.Format("{0:0.######}", LocationService.Coords.Latitude);
+            Session.live_longitude = String.Format("{0:0.######}", LocationService.Coords.Longitude);
+            Session.live_lattitude = String.Format("{0:0.######}", LocationService.Coords.Latitude);
+            Session.altitude = String.Format("{0:0.######}", LocationService.Coords.Altitude);
+            //{ String.Format("{0:0.#######}", _location.Latitude.ToString())}
+
+            try
+            {
+                DateTime dt = DateTime.Parse(sStartTime.Trim());
+                int user_hours = int.Parse(dt.ToString("HH"));
+                int user_minutes = int.Parse(dt.ToString("mm"));
+
+                await CloudDBService.PostJobEvent(user_hours.ToString(), user_minutes.ToString(),  perDiemIdx.ToString());
+
+            }
+            catch
+            {
+
+                await Application.Current.MainPage.DisplayAlert("Warning", "Time format must be HH:MM", "OK");
+            }
+
+        }
 
     }
 }
