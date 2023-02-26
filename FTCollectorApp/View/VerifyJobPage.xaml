@@ -71,12 +71,12 @@
                         <StackLayout Grid.Row="1" Grid.Column="3" Orientation="Vertical" IsVisible="{Binding IsVerified}"
                                      HeightRequest="150">
                             <Button Text="Func#2" FontSize="Medium" IsEnabled="False"
-                                HeightRequest="120" WidthRequest="120" Command="{Binding Func1Command}" />
+                                HeightRequest="120" WidthRequest="120"  />
                         </StackLayout>
                         <StackLayout Grid.Row="1" Grid.Column="4" Orientation="Vertical" IsVisible="{Binding IsVerified}"
                                      HeightRequest="150">
                             <Button Text="Func#3" FontSize="Medium" IsEnabled="False"
-                                HeightRequest="120" WidthRequest="120" Command="{Binding Func1Command}" />
+                                HeightRequest="120" WidthRequest="120"  />
                         </StackLayout>
 
                     </Grid>
@@ -143,7 +143,7 @@
                         </Grid>
                         <Grid ColumnDefinitions="*,*"  HeightRequest="100" Padding="20">
                             <Label Text="Lunch in time" HorizontalOptions="Start" HeightRequest="80" VerticalOptions="Center" />
-                            <Entry Text="{Binding LunchIntime}" IsEnabled="False" />
+                            <Entry Text="{Binding LunchInTime}" IsEnabled="False" />
                         </Grid>
                         <Grid ColumnDefinitions="*,*"  HeightRequest="100" Padding="20">
                             <Label Text="Clock out time" HorizontalOptions="Start" HeightRequest="80" VerticalOptions="Center" />
@@ -212,11 +212,11 @@
                                     <x:String>Passenger</x:String>
                                 </Picker.Items>
                             </Picker>
-                            <Entry   Grid.Row="2" Grid.Column="3" Text="{Binding StartTimeEmp1}" />
+                            <Entry   Grid.Row="2" Grid.Column="3" Text="{Binding StartTimeEmp1,Mode=TwoWay}" />
                             <Picker  Grid.Row="2" Grid.Column="4"  SelectedItem="{Binding PerDiemEmp1,Mode=TwoWay}"
-                                     Title="Select driver" FontSize="Medium" TextColor="Black"  >
+                                     Title="No per diem" FontSize="Medium" TextColor="Black"  >
                                 <Picker.Items>
-                                    <x:String>Half Day</x:String>
+                                    <x:String>No per diem</x:String>
                                     <x:String>Full day per diem</x:String>
                                     <x:String>Half day per diem</x:String>                                    
                                 </Picker.Items>
@@ -248,11 +248,11 @@
                                     <x:String>Passenger</x:String>
                                 </Picker.Items>
                             </Picker>
-                            <Entry   Grid.Row="3" Grid.Column="3" Text="{Binding StartTimeEmp2}" />
+                            <Entry   Grid.Row="3" Grid.Column="3" Text="{Binding StartTimeEmp2,Mode=TwoWay}" />
                             <Picker  Grid.Row="3" Grid.Column="4"  SelectedIndex ="{Binding PerDiemEmp2,Mode=TwoWay}"
-                                     Title="Select driver" FontSize="Medium" TextColor="Black"  >
+                                     Title="No per diem" FontSize="Medium" TextColor="Black"  >
                                 <Picker.Items>
-                                    <x:String>Half Day</x:String>
+                                    <x:String>No per diem</x:String>
                                     <x:String>Full day per diem</x:String>
                                     <x:String>Half day per diem</x:String>
                                 </Picker.Items>
@@ -281,11 +281,11 @@
                                     <x:String>Passenger</x:String>
                                 </Picker.Items>
                             </Picker>
-                            <Entry Grid.Row="4" Grid.Column="3" Text="{Binding StartTimeEmp3}" />
+                            <Entry Grid.Row="4" Grid.Column="3" Text="{Binding StartTimeEmp3,Mode=TwoWay}" />
                             <Picker  Grid.Row="4" Grid.Column="4"  SelectedIndex="{Binding PerDiemEmp3,Mode=TwoWay}"
-                                     Title="Select driver" FontSize="Medium" TextColor="Black"  >
+                                     Title="No per diem" FontSize="Medium" TextColor="Black"  >
                                 <Picker.Items>
-                                    <x:String>Half Day</x:String>
+                                    <x:String>No per diem</x:String>
                                     <x:String>Full day per diem</x:String>
                                     <x:String>Half day per diem</x:String>
                                 </Picker.Items>
@@ -313,11 +313,11 @@
                                     <x:String>Passenger</x:String>
                                 </Picker.Items>
                             </Picker>
-                            <Entry   Grid.Row="5" Grid.Column="3" Text="{Binding StartTimeEmp4}" />
-                            <Picker  Grid.Row="5" Grid.Column="4"  SelectedItem="{Binding PerDiemEmp4,Mode=TwoWay}"
-                                     Title="Select driver" FontSize="Medium" TextColor="Black"  >
+                            <Entry   Grid.Row="5" Grid.Column="3" Text="{Binding StartTimeEmp4,Mode=TwoWay}" />
+                            <Picker  Grid.Row="5" Grid.Column="4"  SelectedIndex="{Binding PerDiemEmp4,Mode=TwoWay}"
+                                     Title="No per diem" FontSize="Medium" TextColor="Black"  >
                                 <Picker.Items>
-                                    <x:String>Half Day</x:String>
+                                    <x:String>No per diem</x:String>
                                     <x:String>Full day per diem</x:String>
                                     <x:String>Half day per diem</x:String>
                                 </Picker.Items>
@@ -345,9 +345,26 @@
                                     <x:String>Passenger</x:String>
                                 </Picker.Items>
                             </Picker>
+                            <Entry   Grid.Row="6" Grid.Column="3" Text="{Binding StartTimeEmp5,Mode=TwoWay}" />
+                            <Picker  Grid.Row="6" Grid.Column="4"  
+                                     SelectedIndex="{Binding PerDiemEmp5,Mode=TwoWay}"
+                                     Title="No per diem" FontSize="Medium" TextColor="Black"  >
+                                <Picker.Items>
+                                    <x:String>No per diem</x:String>
+                                    <x:String>Full day per diem</x:String>
+                                    <x:String>Half day per diem</x:String>
+                                </Picker.Items>
+                            </Picker>
 
-                            <Picker Grid.Row="6" Grid.Column="0" x:Name="employeePicker6" Title="Select Employee" FontSize="Small" TextColor="Black"/>
-                            <Picker Grid.Row="6" Grid.Column="1" x:Name="laborPicker6" Title="Select labor" FontSize="Medium" TextColor="Black">
+                            <!-- start employee 5 row -->
+                            <Picker Grid.Row="7" Grid.Column="0" 
+                                   ItemsSource="{Binding SelectableCrewList}"
+                                   SelectedItem="{Binding Employee6Name,Mode=TwoWay}"
+                                   ItemDisplayBinding="{Binding FullName}"
+                                    
+                                    Title="Select Employee" FontSize="Small" TextColor="Black" />
+                            <Picker Grid.Row="7" Grid.Column="1" SelectedItem="{Binding Employee6Labor,Mode=TwoWay}"
+                                    Title="Select labor" FontSize="Medium" TextColor="Black">
                                 <Picker.Items>
                                     <x:String>Installer</x:String>
                                     <x:String>Technician</x:String>
@@ -356,18 +373,18 @@
                                     <x:String>Designer</x:String>
                                 </Picker.Items>
                             </Picker>
-                            <Picker Grid.Row="6" Grid.Column="2"  x:Name="driverPicker6" Title="Select driver" FontSize="Medium" TextColor="Black"  >
+                            <Picker Grid.Row="7" Grid.Column="2"  x:Name="driverPicker6" Title="Select driver" FontSize="Medium" TextColor="Black"  >
                                 <Picker.Items>
                                     <x:String>Driver</x:String>
                                     <x:String>Passenger</x:String>
                                 </Picker.Items>
                             </Picker>
-                            <Entry   Grid.Row="5" Grid.Column="3" Text="{Binding StartTimeEmp5}" />
-                            <Picker  Grid.Row="5" Grid.Column="4"  
-                                     SelectedIndex="{Binding PerDiemEmp5,Mode=TwoWay}"
-                                     Title="Select driver" FontSize="Medium" TextColor="Black"  >
+                            <Entry   Grid.Row="7" Grid.Column="3" Text="{Binding StartTimeEmp6,Mode=TwoWay}" />
+                            <Picker  Grid.Row="7" Grid.Column="4"  
+                                     SelectedIndex="{Binding PerDiemEmp6,Mode=TwoWay}"
+                                     Title="No per diem" FontSize="Medium" TextColor="Black"  >
                                 <Picker.Items>
-                                    <x:String>Half Day</x:String>
+                                    <x:String>No per diem</x:String>
                                     <x:String>Full day per diem</x:String>
                                     <x:String>Half day per diem</x:String>
                                 </Picker.Items>

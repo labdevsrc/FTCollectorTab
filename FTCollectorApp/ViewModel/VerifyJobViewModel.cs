@@ -304,18 +304,21 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] int perDiemEmp4;
 
         [ObservableProperty] int perDiemEmp5;
+        [ObservableProperty] int perDiemEmp6;
 
         [ObservableProperty] string startTimeEmp1;
         [ObservableProperty] string startTimeEmp2;
         [ObservableProperty] string startTimeEmp3;
         [ObservableProperty] string startTimeEmp4;
         [ObservableProperty] string startTimeEmp5;
+        [ObservableProperty] string startTimeEmp6;
 
         [ObservableProperty] string employee1Labor;
         [ObservableProperty] string employee2Labor;
         [ObservableProperty] string employee3Labor;
         [ObservableProperty] string employee4Labor;
         [ObservableProperty] string employee5Labor;
+        [ObservableProperty] string employee6Labor;
 
         public VerifyJobViewModel()
         {
@@ -332,145 +335,154 @@ namespace FTCollectorApp.ViewModel
             ToggleJobEntriesCommand = new Command(() => ToggleJobEntriesExecute());
             ToggleEndofDayCommand = new Command(() => ToggleEndofDayExecute());
 
+            
+            ToggleCrewListCommand = new Command(
+                execute: () =>
+                {
+                    IsDisplayJobEntries = false;
+                    IsDisplayOdo = false;
+                    IsDisplayCrewList = !IsDisplayCrewList;
+                    clrBkgndJob = Color.LightBlue;
+                    clrBkgndCrew = Color.Green;
+                    clrBkgndECheckin = Color.LightBlue;
+                    clrBkgndEChkOut = Color.LightBlue;
+                    clrBkgndODO = Color.LightBlue;
 
-            try
-            {
-                ToggleCrewListCommand = new Command(
-                    execute: () =>
-                    {
-                        IsDisplayJobEntries = false;
-                        IsDisplayOdo = false;
-                        IsDisplayCrewList = !IsDisplayCrewList;
-                        clrBkgndJob = Color.LightBlue;
-                        clrBkgndCrew = Color.Green;
-                        clrBkgndECheckin = Color.LightBlue;
-                        clrBkgndEChkOut = Color.LightBlue;
-                        clrBkgndODO = Color.LightBlue;
+                },
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return IsVerified;
+                }
+            );
 
-                    },
-                    canExecute: () =>
-                    {
-                        Console.WriteLine();
-                        return IsVerified;
-                    }
-                );
+            CrewSaveCommand = new Command(
+                execute: async () =>
+                {
+                    string curHHMM = DateTime.Now.ToString("H:m");
+                    string curHour = DateTime.Now.ToString("H");
+                    string curMinute = DateTime.Now.ToString("m");
+                    // preserve LunchOut time here
+                    IsLunchOut = true;
+                    IsLunchIn = false;
+                    (LunchInCommand as Command).ChangeCanExecute();
+                    Console.WriteLine();
+                    Application.Current.Properties["ClockInHH"] = curHour;
+                    Application.Current.Properties["ClockInMM"] = curMinute;
+                    Session.event_type = "15"; // Clock In
+                    //if (Employee1Name != null && StartTimeEmp1.Length > 2)
+                    await JobSaveEvent(PerDiemEmp1, startTimeEmp1);
+                    await JobSaveEvent(PerDiemEmp2, startTimeEmp2);
+                    await JobSaveEvent(PerDiemEmp3, startTimeEmp3);
+                    await JobSaveEvent(PerDiemEmp4, startTimeEmp4);
+                    await JobSaveEvent(PerDiemEmp5, startTimeEmp5);
+                    await JobSaveEvent(PerDiemEmp6, startTimeEmp6);
 
-                CrewSaveCommand = new Command(
-                    execute: async () =>
-                    {
-                        string curHHMM = DateTime.Now.ToString("H:m");
-                        string curHour = DateTime.Now.ToString("H");
-                        string curMinute = DateTime.Now.ToString("m");
-                        // preserve LunchOut time here
-                        IsLunchOut = true;
-                        IsLunchIn = false;
-                        (LunchInCommand as Command).ChangeCanExecute();
-                        Console.WriteLine();
-                        Application.Current.Properties["ClockInHH"] = curHour;
-                        Application.Current.Properties["ClockInMM"] = curMinute;
-                        Session.event_type = "15"; // Clock In
-                        /*if (Employee1Name != null && StartTimeEmp1.Length > 2)
-                            await JobSaveEvent(PerDiemEmp1, curHHMM);
-                        await JobSaveEvent(PerDiemEmp2, curHHMM);
-                        await JobSaveEvent(PerDiemEmp3, curHHMM);
-                        await JobSaveEvent(PerDiemEmp4, curHHMM);
-                        await JobSaveEvent(PerDiemEmp5, curHHMM);*/
-
-                    },
-                    canExecute: () =>
-                    {
-                        Console.WriteLine();
-                        return Employee1Name.FullName.Length > 1;
-                    }
-                );
-
-
-                LunchOutCommand = new Command(
-                    execute: async () =>
-                    {
-                        string curHHMM = DateTime.Now.ToString("H:m");
-                        string curHour = DateTime.Now.ToString("H");
-                        string curMinute = DateTime.Now.ToString("m");
-
-                        IsLunchOut = true;
-                        IsLunchIn = false;
-                        (LunchInCommand as Command).ChangeCanExecute();
-                        Console.WriteLine();
-                        Application.Current.Properties["LunchOutHH"] = curHour;
-                        Application.Current.Properties["LunchOutMM"] = curMinute;
-                        Session.event_type = "13"; // Lunch in
-                        LunchOutTime = DateTime.Now.ToString("HH:mm");
-                        await JobSaveEvent(0, "");
-
-                    },
-                    canExecute: () =>
-                    {
-                        Console.WriteLine();
-                        return IsLunchIn;
-                    }
-                );
-
-                LunchInCommand = new Command(
-                    execute: async () =>
-                    {
-
-                        IsLunchOut = false;
-                        IsLunchIn = true;
-
-                        (LunchOutCommand as Command).ChangeCanExecute();
-                        LunchInTime = DateTime.Now.ToString("HH:mm");
-                        Session.event_type = "14"; // Lunch in
-                        await JobSaveEvent(0, LunchInTime);
-
-                    },
-                    canExecute: () =>
-                    {
-                        Console.WriteLine();
-                        return IsLunchOut;
-                    }
-                );
-
-                TriggerEndOfDayCommand = new Command(
-                    execute: async () =>
-                    {
-
-                        ClockOutTime = DateTime.Now.ToString("HH:mm");
-                        Session.event_type = "16"; // ClockOut
-                        await JobSaveEvent(0, ClockOutTime);
-
-                    },
-                    canExecute: () =>
-                    {
-                        Console.WriteLine();
-                        return IsLunchOut;
-                    }
-                );
-
-                ODOPopupCommand = new Command(
-                    execute: async () =>
-                    {
-                        IsDisplayOdo = !IsDisplayOdo;
-                        IsDisplayCrewList = false;
-                        IsDisplayJobEntries = false;
-                        clrBkgndJob = Color.LightBlue;
-                        clrBkgndCrew = Color.LightBlue;
-                        clrBkgndECheckin = Color.LightBlue;
-                        clrBkgndEChkOut = Color.LightBlue;
-                        clrBkgndODO = Color.Green;
-                    },
-                    canExecute: () =>
-                    {
-                        Console.WriteLine();
-                        return IsVerified;
-                    }
+                },
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return true;
+                    //return Employee1Name!= null;
+                }
+            );
 
 
-                );
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine("Exception "+e);
-            }
+            LunchOutCommand = new Command(
+                execute: async () =>
+                {
+                    string curHHMM = DateTime.Now.ToString("H:m");
+                    string curHour = DateTime.Now.ToString("H");
+                    string curMinute = DateTime.Now.ToString("m");
+
+                    IsLunchOut = true;
+                    IsLunchIn = false;
+                    (LunchInCommand as Command).ChangeCanExecute();
+                    Console.WriteLine();
+                    Application.Current.Properties["LunchOutHH"] = curHour;
+                    Application.Current.Properties["LunchOutMM"] = curMinute;
+                    Session.event_type = "13"; // Lunch out
+                    LunchOutTime = DateTime.Now.ToString("HH:mm");
+                    await JobSaveEvent(0, LunchOutTime);
+
+                },
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return IsLunchIn;
+                }
+            );
+
+            LunchInCommand = new Command(
+                execute: async () =>
+                {
+
+                    IsLunchOut = false;
+                    IsLunchIn = true;
+
+                    (LunchOutCommand as Command).ChangeCanExecute();
+                    LunchInTime = DateTime.Now.ToString("HH:mm");
+                    Session.event_type = "14"; // Lunch in
+                    await JobSaveEvent(0, LunchInTime);
+
+                },
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return IsLunchOut;
+                }
+            );
+
+            TriggerEndOfDayCommand = new Command(
+                execute: async () =>
+                {
+
+                    ClockOutTime = DateTime.Now.ToString("HH:mm");
+                    Session.event_type = "16"; // ClockOut
+                    //calculate from Clock in to Lunch out
+
+                    //check if clockintime > lunchout
+                    TimeSpan duration1 = DateTime.Parse(LunchOutTime).Subtract(DateTime.Parse(ClockIntime));
+
+
+                    //check if LunchInTime > ClockOutTime
+                    TimeSpan duration2 = DateTime.Parse(ClockOutTime).Subtract(DateTime.Parse(LunchInTime));
+                    TimeSpan totaltime = duration1 + duration2;
+
+                    TotalHoursForToday = totaltime.ToString("HH:mm:ss");
+                    Console.WriteLine("TotalHoursForToday " + TotalHoursForToday);
+                    Console.WriteLine();
+                    await JobSaveEvent(0, TotalHoursForToday);
+
+                },
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return IsLunchOut;
+                }
+            );
+
+            ODOPopupCommand = new Command(
+                execute: async () =>
+                {
+                    IsDisplayOdo = !IsDisplayOdo;
+                    IsDisplayCrewList = false;
+                    IsDisplayJobEntries = false;
+                    clrBkgndJob = Color.LightBlue;
+                    clrBkgndCrew = Color.LightBlue;
+                    clrBkgndECheckin = Color.LightBlue;
+                    clrBkgndEChkOut = Color.LightBlue;
+                    clrBkgndODO = Color.Green;
+                },
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return IsVerified;
+                }
+
+
+            );
+
 
 
             ODOSaveCommand = new Command(
@@ -481,19 +493,8 @@ namespace FTCollectorApp.ViewModel
                     {
                         await CloudDBService.PostJobEvent(EntryOdometer);
 
-
                         /* Tab Navigation */
                         await Application.Current.MainPage.DisplayAlert("Job Event", "Job uploaded. Please Continue to Site Menu", "CLOSE");
-
-                        
-                        /*if (answer)
-                        {
-                            if (Session.stage =="A")
-                                await Navigation.PushAsync(new AsBuiltDocMenu());
-                            if (Session.stage == "I")
-                                await Navigation.PushAsync(new MainMenuInstall());
-                        }*/
-                        //await PopupNavigation.Instance.PopAsync(true);
                     }
                     catch
                     {
@@ -501,7 +502,6 @@ namespace FTCollectorApp.ViewModel
                     }
                     IsBusy = false;
 
-                    //await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new OdometerPopup());
                 }
 
             );
@@ -552,13 +552,14 @@ namespace FTCollectorApp.ViewModel
 
                         Application.Current.Properties["PageNumber"] = 3;
 
-                        IsJobChanged = IsVerified; // condition when job changed
                         IsVerified = true; // enable EqIn, EqOut, ODO input button
+                        IsJobChanged = IsVerified; // condition when job changed
                         Session.IsVerified = true; // singleton session instance to notify Verify job done
-                        Verified = "Verified";
+                        //Verified = "Verified";
                     }
-                    catch
+                    catch (Exception e)
                     {
+                        Console.WriteLine("Exception : " + e.ToString());
                         await Application.Current.MainPage.DisplayAlert("Error", "Update JobEvent table failed", "OK");
                     }
                     IsBusy = false;
@@ -595,7 +596,11 @@ namespace FTCollectorApp.ViewModel
                         TeamUserKey = value.TeamUserKey
                     });
                     Console.WriteLine();
+                    (CrewSaveCommand as Command).ChangeCanExecute();
                 }
+                StartTimeEmp1 = DateTime.Now.ToString("H:m");
+                OnPropertyChanged(nameof(StartTimeEmp1));
+
             }
         }
 
@@ -616,7 +621,10 @@ namespace FTCollectorApp.ViewModel
                         TeamUserKey = value.TeamUserKey
                     });
                     Console.WriteLine();
+                    (CrewSaveCommand as Command).ChangeCanExecute();
                 }
+                StartTimeEmp2 = DateTime.Now.ToString("H:m");
+                OnPropertyChanged(nameof(StartTimeEmp2));
             }
         }
 
@@ -637,7 +645,10 @@ namespace FTCollectorApp.ViewModel
                         TeamUserKey = value.TeamUserKey
                     });
                     Console.WriteLine();
+                    (CrewSaveCommand as Command).ChangeCanExecute();
                 }
+                StartTimeEmp3 = DateTime.Now.ToString("H:m");
+                OnPropertyChanged(nameof(StartTimeEmp3));
             }
         }
 
@@ -658,7 +669,10 @@ namespace FTCollectorApp.ViewModel
                         TeamUserKey = value.TeamUserKey
                     });
                     Console.WriteLine();
+                    (CrewSaveCommand as Command).ChangeCanExecute();
                 }
+                StartTimeEmp4 = DateTime.Now.ToString("H:m");
+                OnPropertyChanged(nameof(StartTimeEmp4));
             }
         }
 
@@ -679,13 +693,38 @@ namespace FTCollectorApp.ViewModel
                         TeamUserKey = value.TeamUserKey
                     });
                     Console.WriteLine();
+                    (CrewSaveCommand as Command).ChangeCanExecute();
                 }
+                StartTimeEmp5 = DateTime.Now.ToString("H:m");
+                OnPropertyChanged(nameof(StartTimeEmp5));
             }
         }
 
-        [ObservableProperty] string startTime1;
+        private CrewInfoDetail employee6Name;
+        public CrewInfoDetail Employee6Name
+        {
+            get => employee4Name;
+            set
+            {
+                SetProperty(ref employee6Name, value);
+                // Check Existense before insert
+                if (!SelectedCrewInfoDetails.Contains(value))
+                {
+                    SelectedCrewInfoDetails.Add(new CrewInfoDetail
+                    {
+                        id = 5,
+                        FullName = value.FullName,
+                        TeamUserKey = value.TeamUserKey
+                    });
+                    Console.WriteLine();
+                    (CrewSaveCommand as Command).ChangeCanExecute();
+                }
+                StartTimeEmp6 = DateTime.Now.ToString("H:m");
+                OnPropertyChanged(nameof(StartTimeEmp6));
+            }
+        }
 
-        [ObservableProperty] string clockIntime;
+        [ObservableProperty] string clockIntime ;
 
         [ObservableProperty] string lunchOutTime;
 
@@ -751,17 +790,11 @@ namespace FTCollectorApp.ViewModel
 
         async Task JobSaveEvent(int perDiemIdx, string sStartTime)
         {
-            //Session.event_type = Session.ClockIn;
-
-            await LocationService.GetLocation();
-
+            /*await LocationService.GetLocation();
             Session.accuracy = String.Format("{0:0.######}", LocationService.Coords.Accuracy);
-            //Session.longitude2 = String.Format("{0:0.######}", LocationService.Coords.Longitude);
-            //Session.lattitude2 = String.Format("{0:0.######}", LocationService.Coords.Latitude);
             Session.live_longitude = String.Format("{0:0.######}", LocationService.Coords.Longitude);
             Session.live_lattitude = String.Format("{0:0.######}", LocationService.Coords.Latitude);
-            Session.altitude = String.Format("{0:0.######}", LocationService.Coords.Altitude);
-            //{ String.Format("{0:0.#######}", _location.Latitude.ToString())}
+            Session.altitude = String.Format("{0:0.######}", LocationService.Coords.Altitude);*/
 
             try
             {
