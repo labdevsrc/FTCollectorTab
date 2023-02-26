@@ -205,8 +205,8 @@
                                 </Picker.Items>
                             </Picker>
 
-                            <Picker  Grid.Row="2" Grid.Column="2"  SelectedItem="{Binding Employee1IsDriver,Mode=TwoWay}"
-                                     Title="Select driver" FontSize="Medium" TextColor="Black"  >
+                            <Picker  Grid.Row="2" Grid.Column="2"  SelectedIndex ="{Binding Employee1IsDriver,Mode=TwoWay}"
+                                     Title="Driver" FontSize="Medium" TextColor="Black"  >
                                 <Picker.Items>
                                     <x:String>Driver</x:String>
                                     <x:String>Passenger</x:String>
@@ -242,10 +242,11 @@
                                     <x:String>Designer</x:String>
                                 </Picker.Items>
                             </Picker>
-                            <Picker Grid.Row="3" Grid.Column="2"  x:Name="driverPicker2" Title="Select driver" FontSize="Medium" TextColor="Black"  >
+                            <Picker Grid.Row="3" Grid.Column="2" SelectedIndex ="{Binding Employee2IsDriver,Mode=TwoWay}"
+                                    Title="Passenger" FontSize="Medium" TextColor="Black"  >
                                 <Picker.Items>
-                                    <x:String>Driver</x:String>
                                     <x:String>Passenger</x:String>
+                                    <x:String>Driver</x:String>
                                 </Picker.Items>
                             </Picker>
                             <Entry   Grid.Row="3" Grid.Column="3" Text="{Binding StartTimeEmp2,Mode=TwoWay}" />
@@ -275,10 +276,11 @@
                                     <x:String>Designer</x:String>
                                 </Picker.Items>
                             </Picker>
-                            <Picker Grid.Row="4" Grid.Column="2"  x:Name="driverPicker3" Title="Select driver" FontSize="Medium" TextColor="Black" >
+                            <Picker Grid.Row="4" Grid.Column="2"  SelectedIndex ="{Binding Employee3IsDriver,Mode=TwoWay}" 
+                                    Title="Passenger" FontSize="Medium" TextColor="Black" >
                                 <Picker.Items>
-                                    <x:String>Driver</x:String>
                                     <x:String>Passenger</x:String>
+                                    <x:String>Driver</x:String>
                                 </Picker.Items>
                             </Picker>
                             <Entry Grid.Row="4" Grid.Column="3" Text="{Binding StartTimeEmp3,Mode=TwoWay}" />
@@ -307,10 +309,11 @@
                                     <x:String>Designer</x:String>
                                 </Picker.Items>
                             </Picker>
-                            <Picker Grid.Row="5" Grid.Column="2"  x:Name="driverPicker4" Title="Select driver" FontSize="Medium" TextColor="Black"  >
+                            <Picker Grid.Row="5" Grid.Column="2"  SelectedIndex ="{Binding Employee4IsDriver,Mode=TwoWay}" 
+                                    Title="Passenger" FontSize="Medium" TextColor="Black"  >
                                 <Picker.Items>
-                                    <x:String>Driver</x:String>
                                     <x:String>Passenger</x:String>
+                                    <x:String>Driver</x:String>
                                 </Picker.Items>
                             </Picker>
                             <Entry   Grid.Row="5" Grid.Column="3" Text="{Binding StartTimeEmp4,Mode=TwoWay}" />
@@ -322,7 +325,7 @@
                                     <x:String>Half day per diem</x:String>
                                 </Picker.Items>
                             </Picker>
-                            <!-- start employee 5 row -->
+                            <!-- start employee 5th row -->
                             <Picker Grid.Row="6" Grid.Column="0" 
                                    ItemsSource="{Binding SelectableCrewList}"
                                    SelectedItem="{Binding Employee5Name,Mode=TwoWay}"
@@ -339,10 +342,11 @@
                                     <x:String>Designer</x:String>
                                 </Picker.Items>
                             </Picker>
-                            <Picker Grid.Row="6" Grid.Column="2"  x:Name="driverPicker5" Title="Select driver" FontSize="Medium" TextColor="Black"  >
+                            <Picker Grid.Row="6" Grid.Column="2"  SelectedIndex ="{Binding Employee5IsDriver,Mode=TwoWay}"
+                                    Title="Passenger" FontSize="Medium" TextColor="Black"  >
                                 <Picker.Items>
-                                    <x:String>Driver</x:String>
                                     <x:String>Passenger</x:String>
+                                    <x:String>Driver</x:String>
                                 </Picker.Items>
                             </Picker>
                             <Entry   Grid.Row="6" Grid.Column="3" Text="{Binding StartTimeEmp5,Mode=TwoWay}" />
@@ -356,7 +360,7 @@
                                 </Picker.Items>
                             </Picker>
 
-                            <!-- start employee 5 row -->
+                            <!-- start employee 6th row -->
                             <Picker Grid.Row="7" Grid.Column="0" 
                                    ItemsSource="{Binding SelectableCrewList}"
                                    SelectedItem="{Binding Employee6Name,Mode=TwoWay}"
@@ -373,10 +377,11 @@
                                     <x:String>Designer</x:String>
                                 </Picker.Items>
                             </Picker>
-                            <Picker Grid.Row="7" Grid.Column="2"  x:Name="driverPicker6" Title="Select driver" FontSize="Medium" TextColor="Black"  >
+                            <Picker Grid.Row="7" Grid.Column="2"  SelectedIndex ="{Binding Employee6IsDriver,Mode=TwoWay}" 
+                                    Title="Passenger" FontSize="Medium" TextColor="Black"  >
                                 <Picker.Items>
-                                    <x:String>Driver</x:String>
                                     <x:String>Passenger</x:String>
+                                    <x:String>Driver</x:String>
                                 </Picker.Items>
                             </Picker>
                             <Entry   Grid.Row="7" Grid.Column="3" Text="{Binding StartTimeEmp6,Mode=TwoWay}" />

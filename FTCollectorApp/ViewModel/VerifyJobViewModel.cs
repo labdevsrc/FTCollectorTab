@@ -47,11 +47,11 @@ namespace FTCollectorApp.ViewModel
 
 
         string verifyStatusBadge = string.Empty;
-        public string VerifyStatusBadge{
+        public string VerifyStatusBadge {
             get => verifyStatusBadge;
             set
             {
-                if(IsVerified)
+                if (IsVerified)
                     SetProperty(ref textStatus, "OK");
                 else if (IsJobChanging)
                     SetProperty(ref textStatus, "");
@@ -66,7 +66,7 @@ namespace FTCollectorApp.ViewModel
             get => textStatus;
             set
             {
-                if(isVerified || IsJobChanged)
+                if (isVerified || IsJobChanged)
                     SetProperty(ref textStatus, "Verified");
                 else if (IsJobChanging)
                     SetProperty(ref textStatus, "Verify");
@@ -75,7 +75,7 @@ namespace FTCollectorApp.ViewModel
 
         //[ObservableProperty]
         bool isVerified = false;
-        public bool IsVerified{
+        public bool IsVerified {
             get => isVerified;
             set {
                 SetProperty(ref isVerified, value);
@@ -143,7 +143,7 @@ namespace FTCollectorApp.ViewModel
                     //Application.Current.Properties[JobNumberKey] = value.JobNumber;
                     //Application.Current.Properties[JobOwnerKey] = value.OwnerName;
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Console.WriteLine(e.ToString());
                 }
@@ -205,7 +205,7 @@ namespace FTCollectorApp.ViewModel
                     var table = conn.Table<Job>().ToList();
                     // add "?" to make an object nullable.
                     // without nullable var, it will raise exception when it is null value
-                    if (SelectedOwner?.OwnerName != null){
+                    if (SelectedOwner?.OwnerName != null) {
                         Console.WriteLine();
                         table = conn.Table<Job>().Where(a => a.OwnerName == SelectedOwner.OwnerName).GroupBy(b => b.JobNumber).Select(g => g.First()).ToList();
                         Console.WriteLine();
@@ -295,16 +295,12 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         string entryOdometer;
 
-        [ObservableProperty] int perDiemEmp1;
-
-        [ObservableProperty] int perDiemEmp2;
-
-        [ObservableProperty] int perDiemEmp3;
-
-        [ObservableProperty] int perDiemEmp4;
-
-        [ObservableProperty] int perDiemEmp5;
-        [ObservableProperty] int perDiemEmp6;
+        [ObservableProperty] int perDiemEmp1 = 0;
+        [ObservableProperty] int perDiemEmp2 = 0;
+        [ObservableProperty] int perDiemEmp3 = 0;
+        [ObservableProperty] int perDiemEmp4 = 0;
+        [ObservableProperty] int perDiemEmp5 = 0;
+        [ObservableProperty] int perDiemEmp6 = 0;
 
         [ObservableProperty] string startTimeEmp1;
         [ObservableProperty] string startTimeEmp2;
@@ -335,7 +331,7 @@ namespace FTCollectorApp.ViewModel
             ToggleJobEntriesCommand = new Command(() => ToggleJobEntriesExecute());
             ToggleEndofDayCommand = new Command(() => ToggleEndofDayExecute());
 
-            
+
             ToggleCrewListCommand = new Command(
                 execute: () =>
                 {
@@ -363,27 +359,19 @@ namespace FTCollectorApp.ViewModel
                     string curHour = DateTime.Now.ToString("H");
                     string curMinute = DateTime.Now.ToString("m");
                     // preserve LunchOut time here
-                    IsLunchOut = true;
-                    IsLunchIn = false;
-                    (LunchInCommand as Command).ChangeCanExecute();
                     Console.WriteLine();
-                    Application.Current.Properties["ClockInHH"] = curHour;
-                    Application.Current.Properties["ClockInMM"] = curMinute;
-                    Session.event_type = "15"; // Clock In
-                    //if (Employee1Name != null && StartTimeEmp1.Length > 2)
-                    await JobSaveEvent(PerDiemEmp1, startTimeEmp1);
-                    await JobSaveEvent(PerDiemEmp2, startTimeEmp2);
-                    await JobSaveEvent(PerDiemEmp3, startTimeEmp3);
-                    await JobSaveEvent(PerDiemEmp4, startTimeEmp4);
-                    await JobSaveEvent(PerDiemEmp5, startTimeEmp5);
-                    await JobSaveEvent(PerDiemEmp6, startTimeEmp6);
+                    Session.event_type = "3";
+                    await JobSaveEvent(0, LunchOutTime);
+                    await CloudDBService.SaveCrewdata(Session.ownerCD, Employee1Name.FullName, Employee1Name.FullName,
+                        Employee3Name.FullName, Employee4Name.FullName,
+                        Employee5Name.FullName, Employee6Name.FullName,
+                        PerDiemEmp1.ToString(), PerDiemEmp2.ToString(), PerDiemEmp3.ToString(),
+                        PerDiemEmp4.ToString(), PerDiemEmp5.ToString(), PerDiemEmp6.ToString(),
+                        Employee1IsDriver.ToString(), Employee2IsDriver.ToString(),
+                        Employee1IsDriver.ToString(), Employee2IsDriver.ToString(),
+                        Employee1IsDriver.ToString(), Employee2IsDriver.ToString()
+                        );
 
-                },
-                canExecute: () =>
-                {
-                    Console.WriteLine();
-                    return true;
-                    //return Employee1Name!= null;
                 }
             );
 
@@ -395,9 +383,9 @@ namespace FTCollectorApp.ViewModel
                     string curHour = DateTime.Now.ToString("H");
                     string curMinute = DateTime.Now.ToString("m");
 
-                    IsLunchOut = true;
-                    IsLunchIn = false;
-                    (LunchInCommand as Command).ChangeCanExecute();
+                    IsLunchOut = false;
+                    IsLunchIn = true;
+                    (LunchOutCommand as Command).ChangeCanExecute();
                     Console.WriteLine();
                     Application.Current.Properties["LunchOutHH"] = curHour;
                     Application.Current.Properties["LunchOutMM"] = curMinute;
@@ -409,7 +397,7 @@ namespace FTCollectorApp.ViewModel
                 canExecute: () =>
                 {
                     Console.WriteLine();
-                    return IsLunchIn;
+                    return IsLunchOut;
                 }
             );
 
@@ -417,10 +405,10 @@ namespace FTCollectorApp.ViewModel
                 execute: async () =>
                 {
 
-                    IsLunchOut = false;
-                    IsLunchIn = true;
+                    IsLunchOut = true;
+                    IsLunchIn = false;
 
-                    (LunchOutCommand as Command).ChangeCanExecute();
+                    (LunchInCommand as Command).ChangeCanExecute();
                     LunchInTime = DateTime.Now.ToString("HH:mm");
                     Session.event_type = "14"; // Lunch in
                     await JobSaveEvent(0, LunchInTime);
@@ -429,7 +417,7 @@ namespace FTCollectorApp.ViewModel
                 canExecute: () =>
                 {
                     Console.WriteLine();
-                    return IsLunchOut;
+                    return IsLunchIn;
                 }
             );
 
@@ -487,7 +475,7 @@ namespace FTCollectorApp.ViewModel
 
             ODOSaveCommand = new Command(
                 execute: async () =>
-                { 
+                {
                     IsBusy = true;
                     try
                     {
@@ -507,7 +495,7 @@ namespace FTCollectorApp.ViewModel
             );
 
             DisplayEquipmentCheckInCommand = new Command(
-                execute: () => 
+                execute: () =>
                 {
                     DisplayEquipmentCheckIn();
                     clrBkgndJob = Color.LightBlue;
@@ -579,7 +567,13 @@ namespace FTCollectorApp.ViewModel
 
         public ObservableCollection<CrewInfoDetail> SelectedCrewInfoDetails = new ObservableCollection<CrewInfoDetail>();
 
-        private CrewInfoDetail employee1Name;
+        private CrewInfoDetail employee1Name = new CrewInfoDetail
+        {
+            id = 1,
+            FullName = string.Empty,
+            TeamUserKey = 0
+        };
+
         public CrewInfoDetail Employee1Name
         {
             get => employee1Name;
@@ -591,7 +585,7 @@ namespace FTCollectorApp.ViewModel
                 {
                     SelectedCrewInfoDetails.Add(new CrewInfoDetail
                     {
-                        id=1,
+                        id = 1,
                         FullName = value.FullName,
                         TeamUserKey = value.TeamUserKey
                     });
@@ -723,6 +717,13 @@ namespace FTCollectorApp.ViewModel
                 OnPropertyChanged(nameof(StartTimeEmp6));
             }
         }
+
+        [ObservableProperty] int employee1IsDriver = 0;
+        [ObservableProperty] int employee2IsDriver = 0;
+        [ObservableProperty] int employee3IsDriver = 0;
+        [ObservableProperty] int employee4IsDriver = 0;
+        [ObservableProperty] int employee5IsDriver = 0; 
+        [ObservableProperty] int employee6IsDriver = 0;
 
         [ObservableProperty] string clockIntime ;
 
