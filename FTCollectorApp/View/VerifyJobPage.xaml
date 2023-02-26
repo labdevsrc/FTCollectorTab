@@ -208,8 +208,9 @@
                             <Picker  Grid.Row="2" Grid.Column="2"  SelectedIndex ="{Binding Employee1IsDriver,Mode=TwoWay}"
                                      Title="Driver" FontSize="Medium" TextColor="Black"  >
                                 <Picker.Items>
+                                    <x:String>Passenger</x:String>                                    
                                     <x:String>Driver</x:String>
-                                    <x:String>Passenger</x:String>
+
                                 </Picker.Items>
                             </Picker>
                             <Entry   Grid.Row="2" Grid.Column="3" Text="{Binding StartTimeEmp1,Mode=TwoWay}" />

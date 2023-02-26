@@ -355,23 +355,38 @@ namespace FTCollectorApp.ViewModel
             CrewSaveCommand = new Command(
                 execute: async () =>
                 {
-                    string curHHMM = DateTime.Now.ToString("H:m");
-                    string curHour = DateTime.Now.ToString("H");
-                    string curMinute = DateTime.Now.ToString("m");
-                    // preserve LunchOut time here
-                    Console.WriteLine();
-                    Session.event_type = "3";
-                    await JobSaveEvent(0, LunchOutTime);
-                    await CloudDBService.SaveCrewdata(Session.ownerCD, Employee1Name.FullName, Employee1Name.FullName,
-                        Employee3Name.FullName, Employee4Name.FullName,
-                        Employee5Name.FullName, Employee6Name.FullName,
-                        PerDiemEmp1.ToString(), PerDiemEmp2.ToString(), PerDiemEmp3.ToString(),
-                        PerDiemEmp4.ToString(), PerDiemEmp5.ToString(), PerDiemEmp6.ToString(),
-                        Employee1IsDriver.ToString(), Employee2IsDriver.ToString(),
-                        Employee1IsDriver.ToString(), Employee2IsDriver.ToString(),
-                        Employee1IsDriver.ToString(), Employee2IsDriver.ToString()
-                        );
+                    Console.WriteLine(  );
+                    try
+                    {
+                        string curHHMM = DateTime.Now.ToString("HM:mm");
+                        string curHour = DateTime.Now.ToString("HH");
+                        string curMinute = DateTime.Now.ToString("mm");
+                        // preserve LunchOut time here
+                        Console.WriteLine();
+                        Session.event_type = "3";
 
+                        await JobSaveEvent();
+                        await CloudDBService.SaveCrewdata(Session.ownerCD, Employee1Name?.FullName, Employee1Name?.FullName,
+                            Employee3Name?.FullName, Employee4Name?.FullName,
+                            Employee5Name?.FullName, Employee6Name?.FullName,
+                            PerDiemEmp1.ToString(), PerDiemEmp2.ToString(), PerDiemEmp3.ToString(),
+                            PerDiemEmp4.ToString(), PerDiemEmp5.ToString(), PerDiemEmp6.ToString(),
+                            Employee1IsDriver.ToString(), Employee2IsDriver.ToString(),
+                            Employee1IsDriver.ToString(), Employee2IsDriver.ToString(),
+                            Employee1IsDriver.ToString(), Employee2IsDriver.ToString()
+                            );
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine("Exception " + e);
+                    }
+                },
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return Employee1Name?.FullName.Length > 1 || Employee1Name?.FullName.Length > 1 ||
+                            Employee3Name?.FullName.Length > 1 || Employee4Name?.FullName.Length > 1 ||
+                            Employee5Name?.FullName.Length > 1 || Employee6Name?.FullName.Length > 1;
                 }
             );
 
@@ -379,19 +394,29 @@ namespace FTCollectorApp.ViewModel
             LunchOutCommand = new Command(
                 execute: async () =>
                 {
-                    string curHHMM = DateTime.Now.ToString("H:m");
-                    string curHour = DateTime.Now.ToString("H");
-                    string curMinute = DateTime.Now.ToString("m");
-
-                    IsLunchOut = false;
-                    IsLunchIn = true;
-                    (LunchOutCommand as Command).ChangeCanExecute();
                     Console.WriteLine();
-                    Application.Current.Properties["LunchOutHH"] = curHour;
-                    Application.Current.Properties["LunchOutMM"] = curMinute;
-                    Session.event_type = "13"; // Lunch out
-                    LunchOutTime = DateTime.Now.ToString("HH:mm");
-                    await JobSaveEvent(0, LunchOutTime);
+                    try
+                    {
+                        string curHHMM = DateTime.Now.ToString("H:m");
+                        string curHour = DateTime.Now.ToString("H");
+                        string curMinute = DateTime.Now.ToString("m");
+
+                        IsLunchOut = false;
+                        IsLunchIn = true;
+                        (LunchOutCommand as Command).ChangeCanExecute();
+                        Console.WriteLine();
+                        Application.Current.Properties["LunchOutHH"] = curHour;
+                        Application.Current.Properties["LunchOutMM"] = curMinute;
+                        Session.event_type = "13"; // Lunch out
+
+                        LunchOutTime = DateTime.Now.ToString("HH:mm");
+
+                        await JobSaveEvent();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Exception LunchOutCommand " + e);
+                    }
 
                 },
                 canExecute: () =>
@@ -411,7 +436,7 @@ namespace FTCollectorApp.ViewModel
                     (LunchInCommand as Command).ChangeCanExecute();
                     LunchInTime = DateTime.Now.ToString("HH:mm");
                     Session.event_type = "14"; // Lunch in
-                    await JobSaveEvent(0, LunchInTime);
+                    await JobSaveEvent();
 
                 },
                 canExecute: () =>
@@ -426,7 +451,7 @@ namespace FTCollectorApp.ViewModel
                 {
 
                     ClockOutTime = DateTime.Now.ToString("HH:mm");
-                    Session.event_type = "16"; // ClockOut
+
                     //calculate from Clock in to Lunch out
 
                     //check if clockintime > lunchout
@@ -440,7 +465,9 @@ namespace FTCollectorApp.ViewModel
                     TotalHoursForToday = totaltime.ToString("HH:mm:ss");
                     Console.WriteLine("TotalHoursForToday " + TotalHoursForToday);
                     Console.WriteLine();
-                    await JobSaveEvent(0, TotalHoursForToday);
+
+                    Session.event_type = "16"; // ClockOut
+                    await JobSaveEvent();
 
                 },
                 canExecute: () =>
@@ -789,7 +816,7 @@ namespace FTCollectorApp.ViewModel
 
 
 
-        async Task JobSaveEvent(int perDiemIdx, string sStartTime)
+        async Task JobSaveEvent()
         {
             /*await LocationService.GetLocation();
             Session.accuracy = String.Format("{0:0.######}", LocationService.Coords.Accuracy);
@@ -799,11 +826,14 @@ namespace FTCollectorApp.ViewModel
 
             try
             {
-                DateTime dt = DateTime.Parse(sStartTime.Trim());
-                int user_hours = int.Parse(dt.ToString("HH"));
-                int user_minutes = int.Parse(dt.ToString("mm"));
+                //DateTime dt = DateTime.Parse(sStartTime.Trim());
+                //int user_hours = int.Parse(dt.ToString("HH"));
+                //int user_minutes = int.Parse(dt.ToString("mm"));
 
-                await CloudDBService.PostJobEvent(user_hours.ToString(), user_minutes.ToString(),  perDiemIdx.ToString());
+                int user_hours = int.Parse(DateTime.Now.ToString("HH"));
+                int user_minutes = int.Parse(DateTime.Now.ToString("mm"));
+
+                await CloudDBService.PostJobEvent(user_hours.ToString(), user_minutes.ToString());
 
             }
             catch

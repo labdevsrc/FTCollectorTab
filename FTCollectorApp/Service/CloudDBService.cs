@@ -76,6 +76,7 @@ namespace FTCollectorApp.Service
 
             return JsonConvert.DeserializeObject<T>(json);
         }
+        public static async Task PostJobEvent(string param1, string param2) => await PostJobEvent(param1, param2, "");
         public static async Task PostJobEvent() => await PostJobEvent("", "", "");
         public static async Task PostJobEvent(string odo) => await PostJobEvent("", odo, "");
         public static async Task PostJobEvent(string param1, string param2, string perDiem)
@@ -85,8 +86,8 @@ namespace FTCollectorApp.Service
                 new KeyValuePair<string, string>("jobnum",Session.jobnum),
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
 
-                new KeyValuePair<string, string>("min", Session.event_type == Session.ClockIn ? param1 : "0"),
-                new KeyValuePair<string, string>("hr", Session.event_type == Session.ClockIn ? param2 : "0"),
+                new KeyValuePair<string, string>("min", param1),
+                new KeyValuePair<string, string>("hr", param2),
 
                 new KeyValuePair<string, string>("perdiem",perDiem),
                 new KeyValuePair<string, string>("gps_sts", Session.gps_sts),
