@@ -45,7 +45,7 @@
     <AndroidApkSignerAdditionalArguments>
     </AndroidApkSignerAdditionalArguments>
     <AndroidSigningKeyPass>ftapps123</AndroidSigningKeyPass>
-    <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <MandroidI18n />
     <AndroidLinkSkip>FTCollectorApp</AndroidLinkSkip>
@@ -75,7 +75,7 @@
     <AndroidLinkTool>r8</AndroidLinkTool>
     <AndroidLinkMode>None</AndroidLinkMode>
     <AndroidLinkSkip>FTCollectorApp</AndroidLinkSkip>
-    <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -195,7 +195,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties XamarinHotReloadDebuggerTimeoutExceptionFTCollectorAppAndroidHideInfoBar="True" XamarinHotReloadWrongLinkerErrorInfoBarFTCollectorAppAndroidHideInfoBar="True" />
+      <UserProperties XamarinHotReloadWrongLinkerErrorInfoBarFTCollectorAppAndroidHideInfoBar="True" XamarinHotReloadDebuggerTimeoutExceptionFTCollectorAppAndroidHideInfoBar="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

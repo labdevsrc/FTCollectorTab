@@ -186,13 +186,15 @@
                             <BoxView Grid.Row="1" Grid.ColumnSpan="5"  Color="Gray" HeightRequest="2" HorizontalOptions="Fill" />
                             
                             <!-- start employee 1 row -->
-                            <Picker Grid.Row="2" Grid.Column="0" 
+                            <Label Grid.Row="2" Grid.Column="0" Text="{Binding Employee1Name.FullName}"
+                                   VerticalOptions="Center" FontSize="Medium" TextColor="Black" />
+                            <!--<Picker Grid.Row="2" Grid.Column="0" 
                                     ItemsSource="{Binding SelectableCrewList}"
                                     SelectedItem="{Binding Employee1Name,Mode=TwoWay}"
                                     ItemDisplayBinding="{Binding FullName}"
                                     Title="Employee" FontSize="Medium" TextColor="Black">
 
-                            </Picker>
+                            </Picker>-->
                             <Picker  Grid.Row="2" Grid.Column="1" Title="Labor" 
                                      SelectedItem="{Binding Employee1Labor,Mode=TwoWay}" 
                                      FontSize="Medium" TextColor="Black" >

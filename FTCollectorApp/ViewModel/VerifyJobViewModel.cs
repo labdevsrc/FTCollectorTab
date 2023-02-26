@@ -344,6 +344,11 @@ namespace FTCollectorApp.ViewModel
                     clrBkgndEChkOut = Color.LightBlue;
                     clrBkgndODO = Color.LightBlue;
 
+                    //Add to SelectedCrewInfoDetails
+                    SelectedCrewInfoDetails.Add(Employee1Name);
+                    // add current time
+                    StartTimeEmp1 = DateTime.Now.ToString("HH:mm");
+
                 },
                 canExecute: () =>
                 {
@@ -366,14 +371,14 @@ namespace FTCollectorApp.ViewModel
                         Session.event_type = "3";
 
                         await JobSaveEvent();
-                        await CloudDBService.SaveCrewdata(Session.ownerCD, Employee1Name?.FullName, Employee1Name?.FullName,
+                        await CloudDBService.SaveCrewdata(Session.ownerCD, Employee1Name?.FullName, Employee2Name?.FullName,
                             Employee3Name?.FullName, Employee4Name?.FullName,
                             Employee5Name?.FullName, Employee6Name?.FullName,
                             PerDiemEmp1.ToString(), PerDiemEmp2.ToString(), PerDiemEmp3.ToString(),
                             PerDiemEmp4.ToString(), PerDiemEmp5.ToString(), PerDiemEmp6.ToString(),
                             Employee1IsDriver.ToString(), Employee2IsDriver.ToString(),
-                            Employee1IsDriver.ToString(), Employee2IsDriver.ToString(),
-                            Employee1IsDriver.ToString(), Employee2IsDriver.ToString()
+                            Employee3IsDriver.ToString(), Employee4IsDriver.ToString(),
+                            Employee5IsDriver.ToString(), Employee6IsDriver.ToString()
                             );
                     }
                     catch(Exception e)
@@ -384,7 +389,7 @@ namespace FTCollectorApp.ViewModel
                 canExecute: () =>
                 {
                     Console.WriteLine();
-                    return Employee1Name?.FullName.Length > 1 || Employee1Name?.FullName.Length > 1 ||
+                    return Employee1Name?.FullName.Length > 1 || Employee2Name?.FullName.Length > 1 ||
                             Employee3Name?.FullName.Length > 1 || Employee4Name?.FullName.Length > 1 ||
                             Employee5Name?.FullName.Length > 1 || Employee6Name?.FullName.Length > 1;
                 }
@@ -397,9 +402,10 @@ namespace FTCollectorApp.ViewModel
                     Console.WriteLine();
                     try
                     {
+
                         string curHHMM = DateTime.Now.ToString("H:m");
-                        string curHour = DateTime.Now.ToString("H");
-                        string curMinute = DateTime.Now.ToString("m");
+                        string curHour = DateTime.Now.ToString("%H");
+                        string curMinute = DateTime.Now.ToString("%m");
 
                         IsLunchOut = false;
                         IsLunchIn = true;
@@ -408,7 +414,7 @@ namespace FTCollectorApp.ViewModel
                         Application.Current.Properties["LunchOutHH"] = curHour;
                         Application.Current.Properties["LunchOutMM"] = curMinute;
                         Session.event_type = "13"; // Lunch out
-
+                        Console.WriteLine();
                         LunchOutTime = DateTime.Now.ToString("HH:mm");
 
                         await JobSaveEvent();
@@ -594,36 +600,12 @@ namespace FTCollectorApp.ViewModel
 
         public ObservableCollection<CrewInfoDetail> SelectedCrewInfoDetails = new ObservableCollection<CrewInfoDetail>();
 
-        private CrewInfoDetail employee1Name = new CrewInfoDetail
+        [ObservableProperty] CrewInfoDetail employee1Name = new CrewInfoDetail
         {
             id = 1,
-            FullName = string.Empty,
-            TeamUserKey = 0
+            FullName = Session.crew_leader,
+            TeamUserKey = 22
         };
-
-        public CrewInfoDetail Employee1Name
-        {
-            get => employee1Name;
-            set
-            {
-                SetProperty(ref employee1Name, value);
-                // Check Existense before insert
-                if (!SelectedCrewInfoDetails.Contains(value))
-                {
-                    SelectedCrewInfoDetails.Add(new CrewInfoDetail
-                    {
-                        id = 1,
-                        FullName = value.FullName,
-                        TeamUserKey = value.TeamUserKey
-                    });
-                    Console.WriteLine();
-                    (CrewSaveCommand as Command).ChangeCanExecute();
-                }
-                StartTimeEmp1 = DateTime.Now.ToString("H:m");
-                OnPropertyChanged(nameof(StartTimeEmp1));
-
-            }
-        }
 
         private CrewInfoDetail employee2Name;
         public CrewInfoDetail Employee2Name
@@ -644,7 +626,7 @@ namespace FTCollectorApp.ViewModel
                     Console.WriteLine();
                     (CrewSaveCommand as Command).ChangeCanExecute();
                 }
-                StartTimeEmp2 = DateTime.Now.ToString("H:m");
+                StartTimeEmp2 = DateTime.Now.ToString("HH:mm");
                 OnPropertyChanged(nameof(StartTimeEmp2));
             }
         }
@@ -668,7 +650,7 @@ namespace FTCollectorApp.ViewModel
                     Console.WriteLine();
                     (CrewSaveCommand as Command).ChangeCanExecute();
                 }
-                StartTimeEmp3 = DateTime.Now.ToString("H:m");
+                StartTimeEmp3 = DateTime.Now.ToString("HH:mm");
                 OnPropertyChanged(nameof(StartTimeEmp3));
             }
         }
@@ -692,7 +674,7 @@ namespace FTCollectorApp.ViewModel
                     Console.WriteLine();
                     (CrewSaveCommand as Command).ChangeCanExecute();
                 }
-                StartTimeEmp4 = DateTime.Now.ToString("H:m");
+                StartTimeEmp4 = DateTime.Now.ToString("HH:mm");
                 OnPropertyChanged(nameof(StartTimeEmp4));
             }
         }
@@ -716,7 +698,7 @@ namespace FTCollectorApp.ViewModel
                     Console.WriteLine();
                     (CrewSaveCommand as Command).ChangeCanExecute();
                 }
-                StartTimeEmp5 = DateTime.Now.ToString("H:m");
+                StartTimeEmp5 = DateTime.Now.ToString("HH:mm");
                 OnPropertyChanged(nameof(StartTimeEmp5));
             }
         }
@@ -740,7 +722,7 @@ namespace FTCollectorApp.ViewModel
                     Console.WriteLine();
                     (CrewSaveCommand as Command).ChangeCanExecute();
                 }
-                StartTimeEmp6 = DateTime.Now.ToString("H:m");
+                StartTimeEmp6 = DateTime.Now.ToString("HH:mm");
                 OnPropertyChanged(nameof(StartTimeEmp6));
             }
         }
@@ -823,7 +805,7 @@ namespace FTCollectorApp.ViewModel
             Session.live_longitude = String.Format("{0:0.######}", LocationService.Coords.Longitude);
             Session.live_lattitude = String.Format("{0:0.######}", LocationService.Coords.Latitude);
             Session.altitude = String.Format("{0:0.######}", LocationService.Coords.Altitude);*/
-
+            Console.WriteLine("JobSaveEvent");
             try
             {
                 //DateTime dt = DateTime.Parse(sStartTime.Trim());
