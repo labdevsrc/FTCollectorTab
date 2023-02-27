@@ -14,69 +14,70 @@
             <StackLayout Orientation="Vertical" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
                 <StackLayout Padding="50" >
                     <Grid RowDefinitions="*,*" ColumnDefinitions="*,*,*,*,*">
-                        <StackLayout Orientation="Vertical" HeightRequest="150">
+                        <StackLayout Orientation="Vertical" HeightRequest="110">
                             <Button Text="{x:Static fa:FontAwesomeIcons.User}" FontSize="60"
-                                        FontFamily="FontAwesome6Solid" HeightRequest="120" WidthRequest="120" 
+                                        FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" 
                                     Command="{Binding ToggleJobEntriesCommand}" />
 
                             <Label HorizontalOptions="Center" Text="Verify Job"/>
                         </StackLayout>
-                        <StackLayout Grid.Column="1" Orientation="Vertical" HeightRequest="150">                        
+                        <StackLayout Grid.Column="1" Orientation="Vertical" HeightRequest="110">                        
                             <Button Text="{x:Static fa:FontAwesomeIcons.Users}" FontSize="60"
-                                           FontFamily="FontAwesome6Solid" HeightRequest="120" WidthRequest="120" Command="{Binding ToggleCrewListCommand}" />
+                                           FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" Command="{Binding ToggleCrewListCommand}" />
 
                             <Label HorizontalOptions="Center" Text="Enter Crew"/>
                         </StackLayout>
 
                         <!--Equipment Checkout-->
-                        <StackLayout Grid.Column="2" Orientation="Vertical" HeightRequest="150">
+                        <StackLayout Grid.Column="2" Orientation="Vertical" HeightRequest="110">
                             <Button Text="{x:Static fa:FontAwesomeIcons.UserGear}" FontSize="60"
-                                       FontFamily="FontAwesome6Solid" HeightRequest="120" WidthRequest="120" Command="{Binding DisplayEquipmentCheckOutCommand}" />
+                                       FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" Command="{Binding DisplayEquipmentCheckOutCommand}" />
                             <Label HorizontalOptions="Center" Text="Eq. Checkout"/>
                         </StackLayout>
                         <!--Equipment Checkin-->
-                        <StackLayout Grid.Column="3" Orientation="Vertical" HeightRequest="150">
+                        <StackLayout Grid.Column="3" Orientation="Vertical" HeightRequest="110">
                             <Button Text="{x:Static fa:FontAwesomeIcons.Gears}" FontSize="60"
-                                       FontFamily="FontAwesome6Solid" HeightRequest="120" WidthRequest="120" Command="{Binding DisplayEquipmentCheckInCommand}" />                        
+                                       FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" Command="{Binding DisplayEquipmentCheckInCommand}" />                        
                             <Label HorizontalOptions="Center" Text="Eq. Checkin"/>
                         </StackLayout>
                         <!--Odometer-->
-                        <StackLayout Grid.Column="4" Orientation="Vertical" HeightRequest="150">
+                        <StackLayout Grid.Column="4" Orientation="Vertical" HeightRequest="110">
 
                             <Button Text="{x:Static fa:FontAwesomeIcons.GaugeHigh}" FontSize="60"
-                                       FontFamily="FontAwesome6Solid" HeightRequest="120" WidthRequest="120" Command="{Binding ODOPopupCommand}" />
+                                       FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" Command="{Binding ODOPopupCommand}" />
                             <Label HorizontalOptions="Center" Text="Odometer In"/>
                         </StackLayout>
                         
                         <!-- 2nd row -->
                         <StackLayout Grid.Row="1" Grid.Column="0" IsVisible="{Binding IsVerified}"
-                                        Orientation="Vertical" HeightRequest="150">
-                            <Button Text="Lunch Out" FontSize="Medium" HeightRequest="120" WidthRequest="120"
+                                        Orientation="Vertical" HeightRequest="110">
+                            <Button Text="Lunch Out" FontSize="Medium" HeightRequest="90" WidthRequest="90" 
                                         Command="{Binding LunchOutCommand}" />
                         </StackLayout>
                         <StackLayout Grid.Row="1" Grid.Column="2" IsVisible="{Binding IsVerified}" 
-                                     Orientation="Vertical" HeightRequest="150">
+                                     Orientation="Vertical" HeightRequest="110">
                             <Button Text="Lunch In" FontSize="Medium" IsEnabled="False"
-                                HeightRequest="120" WidthRequest="120" Command="{Binding LunchInCommand}" />
+                                HeightRequest="90" WidthRequest="120" Command="{Binding LunchInCommand}" />
                         </StackLayout>
 
                         <StackLayout Grid.Row="1" Grid.Column="1" IsVisible="{Binding IsVerified}" 
-                                     Orientation="Vertical" HeightRequest="150">
+                                     Orientation="Vertical" HeightRequest="110">
                             <Button Text="End of Day" FontSize="Medium"
-                                            FontFamily="FontAwesome6Solid" HeightRequest="120" WidthRequest="120" Command="{Binding ToggleEndofDayCommand}" />
+                                    FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="120" 
+                                    Command="{Binding ToggleEndofDayCommand}" />
                         </StackLayout>
 
                         <!--Func#1-->
 
                         <StackLayout Grid.Row="1" Grid.Column="3" Orientation="Vertical" IsVisible="{Binding IsVerified}"
-                                     HeightRequest="150">
+                                     HeightRequest="110">
                             <Button Text="Func#2" FontSize="Medium" IsEnabled="False"
-                                HeightRequest="120" WidthRequest="120"  />
+                                HeightRequest="90" WidthRequest="120"  />
                         </StackLayout>
                         <StackLayout Grid.Row="1" Grid.Column="4" Orientation="Vertical" IsVisible="{Binding IsVerified}"
-                                     HeightRequest="150">
+                                     HeightRequest="110">
                             <Button Text="Func#3" FontSize="Medium" IsEnabled="False"
-                                HeightRequest="120" WidthRequest="120"  />
+                                HeightRequest="90" WidthRequest="120"  />
                         </StackLayout>
 
                     </Grid>
@@ -114,7 +115,7 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
-                                    <Frame CornerRadius="10" BackgroundColor="LightBlue">
+                                    <Frame Margin="20" CornerRadius="10" BackgroundColor="LightBlue">
                                         <Label Text="{Binding FullName}"  />
                                     </Frame>
                                 </ViewCell>
@@ -123,71 +124,65 @@
                         </ListView.ItemTemplate>
                     </ListView>
                     <!-- End of Day -->
-                    <StackLayout IsVisible="{Binding IsDisplayEndOfDayForm}" >
-                        <Label Text="By signing this daily time report, \n
-                               I verify that my individual hours are correctly reported,\n
-                               and I also acknowledge that I have not been involved \n
-                               in a vehicle accident, incident or work related injury \n
-                               during this work period. I understand that falsification of \n
-                               any information or making false statements will be considered grounds \n
+                    <StackLayout IsVisible="{Binding IsDisplayEndOfDayForm}" Margin="5,50,5,20">
+                        
+                        <Label Text="By signing this daily time report, I verify that my individual hours are correctly reported,
+                               and I also acknowledge that I have not been involved in a vehicle accident, incident or work related injury
+                               during this work period. 
+                               I understand that falsification of any information or making false statements will be considered grounds 
                                for dismissal." 
                             VerticalOptions="CenterAndExpand" 
                             HorizontalOptions="CenterAndExpand" />
-                        <Grid ColumnDefinitions="*,*"  HeightRequest="100" Padding="20">
-                            <Label Text="Clock in time" HorizontalOptions="Start" HeightRequest="80" VerticalOptions="Center" />
-                            <Entry Text="{Binding ClockIntime}" IsEnabled="False" />
-                        </Grid>
-                        <Grid ColumnDefinitions="*,*"  HeightRequest="100" Padding="20">
-                            <Label Text="Lunch out time" HorizontalOptions="Start" HeightRequest="80" VerticalOptions="Center" />
-                            <Entry Text="{Binding LunchOutTime}" IsEnabled="False" />
-                        </Grid>
-                        <Grid ColumnDefinitions="*,*"  HeightRequest="100" Padding="20">
-                            <Label Text="Lunch in time" HorizontalOptions="Start" HeightRequest="80" VerticalOptions="Center" />
-                            <Entry Text="{Binding LunchInTime}" IsEnabled="False" />
-                        </Grid>
-                        <Grid ColumnDefinitions="*,*"  HeightRequest="100" Padding="20">
-                            <Label Text="Clock out time" HorizontalOptions="Start" HeightRequest="80" VerticalOptions="Center" />
-                            <Entry Text="{Binding ClockOutTime}" IsEnabled="False" />
-                        </Grid>
-                        <Grid ColumnDefinitions="*,*"  HeightRequest="100" Padding="20">
-                            <Label Text="Total Hours for Today" HorizontalOptions="Start" HeightRequest="80" VerticalOptions="Center" />
-                            <Entry Text="{Binding TotalHoursForToday}" IsEnabled="False" />
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="*,*,*,*,*"  Padding="20">
+                            <Label  Text="Clock in time" HorizontalOptions="Start" HeightRequest="80" VerticalOptions="Center" />
+                            <Entry Grid.Row="0" Grid.Column="1" Text="{Binding ClockIntime}" VerticalOptions="Center" IsEnabled="False" />
+                            <Label Grid.Row="1" Grid.Column="0" Text="Lunch out time" HorizontalOptions="Start" HeightRequest="80" VerticalOptions="Center" />
+                            <Entry Grid.Row="1" Grid.Column="1" Text="{Binding LunchOutTime}" IsEnabled="False" VerticalOptions="Center"/>
+                            <Label Grid.Row="2" Grid.Column="0" Text="Lunch in time" HorizontalOptions="Start" HeightRequest="80" VerticalOptions="Center" />
+                            <Entry Grid.Row="2" Grid.Column="1" Text="{Binding LunchInTime}" IsEnabled="False" VerticalOptions="Center"/>
+                            <Label Grid.Row="3" Grid.Column="0" Text="Clock out time" HorizontalOptions="Start" HeightRequest="80" VerticalOptions="Center" />
+                            <Entry Grid.Row="3" Grid.Column="1" Text="{Binding ClockOutTime}" IsEnabled="False" VerticalOptions="Center"/>
+                            <Label Grid.Row="4" Grid.Column="0" Text="Total Hours for Today" HorizontalOptions="Start" HeightRequest="80" VerticalOptions="Center" />
+                            <Entry Grid.Row="4" Grid.Column="1" Text="{Binding TotalHoursForToday}" IsEnabled="False" />
                         </Grid>
                         <Label Text="{Binding SelectedCrewForEndOfDay.FullName, StringFormat= 'Selected : Employee Name {0}'}" />
-                        <forms:SignaturePadView x:Name="signaturePad"  BackgroundImage="sign_bg.png"
+                        <Frame HeightRequest="120" CornerRadius="15">                        
+                            <forms:SignaturePadView x:Name="signaturePad"  BackgroundImage="sign_bg.png"
                             BackgroundColor="LightGray"  StrokeColor="Black"  StrokeWidth="3" />
+                        </Frame>
+
                         <Button Text="Save" Command="{Binding TriggerEndOfDayCommand}" HorizontalOptions="End" 
                                 WidthRequest="100" HeightRequest="40"/>
                     </StackLayout>
                     <!--<Button Text="Crew List" Command="{Binding ToggleCrewListCommand}"/>-->
                     <StackLayout IsVisible="{Binding IsDisplayCrewList}">
-                        <Frame CornerRadius="5" HasShadow="true">
-                            <Label FontSize="30" Text="Select Crew" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+                        <Frame CornerRadius="5" HasShadow="true" HeightRequest="70">
+                            <Label FontSize="20" Text="Select Crew" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
                         </Frame>
-                        <Label FontSize="Medium" Text="{Binding CrewLeader , StringFormat='Crew Leader : {0}'}" 
+                        <Label Text="{Binding CrewLeader , StringFormat='Crew Leader : {0}'}" 
                                     VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
-                        <Grid Padding="20" ColumnDefinitions="*,*,*,*,*" RowDefinitions="*,0.1*,*,*,*,*,*,*">
+                        <Grid Padding="5" ColumnDefinitions="*,*,*,*,*" RowDefinitions="*,0.1*,*,*,*,*,*,*">
                             <!-- table header -->
-                            <Frame  Grid.Row="0" CornerRadius="10" HasShadow="true">
-                                <Label FontSize="16" Text="EMPLOYEE" VerticalOptions="Center"/>
+                            <Frame  Grid.Row="0" CornerRadius="10" > 
+                                <Label Text="Employee" VerticalOptions="Center" HeightRequest="40"/>
                             </Frame>
-                            <Frame Grid.Row="0"  Grid.Column="1"  CornerRadius="10" HasShadow="true">
-                                <Label FontSize="16" Text="Labor Class" VerticalOptions="Center"/>
+                            <Frame Grid.Row="0"  Grid.Column="1"  CornerRadius="10" >
+                                <Label Text="Labor Class" VerticalOptions="Center" HeightRequest="40"/>
                             </Frame>
-                            <Frame Grid.Row="0"  Grid.Column="2" CornerRadius="10" HasShadow="true">
-                                <Label  FontSize="16" Text="DRIVER" VerticalOptions="Center"/>
+                            <Frame Grid.Row="0"  Grid.Column="2" CornerRadius="10">
+                                <Label Text="DRIVER" VerticalOptions="Center" HeightRequest="40"/>
                             </Frame>
-                            <Frame Grid.Row="0"  Grid.Column="3" CornerRadius="10" HasShadow="true">
-                                <Label  FontSize="16" Text="Start Time" VerticalOptions="Center"/>
+                            <Frame Grid.Row="0"  Grid.Column="3" CornerRadius="10" >
+                                <Label  Text="Start Time" VerticalOptions="Center" HeightRequest="40"/>
                             </Frame>
-                            <Frame Grid.Row="0"  Grid.Column="4"  CornerRadius="10" HasShadow="true">
-                                <Label FontSize="16" Text="Per Diem" VerticalOptions="Center"/>
+                            <Frame Grid.Row="0"  Grid.Column="4"  CornerRadius="10">
+                                <Label Text="Per Diem" VerticalOptions="Center" HeightRequest="40"/>
                             </Frame>
                             <BoxView Grid.Row="1" Grid.ColumnSpan="5"  Color="Gray" HeightRequest="2" HorizontalOptions="Fill" />
                             
                             <!-- start employee 1 row -->
                             <Label Grid.Row="2" Grid.Column="0" Text="{Binding Employee1Name.FullName}"
-                                   VerticalOptions="Center" FontSize="Medium" TextColor="Black" />
+                                   VerticalOptions="Center" TextColor="Black" />
                             <!--<Picker Grid.Row="2" Grid.Column="0" 
                                     ItemsSource="{Binding SelectableCrewList}"
                                     SelectedItem="{Binding Employee1Name,Mode=TwoWay}"
@@ -197,7 +192,7 @@
                             </Picker>-->
                             <Picker  Grid.Row="2" Grid.Column="1" Title="Labor" 
                                      SelectedItem="{Binding Employee1Labor,Mode=TwoWay}" 
-                                     FontSize="Medium" TextColor="Black" >
+                                     TextColor="Black" >
                                 <Picker.Items>
                                     <x:String>Installer</x:String>
                                     <x:String>Technician</x:String>
@@ -208,7 +203,7 @@
                             </Picker>
 
                             <Picker  Grid.Row="2" Grid.Column="2"  SelectedIndex ="{Binding Employee1IsDriver,Mode=TwoWay}"
-                                     Title="Driver" FontSize="Medium" TextColor="Black"  >
+                                     Title="Driver" TextColor="Black"  >
                                 <Picker.Items>
                                     <x:String>Passenger</x:String>                                    
                                     <x:String>Driver</x:String>
@@ -217,7 +212,7 @@
                             </Picker>
                             <Entry   Grid.Row="2" Grid.Column="3" Text="{Binding StartTimeEmp1,Mode=TwoWay}" />
                             <Picker  Grid.Row="2" Grid.Column="4"  SelectedItem="{Binding PerDiemEmp1,Mode=TwoWay}"
-                                     Title="No per diem" FontSize="Medium" TextColor="Black"  >
+                                     Title="No per diem" TextColor="Black"  >
                                 <Picker.Items>
                                     <x:String>No per diem</x:String>
                                     <x:String>Full day per diem</x:String>
@@ -235,7 +230,7 @@
                                     
                                     FontSize="Small" TextColor="Black"/>
                             <Picker Grid.Row="3" Grid.Column="1" SelectedItem="{Binding Employee2Labor,Mode=TwoWay}" 
-                                    Title="Select labor" FontSize="Medium" TextColor="Black" 
+                                    Title="Select labor" TextColor="Black" 
                                     >
                                 <Picker.Items>
                                     <x:String>Installer</x:String>
@@ -246,7 +241,7 @@
                                 </Picker.Items>
                             </Picker>
                             <Picker Grid.Row="3" Grid.Column="2" SelectedIndex ="{Binding Employee2IsDriver,Mode=TwoWay}"
-                                    Title="Passenger" FontSize="Medium" TextColor="Black"  >
+                                    Title="Passenger"  TextColor="Black"  >
                                 <Picker.Items>
                                     <x:String>Passenger</x:String>
                                     <x:String>Driver</x:String>
@@ -254,7 +249,7 @@
                             </Picker>
                             <Entry   Grid.Row="3" Grid.Column="3" Text="{Binding StartTimeEmp2,Mode=TwoWay}" />
                             <Picker  Grid.Row="3" Grid.Column="4"  SelectedIndex ="{Binding PerDiemEmp2,Mode=TwoWay}"
-                                     Title="No per diem" FontSize="Medium" TextColor="Black"  >
+                                     Title="No per diem" TextColor="Black"  >
                                 <Picker.Items>
                                     <x:String>No per diem</x:String>
                                     <x:String>Full day per diem</x:String>
@@ -270,7 +265,7 @@
                                    ItemDisplayBinding="{Binding FullName}"
                                     Title="Select Employee" FontSize="Small" TextColor="Black" />
                             <Picker Grid.Row="4" Grid.Column="1" SelectedItem="{Binding Employee3Labor,Mode=TwoWay}" 
-                                    Title="Select labor" FontSize="Medium" TextColor="Black">
+                                    Title="Select labor" TextColor="Black">
                                 <Picker.Items>
                                     <x:String>Installer</x:String>
                                     <x:String>Technician</x:String>
@@ -280,7 +275,7 @@
                                 </Picker.Items>
                             </Picker>
                             <Picker Grid.Row="4" Grid.Column="2"  SelectedIndex ="{Binding Employee3IsDriver,Mode=TwoWay}" 
-                                    Title="Passenger" FontSize="Medium" TextColor="Black" >
+                                    Title="Passenger" TextColor="Black" >
                                 <Picker.Items>
                                     <x:String>Passenger</x:String>
                                     <x:String>Driver</x:String>
@@ -288,7 +283,7 @@
                             </Picker>
                             <Entry Grid.Row="4" Grid.Column="3" Text="{Binding StartTimeEmp3,Mode=TwoWay}" />
                             <Picker  Grid.Row="4" Grid.Column="4"  SelectedIndex="{Binding PerDiemEmp3,Mode=TwoWay}"
-                                     Title="No per diem" FontSize="Medium" TextColor="Black"  >
+                                     Title="No per diem" TextColor="Black"  >
                                 <Picker.Items>
                                     <x:String>No per diem</x:String>
                                     <x:String>Full day per diem</x:String>
@@ -303,7 +298,7 @@
                                    ItemDisplayBinding="{Binding FullName}"
                                     Title="Select Employee" FontSize="Small" TextColor="Black" />
                             <Picker Grid.Row="5" Grid.Column="1" SelectedItem="{Binding Employee4Labor,Mode=TwoWay}" 
-                                    Title="Select labor" FontSize="Medium" TextColor="Black" >
+                                    Title="Select labor" TextColor="Black" >
                                 <Picker.Items>
                                     <x:String>Installer</x:String>
                                     <x:String>Technician</x:String>
@@ -313,7 +308,7 @@
                                 </Picker.Items>
                             </Picker>
                             <Picker Grid.Row="5" Grid.Column="2"  SelectedIndex ="{Binding Employee4IsDriver,Mode=TwoWay}" 
-                                    Title="Passenger" FontSize="Medium" TextColor="Black"  >
+                                    Title="Passenger" TextColor="Black"  >
                                 <Picker.Items>
                                     <x:String>Passenger</x:String>
                                     <x:String>Driver</x:String>
@@ -321,7 +316,7 @@
                             </Picker>
                             <Entry   Grid.Row="5" Grid.Column="3" Text="{Binding StartTimeEmp4,Mode=TwoWay}" />
                             <Picker  Grid.Row="5" Grid.Column="4"  SelectedIndex="{Binding PerDiemEmp4,Mode=TwoWay}"
-                                     Title="No per diem" FontSize="Medium" TextColor="Black"  >
+                                     Title="No per diem" TextColor="Black"  >
                                 <Picker.Items>
                                     <x:String>No per diem</x:String>
                                     <x:String>Full day per diem</x:String>
@@ -336,7 +331,7 @@
                                     
                                     Title="Select Employee" FontSize="Small" TextColor="Black" />
                             <Picker Grid.Row="6" Grid.Column="1" SelectedItem="{Binding Employee5Labor,Mode=TwoWay}"
-                                    Title="Select labor" FontSize="Medium" TextColor="Black">
+                                    Title="Select labor" TextColor="Black">
                                 <Picker.Items>
                                     <x:String>Installer</x:String>
                                     <x:String>Technician</x:String>
@@ -346,7 +341,7 @@
                                 </Picker.Items>
                             </Picker>
                             <Picker Grid.Row="6" Grid.Column="2"  SelectedIndex ="{Binding Employee5IsDriver,Mode=TwoWay}"
-                                    Title="Passenger" FontSize="Medium" TextColor="Black"  >
+                                    Title="Passenger" TextColor="Black"  >
                                 <Picker.Items>
                                     <x:String>Passenger</x:String>
                                     <x:String>Driver</x:String>
@@ -355,49 +350,33 @@
                             <Entry   Grid.Row="6" Grid.Column="3" Text="{Binding StartTimeEmp5,Mode=TwoWay}" />
                             <Picker  Grid.Row="6" Grid.Column="4"  
                                      SelectedIndex="{Binding PerDiemEmp5,Mode=TwoWay}"
-                                     Title="No per diem" FontSize="Medium" TextColor="Black"  >
+                                     Title="No per diem" TextColor="Black"  >
                                 <Picker.Items>
                                     <x:String>No per diem</x:String>
                                     <x:String>Full day per diem</x:String>
                                     <x:String>Half day per diem</x:String>
                                 </Picker.Items>
                             </Picker>
-
-                            <!-- start employee 6th row -->
-                            <Picker Grid.Row="7" Grid.Column="0" 
-                                   ItemsSource="{Binding SelectableCrewList}"
-                                   SelectedItem="{Binding Employee6Name,Mode=TwoWay}"
-                                   ItemDisplayBinding="{Binding FullName}"
-                                    
-                                    Title="Select Employee" FontSize="Small" TextColor="Black" />
-                            <Picker Grid.Row="7" Grid.Column="1" SelectedItem="{Binding Employee6Labor,Mode=TwoWay}"
-                                    Title="Select labor" FontSize="Medium" TextColor="Black">
-                                <Picker.Items>
-                                    <x:String>Installer</x:String>
-                                    <x:String>Technician</x:String>
-                                    <x:String>CADD operator</x:String>
-                                    <x:String>RCDD</x:String>
-                                    <x:String>Designer</x:String>
-                                </Picker.Items>
-                            </Picker>
-                            <Picker Grid.Row="7" Grid.Column="2"  SelectedIndex ="{Binding Employee6IsDriver,Mode=TwoWay}" 
-                                    Title="Passenger" FontSize="Medium" TextColor="Black"  >
-                                <Picker.Items>
-                                    <x:String>Passenger</x:String>
-                                    <x:String>Driver</x:String>
-                                </Picker.Items>
-                            </Picker>
-                            <Entry   Grid.Row="7" Grid.Column="3" Text="{Binding StartTimeEmp6,Mode=TwoWay}" />
-                            <Picker  Grid.Row="7" Grid.Column="4"  
-                                     SelectedIndex="{Binding PerDiemEmp6,Mode=TwoWay}"
-                                     Title="No per diem" FontSize="Medium" TextColor="Black"  >
-                                <Picker.Items>
-                                    <x:String>No per diem</x:String>
-                                    <x:String>Full day per diem</x:String>
-                                    <x:String>Half day per diem</x:String>
-                                </Picker.Items>
-                            </Picker>                            
+                            
                         </Grid>
+                        <StackLayout IsVisible="{Binding IsLunchOutDisplay}" >
+                            <Frame CornerRadius="20" HasShadow="True" HeightRequest="200">
+                                <StackLayout>
+                                    <Label FontSize="Medium" Text="LunchOut Time" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" />
+                                    <Label FontSize="Medium" Text="{Binding LunchOutTime}" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" />
+                                </StackLayout>
+                            </Frame>
+                        </StackLayout>
+
+                        <StackLayout IsVisible="{Binding IsLunchInDisplay}" >
+                            <Frame CornerRadius="20" HasShadow="True" HeightRequest="200">
+                                <StackLayout>
+                                    <Label FontSize="Medium" Text="LunchIn Time" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" />
+                                    <Label FontSize="Medium" Text="{Binding LunchInTime}" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" />
+                                </StackLayout>
+                            </Frame>
+                        </StackLayout>
+
                         <Button Text="Save" Command="{Binding CrewSaveCommand}" BackgroundColor="{StaticResource blueColor}"/>
 
                     </StackLayout>

@@ -255,10 +255,19 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         bool isLunchIn = false;
 
+        [ObservableProperty]
+        bool isLunchOutDisplay = true;
+
+        [ObservableProperty]
+        bool isLunchInDisplay = false;
+
         private void ToggleExecute()
         {
             IsDisplayCrewList = !IsDisplayCrewList;
             IsDisplayEndOfDayForm = false;
+            IsDisplayEndOfDay = false;
+            IsLunchOutDisplay = false;
+            IsLunchInDisplay = false;
         }
 
         private void ToggleJobEntriesExecute()
@@ -266,16 +275,12 @@ namespace FTCollectorApp.ViewModel
             IsDisplayCrewList = false;
             IsDisplayOdo = false;
             IsDisplayEndOfDayForm = false;
+            IsDisplayEndOfDay = false;
             IsDisplayJobEntries = !IsDisplayJobEntries;
+            IsLunchOutDisplay = false;
+            IsLunchInDisplay = false;
         }
 
-        private void ToggleEndofDayExecute()
-        {
-            IsDisplayCrewList = false;
-            IsDisplayOdo = false;
-
-            IsDisplayEndOfDayForm = !IsDisplayEndOfDayForm;
-        }
 
         [ObservableProperty]
         Color clrBkgndJob = Color.LightBlue;
@@ -329,8 +334,18 @@ namespace FTCollectorApp.ViewModel
 
             GPSSettingCommand = new Command(() => DisplayGPSSettingCommand());
             ToggleJobEntriesCommand = new Command(() => ToggleJobEntriesExecute());
-            ToggleEndofDayCommand = new Command(() => ToggleEndofDayExecute());
+            SelectedCrewInfoDetails.Add(Employee1Name); // add crew leader ass Employee 1 by default
 
+            ToggleEndofDayCommand = new Command(
+                execute: () => {
+                    IsDisplayEndOfDay = true;
+                    IsDisplayCrewList = false;
+                    IsDisplayOdo = false;
+                    IsDisplayEndOfDay = true; // display list registered employee
+                    IsLunchOutDisplay = false;
+                    IsLunchInDisplay = false;
+                }
+                ) ;
 
             ToggleCrewListCommand = new Command(
                 execute: () =>
@@ -338,6 +353,10 @@ namespace FTCollectorApp.ViewModel
                     IsDisplayJobEntries = false;
                     IsDisplayOdo = false;
                     IsDisplayCrewList = !IsDisplayCrewList;
+                    IsDisplayEndOfDay = false;
+                    IsLunchInDisplay = false;
+                    IsLunchOutDisplay = false;
+
                     clrBkgndJob = Color.LightBlue;
                     clrBkgndCrew = Color.Green;
                     clrBkgndECheckin = Color.LightBlue;
@@ -345,7 +364,7 @@ namespace FTCollectorApp.ViewModel
                     clrBkgndODO = Color.LightBlue;
 
                     //Add to SelectedCrewInfoDetails
-                    SelectedCrewInfoDetails.Add(Employee1Name);
+
                     // add current time
                     StartTimeEmp1 = DateTime.Now.ToString("HH:mm");
 
@@ -380,6 +399,9 @@ namespace FTCollectorApp.ViewModel
                             Employee3IsDriver.ToString(), Employee4IsDriver.ToString(),
                             Employee5IsDriver.ToString(), Employee6IsDriver.ToString()
                             );
+
+                        await Application.Current.MainPage.DisplayAlert("Updated", "Crew member updated", "OK");
+
                     }
                     catch(Exception e)
                     {
@@ -406,17 +428,29 @@ namespace FTCollectorApp.ViewModel
                         string curHHMM = DateTime.Now.ToString("H:m");
                         string curHour = DateTime.Now.ToString("%H");
                         string curMinute = DateTime.Now.ToString("%m");
+                        Application.Current.Properties["LunchOutHH"] = curHour;
+                        Application.Current.Properties["LunchOutMM"] = curMinute;
+
 
                         IsLunchOut = false;
                         IsLunchIn = true;
+                        (LunchInCommand as Command).ChangeCanExecute();
                         (LunchOutCommand as Command).ChangeCanExecute();
+
+                        // hide other display
+                        IsDisplayCrewList = false;
+                        IsDisplayEndOfDay= false;
+                        IsDisplayOdo = false;
+
+
                         Console.WriteLine();
-                        Application.Current.Properties["LunchOutHH"] = curHour;
-                        Application.Current.Properties["LunchOutMM"] = curMinute;
                         Session.event_type = "13"; // Lunch out
                         Console.WriteLine();
-                        LunchOutTime = DateTime.Now.ToString("HH:mm");
 
+                        IsLunchOutDisplay = true;
+                        IsLunchInDisplay = false;
+
+                        LunchOutTime = DateTime.Now.ToString("HH:mm");
                         await JobSaveEvent();
                     }
                     catch (Exception e)
@@ -439,9 +473,22 @@ namespace FTCollectorApp.ViewModel
                     IsLunchOut = true;
                     IsLunchIn = false;
 
-                    (LunchInCommand as Command).ChangeCanExecute();
+
                     LunchInTime = DateTime.Now.ToString("HH:mm");
+                    IsLunchOutDisplay = false;
+                    IsLunchInDisplay = true;
+                    (LunchInCommand as Command).ChangeCanExecute();
+                    (LunchOutCommand as Command).ChangeCanExecute();
+
+                    // hide other display
+                    IsDisplayCrewList = false;
+                    IsDisplayEndOfDay = false;
+                    IsDisplayOdo = false;
+
+
+
                     Session.event_type = "14"; // Lunch in
+
                     await JobSaveEvent();
 
                 },
@@ -595,8 +642,20 @@ namespace FTCollectorApp.ViewModel
 
         }
 
-        [ObservableProperty]
+        //[ObservableProperty]
         CrewInfoDetail selectedCrewForEndOfDay;
+        public CrewInfoDetail SelectedCrewForEndOfDay
+        {
+            get => selectedCrewForEndOfDay;
+            set
+            {
+                SetProperty(ref selectedCrewForEndOfDay, value);
+                IsDisplayEndOfDayForm = true; // display the Finish the Day 
+            }
+        }
+
+
+
 
         public ObservableCollection<CrewInfoDetail> SelectedCrewInfoDetails = new ObservableCollection<CrewInfoDetail>();
 
@@ -625,9 +684,10 @@ namespace FTCollectorApp.ViewModel
                     });
                     Console.WriteLine();
                     (CrewSaveCommand as Command).ChangeCanExecute();
+                    StartTimeEmp2 = DateTime.Now.ToString("HH:mm");
+                    OnPropertyChanged(nameof(StartTimeEmp2));
                 }
-                StartTimeEmp2 = DateTime.Now.ToString("HH:mm");
-                OnPropertyChanged(nameof(StartTimeEmp2));
+
             }
         }
 
@@ -715,7 +775,7 @@ namespace FTCollectorApp.ViewModel
                 {
                     SelectedCrewInfoDetails.Add(new CrewInfoDetail
                     {
-                        id = 5,
+                        id = 6,
                         FullName = value.FullName,
                         TeamUserKey = value.TeamUserKey
                     });
@@ -812,9 +872,14 @@ namespace FTCollectorApp.ViewModel
                 //int user_hours = int.Parse(dt.ToString("HH"));
                 //int user_minutes = int.Parse(dt.ToString("mm"));
 
-                int user_hours = int.Parse(DateTime.Now.ToString("HH"));
-                int user_minutes = int.Parse(DateTime.Now.ToString("mm"));
-
+                DateTime curTime = DateTime.Now;
+                int user_hours = curTime.Hour;
+                int user_minutes = curTime.Minute;
+                Console.WriteLine("HH " + user_hours);
+                Console.WriteLine("MM " + user_minutes);
+                //int user_hours = int.Parse(DateTime.Now.ToString("%HH"));
+                //int user_minutes = int.Parse(DateTime.Now.ToString("%mm"));
+                Console.WriteLine();
                 await CloudDBService.PostJobEvent(user_hours.ToString(), user_minutes.ToString());
 
             }
