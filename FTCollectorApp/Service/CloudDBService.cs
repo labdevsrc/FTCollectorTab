@@ -86,8 +86,8 @@ namespace FTCollectorApp.Service
                 new KeyValuePair<string, string>("jobnum",Session.jobnum),
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
 
-                new KeyValuePair<string, string>("min", param1),
-                new KeyValuePair<string, string>("hr", param2),
+                new KeyValuePair<string, string>("hr", param1),
+                new KeyValuePair<string, string>("min", param2),
 
                 new KeyValuePair<string, string>("perdiem",perDiem),
                 new KeyValuePair<string, string>("gps_sts", Session.gps_sts),

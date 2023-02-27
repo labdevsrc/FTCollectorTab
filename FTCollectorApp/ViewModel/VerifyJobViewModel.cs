@@ -307,6 +307,7 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] int perDiemEmp5 = 0;
         [ObservableProperty] int perDiemEmp6 = 0;
 
+        [ObservableProperty] string startTimeLeader;
         [ObservableProperty] string startTimeEmp1;
         [ObservableProperty] string startTimeEmp2;
         [ObservableProperty] string startTimeEmp3;
@@ -334,11 +335,13 @@ namespace FTCollectorApp.ViewModel
 
             GPSSettingCommand = new Command(() => DisplayGPSSettingCommand());
             ToggleJobEntriesCommand = new Command(() => ToggleJobEntriesExecute());
-            SelectedCrewInfoDetails.Add(Employee1Name); // add crew leader ass Employee 1 by default
+
+            SelectedCrewInfoDetails.Add(LeaderInfoDetail); // add crew leader , exclude from employee
+            StartTimeLeader = DateTime.Now.ToString("HH:mm");
+
 
             ToggleEndofDayCommand = new Command(
                 execute: () => {
-                    IsDisplayEndOfDay = true;
                     IsDisplayCrewList = false;
                     IsDisplayOdo = false;
                     IsDisplayEndOfDay = true; // display list registered employee
@@ -390,9 +393,11 @@ namespace FTCollectorApp.ViewModel
                         Session.event_type = "3";
 
                         await JobSaveEvent();
-                        await CloudDBService.SaveCrewdata(Session.ownerCD, Employee1Name?.FullName, Employee2Name?.FullName,
-                            Employee3Name?.FullName, Employee4Name?.FullName,
-                            Employee5Name?.FullName, Employee6Name?.FullName,
+                        await CloudDBService.SaveCrewdata(Session.ownerCD, 
+                            Employee1Name?.TeamUserKey.ToString(),
+                            Employee2Name?.TeamUserKey.ToString(),
+                            Employee3Name?.TeamUserKey.ToString(), Employee4Name?.TeamUserKey.ToString(),
+                            Employee5Name?.TeamUserKey.ToString(), Employee6Name?.TeamUserKey.ToString(),
                             PerDiemEmp1.ToString(), PerDiemEmp2.ToString(), PerDiemEmp3.ToString(),
                             PerDiemEmp4.ToString(), PerDiemEmp5.ToString(), PerDiemEmp6.ToString(),
                             Employee1IsDriver.ToString(), Employee2IsDriver.ToString(),
@@ -659,12 +664,39 @@ namespace FTCollectorApp.ViewModel
 
         public ObservableCollection<CrewInfoDetail> SelectedCrewInfoDetails = new ObservableCollection<CrewInfoDetail>();
 
-        [ObservableProperty] CrewInfoDetail employee1Name = new CrewInfoDetail
+        [ObservableProperty] CrewInfoDetail leaderInfoDetail = new CrewInfoDetail
         {
             id = 1,
             FullName = Session.crew_leader,
             TeamUserKey = 22
         };
+
+
+        private CrewInfoDetail employee1Name;
+        public CrewInfoDetail Employee1Name
+        {
+            get => employee1Name;
+            set
+            {
+                SetProperty(ref employee1Name, value);
+                // Check Existense before insert
+                if (!SelectedCrewInfoDetails.Contains(value))
+                {
+                    SelectedCrewInfoDetails.Add(new CrewInfoDetail
+                    {
+                        id = 2,
+                        FullName = value.FullName,
+                        TeamUserKey = value.TeamUserKey
+                    });
+                    Console.WriteLine();
+                    (CrewSaveCommand as Command).ChangeCanExecute();
+                    StartTimeEmp1 = DateTime.Now.ToString("HH:mm");
+                    OnPropertyChanged(nameof(StartTimeEmp1));
+                }
+
+            }
+        }
+
 
         private CrewInfoDetail employee2Name;
         public CrewInfoDetail Employee2Name
