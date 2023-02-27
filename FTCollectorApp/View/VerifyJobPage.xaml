@@ -9,20 +9,20 @@
              x:Class="FTCollectorApp.View.VerifyJobPage">
     <ContentPage.Content>
         
-        <AbsoluteLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" >
+        <AbsoluteLayout VerticalOptions="FillAndExpand" HorizontalOptions="CenterAndExpand" >
 
             <StackLayout Orientation="Vertical" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
                 <StackLayout Padding="50" >
                     <Grid RowDefinitions="*,*" ColumnDefinitions="*,*,*,*,*">
                         <StackLayout Orientation="Vertical" HeightRequest="110">
-                            <Button Text="{x:Static fa:FontAwesomeIcons.User}" FontSize="60"
+                            <Button Text="{x:Static fa:FontAwesomeIcons.User}" FontSize="40"
                                         FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" 
                                     Command="{Binding ToggleJobEntriesCommand}" />
 
                             <Label HorizontalOptions="Center" Text="Verify Job"/>
                         </StackLayout>
                         <StackLayout Grid.Column="1" Orientation="Vertical" HeightRequest="110">                        
-                            <Button Text="{x:Static fa:FontAwesomeIcons.Users}" FontSize="60"
+                            <Button Text="{x:Static fa:FontAwesomeIcons.Users}" FontSize="40"
                                            FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" Command="{Binding ToggleCrewListCommand}" />
 
                             <Label HorizontalOptions="Center" Text="Enter Crew"/>
@@ -30,39 +30,39 @@
 
                         <!--Equipment Checkout-->
                         <StackLayout Grid.Column="2" Orientation="Vertical" HeightRequest="110">
-                            <Button Text="{x:Static fa:FontAwesomeIcons.UserGear}" FontSize="60"
+                            <Button Text="{x:Static fa:FontAwesomeIcons.UserGear}" FontSize="40"
                                        FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" Command="{Binding DisplayEquipmentCheckOutCommand}" />
                             <Label HorizontalOptions="Center" Text="Eq. Checkout"/>
                         </StackLayout>
                         <!--Equipment Checkin-->
                         <StackLayout Grid.Column="3" Orientation="Vertical" HeightRequest="110">
-                            <Button Text="{x:Static fa:FontAwesomeIcons.Gears}" FontSize="60"
+                            <Button Text="{x:Static fa:FontAwesomeIcons.Gears}" FontSize="40"
                                        FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" Command="{Binding DisplayEquipmentCheckInCommand}" />                        
                             <Label HorizontalOptions="Center" Text="Eq. Checkin"/>
                         </StackLayout>
                         <!--Odometer-->
                         <StackLayout Grid.Column="4" Orientation="Vertical" HeightRequest="110">
 
-                            <Button Text="{x:Static fa:FontAwesomeIcons.GaugeHigh}" FontSize="60"
+                            <Button Text="{x:Static fa:FontAwesomeIcons.GaugeHigh}" FontSize="40"
                                        FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" Command="{Binding ODOPopupCommand}" />
                             <Label HorizontalOptions="Center" Text="Odometer In"/>
                         </StackLayout>
                         
                         <!-- 2nd row -->
                         <StackLayout Grid.Row="1" Grid.Column="0" IsVisible="{Binding IsVerified}"
-                                        Orientation="Vertical" HeightRequest="110">
-                            <Button Text="Lunch Out" FontSize="Medium" HeightRequest="90" WidthRequest="90" 
+                                        Orientation="Vertical" HeightRequest="100">
+                            <Button Text="Lunch Out" FontSize="Small" HeightRequest="90" WidthRequest="90" 
                                         Command="{Binding LunchOutCommand}" />
                         </StackLayout>
                         <StackLayout Grid.Row="1" Grid.Column="2" IsVisible="{Binding IsVerified}" 
-                                     Orientation="Vertical" HeightRequest="110">
-                            <Button Text="Lunch In" FontSize="Medium" IsEnabled="False"
+                                     Orientation="Vertical" HeightRequest="100">
+                            <Button Text="Lunch In" FontSize="Small" IsEnabled="False"
                                 HeightRequest="90" WidthRequest="120" Command="{Binding LunchInCommand}" />
                         </StackLayout>
 
                         <StackLayout Grid.Row="1" Grid.Column="1" IsVisible="{Binding IsVerified}" 
-                                     Orientation="Vertical" HeightRequest="110">
-                            <Button Text="End of Day" FontSize="Medium"
+                                     Orientation="Vertical" HeightRequest="100">
+                            <Button Text="End of Day" FontSize="Small"
                                     FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="120" 
                                     Command="{Binding ToggleEndofDayCommand}" />
                         </StackLayout>
@@ -110,31 +110,28 @@
                         <Button Grid.Column="2" Text="Save" VerticalOptions="Center" Command="{Binding ODOSaveCommand} "/>
                     </Grid>
 
-                    <StackLayout IsVisible="{Binding IsDisplayEndOfDay}" HeightRequest="100" >
-                    <ListView  ItemsSource ="{Binding SelectedCrewInfoDetails}" 
+                    <StackLayout IsVisible="{Binding IsDisplayEndOfDay}"  >
+                        <ListView  ItemsSource ="{Binding FinishDayList}" 
                               SelectedItem="{Binding SelectedCrewForEndOfDay, Mode=TwoWay}"
-                              
-                              >
+                                   HeightRequest="100"
+                                   >
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <ViewCell>
-                                    <Frame Margin="20" CornerRadius="10" BackgroundColor="Blue">
-                                        <Label Text="{Binding FullName}"  />
-                                    </Frame>
-                                </ViewCell>
-                                <!--<TextCell Text=" = {Binding EmployeeNmae}" />-->
+                                <TextCell Text="{Binding FullName}" Height="40">
+                                    <!--<Frame Margin="20" CornerRadius="10" BackgroundColor="Blue"/>                                    
+                                      <Label Text="{Binding FullName}" FontSize="50" />
+                                    </Frame>-->
+                                </TextCell>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
                     </StackLayout>
                     <!-- End of Day -->
-                    <StackLayout IsVisible="{Binding IsDisplayEndOfDayForm}" Margin="5,50,5,20">
+                    <StackLayout  Margin="5"  IsVisible="{Binding IsDisplayEndOfDayForm}" >
                         
-                        <Label Text="By signing this daily time report, I verify that my individual hours are correctly reported,
-                               and I also acknowledge that I have not been involved in a vehicle accident, incident or work related injury
+                        <Label Text="By signing this daily time report, I verify that my individual hours are correctly reported,and I also acknowledge that I have not been involved in a vehicle accident, incident or work related injury
                                during this work period. 
-                               I understand that falsification of any information or making false statements will be considered grounds 
-                               for dismissal." 
+                               I understand that falsification of any information or making false statements will be considered grounds for dismissal." 
                             VerticalOptions="CenterAndExpand" 
                             HorizontalOptions="CenterAndExpand" />
                         <Grid ColumnDefinitions="*,*" RowDefinitions="*,*,*,*,*"  Padding="20">
@@ -155,12 +152,12 @@
                             BackgroundColor="LightGray"  StrokeColor="Black"  StrokeWidth="3" />
                         </Frame>
 
-                        <Button Text="Save" Command="{Binding TriggerEndOfDayCommand}" HorizontalOptions="End" 
+                        <Button Text="Save" Command="{Binding SaveEndOfDayCommand}" HorizontalOptions="End" 
                                 WidthRequest="100" HeightRequest="40"/>
                     </StackLayout>
                     <!--<Button Text="Crew List" Command="{Binding ToggleCrewListCommand}"/>-->
                     <StackLayout IsVisible="{Binding IsDisplayCrewList}">
-                        <Frame CornerRadius="5" HasShadow="true" HeightRequest="70">
+                        <Frame CornerRadius="5" HasShadow="true" HeightRequest="50">
                             <Label FontSize="20" Text="Select Crew" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
                         </Frame>
                         <Label Text="{Binding CrewLeader , StringFormat='Crew Leader : {0}'}" 
@@ -189,13 +186,13 @@
                             <Entry   Grid.Row="1" Grid.Column="3" Text="{Binding StartTimeLeader,Mode=TwoWay}" />
 
                             <!-- start employee 1 row -->
-                            <Label Grid.Row="2" Grid.Column="0" Text="{Binding Employee1Name.FullName}"
-                                   VerticalOptions="Center" TextColor="Black" />
+                            <!--<Label Grid.Row="2" Grid.Column="0" Text="{Binding Employee1Name.FullName}"
+                                   VerticalOptions="Center" TextColor="Black" />-->
                             <Picker Grid.Row="2" Grid.Column="0" 
                                     ItemsSource="{Binding SelectableCrewList}"
                                     SelectedItem="{Binding Employee1Name,Mode=TwoWay}"
                                     ItemDisplayBinding="{Binding FullName}"
-                                    Title="Employee" FontSize="Medium" TextColor="Black">
+                                    Title="Employee" FontSize="Small" TextColor="Black">
 
                             </Picker>
                             <Picker  Grid.Row="2" Grid.Column="1" Title="Labor" 

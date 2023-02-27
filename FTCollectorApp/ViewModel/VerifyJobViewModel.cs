@@ -83,6 +83,7 @@ namespace FTCollectorApp.ViewModel
                 (DisplayEquipmentCheckInCommand as Command).ChangeCanExecute();
                 (DisplayEquipmentCheckOutCommand as Command).ChangeCanExecute();
                 (ToggleCrewListCommand as Command).ChangeCanExecute();
+                (ToggleEndofDayCommand as Command).ChangeCanExecute();
                 Console.WriteLine();
             }
         }
@@ -229,7 +230,7 @@ namespace FTCollectorApp.ViewModel
         public ICommand LunchOutCommand { get; set; }
         public ICommand LunchInCommand { get; set; }
         public ICommand ToggleEndofDayCommand { get; set; }
-        public ICommand TriggerEndOfDayCommand { get; set; }
+        public ICommand SaveEndOfDayCommand { get; set; }
         public ICommand CrewSaveCommand { get; set; }
 
 
@@ -256,7 +257,7 @@ namespace FTCollectorApp.ViewModel
         bool isLunchIn = false;
 
         [ObservableProperty]
-        bool isLunchOutDisplay = true;
+        bool isLunchOutDisplay = false;
 
         [ObservableProperty]
         bool isLunchInDisplay = false;
@@ -307,10 +308,93 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] int perDiemEmp5 = 0;
         [ObservableProperty] int perDiemEmp6 = 0;
 
-        [ObservableProperty] string startTimeLeader;
-        [ObservableProperty] string startTimeEmp1;
-        [ObservableProperty] string startTimeEmp2;
-        [ObservableProperty] string startTimeEmp3;
+        string startTimeLeader;
+        public string StartTimeLeader
+        {
+            get => startTimeLeader;
+            set
+            {
+                SetProperty(ref startTimeLeader, value);
+                //if (!SelectedCrewInfoDetails.Contains(LeaderInfoDetail))
+                SelectedCrewInfoDetails.Remove(LeaderInfoDetail);
+
+                SelectedCrewInfoDetails.Add(new CrewInfoDetail
+                {
+                    id = 1,
+                    FullName = CrewLeader,
+                    TeamUserKey = Employee1Name.TeamUserKey,
+                    StartTime = value
+                });
+                OnPropertyChanged(nameof(FinishDayList)); // notify
+            }
+        }
+
+
+
+        // ClockIn / StartTime Employee 1
+        string startTimeEmp1;
+        public string StartTimeEmp1
+        {
+            get => startTimeEmp1;
+            set
+            {
+                SetProperty(ref startTimeEmp1, value);
+                if (!SelectedCrewInfoDetails.Contains(Employee1Name))
+                {
+                    SelectedCrewInfoDetails.Add(new CrewInfoDetail
+                    {
+                        id = 2,
+                        FullName = Employee1Name?.FullName,
+                        TeamUserKey = Employee1Name.TeamUserKey,
+                        StartTime = value
+                    });
+                    OnPropertyChanged(nameof(FinishDayList)); // notify
+                }
+            }
+        }
+
+        string startTimeEmp2;
+        public string StartTimeEmp2
+        {
+            get => startTimeEmp2;
+            set
+            {
+                SetProperty(ref startTimeEmp2, value);
+                if (!SelectedCrewInfoDetails.Contains(Employee1Name))
+                {
+                    SelectedCrewInfoDetails.Add(new CrewInfoDetail
+                    {
+                        id = 3,
+                        FullName = Employee2Name?.FullName,
+                        TeamUserKey = Employee2Name.TeamUserKey,
+                        StartTime = value
+                    });
+                    OnPropertyChanged(nameof(FinishDayList)); // notify
+                }
+            }
+        }
+
+        string startTimeEmp3;
+        public string StartTimeEmp3
+        {
+            get => startTimeEmp3;
+            set
+            {
+                SetProperty(ref startTimeEmp3, value);
+                if (!SelectedCrewInfoDetails.Contains(Employee1Name))
+                {
+                    SelectedCrewInfoDetails.Add(new CrewInfoDetail
+                    {
+                        id = 4,
+                        FullName = Employee3Name?.FullName,
+                        TeamUserKey = Employee3Name.TeamUserKey,
+                        StartTime = value
+                    });
+                    OnPropertyChanged(nameof(FinishDayList)); // notify
+                }
+            }
+        }
+
         [ObservableProperty] string startTimeEmp4;
         [ObservableProperty] string startTimeEmp5;
         [ObservableProperty] string startTimeEmp6;
@@ -337,16 +421,24 @@ namespace FTCollectorApp.ViewModel
             ToggleJobEntriesCommand = new Command(() => ToggleJobEntriesExecute());
 
             SelectedCrewInfoDetails.Add(LeaderInfoDetail); // add crew leader , exclude from employee
-            StartTimeLeader = DateTime.Now.ToString("HH:mm");
+            OnPropertyChanged(nameof(FinishDayList)); // notify
+            //StartTimeLeader = DateTime.Now.ToString("HH:mm");
 
 
             ToggleEndofDayCommand = new Command(
                 execute: () => {
+                    IsDisplayEndOfDay = !IsDisplayEndOfDay;
                     IsDisplayCrewList = false;
+                    IsDisplayJobEntries = false;
                     IsDisplayOdo = false;
-                    IsDisplayEndOfDay = true; // display list registered employee
-                    IsLunchOutDisplay = false;
                     IsLunchInDisplay = false;
+                    IsLunchOutDisplay = false;
+
+                    //calculate from Clock in to Lunch out
+
+                    //check if clockintime > lunchout
+                    Console.WriteLine();
+
                 }
                 ) ;
 
@@ -357,6 +449,7 @@ namespace FTCollectorApp.ViewModel
                     IsDisplayOdo = false;
                     IsDisplayCrewList = !IsDisplayCrewList;
                     IsDisplayEndOfDay = false;
+                    IsDisplayEndOfDayForm = false;
                     IsLunchInDisplay = false;
                     IsLunchOutDisplay = false;
 
@@ -391,6 +484,17 @@ namespace FTCollectorApp.ViewModel
                         // preserve LunchOut time here
                         Console.WriteLine();
                         Session.event_type = "3";
+
+
+                        /*SelectedCrewInfoDetails.Clear();
+                        SelectedCrewInfoDetails.Add(new CrewInfoDetail { id = 1, FullName = CrewLeader, StartTime = StartTimeLeader });
+                        SelectedCrewInfoDetails.Add(new CrewInfoDetail { id = 2, FullName = Employee1Name?.FullName, StartTime = StartTimeEmp1});
+                        SelectedCrewInfoDetails.Add(new CrewInfoDetail { id = 3, FullName = Employee2Name?.FullName, StartTime = StartTimeEmp2 });
+                        SelectedCrewInfoDetails.Add(new CrewInfoDetail { id = 4, FullName = Employee3Name?.FullName, StartTime = StartTimeEmp3 });
+                        SelectedCrewInfoDetails.Add(new CrewInfoDetail { id = 5, FullName = Employee4Name?.FullName, StartTime = StartTimeEmp4 });
+                        SelectedCrewInfoDetails.Add(new CrewInfoDetail { id = 6, FullName = Employee5Name?.FullName, StartTime = StartTimeEmp5 });
+                        SelectedCrewInfoDetails.Add(new CrewInfoDetail { id = 7, FullName = Employee6Name?.FullName, StartTime = StartTimeEmp6 });*/
+
 
                         await JobSaveEvent();
                         await CloudDBService.SaveCrewdata(Session.ownerCD, 
@@ -446,13 +550,14 @@ namespace FTCollectorApp.ViewModel
                         IsDisplayCrewList = false;
                         IsDisplayEndOfDay= false;
                         IsDisplayOdo = false;
-
+                        IsDisplayEndOfDayForm = false;
+                        IsDisplayEndOfDay = false;
 
                         Console.WriteLine();
                         Session.event_type = "13"; // Lunch out
                         Console.WriteLine();
 
-                        IsLunchOutDisplay = true;
+                        IsLunchOutDisplay = !IsLunchOutDisplay;
                         IsLunchInDisplay = false;
 
                         LunchOutTime = DateTime.Now.ToString("HH:mm");
@@ -481,7 +586,7 @@ namespace FTCollectorApp.ViewModel
 
                     LunchInTime = DateTime.Now.ToString("HH:mm");
                     IsLunchOutDisplay = false;
-                    IsLunchInDisplay = true;
+                    IsLunchInDisplay = !IsLunchInDisplay;
                     (LunchInCommand as Command).ChangeCanExecute();
                     (LunchOutCommand as Command).ChangeCanExecute();
 
@@ -504,25 +609,11 @@ namespace FTCollectorApp.ViewModel
                 }
             );
 
-            TriggerEndOfDayCommand = new Command(
+            SaveEndOfDayCommand = new Command(
                 execute: async () =>
                 {
 
-                    ClockOutTime = DateTime.Now.ToString("HH:mm");
 
-                    //calculate from Clock in to Lunch out
-
-                    //check if clockintime > lunchout
-                    TimeSpan duration1 = DateTime.Parse(LunchOutTime).Subtract(DateTime.Parse(ClockIntime));
-
-
-                    //check if LunchInTime > ClockOutTime
-                    TimeSpan duration2 = DateTime.Parse(ClockOutTime).Subtract(DateTime.Parse(LunchInTime));
-                    TimeSpan totaltime = duration1 + duration2;
-
-                    TotalHoursForToday = totaltime.ToString("HH:mm:ss");
-                    Console.WriteLine("TotalHoursForToday " + TotalHoursForToday);
-                    Console.WriteLine();
 
                     Session.event_type = "16"; // ClockOut
                     await JobSaveEvent();
@@ -656,23 +747,56 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref selectedCrewForEndOfDay, value);
                 IsDisplayEndOfDayForm = true; // display the Finish the Day 
+                ClockIntime = value.StartTime;
+                ClockOutTime = DateTime.Now.ToString("HH:mm");
+                Console.WriteLine();
+                //check if LunchInTime > ClockOutTime
+                if (DateTime.Parse(LunchOutTime) > DateTime.Parse(ClockIntime))
+                {
+                    TimeSpan duration1 = DateTime.Parse(LunchOutTime).Subtract(DateTime.Parse(ClockIntime));
+                    Console.WriteLine();
+                }
+                //check if LunchInTime > ClockOutTime
+                if (DateTime.Parse(LunchInTime) > DateTime.Parse(ClockOutTime))
+                {
+                    TimeSpan duration2 = DateTime.Parse(ClockOutTime).Subtract(DateTime.Parse(LunchInTime));
+                    Console.WriteLine();
+                }
+                //TimeSpan totaltime = duration1 + duration2;
+
+                //TotalHoursForToday = totaltime.ToString("HH:mm:ss");
+                //Console.WriteLine("TotalHoursForToday " + TotalHoursForToday);
+
+                Console.WriteLine();
+            }
+        }
+
+        public ObservableCollection<CrewInfoDetail> FinishDayList {
+            get {
+                return new ObservableCollection<CrewInfoDetail>(SelectedCrewInfoDetails);
             }
         }
 
 
 
+        List<CrewInfoDetail> SelectedCrewInfoDetails = new List<CrewInfoDetail>();
 
-        public ObservableCollection<CrewInfoDetail> SelectedCrewInfoDetails = new ObservableCollection<CrewInfoDetail>();
-
-        [ObservableProperty] CrewInfoDetail leaderInfoDetail = new CrewInfoDetail
+        [ObservableProperty] CrewInfoDetail leaderInfoDetail;
+        
+        /*= new CrewInfoDetail
         {
             id = 1,
             FullName = Session.crew_leader,
             TeamUserKey = 22
-        };
+        };*/
 
-
-        private CrewInfoDetail employee1Name;
+        [ObservableProperty] CrewInfoDetail employee1Name;
+        [ObservableProperty] CrewInfoDetail employee2Name;
+        [ObservableProperty] CrewInfoDetail employee3Name;
+        [ObservableProperty] CrewInfoDetail employee4Name;
+        [ObservableProperty] CrewInfoDetail employee5Name;
+        [ObservableProperty] CrewInfoDetail employee6Name;
+        /*private CrewInfoDetail employee1Name;
         public CrewInfoDetail Employee1Name
         {
             get => employee1Name;
@@ -688,6 +812,7 @@ namespace FTCollectorApp.ViewModel
                         FullName = value.FullName,
                         TeamUserKey = value.TeamUserKey
                     });
+                    OnPropertyChanged(nameof(FinishDayList));
                     Console.WriteLine();
                     (CrewSaveCommand as Command).ChangeCanExecute();
                     StartTimeEmp1 = DateTime.Now.ToString("HH:mm");
@@ -715,6 +840,7 @@ namespace FTCollectorApp.ViewModel
                         TeamUserKey = value.TeamUserKey
                     });
                     Console.WriteLine();
+                    OnPropertyChanged(nameof(FinishDayList));
                     (CrewSaveCommand as Command).ChangeCanExecute();
                     StartTimeEmp2 = DateTime.Now.ToString("HH:mm");
                     OnPropertyChanged(nameof(StartTimeEmp2));
@@ -740,10 +866,12 @@ namespace FTCollectorApp.ViewModel
                         TeamUserKey = value.TeamUserKey
                     });
                     Console.WriteLine();
+                    OnPropertyChanged(nameof(FinishDayList));
                     (CrewSaveCommand as Command).ChangeCanExecute();
+                    StartTimeEmp3 = DateTime.Now.ToString("HH:mm");
+                    OnPropertyChanged(nameof(StartTimeEmp3));
                 }
-                StartTimeEmp3 = DateTime.Now.ToString("HH:mm");
-                OnPropertyChanged(nameof(StartTimeEmp3));
+
             }
         }
 
@@ -764,6 +892,7 @@ namespace FTCollectorApp.ViewModel
                         TeamUserKey = value.TeamUserKey
                     });
                     Console.WriteLine();
+                    OnPropertyChanged(nameof(FinishDayList));
                     (CrewSaveCommand as Command).ChangeCanExecute();
                 }
                 StartTimeEmp4 = DateTime.Now.ToString("HH:mm");
@@ -774,7 +903,7 @@ namespace FTCollectorApp.ViewModel
         private CrewInfoDetail employee5Name;
         public CrewInfoDetail Employee5Name
         {
-            get => employee4Name;
+            get => employee5Name;
             set
             {
                 SetProperty(ref employee5Name, value);
@@ -788,6 +917,7 @@ namespace FTCollectorApp.ViewModel
                         TeamUserKey = value.TeamUserKey
                     });
                     Console.WriteLine();
+                    OnPropertyChanged(nameof(FinishDayList));
                     (CrewSaveCommand as Command).ChangeCanExecute();
                 }
                 StartTimeEmp5 = DateTime.Now.ToString("HH:mm");
@@ -798,7 +928,7 @@ namespace FTCollectorApp.ViewModel
         private CrewInfoDetail employee6Name;
         public CrewInfoDetail Employee6Name
         {
-            get => employee4Name;
+            get => employee6Name;
             set
             {
                 SetProperty(ref employee6Name, value);
@@ -812,12 +942,13 @@ namespace FTCollectorApp.ViewModel
                         TeamUserKey = value.TeamUserKey
                     });
                     Console.WriteLine();
+                    OnPropertyChanged(nameof(FinishDayList));
                     (CrewSaveCommand as Command).ChangeCanExecute();
                 }
                 StartTimeEmp6 = DateTime.Now.ToString("HH:mm");
                 OnPropertyChanged(nameof(StartTimeEmp6));
             }
-        }
+        }*/
 
         [ObservableProperty] int employee1IsDriver = 0;
         [ObservableProperty] int employee2IsDriver = 0;
