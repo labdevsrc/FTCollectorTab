@@ -10,6 +10,9 @@ namespace FTCollectorApp.Model.Reference
         public int TeamUserKey { get; set; }
         public string FullName { get; set; }
         public string StartTime { get; set; }
+        public string LunchInTime { get; set; }
+        public string LunchOutTime { get; set; }
+
         public int PerDiem { get; set; }
     }
 }

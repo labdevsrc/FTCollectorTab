@@ -13,6 +13,7 @@ using FTCollectorApp.View;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using FTCollectorApp.Service;
 
 namespace FTCollectorApp.ViewModel
 {
@@ -109,9 +110,17 @@ namespace FTCollectorApp.ViewModel
             Console.WriteLine();
             Session.uid = Users.Where(a => (a.email == EmailText) && (a.password == PasswordText)).Select(a => a.UserKey).First(); // populate uid to Static-class (session) property uid  
             Session.crew_leader = $"{FirstName} {LastName}";
+           
+            
             //await Shell.Current.GoToAsync($"{nameof(VerifyJobPage)}");
             Session.LoggedIn = true;
+            Session.event_type = "1";
+            await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString());
+
+
             await Shell.Current.GoToAsync("..");
+
+
             //await Application.Current.MainPage.Navigation.PushAsync(new VerifyJobPage());
         }
     }

@@ -7,10 +7,11 @@ using FTCollectorApp.Model.Reference;
 using System.Collections.ObjectModel;
 using System.Linq;
 using FTCollectorApp.Model;
+using System.Web;
 
 namespace FTCollectorApp.ViewModel
 {
-    public partial class BuildingSiteItemsVM : ObservableObject
+    public partial class PullboxSiteItemsVM : ObservableObject
     {
         /// Roadway - intersection Properties - start
 
@@ -143,9 +144,115 @@ namespace FTCollectorApp.ViewModel
                 }
             }
         }
+        [ObservableProperty]
+        MaterialCode selectedMatCode;
+
+        [ObservableProperty]
+        Mounting selectedMounting;
+
+        public ObservableCollection<MaterialCode> MaterialCodeList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<MaterialCode>();
+                    var table = conn.Table<MaterialCode>().ToList();
+                    foreach (var col in table)
+                    {
+                        col.CodeDescription = HttpUtility.HtmlDecode(col.CodeDescription); // should use for escape char "
+                    }
+                    return new ObservableCollection<MaterialCode>(table);
+                }
+            }
+        }
+
+        //Properties, Bindable object for manufacturer dropdown list - start
+        [ObservableProperty]
+        bool isSearching = false;
+
+        [ObservableProperty]
+        ModelDetail selectedModelDetail;
 
 
+        Manufacturer selectedManuf;
+        public Manufacturer SelectedManuf
+        {
+            get => selectedManuf;
+            set
+            {
+                SetProperty(ref (selectedManuf), value);
+                SearchManufacturer = value.ManufName;
+                OnPropertyChanged(nameof(ModelDetailList));
+                OnPropertyChanged(nameof(SearchManufacturer));
+            }
+        }
 
+        string searchManufacturer;
+        public string SearchManufacturer
+        {
+            get => searchManufacturer;
+            set
+            {
+                IsSearching = string.IsNullOrEmpty(value) ? false : true;
+
+                SetProperty(ref (searchManufacturer), value);
+                OnPropertyChanged(nameof(ManufacturerList));
+                Console.WriteLine();
+            }
+        }
+
+        public ObservableCollection<Manufacturer> ManufacturerList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<Manufacturer>();
+                    var table = conn.Table<Manufacturer>().GroupBy(b => b.ManufName).Select(g => g.First()).ToList();
+                    foreach (var col in table)
+                    {
+                        col.ManufName = HttpUtility.HtmlDecode(col.ManufName); // should use for escape char "
+                        col.ManufName = col.ManufName.Trim();
+                    }
+                    if (SearchManufacturer != null)
+                    {
+                        Console.WriteLine();
+                        table = conn.Table<Manufacturer>().Where(i => i.ManufName.ToLower().Contains(SearchManufacturer.ToLower())).
+                            GroupBy(b => b.ManufName).Select(g => g.First()).ToList();
+                    }
+                    return new ObservableCollection<Manufacturer>(table);
+                }
+            }
+        }
+
+        public ObservableCollection<ModelDetail> ModelDetailList
+        {
+            get
+            {
+
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<ModelDetail>();
+                    var table = conn.Table<ModelDetail>().ToList();
+                    if (SelectedManuf != null)
+                        table = conn.Table<ModelDetail>().Where(a => a.ManufKey == SelectedManuf.ManufKey).ToList();
+
+                    Console.WriteLine();
+                    foreach (var col in table)
+                    {
+                        col.ModelNumber = HttpUtility.HtmlDecode(col.ModelNumber); // should use for escape char 
+                        col.ModelDescription = HttpUtility.HtmlDecode(col.ModelDescription); // should use for escape char 
+                        if (col.ModelCode1 == "")
+                            col.ModelCode1 = col.ModelCode2;
+                        if (col.ModelCode2 == "")
+                            col.ModelCode2 = col.ModelCode1;
+                    }
+                    Console.WriteLine();
+                    return new ObservableCollection<ModelDetail>(table);
+                }
+            }
+        }
 
         /// new feature 2102
         /// add exclude cols
@@ -251,7 +358,7 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         bool isserial_numberVisible = false;
 
-        public BuildingSiteItemsVM()
+        public PullboxSiteItemsVM()
         {
             PopulateVisibleVars();
         }

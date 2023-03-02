@@ -75,7 +75,7 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        string version = "20230227D"; // change here for release
+        string version = "20230302A"; // change here for release
 
         string apkVersion;
         public string ApkVersion
@@ -295,6 +295,8 @@ namespace FTCollectorApp.ViewModel
             // open dialog
             GPSSettingCommand?.Execute(null);
 
+            Session.event_type = "1"; // Login
+            await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString());
 
         }
 

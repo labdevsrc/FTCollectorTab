@@ -12,7 +12,7 @@
         <AbsoluteLayout VerticalOptions="FillAndExpand" HorizontalOptions="CenterAndExpand" >
 
             <StackLayout Orientation="Vertical" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
-                <StackLayout Padding="50" >
+                <StackLayout Padding="20,10,20,5" >
                     <Grid RowDefinitions="*,*" ColumnDefinitions="*,*,*,*,*">
                         <StackLayout Orientation="Vertical" HeightRequest="110">
                             <Button Text="{x:Static fa:FontAwesomeIcons.User}" FontSize="40"
@@ -100,7 +100,7 @@
                         <Label Text="Phone *"/>
                         <local:BorderColorEntry Text="{Binding SelectedJob.CustomerPhone}"  IsEnabled="True"/>
                         <Button Text="{Binding TextStatus, Mode=TwoWay}" HorizontalOptions="EndAndExpand" BackgroundColor="{StaticResource blueColor}"
-                    Command="{Binding ContinueCommand}"/>
+                    Command="{Binding VerifyCommand}"/>
                     </StackLayout>
 
                     <!-- Odometer Detail Entries -->
@@ -111,21 +111,31 @@
                     </Grid>
 
                     <StackLayout IsVisible="{Binding IsDisplayEndOfDay}"  >
-                        <ListView  ItemsSource ="{Binding FinishDayList}" 
+                        
+                        <Grid ColumnDefinitions="*,*" HeightRequest="120" >
+                            
+                            <Label  Text="Choose Employee for Finished Day " FontSize="Medium" />
+                            <Frame Grid.Column="1" CornerRadius="5" BackgroundColor="LightBlue" HasShadow="True" >
+                                <Picker ItemsSource ="{Binding FinishDayList}"   
+                                        SelectedItem="{Binding SelectedCrewForEndOfDay, Mode=TwoWay}" 
+                                        ItemDisplayBinding="{Binding FullName}">
+                                
+                                </Picker>
+                            </Frame>
+                        </Grid>
+                        <!--<ListView  ItemsSource ="{Binding FinishDayList}" 
                               SelectedItem="{Binding SelectedCrewForEndOfDay, Mode=TwoWay}"
                                    HeightRequest="100"
                                    >
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <TextCell Text="{Binding FullName}" Height="40">
-                                    <!--<Frame Margin="20" CornerRadius="10" BackgroundColor="Blue"/>                                    
-                                      <Label Text="{Binding FullName}" FontSize="50" />
-                                    </Frame>-->
-                                </TextCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextCell Text="{Binding FullName}" Height="40">
+                                    </TextCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>-->
                     </StackLayout>
+                    
                     <!-- End of Day -->
                     <StackLayout  Margin="5"  IsVisible="{Binding IsDisplayEndOfDayForm}" >
                         
@@ -147,14 +157,151 @@
                             <Entry Grid.Row="4" Grid.Column="1" Text="{Binding TotalHoursForToday}" IsEnabled="False" />
                         </Grid>
                         <Label Text="{Binding SelectedCrewForEndOfDay.FullName, StringFormat= 'Selected : Employee Name {0}'}" />
-                        <Frame HeightRequest="120" CornerRadius="15">                        
-                            <forms:SignaturePadView x:Name="signaturePad"  BackgroundImage="sign_bg.png"
-                            BackgroundColor="LightGray"  StrokeColor="Black"  StrokeWidth="3" />
-                        </Frame>
+                       
+                        <forms:SignaturePadView x:Name="signaturePad"  BackgroundImage="sign_bg.png"
+                        BackgroundColor="LightGray"  StrokeColor="Black"  StrokeWidth="3" />
 
                         <Button Text="Save" Command="{Binding SaveEndOfDayCommand}" HorizontalOptions="End" 
                                 WidthRequest="100" HeightRequest="40"/>
                     </StackLayout>
+
+                    <StackLayout Padding="10" IsVisible="{Binding IsEqCheckOutDisplayed}">
+
+                        <Grid RowDefinitions="3*,0.4*,*,*,*,*,*,*" ColumnDefinitions="*,*,*" Padding="5,10,10,5">
+                            <Label Grid.Row="0" Grid.ColumnSpan="3" Text="Equipment Check Out" FontSize="30"
+                            VerticalOptions="Center" HorizontalOptions="Center" />
+                            <Label Grid.Row="1" Grid.Column="0" Text="Type*" />
+                            <Label Grid.Row="1" Grid.Column="1" Text="Asset" />
+                            <Label Grid.Row="1" Grid.Column="2" Text="Equipment*" />
+
+                            <local:Dropdown Grid.Row="2" Grid.Column="0" Margin="5,5,10,5"
+                                SelectedItem="{Binding SelectedEqType, Mode=TwoWay}"
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}" />
+                            <local:Dropdown Grid.Row="2" Grid.Column="1" Margin="5,5,10,5" 
+                                SelectedItem="{Binding SelectedEqDetailType, Mode=TwoWay}"                                            
+                                ItemsSource="{Binding EquipmentDetailAssets}" 
+                                ItemDisplayBinding="{Binding EquipmentNumber}" />
+                            <local:Dropdown Grid.Row="2" Grid.Column="2" Margin="5,5,10,5" 
+                                SelectedItem="{Binding SelectedEqType, Mode=TwoWay}"                                            
+                                ItemsSource="{Binding EquipmentDetailAssets}" 
+                                ItemDisplayBinding="{Binding EquipmentNumber}" />
+
+                            <local:Dropdown Grid.Row="3" Grid.Column="0" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"/>
+                            <local:Dropdown Grid.Row="3" Grid.Column="1" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentDetailAssets}" 
+                                ItemDisplayBinding="{Binding EquipmentNumber}"/>
+                            <local:Dropdown Grid.Row="3" Grid.Column="2" Margin="5,5,10,5"                                            
+                                ItemDisplayBinding="{Binding EquipmentDesc}" />
+
+
+                            <local:Dropdown Grid.Row="4" Grid.Column="0" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}" />
+
+                            <local:Dropdown Grid.Row="4" Grid.Column="1" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentDetailAssets}" 
+                                ItemDisplayBinding="{Binding EquipmentNumber}" />
+
+                            <local:Dropdown Grid.Row="4" Grid.Column="2" Margin="5,5,10,5"
+                                ItemDisplayBinding="{Binding EquipmentDesc}"  />
+
+
+                            <local:Dropdown Grid.Row="5" Grid.Column="0" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"  />
+                            <local:Dropdown Grid.Row="5" Grid.Column="1" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentDetailAssets}" 
+                                ItemDisplayBinding="{Binding EquipmentNumber}" />
+                            <local:Dropdown Grid.Row="5" Grid.Column="2" Margin="5,5,10,5"
+                                            ItemDisplayBinding="{Binding EquipmentDesc}"  />
+
+
+                            <local:Dropdown Grid.Row="6" Grid.Column="0" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"  />
+                            <local:Dropdown Grid.Row="6" Grid.Column="1" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentDetailAssets}" 
+                                ItemDisplayBinding="{Binding EquipmentNumber}" />
+                            <local:Dropdown Grid.Row="6" Grid.Column="2" Margin="5,5,10,5" 
+                                            ItemDisplayBinding="{Binding EquipmentDesc}"  />
+
+
+                            <local:Dropdown Grid.Row="6" Grid.Column="0" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}" />
+                            <local:Dropdown Grid.Row="6" Grid.Column="1" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentDetailAssets}" 
+                                ItemDisplayBinding="{Binding EquipmentNumber}" />
+                            <local:Dropdown Grid.Row="6" Grid.Column="2" Margin="5,5,10,5"
+                                            ItemDisplayBinding="{Binding EquipmentDesc}"  />
+
+                        </Grid>
+                        <Button Text="Finished Packing Equipment" Command="{Binding SaveEqCheckOutCommand}"/>
+                    </StackLayout>
+
+                    <StackLayout Padding="10"  IsVisible="{Binding IsEqCheckInDisplayed}" >
+                        <Grid RowDefinitions="3*,0.4*,*,*,*,*,*,*" ColumnDefinitions="*,*,*" Padding="5,10,10,5">
+                            <Frame>
+                                <Label Grid.Row="0" Grid.ColumnSpan="3" Text="Equipment Check In " FontSize="30"
+                                    VerticalOptions="Center" HorizontalOptions="Center" />
+                            </Frame>
+                            
+                            <Label Grid.Row="1" Grid.Column="0" Text="Type*" />
+                            <Label Grid.Row="1" Grid.Column="1" Text="Asset" />
+                            <Label Grid.Row="1" Grid.Column="2" Text="Equipment*" />
+                            <local:Dropdown Grid.Row="2" Grid.Column="0" Margin="5,5,10,5"
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"
+                                SelectedItem="{Binding SelectedCheckInEq, Mode=TwoWay}"/>
+                            <local:Dropdown Grid.Row="2" Grid.Column="1" Margin="5,5,10,5" />
+                            <CheckBox Grid.Row="2" Grid.Column="2" Margin="5,5,10,5" IsChecked="{Binding Equipment1Checked}" />
+
+
+                            <local:Dropdown Grid.Row="3" Grid.Column="0" Margin="5,5,10,5"
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"                                                                
+                                SelectedItem="{Binding SelectedCheckInEq, Mode=TwoWay}"/>
+                            <local:Dropdown Grid.Row="3" Grid.Column="1" Margin="5,5,10,5" />
+                            <CheckBox Grid.Row="3" Grid.Column="2" Margin="5,5,10,5" IsChecked="{Binding Equipment2Checked}" />
+
+
+                            <local:Dropdown Grid.Row="4" Grid.Column="0" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"                                                                
+                                SelectedItem="{Binding SelectedCheckInEq, Mode=TwoWay}"/>
+                            <local:Dropdown Grid.Row="4" Grid.Column="1" Margin="5,5,10,5"  />
+                            <CheckBox Grid.Row="4" Grid.Column="2" Margin="5,5,10,5" IsChecked="{Binding Equipment3Checked}" />
+
+
+                            <local:Dropdown Grid.Row="5" Grid.Column="0" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"                                                                
+                                SelectedItem="{Binding SelectedCheckInEq, Mode=TwoWay}"/>
+                            <local:Dropdown Grid.Row="5" Grid.Column="1" Margin="5,5,10,5"  />
+                            <CheckBox Grid.Row="5" Grid.Column="2" Margin="5,5,10,5" IsChecked="{Binding Equipment4Checked}"  />
+
+
+                            <local:Dropdown Grid.Row="6" Grid.Column="0" Margin="5,5,10,5"
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"                                                                
+                                SelectedItem="{Binding SelectedCheckInEq, Mode=TwoWay}"/>
+                            <local:Dropdown Grid.Row="6" Grid.Column="1" Margin="5,5,10,5" />
+                            <CheckBox Grid.Row="6" Grid.Column="2" Margin="5,5,10,5" IsChecked="{Binding Equipment5Checked}"  />
+
+                            <local:Dropdown Grid.Row="7" Grid.Column="0" Margin="5,5,10,5" 
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"                                                                
+                                SelectedItem="{Binding SelectedCheckInEq, Mode=TwoWay}"/>
+                            <local:Dropdown Grid.Row="7" Grid.Column="1" Margin="5,5,10,5" />
+                            <CheckBox Grid.Row="7" Grid.Column="2" Margin="5,5,10,5" IsChecked="{Binding Equipment6Checked}"  />
+                        </Grid>
+                        <Button Text="Save" Command="{Binding SaveEqCheckInCommand}"/>
+                    </StackLayout>
+
+
                     <!--<Button Text="Crew List" Command="{Binding ToggleCrewListCommand}"/>-->
                     <StackLayout IsVisible="{Binding IsDisplayCrewList}">
                         <Frame CornerRadius="5" HasShadow="true" HeightRequest="50">
@@ -162,24 +309,8 @@
                         </Frame>
                         <Label Text="{Binding CrewLeader , StringFormat='Crew Leader : {0}'}" 
                                     VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
-                        <Grid Padding="5" ColumnDefinitions="*,*,*,*,*" RowDefinitions="*,*,*,*,*,*,*,*">
-                            <!-- table header -->
-                            <Frame  Grid.Row="0" CornerRadius="10" > 
-                                <Label Text="Employee" VerticalOptions="Center" HeightRequest="40"/>
-                            </Frame>
-                            <Frame Grid.Row="0"  Grid.Column="1"  CornerRadius="10" >
-                                <Label Text="Labor Class" VerticalOptions="Center" HeightRequest="40"/>
-                            </Frame>
-                            <Frame Grid.Row="0"  Grid.Column="2" CornerRadius="10">
-                                <Label Text="DRIVER" VerticalOptions="Center" HeightRequest="40"/>
-                            </Frame>
-                            <Frame Grid.Row="0"  Grid.Column="3" CornerRadius="10" >
-                                <Label  Text="Start Time" VerticalOptions="Center" HeightRequest="40"/>
-                            </Frame>
-                            <Frame Grid.Row="0"  Grid.Column="4"  CornerRadius="10">
-                                <Label Text="Per Diem" VerticalOptions="Center" HeightRequest="40"/>
-                            </Frame>
-                            <!--<BoxView Grid.Row="1" Grid.ColumnSpan="5"  Color="Gray" HeightRequest="2" HorizontalOptions="Fill" />-->
+                        <Grid Padding="5" ColumnDefinitions="*,*,*,*,*" RowDefinitions="0.1*,*,*,*,*,*">
+                            <BoxView Grid.Row="0" Grid.ColumnSpan="5"  Color="Gray" HeightRequest="2" HorizontalOptions="Fill" />
                             <!-- crew leader -->
                             <Label Grid.Row="1" Grid.Column="0" Text="{Binding CrewLeader, StringFormat='{0} [L]'}" 
                                    VerticalOptions="Center" TextColor="Black" />
@@ -399,29 +530,59 @@
                             </Picker>
 
                         </Grid>
-                        <StackLayout IsVisible="{Binding IsLunchOutDisplay}" >
-                            <Frame CornerRadius="20" HasShadow="True" HeightRequest="200">
-                                <StackLayout>
-                                    <Label FontSize="Medium" Text="LunchOut Time" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" />
-                                    <Label FontSize="Medium" Text="{Binding LunchOutTime}" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" />
-                                </StackLayout>
-                            </Frame>
-                        </StackLayout>
 
-                        <StackLayout IsVisible="{Binding IsLunchInDisplay}" >
-                            <Frame CornerRadius="20" HasShadow="True" HeightRequest="200">
-                                <StackLayout>
-                                    <Label FontSize="Medium" Text="LunchIn Time" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" />
-                                    <Label FontSize="Medium" Text="{Binding LunchInTime}" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" />
-                                </StackLayout>
-                            </Frame>
-                        </StackLayout>
 
                         <Button Text="Save" Command="{Binding CrewSaveCommand}" BackgroundColor="{StaticResource blueColor}"/>
 
                     </StackLayout>
+                    <StackLayout IsVisible="{Binding IsLunchOutDisplay}" >
+                        <Frame CornerRadius="20" HasShadow="True" VerticalOptions="Fill">
+                            <StackLayout>
+                                <Grid ColumnDefinitions="*,*" >
+                                    <Label Text="Employee Name" />
+                                    <Label Grid.Column="1" Text="Lunch Out Time" />
+                                </Grid>
+                                <ListView ItemsSource="{Binding SelectedCrewInfoDetails}" SelectedItem="{Binding }">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <ViewCell>
+                                            <StackLayout Orientation="Horizontal"> 
+                                                <Label Text="{Binding FullName}" />
+                                                <Entry Text="{Binding LunchOutTime, Mode=TwoWay}" />
+                                            </StackLayout>
+                                        </ViewCell>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                                
+                            </StackLayout>
+                        </Frame>
+                    </StackLayout>
 
-                <!--<Button Text="Equipment CheckOut" Command="{Binding DisplayEquipmentCheckOutCommand}" />
+                    <StackLayout IsVisible="{Binding IsLunchInDisplay}" >
+                        <Frame CornerRadius="20" HasShadow="True" VerticalOptions="Fill">
+                            <StackLayout>
+                                <Grid ColumnDefinitions="*,*" >
+                                    <Label Text="Employee Name" />
+                                    <Label Grid.Column="1" Text="Lunch-In Time" />
+                                </Grid>
+                                <ListView ItemsSource="{Binding SelectedCrewInfoDetails}" SelectedItem="{Binding }">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <ViewCell>
+                                                <StackLayout Orientation="Horizontal">
+                                                    <Label Text="{Binding FullName}" />
+                                                    <Entry Text="{Binding LunchInTime, Mode=TwoWay}" />
+                                                </StackLayout>
+                                            </ViewCell>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+
+                            </StackLayout>
+                        </Frame>
+                    </StackLayout>
+                    <!--<Button Text="Equipment CheckOut" Command="{Binding DisplayEquipmentCheckOutCommand}" />
                 <Button Text="Equipment CheckIn"  Command="{Binding DisplayEquipmentCheckInCommand}"/>
                 <Button Text="Odometer Input" Command="{Binding ODOPopupCommand}"/>-->
 

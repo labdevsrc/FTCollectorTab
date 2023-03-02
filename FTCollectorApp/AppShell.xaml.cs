@@ -33,12 +33,12 @@ namespace FTCollectorApp
             try
             {
                 //Routes.Add(nameof(LoginPage), typeof(LoginPage));
-                Routes.Add(nameof(BeginWorkPage), typeof(BeginWorkPage));
+                //Routes.Add(nameof(BeginWorkPage), typeof(BeginWorkPage));
                 Routes.Add(nameof(VerifyJobPage), typeof(VerifyJobPage));
                 //Routes.Add(nameof(SelectCrewPage), typeof(SelectCrewPage));
                 //Routes.Add(nameof(AsBuiltDocMenu), typeof(AsBuiltDocMenu));
                 //Routes.Add(nameof(MainMenuInstall), typeof(MainMenuInstall));
-                Routes.Add(nameof(MainSitePage), typeof(MainSitePage));
+                //Routes.Add(nameof(MainSitePage), typeof(MainSitePage));
                 Routes.Add(nameof(MainSitePageX), typeof(MainSitePageX));
                 //Routes.Add(nameof(CommonSite), typeof(CommonSite)); // Start develope Feb-8, 2023, state : obsolete
                 //Routes.Add(nameof(CreateSite), typeof(CreateSite));

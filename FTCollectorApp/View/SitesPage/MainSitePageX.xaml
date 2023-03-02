@@ -2,11 +2,18 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:fa="clr-namespace:FontAwesome"  
-             xmlns:buildingvm="clr-namespace:FTCollectorApp.ViewModel"  
-             x:Class="FTCollectorApp.View.SitesPage.MainSitePageX"
-          
+             xmlns:vm="clr-namespace:FTCollectorApp.ViewModel"  
+             x:Class="FTCollectorApp.View.SitesPage.MainSitePageX"          
              x:Name="CommonSitePage"
              >
+    <ContentPage.ToolbarItems>
+        <ToolbarItem  Command="{Binding CaptureCommand}" IconImageSource="cam_white.png" 
+                 Order="Primary"
+                 Priority="0" />
+        <ToolbarItem  Text="COMPLETE" Command="{Binding CompleteSiteCommand}" />
+        <ToolbarItem  Text="CREATE" Command="{Binding CreteSiteCommand}" />
+
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
 
@@ -17,7 +24,7 @@
                 </MultiBinding>
             </Label>
 
-
+            <!-- obsolete 
             <StackLayout Orientation="Horizontal" Padding="20">
                 <StackLayout Orientation="Vertical">
                     <Button Text="{x:Static fa:FontAwesomeIcons.Building}" FontSize="60"
@@ -59,6 +66,27 @@
                 </StackLayout>
 
             </StackLayout>
+            -->
+            <StackLayout Orientation="Horizontal" Padding="20">
+                <StackLayout Orientation="Vertical" Padding="10" HorizontalOptions="FillAndExpand">
+                    <Label Text="Site Type" HorizontalOptions="Start" FontSize="Medium"/>
+                    <Picker SelectedItem="{Binding SelectedMajorType, Mode=TwoWay}" Title="{Binding SelectedMajorType, StringFormat='Select Detail Site : {0} here'}" FontSize="Medium">
+                        <Picker.Items>
+                            <x:String>Building</x:String>
+                            <x:String>Cabinet</x:String>
+                            <x:String>PullBox</x:String>
+                            <x:String>Structure</x:String>
+                            <x:String>Building</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </StackLayout>
+
+                <StackLayout Orientation="Vertical" Padding="10" HorizontalOptions="FillAndExpand">
+                <Label Text="Detail Site Type*" HorizontalOptions="Start" FontSize="Medium"/>
+                <Picker SelectedItem="{Binding SelectedMinorType, Mode=TwoWay}" Title="{Binding SelectedMajorType, StringFormat='Select Detail Site : {0} here'}"
+                            ItemsSource="{Binding MinorSiteList}" FontSize="Medium" />
+            </StackLayout>
+            </StackLayout>
 
             <Grid Padding="20,5,20,5" ColumnDefinitions="*,*,*,*" RowDefinitions="*,*" HeightRequest="200">
                 <Label Text="Enter PC tag" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Medium"/>
@@ -75,12 +103,11 @@
                         Text="Reset {0}" Command="{Binding ResetSiteCommand}" BackgroundColor="Red" />                
             </Grid>
 
-            <ScrollView>
+            <!-- BUILDING : BuildingSiteItemsVM -->
+            <ScrollView IsVisible="{Binding IsBuildingSelected}">
                 <StackLayout Padding="20,10,5,10" VerticalOptions="Start" WidthRequest="400" IsVisible="{Binding IsBuildingSelected}" 
-                    BindingContext="{Binding Source = {buildingvm:BuildingSiteItemsVM}}">
+                    BindingContext="{Binding Source = {vm:BuildingSiteItemsVM}}">
 
-                    <Label Text="Owner or Customer" HorizontalOptions="Start"/>
-                    <Entry IsReadOnly="True" Text="{Binding OwnerName}"   HorizontalOptions="FillAndExpand"/>
                     <Label Text="Enter owners tag number" HorizontalOptions="Start"/>
                     <Entry Text="{Binding OwnerTagNumber, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
                     <Label Text="Enter Property Id" HorizontalOptions="Start"/>
@@ -94,9 +121,6 @@
                                IsVisible="{Binding Issite_street_addressVisible}"/>
                     <Label Text="Enter Postal Code" HorizontalOptions="Start"/>
                     <Entry Text="{Binding PostalCode, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
-
-
-
                     <Label Text="Enter UDS owner" IsVisible="{Binding IsUDS_ownerVisible}"/>
                     <Entry Text="{Binding UDSOwner, Mode=TwoWay}" HorizontalOptions="FillAndExpand"
                                IsVisible="{Binding IsUDS_ownerVisible}"/>
@@ -262,6 +286,313 @@
 
             </ScrollView>
 
+            <!-- CABINET : CabinetSiteItemsVM -->            
+            <ScrollView>
+                <StackLayout Padding="20,10,5,10" VerticalOptions="Start" WidthRequest="400" IsVisible="{Binding IsCabinetSelected}" 
+                    BindingContext="{Binding Source = {vm:CabinetSiteItemsVM}}">
+
+                    <Label Text="Enter owners tag number" HorizontalOptions="Start"/>
+                    <Entry Text="{Binding OwnerTagNumber, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Enter serial number" IsVisible="{Binding Isserial_numberVisible}" />
+                    <Entry Text="{Binding SerialNumber,Mode=TwoWay}" HorizontalOptions="FillAndExpand" 
+                               IsVisible="{Binding Isserial_numberVisible}" />
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*,0.2*,0.2*,0.2*,0.2*">
+                        <StackLayout IsVisible="{Binding IsroadwayVisible}">
+                            <Label Text="Choose a roadway"/>
+                            <Entry Grid.Row="1" Text="{Binding SearchRoadway, Mode=TwoWay}" Placeholder="type roadway" PlaceholderColor="aqua"/>
+                            <ListView  Grid.Row="2" Grid.RowSpan="4" ItemsSource="{Binding RoadwayList}" SelectedItem="{Binding SelectedRoadway, Mode=TwoWay}"                     
+                              BackgroundColor="LightGray" IsVisible="{Binding IsSearchingRoadway}" >
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextCell Text="{Binding RoadwayName}"  />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackLayout>
+
+                        <StackLayout Grid.Column="1" IsVisible="{Binding IsintersectionVisible}">
+                            <Label  Text="Choose an intersection" />
+                            <Picker Grid.Column="1" Grid.Row="1" Title="Select Intersection" ItemsSource="{Binding IntersectionList}" 
+                                ItemDisplayBinding="{Binding IntersectionName}"
+                                     SelectedItem="{Binding SelectedIntersection, Mode=TwoWay}"
+                                 HorizontalOptions="FillAndExpand" />
+                        </StackLayout>
+                    </Grid>
+
+
+                    <Label Text="Direction of Travel" />
+                    <Picker  ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}" 
+                                SelectedItem="{Binding SelectedTravelDirection, Mode=TwoWay}"   HorizontalOptions="FillAndExpand" />
+                    <Label Text="Orientation" />
+                    <Picker  ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}"
+                                SelectedItem="{Binding SelectedOrientation, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+
+
+                    <Label Text="Material" />
+                    <Picker  ItemsSource="{Binding MaterialCodeList}" ItemDisplayBinding="{Binding CodeDescription}"
+                                 SelectedItem="{Binding SelectedMatCode,Mode=TwoWay}"
+                            HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Mounting" />
+                    <Picker ItemsSource="{Binding MountingTypeList}" 
+                            ItemDisplayBinding="{Binding MountingType}" 
+                            SelectedItem="{Binding SelectedMounting, Mode=TwoWay}"
+                            HorizontalOptions="FillAndExpand"/>
+
+                    <Grid Padding="0,5,10,5" RowDefinitions="0.5*,*" ColumnDefinitions="*,*,*" >
+                        <Label Grid.Row="0" Grid.Column="0"  Text="Height" IsVisible="{Binding IsheightVisible}"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="Depth" IsVisible="{Binding IsweightVisible}"/>
+                        <Label Grid.Row="0" Grid.Column="2" Text="Width" IsVisible="{Binding IswidthVisible}"/>
+                        <Entry Grid.Row="1" Grid.Column="0" Text="{Binding Height, Mode=TwoWay}" IsVisible="{Binding IsheightVisible}"/>
+                        <Entry Grid.Row="1" Grid.Column="1" Text="{Binding Depth, Mode=TwoWay}" IsVisible="{Binding IsweightVisible}"/>
+                        <Entry Grid.Row="1" Grid.Column="2" Text="{Binding Width, Mode=TwoWay}" IsVisible="{Binding IswidthVisible}"/>
+                    </Grid>
+
+                    <Label Text="Filter Type" IsVisible="{Binding IsFilterTypeVisible}"/>
+                    <Picker ItemsSource="{Binding FilterTypeList}" ItemDisplayBinding="{Binding FilterTypeDesc}"
+                            SelectedItem="{Binding SelectedFilterType, Mode=TwoWay}" HorizontalOptions="FillAndExpand"
+                                IsVisible="{Binding IsFilterTypeVisible}"/>
+                    <Label Text="Filter Size" IsVisible="{Binding IsFilterSizeVisible}"/>
+                    <Picker  ItemsSource="{Binding FilterSizeList}" ItemDisplayBinding="{Binding data}"
+                            SelectedItem="{Binding SelectedFilterSize, Mode=TwoWay}" HorizontalOptions="FillAndExpand"
+                                 IsVisible="{Binding IsFilterSizeVisible}" />
+
+                    <Grid Padding="0,5,10,5" RowDefinitions="*,*" ColumnDefinitions="*,*" >
+                        <Label Grid.Row="0" Grid.Column="0"  Text="# Racks"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="key code"/>
+                        <Picker Grid.Row="1" Grid.Column="0" 
+                                        ItemsSource="{Binding RackCount}" SelectedItem="{Binding SelectedRackCount, Mode=TwoWay}"/>
+                        <Entry  Grid.Row="1" Grid.Column="1"  Text="{Binding KeyCode, Mode=TwoWay}" />
+                    </Grid>
+                    <StackLayout>
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*,0.2*,0.2*,0.2*,0.2*">
+
+                            <Label Text="Manufacturer"/>
+                            <Label Grid.Column="1" IsVisible="{Binding IsManufSearching}" />
+                            <Entry Grid.Row="1" Text="{Binding SearchManufacturer, Mode=TwoWay}" Placeholder="type manufacturer" PlaceholderColor="aqua"/>
+                            <ListView  Grid.Row="2" Grid.RowSpan="4" ItemsSource="{Binding ManufacturerList}" SelectedItem="{Binding SelectedManuf, Mode=TwoWay}"                     
+                                BackgroundColor="LightGray" IsVisible="{Binding IsManufSearching}" >
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextCell Text="{Binding ManufName}"  />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                            <Label Grid.Column="1" Text="Model"/>
+                            <Picker Grid.Column="1" Grid.Row="1" Title="Select model" ItemsSource="{Binding ModelDetailList}" 
+                            ItemDisplayBinding="{Binding ModelNumber}"
+                                 SelectedItem="{Binding SelectedModelDetail, Mode=TwoWay}"
+                             HorizontalOptions="FillAndExpand" />
+                        </Grid>
+                    </StackLayout>
+                    <!-- Cabinet. Manufacturer entry end -->
+
+
+
+                    <Label Text="Enter manufactured" />
+                    <DatePicker HorizontalOptions="FillAndExpand" Date="{Binding Manufactured, Mode=TwoWay}" />
+                    <Label Text="Installed at" />
+                    <DatePicker HorizontalOptions="FillAndExpand" Date="{Binding InstalledAt, Mode=TwoWay}" />
+
+                    <Label Text="Enter notes and comments"/>
+                    <Editor Text="{Binding Notes,Mode=TwoWay}" Placeholder="Enter notes here" 
+                                HorizontalOptions="FillAndExpand" MaxLength="250"   />
+
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="*,*,*,*,*,*">
+                        <Label Text="Lane closure required" IsVisible="{Binding Islane_closure_requiredVisible }" />
+                        <Switch  Grid.Column="1" IsToggled="{Binding IsLaneClosure, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start"
+                                IsVisible="{Binding Islane_closure_requiredVisible }"/>
+
+                        <Label Grid.Row="1"  Text="Dot Disctrict"/>
+                        <Entry Grid.Row="1" Grid.Column="1" Text="{Binding DotDistrict, Mode=TwoWay}" Placeholder="1-100"/>
+
+
+                        <Label Grid.Row="2" Text="Has Power disconnect" IsVisible="{Binding IsHasPowerDisConnectedVisible }"/>
+                        <Switch  Grid.Row="2" Grid.Column="1"  IsToggled="{Binding IsHasPowerDisconnect, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start"
+                                IsVisible="{Binding IsHasPowerDisConnectedVisible }"/>
+
+                        <Label Grid.Row="3" Text="Enter electric site key"/>
+                        <Entry Grid.Row="3" Grid.Column="1" Text="{Binding ElectricSiteKey, Mode=TwoWay}" Placeholder="1-100"/>
+
+                        <Label Grid.Row="4" Text="3rd party comms" IsVisible="{Binding Ishas_commsVisible }"/>
+                        <Label Grid.Row="5" Text="Enter Comms provider" IsVisible="{Binding Iscomms_providerVisible}"/>
+
+
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="*,*,*,*,*">
+                        <Label Text="Have a sun shield" VerticalOptions="Center"  />
+                        <Switch IsToggled="{Binding IsHaveSunShield, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1"/>
+
+                        <Label Text="Has Ground Rod" Grid.Row="1" VerticalOptions="Center" 
+                                   IsVisible="{Binding IsHasGroundRodVisible}"/>
+                        <Switch IsToggled="{Binding IsHasGroundRod, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="1"
+                                    IsVisible="{Binding IsHasGroundRodVisible}"/>
+
+                        <Label Text="Has Key" Grid.Row="2"  VerticalOptions="Center" />
+                        <Switch IsToggled="{Binding IsHasKey, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="2"/>
+
+                        <Label Text="In a clear Zone?" Grid.Row="3" VerticalOptions="Center" />
+                        <Switch IsToggled="{Binding IsSiteClearZone, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="3"/>
+
+                        <Label Text="Bucket Truck" Grid.Row="4"  VerticalOptions="Center" />
+                        <Switch IsToggled="{Binding IsBucketTruck, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="4"/>
+
+                    </Grid>
+
+                </StackLayout>
+
+            </ScrollView>
+            <!--pull box-->
+            <ScrollView>
+                <StackLayout Padding="20,10,5,10" VerticalOptions="Start" WidthRequest="400" IsVisible="{Binding IsPulboxSelected}" 
+                    BindingContext="{Binding Source = {vm:PullboxSiteItemsVM}}" >                
+                    <Entry Text="{Binding OwnerTagNumber, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Enter Property Id" HorizontalOptions="Start"/>
+                    <Entry Text="{Binding PropertyId, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Enter site name" HorizontalOptions="Start"/>
+                    <Entry Text="{Binding SiteName, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Enter Street Address" HorizontalOptions="Start"/>
+                    <Entry Text="{Binding StreetAddress, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Enter Postal Code" HorizontalOptions="Start"/>
+                    <Entry Text="{Binding PostalCode, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
+
+                    <Grid Padding="0,5,10,5" RowDefinitions="*,*,*,*" ColumnDefinitions="*,*,*">
+                        <Label Grid.Row="0" Grid.Column="0"  Text="Lane closure required"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="Enter the dot disctrict"/>
+                        <Label Grid.Row="0" Grid.Column="2" Text="Has Power disconnect"/>
+                        <Picker Grid.Row="1" Grid.Column="0" ItemsSource="{Binding YesNo}" SelectedItem="{Binding IsLaneClosure, Mode=TwoWay}"/>
+                        <Picker Grid.Row="1" Grid.Column="1" 
+                                            ItemsSource="{Binding DotDistrict}" SelectedItem="{Binding SelectedDistrict, Mode=TwoWay}" />
+                        <Picker Grid.Row="1" Grid.Column="2" x:Name="pickerHasPowerDisconnect" ItemsSource="{Binding YesNo}" SelectedItem="{Binding IsHasPowerDisconnect, Mode=TwoWay}"/>
+                        <Label Grid.Row="2" Grid.Column="0" Text="Enter electric site key"/>
+                        <Label Grid.Row="2" Grid.Column="1" Text="3rd party comms"/>
+                        <Label Grid.Row="2" Grid.Column="2" Text="Enter Comms provider"/>
+                        <Picker Grid.Row="3" Grid.Column="0" ItemsSource="{Binding DotDistrict}" SelectedItem="{Binding SelectedElectSiteKey, Mode=TwoWay}"/>
+                        <Picker Grid.Row="3" Grid.Column="1" ItemsSource="{Binding YesNo}" SelectedItem="{Binding Is3rdComms, Mode=TwoWay}"/>
+                        <Entry Grid.Row="3"  Grid.Column="2" Text="{Binding CommsProvider, Mode=TwoWay}"/>
+                    </Grid>
+
+                    <Label Text="Enter UDS owner"/>
+                    <Entry Text="{Binding UDSOwner, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Building Classification"/>
+                    <Picker ItemsSource="{Binding BuildingTypeList}" ItemDisplayBinding="{Binding TYPE_DESC}" 
+                                SelectedItem="{Binding SelectedBuilding, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
+
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*,0.2*,0.2*,0.2*,0.2*">
+                        <Label Text="Choose a roadway"/>
+                        <Label Grid.Column="1" IsVisible="{Binding IsSearchingRoadway}" />
+                        <Entry Grid.Row="1" Text="{Binding SearchRoadway, Mode=TwoWay}" Placeholder="type roadway" PlaceholderColor="aqua"/>
+                        <ListView  Grid.Row="2" Grid.RowSpan="4" ItemsSource="{Binding RoadwayList}" SelectedItem="{Binding SelectedRoadway, Mode=TwoWay}"                     
+                          BackgroundColor="LightGray" IsVisible="{Binding IsSearchingRoadway}" >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextCell Text="{Binding RoadwayName}"  />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Label Grid.Column="1" Text="Choose an intersection"/>
+                        <Picker Grid.Column="1" Grid.Row="1" Title="Select Intersection" ItemsSource="{Binding IntersectionList}" 
+                                ItemDisplayBinding="{Binding IntersectionName}"
+                                     SelectedItem="{Binding SelectedIntersection, Mode=TwoWay}"
+                                 HorizontalOptions="FillAndExpand" />
+                    </Grid>
+
+
+                    <Label Text="Direction of Travel"/>
+                    <Picker  ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}" 
+                                SelectedItem="{Binding SelectedTravelDirection, Mode=TwoWay}"   HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Orientation"/>
+                    <Picker  ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}"
+                                SelectedItem="{Binding SelectedOrientation, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
+
+
+                    <Label Text="Material"/>
+                    <Picker  ItemsSource="{Binding MaterialCodeList}" ItemDisplayBinding="{Binding CodeDescription}"
+                                 SelectedItem="{Binding SelectedMatCode,Mode=TwoWay}"
+                            HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Mounting"/>
+                    <Picker ItemsSource="{Binding MountingTypeList}" 
+                            ItemDisplayBinding="{Binding MountingType}" 
+                            SelectedItem="{Binding SelectedMounting, Mode=TwoWay}"
+                            HorizontalOptions="FillAndExpand"/>
+
+                    <Grid Padding="0,5,10,5" RowDefinitions="*,*" ColumnDefinitions="*,*">
+                        <Label Grid.Row="0" Grid.Column="0"  Text="# Of Racks"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="key code"/>
+                        <Picker Grid.Row="1" Grid.Column="0" 
+                                        ItemsSource="{Binding RackCount}" SelectedItem="{Binding SelectedRackCount, Mode=TwoWay}"/>
+                        <Picker Grid.Row="1" Grid.Column="1"
+                                        ItemsSource="{Binding DotDistrict}" SelectedItem="{Binding SelectedKeyCode, Mode=TwoWay}"/>
+                    </Grid>
+
+
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*,0.2*,0.2*,0.2*,0.2*">
+
+                        <Label Text="Manufacturer"/>
+                        <Label Grid.Column="1" IsVisible="{Binding IsSearching}" />
+                        <Entry Grid.Row="1" Text="{Binding SearchManufacturer, Mode=TwoWay}" Placeholder="type manufacturer" PlaceholderColor="aqua"/>
+                        <ListView  Grid.Row="2" Grid.RowSpan="4" ItemsSource="{Binding ManufacturerList}" SelectedItem="{Binding SelectedManuf, Mode=TwoWay}"                     
+                      BackgroundColor="LightGray" IsVisible="{Binding IsSearching}" >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextCell Text="{Binding ManufName}"  />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Label Grid.Column="1" Text="Model"/>
+                        <Picker Grid.Column="1" Grid.Row="1" Title="Select model" ItemsSource="{Binding ModelDetailList}" 
+                            ItemDisplayBinding="{Binding ModelNumber}"
+                                 SelectedItem="{Binding SelectedModelDetail, Mode=TwoWay}"
+                             HorizontalOptions="FillAndExpand" />
+                    </Grid>
+
+
+                    <Entry Text="{Binding SelectedModelDetail.ModelDescription}"/>
+                    <Grid Padding="0,5,10,5" RowDefinitions="0.5*,*" ColumnDefinitions="*,*,*">
+                        <Label Grid.Row="0" Grid.Column="0"  Text="Height" IsVisible="{Binding IsheightVisible}"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="Depth" IsVisible="{Binding IsdepthVisible}"/>
+                        <Label Grid.Row="0" Grid.Column="2" Text="Width" IsVisible="{Binding IswidthVisible}"/>
+                        <Entry Grid.Row="1" Grid.Column="0" Text="{Binding SelectedModelDetail.height}" IsEnabled="False" IsVisible="{Binding IsheightVisible}"/>
+                        <Entry Grid.Row="1" Grid.Column="1" Text="{Binding SelectedModelDetail.depth}" IsEnabled="False" IsVisible="{Binding IsdepthVisible}"/>
+                        <Entry Grid.Row="1" Grid.Column="2" Text="{Binding SelectedModelDetail.width}" IsEnabled="False" IsVisible="{Binding IswidthVisible}"/>
+                    </Grid>
+
+                    <Label Text="Enter serial number" />
+                    <Entry Text="{Binding SerialNumber,Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
+
+                    <Label Text="Enter manufactured" />
+                    <DatePicker HorizontalOptions="FillAndExpand" Date="{Binding Manufactured}"/>
+                    <Label Text="Installed at" />
+                    <DatePicker HorizontalOptions="FillAndExpand" Date="{Binding InstalledAt}"/>
+
+                    <Label Text="Enter notes and comments"/>
+                    <Editor Text="{Binding Notes,Mode=TwoWay}" Placeholder="Enter notes here" 
+                                HorizontalOptions="FillAndExpand" MaxLength="250"   />
+
+                    <Grid Padding="0,5,10,5" RowDefinitions="0.5*,*,0.5*,*" ColumnDefinitions="*,*,*">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Have a sun shield"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="Has Ground Rod"/>
+                        <Label Grid.Row="0" Grid.Column="2" Text="Has Key"/>
+                        <Picker Grid.Row="1" Grid.Column="0" ItemsSource="{Binding YesNo}" SelectedItem="{Binding IsHaveSunShield}"/>
+                        <Picker Grid.Row="1" Grid.Column="1" ItemsSource="{Binding YesNo}" SelectedItem="{Binding IsHasGround}"/>
+                        <Picker Grid.Row="1" Grid.Column="2" 
+                                            ItemsSource="{Binding YesNo}" SelectedItem="{Binding IsHasKey}"/>
+                        <Label Grid.Row="2" Grid.Column="0" Text="Key Type" IsVisible="{Binding IsKeyTypeDisplay}" />
+                        <Picker Grid.Row="3" Grid.Column="0" 
+                                            IsVisible="{Binding IsKeyTypeDisplay}" 
+                                            ItemsSource="{Binding DotDistrict}" SelectedItem="{Binding SelectedKeyType}" />
+                        <Label Grid.Row="4" Grid.Column="0" Text="Direction of Travel"/>
+                        <Label Grid.Row="4" Grid.Column="1" Text="Is site in a clear Zone?"/>
+                        <Label Grid.Row="4" Grid.Column="2" Text="Bucket Truck"/>
+                        <Picker  Grid.Row="5" Grid.Column="0"
+                                ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}" 
+                                SelectedItem="{Binding SelectedTravelDirection2, Mode=TwoWay}"   HorizontalOptions="FillAndExpand"/>
+
+                        <Picker Grid.Row="5" Grid.Column="1" x:Name="pIsSiteClearZone" ItemsSource="{Binding YesNo}" SelectedItem="{Binding IsSiteClearZone}"/>
+                        <Picker Grid.Row="5" Grid.Column="2" x:Name="pBucketTruck" ItemsSource="{Binding YesNo}" SelectedItem="{Binding IsBucketTruck}"/>
+                    </Grid>
+                    </StackLayout>
+            </ScrollView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
