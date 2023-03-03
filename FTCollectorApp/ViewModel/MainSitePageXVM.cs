@@ -55,10 +55,20 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref selectedMajorType, value);
 
-                IsBuildingSelected = SelectedMajorType.Equals(BUILDING_SITE);
-                IsCabinetSelected = SelectedMajorType.Equals(CABINET_SITE);
-                IsPulboxSelected = SelectedMajorType.Equals(PULLBOX_SITE);
-                IsStructureSelected = SelectedMajorType.Equals(STRUCTURE_SITE);
+                if (SelectedMajorType.Equals(BUILDING_SITE))
+                {
+                    IsBuildingSelected = true;
+                    IsCabinetSelected = false;
+                    IsPulboxSelected = false;
+                    IsStructureSelected = false;
+                }
+                else if (SelectedMajorType.Equals(CABINET_SITE))
+                    IsCabinetSelected = true;
+
+                else if (SelectedMajorType.Equals(PULLBOX_SITE))
+                    IsPulboxSelected = true;
+                else if (SelectedMajorType.Equals(STRUCTURE_SITE))
+                    IsStructureSelected = true;
 
                 OnPropertyChanged(nameof(MinorSiteList));
 
@@ -110,10 +120,7 @@ namespace FTCollectorApp.ViewModel
             if (TagNumber.Equals(ReEnterTagNumber))
             {
                 ReEnterStatus = "MATCH!";
-                IsBuildingSelected = SelectedMajorType.Equals(BUILDING_SITE);
-                IsCabinetSelected = SelectedMajorType.Equals(CABINET_SITE);
-                IsPulboxSelected = SelectedMajorType.Equals(PULLBOX_SITE);
-                IsStructureSelected = SelectedMajorType.Equals(STRUCTURE_SITE);
+
                 IsTagNumberMatch = true;
 
             }

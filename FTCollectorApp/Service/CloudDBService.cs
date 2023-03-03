@@ -260,9 +260,10 @@ namespace FTCollectorApp.Service
                 Console.WriteLine("Failed to serialize. Reason: " + e.Message);
                 throw;
             }
-            catch
+            catch(Exception e)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Invalid Time Format (HH:MM)", "OK");
+                Console.WriteLine("timeinput : " + timeinput + " , " + e.ToString());
+                //await Application.Current.MainPage.DisplayAlert("Error", "Invalid Time Format (HH:MM)", "OK");
                 return;
             }
         }

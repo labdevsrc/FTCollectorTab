@@ -32,16 +32,8 @@ namespace FTCollectorApp
 
             try
             {
-                //Routes.Add(nameof(LoginPage), typeof(LoginPage));
-                //Routes.Add(nameof(BeginWorkPage), typeof(BeginWorkPage));
                 Routes.Add(nameof(VerifyJobPage), typeof(VerifyJobPage));
-                //Routes.Add(nameof(SelectCrewPage), typeof(SelectCrewPage));
-                //Routes.Add(nameof(AsBuiltDocMenu), typeof(AsBuiltDocMenu));
-                //Routes.Add(nameof(MainMenuInstall), typeof(MainMenuInstall));
-                //Routes.Add(nameof(MainSitePage), typeof(MainSitePage));
                 Routes.Add(nameof(MainSitePageX), typeof(MainSitePageX));
-                //Routes.Add(nameof(CommonSite), typeof(CommonSite)); // Start develope Feb-8, 2023, state : obsolete
-                //Routes.Add(nameof(CreateSite), typeof(CreateSite));
 
                 Routes.Add(nameof(BdSiteNew), typeof(BdSiteNew)); // Portrait, 3 columns of BdSite
                 Routes.Add(nameof(CabinetSitePageView), typeof(CabinetSitePageView));
@@ -54,7 +46,6 @@ namespace FTCollectorApp
                 Routes.Add(nameof(PortPage), typeof(PortPage));
 
 
-                //Routes.Add(nameof(SplashDownloadPage), typeof(SplashDownloadPage));
                 Routes.Add(nameof(MainPageP), typeof(MainPageP)); //Portrait of SplashDownloadPage, Tab name : MainPAge
 
 

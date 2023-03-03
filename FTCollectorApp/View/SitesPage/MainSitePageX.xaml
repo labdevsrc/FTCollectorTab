@@ -17,7 +17,7 @@
     <ContentPage.Content>
         <StackLayout>
 
-            <Label FontSize="30" VerticalOptions="Start" Padding="20">
+            <Label FontSize="Medium" VerticalOptions="Start" >
                 <MultiBinding StringFormat="{} Site : {0} - {1}">
                     <Binding Path="SelectedMajorType" />
                     <Binding Path="SelectedMinorType" />
@@ -88,7 +88,7 @@
             </StackLayout>
             </StackLayout>
 
-            <Grid Padding="20,10,20,10" ColumnDefinitions="*,*,*,*" >
+            <Grid Padding="20,10,20,10" ColumnDefinitions="*,*,*,*" VerticalOptions="Fill" >
                 <Label Text="Enter PC tag" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Medium"/>
                 <Entry Grid.Column="1" Placeholder="Number " 
                        VerticalOptions="Center" 
@@ -100,7 +100,7 @@
                 <!--<Label Grid.Column="3" Text="{Binding ReEnterStatus}" HorizontalOptions="End" FontSize="Medium"/>-->
                 <Button Grid.Column="2" Grid.RowSpan="2" Text="Record GPS" Command="{Binding RecordGPSCommand}" />
                 <Button Grid.Column="3" Grid.RowSpan="2" CornerRadius="10"
-                        Text="Reset {0}" Command="{Binding ResetSiteCommand}" BackgroundColor="Red" />                
+                        Text="Reset" Command="{Binding ResetSiteCommand}" BackgroundColor="Red" />                
             </Grid>
 
             <!-- BUILDING : BuildingSiteItemsVM -->
