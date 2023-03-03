@@ -45,9 +45,25 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         bool isRoadwaySelected = false;
 
-        [ObservableProperty]
-        [AlsoNotifyChangeFor(nameof(MinorSiteList))]
+        //[ObservableProperty]
+        //[AlsoNotifyChangeFor(nameof(MinorSiteList))]
         string selectedMajorType = string.Empty;
+        public string SelectedMajorType
+        {
+            get => selectedMajorType;
+            set
+            {
+                SetProperty(ref selectedMajorType, value);
+
+                IsBuildingSelected = SelectedMajorType.Equals(BUILDING_SITE);
+                IsCabinetSelected = SelectedMajorType.Equals(CABINET_SITE);
+                IsPulboxSelected = SelectedMajorType.Equals(PULLBOX_SITE);
+                IsStructureSelected = SelectedMajorType.Equals(STRUCTURE_SITE);
+
+                OnPropertyChanged(nameof(MinorSiteList));
+
+            }
+        }
 
         [ObservableProperty]
         string selectedMinorType = string.Empty;
@@ -229,7 +245,7 @@ namespace FTCollectorApp.ViewModel
                 }
             );
 
-            SiteClickedCmd = new Command<string>(
+            /*SiteClickedCmd = new Command<string>(
                 execute: (string arg) => {
                     SelectedMajorType = arg;
                     bckgdBtnColorB = arg.Equals(BUILDING_SITE) ? Color.Orange : Color.FromHex("#1976D2");
@@ -238,7 +254,7 @@ namespace FTCollectorApp.ViewModel
                     bckgdBtnColorS = arg.Equals(STRUCTURE_SITE) ? Color.Orange : Color.FromHex("#1976D2");
                     Console.WriteLine();
                 }
-            );
+            );*/
 
 
 

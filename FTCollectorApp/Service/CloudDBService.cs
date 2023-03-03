@@ -166,6 +166,109 @@ namespace FTCollectorApp.Service
             }
         }
 
+        public static async Task PostTimeSheet(string employeeid, string timeinput, string laboridx, int perdiemidx)
+        {
+            try
+            {
+                var hours = DateTime.Parse(timeinput).Hour;
+                var mins = DateTime.Parse(timeinput).Minute;
+
+
+                var keyValues = new List<KeyValuePair<string, string>>{
+
+                    new KeyValuePair<string, string>("employeeid",employeeid),
+                    new KeyValuePair<string, string>("jobnum",Session.jobnum),
+                    new KeyValuePair<string, string>("uid", Session.uid.ToString()),
+
+                    new KeyValuePair<string, string>("hr",  hours.ToString()),
+                    new KeyValuePair<string, string>("min", mins.ToString()),
+
+                    new KeyValuePair<string, string>("gps_sts", Session.gps_sts),
+
+                    new KeyValuePair<string, string>("manual_latti", Session.gps_sts == "1" ? "0":Session.manual_latti),
+                    new KeyValuePair<string, string>("manual_longi", Session.gps_sts == "1" ? "0":Session.manual_longi),
+
+                    new KeyValuePair<string, string>("lattitude2", Session.live_lattitude),
+                    new KeyValuePair<string, string>("longitude2", Session.live_lattitude),
+
+                    new KeyValuePair<string, string>("ev_type", Session.event_type),
+                    new KeyValuePair<string, string>("per_diem", perdiemidx.ToString()),
+                    new KeyValuePair<string, string>("labor_classification", laboridx ),
+                    //new KeyValuePair<string, string>("odometer", param2.ToString()), // only for sending odometer 
+                
+                    new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+
+                    new KeyValuePair<string, string>("ajaxname", Constants.InsertJobEvents)
+                };
+
+
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                response = await client.PostAsync(Constants.InsertTimeSheetUrl, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    var isi = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"[CloudService] Response from {Constants.InsertTimeSheetUrl} OK = 200 , content :" + isi);
+                }
+            }
+            else
+            {
+                // Put to Pending Sync
+                var app = Application.Current as App;
+                app.TaskCount += 1;
+
+
+                keyValues.Add(new KeyValuePair<string, string>("Status", "Pending"));
+
+                // put keyvaluepair to App properties as Hash<taskid, string keyvaluepair> with json 
+                // store 
+                // app.Properties[$"Task-{app.TaskCount}"] = JsonConvert.SerializeObject(keyValues);
+                // var storedPendingTaskName = app.PendingTask;
+                // List<string> tasklist = JsonConvert.DeserializeObject(storedPendingTaskName);
+
+
+                // Serialize 
+                var test = new Dictionary<string, List<KeyValuePair<string, string>>>();
+                test.Add($"Task-{app.TaskCount}", keyValues);
+
+                // To serialize the hashtable and its key/value pairs,
+                // you must first open a stream for writing.
+                // In this case, use a file stream.
+                FileStream fs = new FileStream("PendingTaskFile.dat", FileMode.Append);
+
+                // Construct a BinaryFormatter and use it to serialize the data to the stream.
+                BinaryFormatter formatter = new BinaryFormatter();
+                try
+                {
+                    formatter.Serialize(fs, test);
+                }
+                finally
+                {
+                    fs.Close();
+                }
+
+            }
+
+            }
+            catch (SerializationException e)
+            {
+                Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                throw;
+            }
+            catch
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "Invalid Time Format (HH:MM)", "OK");
+                return;
+            }
+        }
+
+
+
         public static async Task PostPendingTask(string pendingTaskKey)
         {
             //Deserialize

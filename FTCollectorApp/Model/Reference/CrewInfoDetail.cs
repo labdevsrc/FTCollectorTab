@@ -12,7 +12,9 @@ namespace FTCollectorApp.Model.Reference
         public string StartTime { get; set; }
         public string LunchInTime { get; set; }
         public string LunchOutTime { get; set; }
+        public string EndOfDayTime { get; set; }
 
+        public string LaborClass { get; set; }
         public int PerDiem { get; set; }
     }
 }
