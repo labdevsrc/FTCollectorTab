@@ -583,20 +583,24 @@ namespace FTCollectorApp.ViewModel
                 execute: async () =>
                 {
 
-                    IsLunchOut = true;
-                    IsLunchIn = false;
+                    // hide other display
+                    IsDisplayCrewList = false;
+                    IsDisplayEndOfDay = false;
+                    IsDisplayEndOfDayForm = false;
+                    IsDisplayOdo = false;
+
 
 
                     LunchInTime = DateTime.Now.ToString("HH:mm");
                     IsLunchOutDisplay = false;
-                    IsLunchInDisplay = !IsLunchInDisplay;
+                    IsLunchInDisplay = true;
+
+                    IsLunchIn = false;
                     (LunchInCommand as Command).ChangeCanExecute();
+                    
+                    IsLunchOut = true; // enable button LuncOut
                     (LunchOutCommand as Command).ChangeCanExecute();
 
-                    // hide other display
-                    IsDisplayCrewList = false;
-                    IsDisplayEndOfDay = false;
-                    IsDisplayOdo = false;
 
 
 

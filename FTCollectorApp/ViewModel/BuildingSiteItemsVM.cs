@@ -7,6 +7,10 @@ using FTCollectorApp.Model.Reference;
 using System.Collections.ObjectModel;
 using System.Linq;
 using FTCollectorApp.Model;
+using Xamarin.Forms;
+using System.Windows.Input;
+using FTCollectorApp.View.SitesPage;
+using FTCollectorApp.View.SitesPage.Fiber;
 
 namespace FTCollectorApp.ViewModel
 {
@@ -251,9 +255,75 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         bool isserial_numberVisible = false;
 
+        public ICommand SendResultCommand { get; }
+
+        public ICommand ShowDuctPageCommand { get; set; }
+
+        public ICommand FiberBtnCommand { get; set; }
+        public ICommand ToggleEntriesCommand { get; set; }
+
+        public ICommand ShowRackPageCommand { get; }
+
+        public ICommand ShowActiveDevicePageCommand { get; set; }
+
         public BuildingSiteItemsVM()
         {
             PopulateVisibleVars();
+            ShowDuctPageCommand = new Command(
+                execute: async () => {
+
+                    await Application.Current.MainPage.Navigation.PushAsync(new DuctPage());
+                    //await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new DuctPopup());
+                },
+
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return true; // Session.SiteCreateCnt > 1;
+                }
+              );
+
+
+            FiberBtnCommand = new Command(
+                execute: async () => {
+
+                    await Application.Current.MainPage.Navigation.PushAsync(new FiberMainMenu());
+
+                },
+
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return true;  //Session.DuctSaveCount >= 1;
+                }
+              );
+
+
+
+            ShowRackPageCommand = new Command(
+                execute: async () => {
+                    await Application.Current.MainPage.Navigation.PushAsync(new RacksPage());
+                    //RefreshCanExecutes();
+                },
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return true; // Session.DuctSaveCount >= 1;
+                }
+              );
+
+            ShowActiveDevicePageCommand = new Command(
+                execute: async () => {
+                    await Application.Current.MainPage.Navigation.PushAsync(new ActiveDevicePage());
+                    //RefreshCanExecutes();
+                },
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return true; // Session.RackCount >= 1;
+                }
+              );
+
         }
 
         void PopulateVisibleVars()

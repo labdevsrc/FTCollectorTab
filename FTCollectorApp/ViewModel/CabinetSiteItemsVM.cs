@@ -167,7 +167,7 @@ namespace FTCollectorApp.ViewModel
                 canExecute: () =>
                 {
                     Console.WriteLine();
-                    return Session.SiteCreateCnt > 1;
+                    return true; // Session.SiteCreateCnt > 1;
                 }
               );
 
@@ -180,7 +180,7 @@ namespace FTCollectorApp.ViewModel
                 canExecute: () =>
                 {
                     Console.WriteLine();
-                    return Session.DuctSaveCount >= 1;
+                    return true; // Session.DuctSaveCount >= 1;
                 }
               );
 
@@ -191,7 +191,7 @@ namespace FTCollectorApp.ViewModel
                 canExecute: () =>
                 {
                     Console.WriteLine();
-                    return Session.DuctSaveCount >= 1;
+                    return true; // Session.DuctSaveCount >= 1;
                 }
               );
 
@@ -202,7 +202,7 @@ namespace FTCollectorApp.ViewModel
                 canExecute: () =>
                 {
                     Console.WriteLine();
-                    return Session.RackCount >= 1;
+                    return true; // Session.RackCount >= 1;
                 }
               );
         }

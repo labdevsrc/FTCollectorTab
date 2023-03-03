@@ -111,17 +111,16 @@
                     </Grid>
 
                     <StackLayout IsVisible="{Binding IsDisplayEndOfDay}"  >
-                        
-                        <Grid ColumnDefinitions="*,*" HeightRequest="120" >
-                            
-                            <Label  Text="Choose Employee for Finished Day " FontSize="Medium" />
-                            <Frame Grid.Column="1" CornerRadius="5" BackgroundColor="LightBlue" HasShadow="True" >
-                                <Picker ItemsSource ="{Binding FinishDayList}"   
+                        <Grid ColumnDefinitions="*,*,*" HeightRequest="50" >
+                            <Label  Text="Choose Employee " FontSize="Medium" />
+                            <!--<Frame Grid.Column="1" CornerRadius="5" BackgroundColor="LightBlue" HasShadow="True" >-->
+                            <Picker Grid.Column="1" HeightRequest=" 40"
+                                    ItemsSource ="{Binding FinishDayList}"   VerticalOptions="Center"
                                         SelectedItem="{Binding SelectedCrewForEndOfDay, Mode=TwoWay}" 
+                                        Title="Select Employee"
                                         ItemDisplayBinding="{Binding FullName}">
-                                
-                                </Picker>
-                            </Frame>
+
+                            </Picker>
                         </Grid>
                         <!--<ListView  ItemsSource ="{Binding FinishDayList}" 
                               SelectedItem="{Binding SelectedCrewForEndOfDay, Mode=TwoWay}"
@@ -538,19 +537,22 @@
                     <StackLayout IsVisible="{Binding IsLunchOutDisplay}" >
                         <Frame CornerRadius="20" HasShadow="True" VerticalOptions="Fill">
                             <StackLayout>
-                                <Grid ColumnDefinitions="*,*" >
+                                <Grid ColumnDefinitions="*,*" HeightRequest="50">
                                     <Label Text="Employee Name" />
                                     <Label Grid.Column="1" Text="Lunch Out Time" />
                                 </Grid>
-                                <ListView ItemsSource="{Binding SelectedCrewInfoDetails}" SelectedItem="{Binding }">
+                                <ListView HeightRequest="200"
+                                    ItemsSource="{Binding FinishDayList}" SelectedItem="{Binding SelectedForLunchOut}">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <ViewCell>
-                                            <StackLayout Orientation="Horizontal"> 
-                                                <Label Text="{Binding FullName}" />
-                                                <Entry Text="{Binding LunchOutTime, Mode=TwoWay}" />
-                                            </StackLayout>
-                                        </ViewCell>
+                                                <StackLayout>
+                                                    <Grid ColumnDefinitions="*,*,*" HeightRequest="50">
+                                                            <Label Grid.Column="0" Text="{Binding FullName}"  VerticalOptions="Center" />
+                                                            <Entry Grid.Column="1" Text="{Binding LunchOutTime, Mode=TwoWay}"  VerticalOptions="Center" />
+                                                    </Grid>
+                                                </StackLayout>
+                                            </ViewCell>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>
@@ -562,17 +564,20 @@
                     <StackLayout IsVisible="{Binding IsLunchInDisplay}" >
                         <Frame CornerRadius="20" HasShadow="True" VerticalOptions="Fill">
                             <StackLayout>
-                                <Grid ColumnDefinitions="*,*" >
+                                <Grid ColumnDefinitions="*,*,*" HeightRequest="50">
                                     <Label Text="Employee Name" />
-                                    <Label Grid.Column="1" Text="Lunch-In Time" />
+                                    <Label Grid.Column="1" Text="Lunch In Time" />
                                 </Grid>
-                                <ListView ItemsSource="{Binding SelectedCrewInfoDetails}" SelectedItem="{Binding }">
+                                <ListView HeightRequest="200"
+                                    ItemsSource="{Binding FinishDayList}" SelectedItem="{Binding SelectedForLunchOut}">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <ViewCell>
-                                                <StackLayout Orientation="Horizontal">
-                                                    <Label Text="{Binding FullName}" />
-                                                    <Entry Text="{Binding LunchInTime, Mode=TwoWay}" />
+                                                <StackLayout>
+                                                    <Grid ColumnDefinitions="*,*,*" HeightRequest="50">
+                                                        <Label Grid.Column="0" Text="{Binding FullName}"  VerticalOptions="Center" />
+                                                        <Entry Grid.Column="1" Text="{Binding LunchOutTime, Mode=TwoWay}"  VerticalOptions="Center" />
+                                                    </Grid>
                                                 </StackLayout>
                                             </ViewCell>
                                         </DataTemplate>

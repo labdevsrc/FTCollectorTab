@@ -282,6 +282,13 @@
 
                     </Grid>
 
+                    <StackLayout Orientation="Horizontal" Padding="10" VerticalOptions="End">
+                        <Button Text="Record Duct" HorizontalOptions="FillAndExpand" Command="{Binding ShowDuctPageCommand}"/>
+                        <Button Text="Fiber"  HorizontalOptions="FillAndExpand" Command="{Binding FiberBtnCommand}" />
+                        <Button Text="Connect Devices" IsEnabled="False" HorizontalOptions="FillAndExpand" />
+                        <Button Text="Record Racks"  HorizontalOptions="FillAndExpand" Command="{Binding ShowRackPageCommand}" />
+                        <Button Text="Active Device" HorizontalOptions="FillAndExpand" Command="{Binding ShowActiveDevicePageCommand}"/>
+                    </StackLayout>
                 </StackLayout>
 
             </ScrollView>
@@ -438,6 +445,13 @@
                         <Switch IsToggled="{Binding IsBucketTruck, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="4"/>
 
                     </Grid>
+                    <StackLayout Orientation="Horizontal" Padding="10" VerticalOptions="End">
+                        <Button Text="Record Duct" HorizontalOptions="FillAndExpand" Command="{Binding ShowDuctPageCommand}"/>
+                        <Button Text="Fiber"  HorizontalOptions="FillAndExpand" Command="{Binding FiberBtnCommand}" />
+                        <Button Text="Connect Devices" IsEnabled="False" HorizontalOptions="FillAndExpand" />
+                        <Button Text="Record Racks"  HorizontalOptions="FillAndExpand" Command="{Binding ShowRackPageCommand}" />
+                        <Button Text="Active Device" HorizontalOptions="FillAndExpand" Command="{Binding ShowActiveDevicePageCommand}"/>
+                    </StackLayout>
 
                 </StackLayout>
 
