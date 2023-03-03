@@ -546,7 +546,8 @@ namespace FTCollectorApp.ViewModel
                                 PerDiem = PerDiemEmp6
 
                             });
-                            await CloudDBService.PostTimeSheet(Employee6Name.?.TeamUserKey.ToString(), StartTimeEmp6, Employee6Labor, PerDiemEmp6);
+                            await CloudDBService.PostTimeSheet(Employee6Name?.TeamUserKey.ToString(), 
+                                StartTimeEmp6, Employee6Labor, PerDiemEmp6);
                         }
 
 
