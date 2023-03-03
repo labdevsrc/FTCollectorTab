@@ -461,7 +461,8 @@ namespace FTCollectorApp.ViewModel
 
                             try
                             {
-                                await CloudDBService.PostTimeSheet(Employee1Name.FullName, StartTimeEmp1, Employee1Labor, PerDiemEmp1);
+                                await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(), 
+                                    StartTimeEmp1, Employee1Labor, PerDiemEmp1);
                                 ErrorMessageCrew = "";
                             }
                             catch
@@ -480,7 +481,8 @@ namespace FTCollectorApp.ViewModel
                                 StartTime = StartTimeEmp2,LaborClass = Employee2Labor, PerDiem = PerDiemEmp2
 
                             });
-                            await CloudDBService.PostTimeSheet(Employee3Name.FullName, StartTimeEmp1, Employee1Labor, PerDiemEmp1);
+                            await CloudDBService.PostTimeSheet(Employee2Name?.TeamUserKey.ToString(), 
+                                StartTimeEmp2, Employee2Labor, PerDiemEmp2);
 
                         }
                         
@@ -496,7 +498,8 @@ namespace FTCollectorApp.ViewModel
                                 PerDiem = PerDiemEmp3
 
                             });
-                            await CloudDBService.PostTimeSheet(Employee3Name.FullName, StartTimeEmp3, Employee3Labor, PerDiemEmp3);
+                            await CloudDBService.PostTimeSheet(Employee3Name?.TeamUserKey.ToString(), 
+                                StartTimeEmp3, Employee3Labor, PerDiemEmp3);
 
                         }
 
@@ -512,8 +515,7 @@ namespace FTCollectorApp.ViewModel
                                 PerDiem = PerDiemEmp4
 
                             });
-                            await CloudDBService.PostTimeSheet(Employee4Name.FullName, StartTimeEmp4, Employee4Labor, PerDiemEmp4);
-
+                            await CloudDBService.PostTimeSheet(Employee4Name?.TeamUserKey.ToString(), StartTimeEmp4, Employee4Labor, PerDiemEmp4);
                         }
 
 
@@ -529,7 +531,7 @@ namespace FTCollectorApp.ViewModel
                                 PerDiem = PerDiemEmp5
 
                             });
-                            await CloudDBService.PostTimeSheet(Employee5Name.FullName, StartTimeEmp5, Employee5Labor, PerDiemEmp5);
+                            await CloudDBService.PostTimeSheet(Employee5Name?.TeamUserKey.ToString(), StartTimeEmp5, Employee5Labor, PerDiemEmp5);
                         }
 
                         if (Employee6Name?.FullName.Length > 1 && StartTimeEmp6.Length > 3)
@@ -544,7 +546,7 @@ namespace FTCollectorApp.ViewModel
                                 PerDiem = PerDiemEmp6
 
                             });
-                            await CloudDBService.PostTimeSheet(Employee6Name.FullName, StartTimeEmp6, Employee6Labor, PerDiemEmp6);
+                            await CloudDBService.PostTimeSheet(Employee6Name.?.TeamUserKey.ToString(), StartTimeEmp6, Employee6Labor, PerDiemEmp6);
                         }
 
 
