@@ -32,26 +32,26 @@
 
              <Label Text="Cable Type" HorizontalOptions="Start" />
              <!--<local:BorderColorEntry Text="{Binding SelectedFiberCable.CableIdDesc}" />-->
-                <local:Dropdown x:Name="pCableType" HorizontalOptions="FillAndExpand" Title="{Binding SelectedFiberCable.CableTypeDesc}"
-                        SelectedItem="{Binding SelectedCableType, Mode=TwoWay}"
-                        ItemsSource="{Binding CableTypeList}" 
-                        ItemDisplayBinding="{Binding CodeCableDesc}" IsEnabled="{Binding NewFiber}"/>
-                <Label Text="Manufacturer" HorizontalOptions="Start" />
-                <Picker x:Name="pManufacturer" HorizontalOptions="FillAndExpand" IsEnabled="{Binding NewFiber}"
+            <local:Dropdown x:Name="pCableType" HorizontalOptions="FillAndExpand" Title="{Binding SelectedFiberCable.CableTypeDesc}"
+                    SelectedItem="{Binding SelectedCableType, Mode=TwoWay}"
+                    ItemsSource="{Binding CableTypeList}" 
+                    ItemDisplayBinding="{Binding CodeCableDesc}" IsEnabled="{Binding NewFiber}"/>
+            <Label Text="Manufacturer" HorizontalOptions="Start" />
+            <Picker x:Name="pManufacturer" HorizontalOptions="FillAndExpand" IsEnabled="{Binding NewFiber}"
                     
-                            ItemsSource="{Binding ManufacturerList} " 
-                            SelectedItem="{Binding SelectedManufacturer, Mode=TwoWay}"
-                            ItemDisplayBinding="{Binding ManufName}"
-                            Title="{Binding SelectedFiberCable.Manufacturer}"
-                            TitleColor="Gray" />
-                <Label Text="Model" HorizontalOptions="Start" />
-                <Picker x:Name="pModel"  IsEnabled="{Binding NewFiber}"
-                           ItemsSource="{Binding ModelDetailList}" 
-                            SelectedItem="{Binding SelectedModelDetail, Mode=TwoWay}"
-                            ItemDisplayBinding="{Binding ModelNumber}"
-                            HorizontalOptions="FillAndExpand"
-                            Title="{Binding SelectedFiberCable.Model}"
-                            TitleColor="Gray" />                            
+                        ItemsSource="{Binding ManufacturerList} " 
+                        SelectedItem="{Binding SelectedManufacturer, Mode=TwoWay}"
+                        ItemDisplayBinding="{Binding ManufName}"
+                        Title="{Binding SelectedFiberCable.Manufacturer}"
+                        TitleColor="Gray" />
+            <Label Text="Model" HorizontalOptions="Start" />
+            <Picker x:Name="pModel"  IsEnabled="{Binding NewFiber}"
+                        ItemsSource="{Binding ModelDetailList}" 
+                        SelectedItem="{Binding SelectedModelDetail, Mode=TwoWay}"
+                        ItemDisplayBinding="{Binding ModelNumber}"
+                        HorizontalOptions="FillAndExpand"
+                        Title="{Binding SelectedFiberCable.Model}"
+                        TitleColor="Gray" />                            
             <Label Text="Enter Label" HorizontalOptions="Start" />
             <local:BorderEntry x:Name="entryLabel" HorizontalOptions="FillAndExpand" Text="{Binding TextLabel, Mode=TwoWay}"
                                Placeholder="{Binding SelectedFiberCable.label}" IsEnabled="{Binding NewFiber}"

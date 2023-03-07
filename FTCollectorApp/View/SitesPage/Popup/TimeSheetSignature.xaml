@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage Title="Timesheet Signature" xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup" 
+             xmlns:forms="clr-namespace:SignaturePad.Forms;assembly=SignaturePad.Forms"                    
+             x:Class="FTCollectorApp.View.SitesPage.Popup.TimeSheetSignature">
+
+    <StackLayout WidthRequest="500"
+                    Margin="20"
+                    Padding="20"
+                    BackgroundColor="White"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+        <Label Text="End Of Day" FontSize="Large" HorizontalOptions="Center"/>
+
+        <Label Text="By signing this daily time report, I verify that my individual hours are correctly reported,and I also acknowledge that I have not been involved in a vehicle accident, incident or work related injury
+                               during this work period. I understand that falsification of any information or making false statements will be considered grounds for dismissal." 
+                            VerticalOptions="CenterAndExpand" 
+                            HorizontalOptions="CenterAndExpand" />
+            <Grid ColumnDefinitions="*,*, *, *" RowDefinitions="*,*,*,*,*,*"  Padding="20">
+                <Label  Text="Clock in time" HorizontalOptions="Start" VerticalOptions="Center" />
+                <!--<Entry x:Name="clkIntime" Grid.Row="0" Grid.Column="1" Text="{Binding ClockIntime, Mode=TwoWay}" VerticalOptions="Center"  />
+                <Label Grid.Row="1" Grid.Column="0" Text="Lunch out time" HorizontalOptions="Start" VerticalOptions="Center" />
+                <Entry x:Name="lOuttime" Grid.Row="1" Grid.Column="1" Text="{Binding LunchOutTime, Mode=TwoWay}" VerticalOptions="Center"/>
+                <Label Grid.Row="2" Grid.Column="0" Text="Lunch in time" HorizontalOptions="Start" VerticalOptions="Center" />
+                <Entry x:Name="lIntime" Grid.Row="2" Grid.Column="1" Text="{Binding LunchInTime, Mode=TwoWay}" VerticalOptions="Center"/>
+                <Label Grid.Row="3" Grid.Column="0" Text="Clock out time" HorizontalOptions="Start" VerticalOptions="Center" />
+                <Entry x:Name="clkOuttime"  Grid.Row="3" Grid.Column="1" Text="{Binding ClockOutTime, Mode=TwoWay}" VerticalOptions="Center"/>
+                <Label Grid.Row="4" Grid.Column="0" Text="Total Hours for Today" HorizontalOptions="Start" VerticalOptions="Center" />
+                <Entry x:Name="totalTime" Grid.Row="4" Grid.Column="1" Text="{Binding TotalHoursForToday, Mode=TwoWay}"  VerticalOptions="Center"/>
+                <Button Grid.Row="5" Clicked="Button_Clicked" Text="Submit" Grid.Column="3" Command="{Binding SaveCommand}" />-->
+
+            <Entry x:Name="clkIntime" Grid.Row="0" Grid.Column="1"  VerticalOptions="Center"  />
+                <Label Grid.Row="1" Grid.Column="0" Text="Lunch out time" HorizontalOptions="Start" VerticalOptions="Center" />
+                <Entry x:Name="lOuttime" Grid.Row="1" Grid.Column="1"  VerticalOptions="Center"/>
+                <Label Grid.Row="2" Grid.Column="0" Text="Lunch in time" HorizontalOptions="Start" VerticalOptions="Center" />
+                <Entry x:Name="lIntime" Grid.Row="2" Grid.Column="1"  VerticalOptions="Center"/>
+                <Label Grid.Row="3" Grid.Column="0" Text="Clock out time" HorizontalOptions="Start" VerticalOptions="Center" />
+                <Entry x:Name="clkOuttime"  Grid.Row="3" Grid.Column="1" VerticalOptions="Center"/>
+                <Label Grid.Row="4" Grid.Column="0" Text="Total Hours for Today" HorizontalOptions="Start" VerticalOptions="Center" />
+                <Entry x:Name="totalTime" Grid.Row="4" Grid.Column="1"  VerticalOptions="Center"/>
+
+        </Grid>
+        <Label x:Name="employeeName" />
+        <!--<Label Text="{Binding SelectedCrewForEndOfDay.FullName, StringFormat= 'Selected : Employee Name {0}'}" />-->
+
+            <forms:SignaturePadView x:Name="signaturePad"  BackgroundImage="sign_bg.png"
+                        BackgroundColor="LightGray"  StrokeColor="Black"  StrokeWidth="3" />
+        <Button Clicked="Button_Clicked" Text="CLOSE" HorizontalOptions="End"  />
+
+        <!--<Button Text="Save" Command="{Binding SaveEndOfDayCommand}" HorizontalOptions="End" 
+                                WidthRequest="100" HeightRequest="40"/>-->
+        </StackLayout>
+
+
+</pages:PopupPage>

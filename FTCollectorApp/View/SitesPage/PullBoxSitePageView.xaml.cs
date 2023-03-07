@@ -19,7 +19,7 @@ namespace FTCollectorApp.View.SitesPage
         {
             InitializeComponent();
             var MajorMinorType = $"Pull Box - {minorType}";
-            BindingContext = new PullBoxSitePageViewModel(MajorMinorType, tagNumber);
+            //BindingContext = new PullBoxSitePageViewModel(MajorMinorType, tagNumber);
         }
 
 

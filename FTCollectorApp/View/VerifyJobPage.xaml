@@ -5,8 +5,8 @@
              xmlns:local="clr-namespace:FTCollectorApp.Utils;assembly=FTCollectorApp"
              xmlns:forms="clr-namespace:SignaturePad.Forms;assembly=SignaturePad.Forms"              
              xmlns:fa="clr-namespace:FontAwesome" 
-             Shell.NavBarIsVisible="False"
              x:Class="FTCollectorApp.View.VerifyJobPage">
+
     <ContentPage.Content>
         
         <AbsoluteLayout VerticalOptions="FillAndExpand" HorizontalOptions="CenterAndExpand" >
@@ -96,7 +96,7 @@
                         <Label Text="Contact Name *"/>
                         <local:BorderColorEntry Text="{Binding SelectedJob.ContactName}"   IsEnabled="False"/>
                         <Label Text="Customer Name *"/>
-                        <local:BorderColorEntry x:Name="custName" Text="{Binding SelectedJob.CustomerName}" IsEnabled="False"/>
+                        <local:BorderColorEntry Text="{Binding SelectedJob.CustomerName}" IsEnabled="False"/>
                         <Label Text="Phone *"/>
                         <local:BorderColorEntry Text="{Binding SelectedJob.CustomerPhone}"  IsEnabled="True"/>
                         <Button Text="{Binding TextStatus, Mode=TwoWay}" HorizontalOptions="EndAndExpand" BackgroundColor="{StaticResource blueColor}"
@@ -129,7 +129,8 @@
                                     <x:String>Half day per diem</x:String>
                                 </Picker.Items>
                             </Picker>
-                            <Button Grid.Row="1" Grid.Column="3" Text="Save TimeSheet" Command="{Binding SaveAndDisplaySignForm}" />
+                            <Button Grid.Row="1" Grid.Column="3" Text="Save TimeSheet" 
+                                   Command="{Binding SaveTimeSheetCommand}" />
 
                         </Grid>
                         <!--<ListView  ItemsSource ="{Binding FinishDayList}" 
@@ -161,7 +162,7 @@
                             <Label Grid.Row="2" Grid.Column="0" Text="Lunch in time" HorizontalOptions="Start" VerticalOptions="Center" />
                             <Entry Grid.Row="2" Grid.Column="1" Text="{Binding LunchInTime, Mode=TwoWay}" VerticalOptions="Center"/>
                             <Label Grid.Row="3" Grid.Column="0" Text="Clock out time" HorizontalOptions="Start" VerticalOptions="Center" />
-                            <Entry Grid.Row="3" Grid.Column="1" Text="{Binding ClockOutTime, Mode=TwoWay}" VerticalOptions="Center"/>
+                            <Entry Grid.Row="3" Grid.Column="1" Text="{Binding ClockOutTimeForm, Mode=TwoWay}" VerticalOptions="Center"/>
                             <Label Grid.Row="4" Grid.Column="0" Text="Total Hours for Today" HorizontalOptions="Start" VerticalOptions="Center" />
                             <Entry Grid.Row="4" Grid.Column="1" Text="{Binding TotalHoursForToday, Mode=TwoWay}"  VerticalOptions="Center"/>
                         </Grid>
@@ -665,4 +666,5 @@
         </StackLayout>
         </AbsoluteLayout>
     </ContentPage.Content>
+
 </ContentPage>

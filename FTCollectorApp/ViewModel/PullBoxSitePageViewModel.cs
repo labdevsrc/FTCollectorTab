@@ -21,8 +21,16 @@ using FTCollectorApp.View.SitesPage.Fiber;
 
 namespace FTCollectorApp.ViewModel
 {
+    [QueryProperty(nameof(SiteType), nameof(TagNumber))]
     public partial class PullBoxSitePageViewModel : ObservableObject
     {
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(MinorSiteList))]
+        string selectedMajorType = "PullBox";
+
+        [ObservableProperty] string selectedMinorType;
+
+
         [ObservableProperty]
         string siteType;
 
@@ -59,33 +67,19 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         string notes;
 
-        [ObservableProperty]
-        string isLaneClosure = "No";
 
-        [ObservableProperty]
-        string isHasPowerDisconnect = "No";
-
-        [ObservableProperty]
-        string is3rdComms = "No";
-
-        [ObservableProperty]
-        string isSiteClearZone = "No";
-
-
-        [ObservableProperty]
-        string isSpliceVault = "No";
-
-
-        [ObservableProperty]
-        string isBucketTruck = "No";
-
-        [ObservableProperty]
-        string isHasGround = "No";
+        [ObservableProperty] bool isLaneClosure = false;
+        [ObservableProperty] bool isHasPowerDisconnect = false;
+        [ObservableProperty] bool is3rdComms = false;
+        [ObservableProperty] bool isSiteClearZone = false;
+        [ObservableProperty] bool isSpliceVault = false;
+        [ObservableProperty] bool isBucketTruck = false;
+        [ObservableProperty] bool isHasGround = false;
+        [ObservableProperty] bool isInClearZone = false;
 
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(IsKeyTypeDisplay))]
-        string isHasKey = "No";
-
+        bool isHasKey = false;
 
         [ObservableProperty]
         string selectedRackCount;
@@ -96,15 +90,15 @@ namespace FTCollectorApp.ViewModel
             get => isKeyTypeDisplay;
             set
             {
-                if (IsHasKey.Equals("Yes"))
-                    SetProperty(ref isKeyTypeDisplay, true);
-                else
-                    SetProperty(ref isKeyTypeDisplay, false);
+                SetProperty(ref isKeyTypeDisplay, IsHasKey);
             }
         }
 
-        [ObservableProperty]
-        string isInClearZone = "No";
+        ReadGPSTimer timer;
+        [ObservableProperty] string accuracy;
+
+
+
         public ObservableCollection<string> DotDistrict
         {
             get
@@ -148,7 +142,7 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
-        public PullBoxSitePageViewModel(string siteType, string tagNumber)
+        public PullBoxSitePageViewModel() //string siteType, string tagNumber
         {
             Console.WriteLine();
             ShowDuctPageCommand = new Command(
@@ -188,7 +182,59 @@ namespace FTCollectorApp.ViewModel
             TagNumber = tagNumber;
             OwnerName = Session.OwnerName;
             Session.current_page = "pullbox";
+
+
+
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<CodeSiteType>();
+                var table = conn.Table<CodeSiteType>().ToList();
+                try
+                {
+                    foreach (var col in table)
+                    {
+                        col.MinorType = HttpUtility.HtmlDecode(col.MinorType); // should use for escape char "
+                        Console.WriteLine();
+
+                    }
+                    CodeSiteTypeList = new ObservableCollection<CodeSiteType>(table);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Exception " + e.ToString());
+                }
+                Console.WriteLine();
+            }
+
+            if (timer == null)
+            {
+                timer = new ReadGPSTimer(TimeSpan.FromSeconds(5), OnGPSTimerStart);
+                timer.Start();
+            }
         }
+
+
+        async void OnGPSTimerStart()
+        {
+            try
+            {
+                await LocationService.GetLocation();
+                Accuracy = $"{LocationService.Coords.Accuracy}";
+                Session.accuracy = String.Format("{0:0.######}", LocationService.Coords.Accuracy);
+                //Session.longitude2 = String.Format("{0:0.######}", LocationService.Coords.Longitude);
+                //Session.lattitude2 = String.Format("{0:0.######}", LocationService.Coords.Latitude);
+                Session.live_longitude = String.Format("{0:0.######}", LocationService.Coords.Longitude);
+                Session.live_lattitude = String.Format("{0:0.######}", LocationService.Coords.Latitude);
+                Session.altitude = String.Format("{0:0.######}", LocationService.Coords.Altitude);
+                //{ String.Format("{0:0.#######}", _location.Latitude.ToString())}
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                Accuracy = "No GPS";
+            }
+        }
+
         public ICommand CompleteSiteCommand { get; set; }
         //public ICommand SaveContinueCommand { get; set; }
         public ICommand CaptureCommand { get; set; }
@@ -214,7 +260,19 @@ namespace FTCollectorApp.ViewModel
             await Application.Current.MainPage.Navigation.PushAsync(new ActiveDevicePage());
         }
 
-
+        ObservableCollection<CodeSiteType> CodeSiteTypeList;
+        ObservableCollection<CodeSiteType> BufferMajorSite = new ObservableCollection<CodeSiteType>();
+        public ObservableCollection<string> MinorSiteList
+        {
+            get
+            {
+                Console.WriteLine();
+                var table = CodeSiteTypeList.Where(a => a.MajorType == SelectedMajorType).OrderBy(d => d.MinorType).ToList();
+                BufferMajorSite = new ObservableCollection<CodeSiteType>(table);
+                var table2 = BufferMajorSite.Select(c => c.MinorType);
+                return new ObservableCollection<string>(table2);
+            }
+        }
         //public string ResultPage;
         private string _resultPage;
         public string ResultPage
@@ -572,11 +630,11 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("btype",""),// SelectedBuilding?.BuildingTypeKey is null ? "":SelectedBuilding.BuildingTypeKey),
                 new KeyValuePair<string, string>("orientation", SelectedOrientation?.CompasKey is null ? "" : SelectedOrientation.CompasKey),
 
-                new KeyValuePair<string, string>("laneclosure", IsLaneClosure.Equals("Yes") ? "1":"0"),
+                new KeyValuePair<string, string>("laneclosure", IsLaneClosure ? "1":"0"),
                 new KeyValuePair<string, string>("dotdis",  SelectedDistrict is null ? "" : SelectedDistrict),
-                new KeyValuePair<string, string>("powr", IsHasPowerDisconnect.Equals("Yes") ? "1":"0"),
+                new KeyValuePair<string, string>("powr", IsHasPowerDisconnect ? "1":"0"),
                 new KeyValuePair<string, string>("elecsite", SelectedElectSiteKey),
-                new KeyValuePair<string, string>("comm", Is3rdComms.Equals("Yes") ? "1":"0"),
+                new KeyValuePair<string, string>("comm", Is3rdComms? "1":"0"),
                 new KeyValuePair<string, string>("commprovider", CommsProvider),
                 new KeyValuePair<string, string>("sitaddr", StreetAddress), // site_street_addres
                 new KeyValuePair<string, string>("udsowner", UDSOwner),
@@ -604,13 +662,13 @@ namespace FTCollectorApp.ViewModel
 
                 new KeyValuePair<string, string>("etc2", ""),
                 new KeyValuePair<string, string>("fosc2", ""),
-                new KeyValuePair<string, string>("vault2", IsSpliceVault.Equals("Yes") ? "1":"0"),
+                new KeyValuePair<string, string>("vault2", IsSpliceVault ? "1":"0"),
                 new KeyValuePair<string, string>("trlane2", Distance2Tralance),
-                new KeyValuePair<string, string>("bucket2", IsBucketTruck.Equals("Yes") ? "1":"0"),
+                new KeyValuePair<string, string>("bucket2", IsBucketTruck? "1":"0"),
                 new KeyValuePair<string, string>("serialno", SerialNumber),
                 new KeyValuePair<string, string>("key", ""),
                 new KeyValuePair<string, string>("ktype", ""), //SelectedKeyType),
-                new KeyValuePair<string, string>("ground", IsHasGround.Equals("Yes") ? "1":"0"),
+                new KeyValuePair<string, string>("ground", IsHasGround ? "1":"0"),
                 new KeyValuePair<string, string>("traveldir", SelectedTravelDirection?.CompasKey is null ? "": SelectedTravelDirection.CompasKey),
                 new KeyValuePair<string, string>("owner_key", Session.ownerkey),
                 new KeyValuePair<string, string>("owner_county", Session.countycode),

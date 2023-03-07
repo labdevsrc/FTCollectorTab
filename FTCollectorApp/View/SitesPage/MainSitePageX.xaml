@@ -88,7 +88,7 @@
             </StackLayout>
             </StackLayout>
 
-            <Grid Padding="20,10,20,10" ColumnDefinitions="*,*,*,*" VerticalOptions="Fill" >
+            <Grid Padding="20,10,20,10" ColumnDefinitions="*,*,*,*" HeightRequest="350" >
                 <Label Text="Enter PC tag" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Medium"/>
                 <Entry Grid.Column="1" Placeholder="Number " 
                        VerticalOptions="Center" 
@@ -104,7 +104,7 @@
             </Grid>
 
             <!-- BUILDING : BuildingSiteItemsVM -->
-            <ScrollView IsVisible="{Binding IsBuildingSelected}">
+            <!--<ScrollView IsVisible="{Binding IsBuildingSelected}">
                 <StackLayout Padding="20,10,5,10" VerticalOptions="Start" WidthRequest="400" IsVisible="{Binding IsBuildingSelected}" 
                     BindingContext="{Binding Source = {vm:BuildingSiteItemsVM}}">
 
@@ -216,7 +216,9 @@
                              HorizontalOptions="FillAndExpand" />
                         </Grid>
                     </StackLayout>
-                    <!-- Cabinet. Manufacturer entry end -->
+            
+
+
 
                     <Label Text="Enter serial number" IsVisible="{Binding Isserial_numberVisible}" />
                     <Entry Text="{Binding SerialNumber,Mode=TwoWay}" HorizontalOptions="FillAndExpand" 
@@ -250,16 +252,6 @@
                         <Label Grid.Row="4" Text="3rd party comms" IsVisible="{Binding Ishas_commsVisible }"/>
                         <Label Grid.Row="5" Text="Enter Comms provider" IsVisible="{Binding Iscomms_providerVisible}"/>
 
-
-                        <!--<Label Grid.Row="4" Text="3rd party comms" IsVisible="{Binding Ishas_commsVisible }"/>
-                            <Switch  Grid.Row="4" Grid.Column="1" IsToggled="{Binding Is3rdComms, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start"
-                                IsVisible="{Binding Ishas_commsVisible }"/>
-
-`
-                            <Label Grid.Row="5" Text="Enter Comms provider" IsVisible="{Binding Iscomms_providerVisible}"/>
-                            <Entry Grid.Row="5"  Grid.Column="1" Text="{Binding CommsProvider, Mode=TwoWay}"
-                                   IsVisible="{Binding Iscomms_providerVisible}"/>-->
-
                     </Grid>
 
                     <Grid ColumnDefinitions="*,*" RowDefinitions="*,*,*,*,*">
@@ -291,7 +283,7 @@
                     </StackLayout>
                 </StackLayout>
 
-            </ScrollView>
+            </ScrollView>-->
 
             <!-- CABINET  : CabinetSiteItemsVM -->            
             <ScrollView>
@@ -457,7 +449,7 @@
 
             </ScrollView>
             <!-- PULLBOX  : PullboxSiteItemsVM -->
-            <ScrollView>
+            <!--<ScrollView>
                 <StackLayout Padding="20,10,5,10" VerticalOptions="Start" WidthRequest="400" IsVisible="{Binding IsPulboxSelected}" 
                     BindingContext="{Binding Source = {vm:PullboxSiteItemsVM}}" >                
                     <Entry Text="{Binding OwnerTagNumber, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
@@ -606,7 +598,7 @@
                         <Picker Grid.Row="5" Grid.Column="2" x:Name="pBucketTruck" ItemsSource="{Binding YesNo}" SelectedItem="{Binding IsBucketTruck}"/>
                     </Grid>
                     </StackLayout>
-            </ScrollView>
+            </ScrollView>-->
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

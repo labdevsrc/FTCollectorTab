@@ -189,7 +189,7 @@ namespace FTCollectorApp.Service
                     new KeyValuePair<string, string>("manual_longi", Session.gps_sts == "1" ? "0":Session.manual_longi),
 
                     new KeyValuePair<string, string>("lattitude2", Session.live_lattitude),
-                    new KeyValuePair<string, string>("longitude2", Session.live_lattitude),
+                    new KeyValuePair<string, string>("longitude2", Session.live_longitude),
 
                     new KeyValuePair<string, string>("ev_type", Session.event_type),
                     new KeyValuePair<string, string>("per_diem", perdiemidx.ToString()),

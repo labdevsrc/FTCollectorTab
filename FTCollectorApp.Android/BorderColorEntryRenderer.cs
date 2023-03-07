@@ -32,7 +32,7 @@ namespace FTCollectorApp.Droid
             {
                 //Control.SetBackgroundResource(Resource.Layout.rounded_shape);
                 var gradientDrawable = new GradientDrawable();
-                gradientDrawable.SetCornerRadius(20f);
+                gradientDrawable.SetCornerRadius(5f);
                 gradientDrawable.SetStroke(3, Android.Graphics.Color.Black);
                 gradientDrawable.SetColor(Android.Graphics.Color.LightGray);
                 Control.SetBackground(gradientDrawable);

@@ -41,13 +41,16 @@ namespace FTCollectorApp.View
             InitializeComponent();
 
             BindingContext = new VerifyJobViewModel();
+
+
         }
 
-        protected override void OnAppearing()
+        private void ToolbarItem_Clicked(object sender, EventArgs e)
         {
-            base.OnAppearing();
-            Console.WriteLine();
+            var tabbedPage = this.Parent.Parent as TabbedPage;
+            tabbedPage.CurrentPage = tabbedPage.Children[1];
         }
+
 
 
 
@@ -269,5 +272,7 @@ namespace FTCollectorApp.View
                 Source = "http://ec2-52-14-97-126.us-east-2.compute.amazonaws.com/FiberTrakArcGIS/UserMap.aspx?user=" + Session.uid
             };
         }
+
+
     }
 }

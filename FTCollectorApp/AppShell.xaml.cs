@@ -8,6 +8,8 @@ using FTCollectorApp.View;
 using FTCollectorApp.View.SitesPage;
 using FTCollectorApp.ViewPortrait;
 using FTCollectorApp.View.FormStyle;
+using FTCollectorApp.View.CablePages;
+using FTCollectorApp.View.TraceFiberPages;
 
 namespace FTCollectorApp
 {
@@ -44,7 +46,11 @@ namespace FTCollectorApp
 
                 Routes.Add(nameof(RacksPage), typeof(RacksPage));
                 Routes.Add(nameof(PortPage), typeof(PortPage));
+                Routes.Add(nameof(PullCablePage), typeof(PullCablePage));
 
+                Routes.Add(nameof(FiberOpticCablePage), typeof(FiberOpticCablePage));
+                Routes.Add(nameof(FiberInstallTabPage), typeof(FiberInstallTabPage));
+                Routes.Add(nameof(TabbedSitePage), typeof(TabbedSitePage));
 
                 Routes.Add(nameof(MainPageP), typeof(MainPageP)); //Portrait of SplashDownloadPage, Tab name : MainPAge
 

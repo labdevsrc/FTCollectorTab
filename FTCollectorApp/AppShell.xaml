@@ -8,6 +8,8 @@
        xmlns:viewsite="clr-namespace:FTCollectorApp.View.SitesPage"   
        xmlns:gformpage="clr-namespace:FTCollectorApp.View.FormStyle"          
        xmlns:viewsitep ="clr-namespace:FTCollectorApp.ViewPortrait"          
+       xmlns:tracefiber ="clr-namespace:FTCollectorApp.View.TraceFiberPages"          
+       xmlns:pullcable ="clr-namespace:FTCollectorApp.View.CablePages"             
        x:Class="FTCollectorApp.AppShell"
        x:Name="shell"
        FlyoutHeaderBehavior="CollapseOnScroll">
@@ -120,7 +122,7 @@
 
         </Tab>
 
-        <Tab Title="SITE" 
+        <!--<Tab Title="SITE" 
              Route="MainSitePageX">
             <Tab.Icon>
                 <FontImageSource FontFamily="FontAwesome6Solid"
@@ -139,7 +141,7 @@
                 </ShellContent.Icon>
             </ShellContent>
 
-        </Tab>        
+        </Tab>      
         
         <Tab Title="SITE-OLD" 
              Route="MainSitePage">
@@ -160,9 +162,92 @@
                 </ShellContent.Icon>
             </ShellContent>
 
+        </Tab>-->
+
+        <Tab Title="Site" 
+             Route="TabbedSitePage">
+            <Tab.Icon>
+                <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.Wifi}"/>
+            </Tab.Icon>
+
+            <ShellContent Route="TabbedSitePage"
+                          Style="{StaticResource DomesticShell}"
+                          Title="SITE"
+                          ContentTemplate="{DataTemplate viewsite:TabbedSitePage}" >
+                <ShellContent.Icon>
+                    <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.Building}"/>
+                </ShellContent.Icon>
+            </ShellContent>
+
+        </Tab>
+
+        <Tab Title="FOInstall" 
+             Route="FiberInstallTabPage">
+            <Tab.Icon>
+                <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.Wifi}"/>
+            </Tab.Icon>
+
+            <ShellContent Route="FiberInstallTabPAge"
+                          Style="{StaticResource DomesticShell}"
+                          Title="SITE"
+                          ContentTemplate="{DataTemplate views:FiberInstallTabPage}" >
+                <ShellContent.Icon>
+                    <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.Building}"/>
+                </ShellContent.Icon>
+            </ShellContent>
+
+        </Tab>
+
+        <!--<Tab Title="New Cable" 
+             Route="FiberOpticCablePage">
+            <Tab.Icon>
+                <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.CabinetFiling}"/>
+            </Tab.Icon>
+
+            <ShellContent Route="FiberOpticCablePage"
+                          Style="{StaticResource DomesticShell}"
+                          Title="New Fiber Cable"
+                          ContentTemplate="{DataTemplate tracefiber:FiberOpticCablePage}" >
+                <ShellContent.Icon>
+                    <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.Building}"/>
+                </ShellContent.Icon>
+            </ShellContent>
+
         </Tab>
         
 
+        <Tab Title="Pull Cable" 
+             Route="FiberOpticCablePage">
+            <Tab.Icon>
+                <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.UpDown}"/>
+            </Tab.Icon>
+
+            <ShellContent Route="PullCablePage"
+                          Style="{StaticResource DomesticShell}"
+                          Title="BUILDING SITE"
+                          ContentTemplate="{DataTemplate pullcable:PullCablePage}" >
+                <ShellContent.Icon>
+                    <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.Building}"/>
+                </ShellContent.Icon>
+            </ShellContent>
+
+        </Tab>-->
         <!--
 
         Shell has implicit conversion operators that enable the Shell visual hierarchy to be simplified.
