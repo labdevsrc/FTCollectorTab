@@ -478,7 +478,6 @@
                         <Button Text="Save and Continue" Command="{Binding SaveCommand}"/>
 
                         <Button Text="Finished Duct Recording" Command="{Binding SaveBackCommand}"/>
-                        <Button Text="Return to Main Menu" HorizontalOptions="FillAndExpand"  Command="{Binding ReturnToMainCommand}"/>
 
                     </StackLayout>
 
@@ -495,6 +494,98 @@
             </StackLayout>
         </AbsoluteLayout>
     </ContentPage.Content>
+
+    </ContentPage>
+
+    <ContentPage Title="Rack">
+        <ContentPage.BindingContext>
+            <vmsite:RacksViewModel/>
+        </ContentPage.BindingContext>        
+        <ContentPage.Content>
+            <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                    <ScrollView>
+
+                        <StackLayout Padding="20">
+                            <Label Text="Racks" FontSize="Large" HorizontalOptions="Center" />
+                            <Grid ColumnDefinitions="0.7*,0.1*" >
+                                <local:Dropdown SelectedItem="{Binding SelectedRackKey, Mode=TwoWay}"
+                                    ItemDisplayBinding="{Binding RackNumKey}" 
+                                    ItemsSource="{Binding RackKeyList}" />
+
+                                <Button Grid.Column="1" Text="{x:Static fa:FontAwesomeIcons.List}"
+                                FontFamily="FontAwesomeSolid6" Command="{Binding RefreshRackKeyListCommand}"
+                                />
+                            </Grid>
+
+                            <Label Text="Enter rack number" />
+                            <local:Dropdown x:Name="pRackNum" SelectedItem="{Binding SelectedRackNumber, Mode=TwoWay}">
+                                <Picker.Items>
+                                    <x:String>1</x:String>
+                                    <x:String>2</x:String>
+                                    <x:String>3</x:String>
+                                    <x:String>4</x:String>
+                                    <x:String>5</x:String>
+                                    <x:String>6</x:String>
+                                    <x:String>7</x:String>
+                                    <x:String>8</x:String>
+                                    <x:String>9</x:String>
+                                    <x:String>10</x:String>
+                                </Picker.Items>
+                            </local:Dropdown>
+
+                            <Label Text="Type"/>
+                            <Picker  ItemsSource="{Binding RackTypeList}" ItemDisplayBinding="{Binding RackMaterialDesc}" x:Name="pType"
+                             SelectedItem="{Binding SelectedRackType, Mode=TwoWay}"
+                             HorizontalOptions="FillAndExpand" />
+                            <Grid RowDefinitions="*,*" ColumnDefinitions="*,0.5*,*,*" >
+                                <Label Text="Front Back "/>
+                                <Switch x:Name="switch1" Grid.Column="1"  IsToggled="{Binding IsBack, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start"/>
+                                <Label Grid.Column="2" >
+                                    <Label.Text>
+                                        <Binding Source="{x:Reference switch1 }" Path="IsToggled">
+                                            <Binding.Converter>
+                                                <local:BoolToObjectConverter  x:TypeArguments="x:String"
+                                                         TrueObject="Back"
+                                                         FalseObject="Front" />
+                                            </Binding.Converter>
+                                        </Binding>
+                                    </Label.Text>
+                                </Label>
+
+
+                                <Label Text="Orientation" Grid.Row="1"/>
+                                <Switch x:Name="switch2" Grid.Column="1" Grid.Row="1" IsToggled="{Binding IsVertical, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start"/>
+                                <Label  Grid.Row="1" Grid.Column="2" >
+                                    <Label.Text>
+                                        <Binding Source="{x:Reference switch2 }" Path="IsToggled">
+                                            <Binding.Converter>
+                                                <local:BoolToObjectConverter  x:TypeArguments="x:String"
+                                                         TrueObject="Vertical"
+                                                         FalseObject="Horizontal" />
+                                            </Binding.Converter>
+                                        </Binding>
+                                    </Label.Text>
+                                </Label>
+                            </Grid>
+                            <Label Text="Y Pos"/>
+                            <local:BorderEntry Grid.Row="1" Grid.Column="0" x:Name="Ypos" Text="{Binding YPos, Mode=TwoWay}"/>
+
+                            <Label Text="X Pos"/>
+                            <local:BorderEntry Grid.Row="1" Grid.Column="1" x:Name="Xpos" Text="{Binding XPos, Mode=TwoWay}"/>
+
+
+                            <Button Text="Submit Rack" Padding="0,10,0,10" Command="{Binding SaveCommand}" />
+                            <Button Text="Finished Documenting Racks" Padding="0,10,0,10" Command="{Binding SaveandBackCommand}"/>
+
+                        </StackLayout>
+
+                    </ScrollView>
+                </StackLayout>
+
+            </AbsoluteLayout>
+        </ContentPage.Content>
+
 
     </ContentPage>
 
@@ -526,4 +617,20 @@
 
         </ContentPage.Content>
     </ContentPage>
+    <ContentPage>    
+    <AbsoluteLayout>
+
+            <Frame CornerRadius="30" BackgroundColor="Transparent"
+                        AbsoluteLayout.LayoutFlags="PositionProportional"  
+                        AbsoluteLayout.LayoutBounds=".95,.95,80,80">
+                <Button Text="{x:Static fa:FontAwesomeIcons.Camera}"  FontFamily="FontAwesomeSolid6" Clicked="Button_Clicked"></Button>
+            </Frame>
+        
+        <!--<ImageButton 
+            BackgroundColor="Transparent"
+            AbsoluteLayout.LayoutFlags="PositionProportional"  
+            AbsoluteLayout.LayoutBounds=".95,.95,80,80"
+            Clicked="" />-->
+    </AbsoluteLayout>
+    </ContentPage>        
 </TabbedPage>

@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using SignaturePad.Forms;
 using PCLStorage;
 using PCLStorage;
+using FTCollectorApp.View.Utils;
 
 namespace FTCollectorApp.View.SitesPage
 {
@@ -186,6 +187,11 @@ namespace FTCollectorApp.View.SitesPage
         private void ClearBtn_Clicked(object sender, EventArgs e)
         {
             SignatureView.Clear();
+        }
+
+        private async void Button_Clicked(object sender, EventArgs e)
+        {
+            await Application.Current.MainPage.Navigation.PushAsync(new CameraViewPage());
         }
 
         /*protected override void OnBindingContextChanged()

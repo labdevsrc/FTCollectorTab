@@ -7,35 +7,39 @@
              xmlns:system="clr-namespace:System;assembly=mscorlib"        
 
              x:Class="FTCollectorApp.View.FiberInstallTabPage">
-    <ContentPage Title="New Cable" BindingContext="{Binding Source = {vm:CabinetSiteItemsVM}}">
+    <ContentPage Title="New Cable" >
+        <ContentPage.BindingContext>
+            <vm:FiberOpticCableViewModel/>
+        </ContentPage.BindingContext>
         <ContentPage.Content>
             <ScrollView>
                 <StackLayout Padding="20">
                     <Label Text="Fiber Optic Cable" FontSize="Large" HorizontalOptions="Center" Padding="20" />
+
                     <Label Text="Enter cable Id" HorizontalOptions="Start" />
-                    <Picker x:Name="pCableId" HorizontalOptions="FillAndExpand" 
+                    <Picker HorizontalOptions="FillAndExpand" 
                                 ItemsSource="{Binding aFiberCableList}"
                                 ItemDisplayBinding="{Binding CableIdDesc}"
                                 SelectedItem="{Binding SelectedFiberCable, Mode=TwoWay}" Title="Select  Fiber Cable" TitleColor="Gray" />
-                    <local:BorderEntry Placeholder="Enter cable id" PlaceholderColor="Gray" x:Name="nwCableName" IsVisible="false" 
+                    <local:BorderEntry Placeholder="Enter cable id" PlaceholderColor="Gray" IsVisible="{Binding IsNewCableSelected}" 
                                    Text="{Binding NewCableName, Mode=TwoWay}">
-                        <Entry.Triggers>
+                        <!--<Entry.Triggers>
                             <DataTrigger TargetType="Entry" Binding="{Binding Source={x:Reference pCableId},
                                     Path=SelectedIndex  }"  Value="0">
                                 <Setter Property="IsVisible" Value="true"/>
                             </DataTrigger>
-                        </Entry.Triggers>
+                        </Entry.Triggers>-->
 
                     </local:BorderEntry>
 
                     <Label Text="Cable Type" HorizontalOptions="Start" />
-                    <!--<local:BorderColorEntry Text="{Binding SelectedFiberCable.CableIdDesc}" />-->
+
                     <local:Dropdown HorizontalOptions="FillAndExpand" Title="{Binding SelectedFiberCable.CableTypeDesc}"
                         SelectedItem="{Binding SelectedCableType, Mode=TwoWay}"
                         ItemsSource="{Binding CableTypeList}" 
-                        ItemDisplayBinding="{Binding CodeCableDesc}" IsEnabled="{Binding NewFiber}"/>
+                        ItemDisplayBinding="{Binding CodeCableDesc}" IsEnabled="{Binding IsNewCableSelected}"/>
                     <Label Text="Manufacturer" HorizontalOptions="Start" />
-                    <Picker x:Name="pManufacturer" HorizontalOptions="FillAndExpand" IsEnabled="{Binding NewFiber}"
+                    <Picker x:Name="pManufacturer" HorizontalOptions="FillAndExpand" IsEnabled="{Binding IsNewCableSelected}"
                     
                             ItemsSource="{Binding ManufacturerList} " 
                             SelectedItem="{Binding SelectedManufacturer, Mode=TwoWay}"
@@ -43,7 +47,7 @@
                             Title="{Binding SelectedFiberCable.Manufacturer}"
                             TitleColor="Gray" />
                     <Label Text="Model" HorizontalOptions="Start" />
-                    <Picker x:Name="pModel"  IsEnabled="{Binding NewFiber}"
+                    <Picker IsEnabled="{Binding IsNewCableSelected}"
                            ItemsSource="{Binding ModelDetailList}" 
                             SelectedItem="{Binding SelectedModelDetail, Mode=TwoWay}"
                             ItemDisplayBinding="{Binding ModelNumber}"
@@ -51,12 +55,11 @@
                             Title="{Binding SelectedFiberCable.Model}"
                             TitleColor="Gray" />
                     <Label Text="Enter Label" HorizontalOptions="Start" />
-                    <local:BorderEntry x:Name="entryLabel" HorizontalOptions="FillAndExpand" Text="{Binding TextLabel, Mode=TwoWay}"
-                               Placeholder="{Binding SelectedFiberCable.label}" IsEnabled="{Binding NewFiber}"
-                               />
+                    <local:BorderEntry HorizontalOptions="FillAndExpand" Text="{Binding TextLabel, Mode=TwoWay}"
+                               IsEnabled="{Binding IsNewCableSelected}" />
                     <Label Text="Enter single-mode strand count" HorizontalOptions="Start"/>
-                    <local:Dropdown x:Name="pSingleModeCount" WidthRequest="100"
-                        SelectedItem="{Binding SMCount, Mode=TwoWay}"  Title="{Binding SelectedFiberCable.SMCount}" IsEnabled="{Binding NewFiber}" >
+                    <local:Dropdown  WidthRequest="100"
+                        SelectedItem="{Binding SMCount, Mode=TwoWay}"  Title="{Binding SelectedFiberCable.SMCount}" IsEnabled="{Binding IsNewCableSelected}" >
 
                         <Picker.Items>
                             <x:String>2</x:String>
@@ -71,7 +74,7 @@
                     </local:Dropdown>
                     <Label Text="Enter multi-mode strand count" HorizontalOptions="Start"/>
                     <local:Dropdown x:Name="pMultiModeCount"  WidthRequest="100"
-                        SelectedItem="{Binding MMCount, Mode=TwoWay}" Title="{Binding SelectedFiberCable.MMCount}" IsEnabled="{Binding NewFiber}">
+                        SelectedItem="{Binding MMCount, Mode=TwoWay}" Title="{Binding SelectedFiberCable.MMCount}" IsEnabled="{Binding IsNewCableSelected}">
                         <Picker.Items>
                             <x:String>4</x:String>
                             <x:String>6</x:String>
@@ -85,7 +88,7 @@
                     </local:Dropdown>
                     <Label Text="Enter buffer count" HorizontalOptions="Start"/>
                     <local:Dropdown x:Name="pBufferCount" WidthRequest="100"
-                        SelectedItem="{Binding SelectedBufferCnt, Mode=TwoWay}"   Title="{Binding SelectedFiberCable.buffer_count}" IsEnabled="{Binding NewFiber}" >
+                        SelectedItem="{Binding SelectedBufferCnt, Mode=TwoWay}"   Title="{Binding SelectedFiberCable.buffer_count}" IsEnabled="{Binding IsNewCableSelected}" >
                         <Picker.Items>
                             <x:String>1</x:String>
                             <x:String>2</x:String>
@@ -110,7 +113,7 @@
                                 BackgroundColor="{Binding SelectedColor.ClrHex}"
                                 SelectedItem="{Binding SelectedColor, Mode=TwoWay, FallbackValue=''}"
                                 HorizontalOptions="FillAndExpand"
-                                Title="--Select  Color--"
+                                Title="Select  Color"
                                 TitleColor="Gray"
                                 />
 
@@ -137,66 +140,96 @@
                     <local:Dropdown HorizontalOptions="FillAndExpand"
                              ItemsSource="{Binding InstallTypeList}" 
                             ItemDisplayBinding="{Binding FbrInstallDesc}" 
-                            SelectedItem="{Binding SelectedInstallType, Mode=TwoWay, FallbackValue=''}"                           
-                            
-                            />
+                            SelectedItem="{Binding SelectedInstallType, Mode=TwoWay, FallbackValue=''}"/>
                     <Button Text="Save and Continue" HorizontalOptions="FillAndExpand" Command="{Binding SaveCommand}"/>
-                    <Button Text="Return to Main Menu" HorizontalOptions="FillAndExpand"  Command="{Binding ReturnToMainCommand}"/>
+
+
                 </StackLayout>
             </ScrollView>
         </ContentPage.Content>
     </ContentPage>
 
-    <ContentPage Title="Pull Fiber" BindingContext="{Binding Source = {vm:PullCableViewModel}}">
-        <StackLayout>
-            <Grid RowDefinitions="2*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*" ColumnDefinitions="*,*,*">
+    <ContentPage Title="Pull Fiber">
+        <ContentPage.BindingContext>
+            <vm:PullCableViewModel/>
+        </ContentPage.BindingContext>
+        <StackLayout Padding="20">
+            <Frame CornerRadius="10">
                 <Label Text="Pull Cable" HorizontalOptions="Center" FontSize="Large"/>
+            </Frame>
+            <Grid RowDefinitions="0.4*,2*,0.4*,1.5*,*,*,*,*,*,*,*,*,*,*,*,*" ColumnDefinitions="*,*,*">
+                <Label Grid.Row="0" Text="Created Cable Id" HorizontalOptions="Start" />
+                <local:Dropdown Grid.Row="1" HorizontalOptions="FillAndExpand" 
+                                ItemsSource="{Binding CableIdByTypeList}"
+                                ItemDisplayBinding="{Binding CableIdDesc}"
+                                SelectedItem="{Binding SelectedCreatedCableId, Mode=TwoWay}" Title="Select Fiber Cable" TitleColor="Gray" />
 
-                <Label Grid.Row="1" Text="Cable Type" HorizontalOptions="Start" />
-                <!--<local:BorderColorEntry Text="{Binding SelectedFiberCable.CableIdDesc}" />-->
-                <local:Dropdown  Grid.Row="2" Grid.ColumnSpan="3" 
-                    HorizontalOptions="FillAndExpand" Title="{Binding SelectedFiberCable.CableTypeDesc}"
-                    SelectedItem="{Binding SelectedCableType, Mode=TwoWay}"
+
+                <Label Grid.Row="2" Text="Cable Type" HorizontalOptions="Start" />
+                <local:Dropdown  Grid.Row="3" Grid.ColumnSpan="2" 
+                    HorizontalOptions="FillAndExpand"  SelectedItem="{Binding SelectedCableType, Mode=TwoWay}"
                     ItemsSource="{Binding CableTypeList}" 
-                    ItemDisplayBinding="{Binding CodeCableDesc}" IsEnabled="{Binding NewFiber}"/>
+                    ItemDisplayBinding="{Binding CodeCableDesc}" />
 
+                <Label Grid.Row="4" Text="Cable Id" HorizontalOptions="Start" />
+                <Picker Grid.Row="5" HorizontalOptions="FillAndExpand" 
+                                ItemsSource="{Binding CableIdByTypeList}"
+                                ItemDisplayBinding="{Binding CableIdDesc}"
+                                SelectedItem="{Binding SelectedCableId, Mode=TwoWay}" Title="Select  Fiber Cable" TitleColor="Gray" />
 
-                <Label Text="Install Method" Grid.Row="3"/>
-                <local:Dropdown x:Name="pInstallMethod" Grid.Row="4" Grid.ColumnSpan="3" />
+                <Label Grid.Row="6" Text="Install Method" />
+                <local:Dropdown Grid.Row="7"   ItemDisplayBinding="{Binding FbrInstallDesc}"
+                                SelectedItem="{Binding SelectedInstallType, Mode=TwoWay}"
+                                ItemsSource="{Binding InstallTypeList}" />
 
-                <Label Text="Site Out" Grid.Row="5"/>
-                <local:Dropdown x:Name="pSiteOut" Grid.Row="6" Grid.ColumnSpan="3" />
+                <Label Grid.Row="8" Text="Site Out" />
+                <local:Dropdown Grid.Row="9" SelectedItem="{Binding SelectedSiteOut,Mode=TwoWay}" 
+                                ItemsSource="{Binding SiteInOutList}"  />
 
-                <Label Text="Duct Out" Grid.Row="7"/>
-                <local:Dropdown x:Name="pDuctOut" Grid.Row="8" Grid.ColumnSpan="3" />
+                <Label Grid.Row="8" Grid.Column="1"  Text="Duct Out" />
+                <local:Dropdown Grid.Row="9" Grid.Column="1"  SelectedItem="{Binding SelectedDuctOut,Mode=TwoWay}"
+                                ItemsSource="{Binding DuctInOutList}" />
 
-                <Label Text="Sheath Out" Grid.Row="9"/>
-                <local:Dropdown x:Name="pSheathOut" Grid.Row="10" Grid.ColumnSpan="3" />
+                <Label Text="Sheath Out" Grid.Row="8" Grid.Column="2"/>
+                <local:BorderEntry  Grid.Row="9" Grid.Column="2" Text="{Binding SheathOutCnt}" Keyboard="Numeric"/>
 
-                <Label Text="Site In" Grid.Row="11"/>
-                <local:Dropdown x:Name="pSiteIn" Grid.Row="12" Grid.ColumnSpan="3" />
+                <Label Grid.Row="10" Text="Site In" />
+                <local:Dropdown Grid.Row="11"   SelectedItem="{Binding SelectedSiteIn,Mode=TwoWay}"  
+                                ItemsSource="{Binding SiteInOutList}"  />                
+               
+                <Label Text="Duct In" Grid.Row="10" Grid.Column="1"/>
+                <local:Dropdown Grid.Row="11" Grid.Column="1" SelectedItem="{Binding SelectedDuctIn,Mode=TwoWay}" 
+                                ItemsSource="{Binding DuctInOutList}" />
 
-                <Label Text="Duct In" Grid.Row="13"/>
-                <local:Dropdown x:Name="pDuctIn" Grid.Row="14" Grid.ColumnSpan="3" />
+                <Label Text="Sheath In" Grid.Row="10" Grid.Column="2"  />
+                <local:BorderEntry  Grid.Row="11" Grid.Column="2" Text="{Binding SheathInCnt}" Keyboard="Numeric" />
 
-                <Label Text="Sheath In" Grid.Row="15"/>
-                <local:Dropdown2 x:Name="pSheathIn" Grid.Row="16" Grid.ColumnSpan="3" />
             </Grid>
-            <Button Text="Save and Continue" HorizontalOptions="FillAndExpand" x:Name="btnSave"  Command="{Binding SavePullCableCommand}"/>
-            <Button Text="New Fiber Cable"  HorizontalOptions="FillAndExpand" Clicked="NewFiberClicked" />
+            <Button Text="Save and Continue" HorizontalOptions="FillAndExpand" Command="{Binding SavePullCableCommand}"/>
+            <!--<Button Text="New Fiber Cable"  HorizontalOptions="FillAndExpand"  Clicked="GotoNewFiber" />-->
+            <AbsoluteLayout>
+                <IndicatorView>
+                    
+                </IndicatorView>
+
+            </AbsoluteLayout>
 
         </StackLayout>
 
 
     </ContentPage>
-    <ContentPage Title="Pull Fiber" BindingContext="{Binding Source = {vm:FiberTerminationViewModel}}">
-        <StackLayout>
-            <Label Text="Fiber Termination" FontSize="Large"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+    <ContentPage Title="Terminate Fiber">
+        <ContentPage.BindingContext>
+            <vm:TerminateFiberViewModel/>
+        </ContentPage.BindingContext>
+        <StackLayout Padding="20">
+            <Frame CornerRadius="10">
+                <Label Text="Fiber Termination" FontSize="Large" VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="CenterAndExpand" />
+            </Frame>
             <Label Text="Created Termination's" />
             <local:Dropdown Title="Select" />
-            <Grid RowDefinitions="0.5*,0.5*,0.5*,0.5*,0.5*,0.5*,0.5*,0.5*,0.5*"
+            <Grid RowDefinitions="0.5*,*,0.5*,*,0.5*,*,0.5*,*,*, 0.5*,*"
                   ColumnDefinitions="*,*" >
                 <Label Text="From Duct*"/>
                 <Label Text="To Rack Number*" Grid.Column="1"/>

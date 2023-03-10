@@ -862,18 +862,15 @@ namespace FTCollectorApp.ViewModel
                         Session.ActiveDeviceCount = 0;
                     }
 
-                    var OkAnswer = await Application.Current.MainPage.DisplayAlert("DONE", result.Equals("CREATE_DONE") ? "Create Site Success" : "Update Site Success", "Goto " + SelectedMajorType, "Create Again");
-                    if (OkAnswer)
+                    //var OkAnswer = 
+                    await Application.Current.MainPage.DisplayAlert("DONE", result.Equals("CREATE_DONE") ? "Create Site Success" : "Update Site Success", "OK");
+                    /*if (OkAnswer)
                     {
                         // stop timer gps
                         timer.Stop();
-
                         await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync(true);
-
-
                         //MessagingCenter.Send<CreateSitePopupVM>(this, "CheckSite");
-
-                    }
+                    }*/
                 }
                 else
                 {

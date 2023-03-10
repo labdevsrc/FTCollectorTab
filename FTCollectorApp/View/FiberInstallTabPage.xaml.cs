@@ -17,10 +17,13 @@ namespace FTCollectorApp.View
             InitializeComponent();
         }
 
-        private void NewFiberClicked(object sender, EventArgs e)
+
+        private void GotoNewFiber(object sender, EventArgs e)
         {
-            var tabbedpage = this.Parent as TabbedPage;
-            tabbedpage.CurrentPage = Children[0];
+            Console.WriteLine();
+            //var tabbedPage = this.Parent.Parent as TabbedPage;
+            //tabbedPage.CurrentPage = tabbedPage.Children[0];
+            Console.WriteLine();
         }
     }
 }

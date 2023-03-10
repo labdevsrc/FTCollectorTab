@@ -308,9 +308,9 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] int perDiemEmp5 = 0;
         [ObservableProperty] int perDiemEmp6 = 0;
 
-        [ObservableProperty] string startTimeLeader = DateTime.Now.ToString("08:00");
-        [ObservableProperty] string startTimeEmp1 = DateTime.Now.ToString("08:10");
-        [ObservableProperty] string startTimeEmp2 = DateTime.Now.ToString("08:20");
+        [ObservableProperty] string startTimeLeader;
+        [ObservableProperty] string startTimeEmp1;
+        [ObservableProperty] string startTimeEmp2;
         [ObservableProperty] string startTimeEmp3;
         [ObservableProperty] string startTimeEmp4;
         [ObservableProperty] string startTimeEmp5;
@@ -836,9 +836,6 @@ namespace FTCollectorApp.ViewModel
                             LunchOutTime = DateTime.Now.ToString("HH:mm");
                             Session.event_type = "13"; // Lunch out
 
-
-                            //await CloudDBService.PostTimeSheet(lotime.Hour.ToString(), lotime.Minute.ToString(), "13");
-
                         }
                         catch (Exception e)
                         {
@@ -1077,18 +1074,18 @@ namespace FTCollectorApp.ViewModel
 
         }
 
-        [ObservableProperty] string lunchInTimeLeader = DateTime.Now.ToString("12:50");
-        [ObservableProperty] string lunchInTime1 = DateTime.Now.ToString("13:10");
-        [ObservableProperty] string lunchInTime2 = DateTime.Now.ToString("13:20");
+        [ObservableProperty] string lunchInTimeLeader = string.Empty;
+        [ObservableProperty] string lunchInTime1 = string.Empty;
+        [ObservableProperty] string lunchInTime2 = string.Empty;
         [ObservableProperty] string lunchInTime3 = string.Empty;
         [ObservableProperty] string lunchInTime4 = string.Empty;
         [ObservableProperty] string lunchInTime5 = string.Empty;
         [ObservableProperty] string lunchInTime6 = string.Empty;
 
 
-        [ObservableProperty] string lunchOutTimeLeader = DateTime.Now.ToString("11:50");
-        [ObservableProperty] string lunchOutTime1 = DateTime.Now.ToString("11:55");
-        [ObservableProperty] string lunchOutTime2 = DateTime.Now.ToString("11:59");
+        [ObservableProperty] string lunchOutTimeLeader = string.Empty;
+        [ObservableProperty] string lunchOutTime1 = string.Empty;
+        [ObservableProperty] string lunchOutTime2 = string.Empty;
         [ObservableProperty] string lunchOutTime3 = string.Empty;
         [ObservableProperty] string lunchOutTime4 = string.Empty;
         [ObservableProperty] string lunchOutTime5 = string.Empty;
@@ -1239,11 +1236,11 @@ namespace FTCollectorApp.ViewModel
             Console.WriteLine("JobSaveEvent");
             try
             {
-                /*await LocationService.GetLocation();
+                await LocationService.GetLocation();
                 Session.accuracy = String.Format("{0:0.######}", LocationService.Coords.Accuracy);
                 Session.live_longitude = String.Format("{0:0.######}", LocationService.Coords.Longitude);
                 Session.live_lattitude = String.Format("{0:0.######}", LocationService.Coords.Latitude);
-                Session.altitude = String.Format("{0:0.######}", LocationService.Coords.Altitude);*/
+                Session.altitude = String.Format("{0:0.######}", LocationService.Coords.Altitude);
 
                 //DateTime dt = DateTime.Parse(sStartTime.Trim());
                 //int user_hours = int.Parse(dt.ToString("HH"));

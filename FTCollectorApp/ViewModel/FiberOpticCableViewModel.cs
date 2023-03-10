@@ -41,14 +41,16 @@ namespace FTCollectorApp.ViewModel
             string result = await CloudDBService.PostSaveFiberOpticCable(KVPair);
             if (result.Equals("OK"))
             {
-                var choice = await Application.Current.MainPage.DisplayAlert("Success", "Uploading Data Done", "TRACE", "DONE");
+                await Application.Current.MainPage.DisplayAlert("Success", "Uploading Data Done","DONE");
+
+                /*var choice = 
                 if (choice)
                 {
                     if (Session.stage.Equals("A"))
                         await Application.Current.MainPage.Navigation.PushAsync(new AsBuiltDocMenu());
                     if (Session.stage.Equals("I"))
                         await Application.Current.MainPage.Navigation.PushAsync(new MainMenuInstall());
-                }
+                }*/
             }
             else
             {
@@ -68,8 +70,7 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
-        [ObservableProperty]
-        string newCableName;
+        [ObservableProperty] string newCableName;
 
         //[ObservableProperty]
         //[AlsoNotifyChangeFor(nameof(CableTypeList))]
@@ -84,15 +85,9 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref selectedFiberCable, value);
                 if (value.CableIdDesc != null) {
-                    if (value.CableIdDesc.Equals("New")){
-                        NewFiber = true; 
-                        // add other TODO when New fiber cable selected
-                    }
-                    else
-                    {
-                        NewFiber = false;
-                    }
-                    OnPropertyChanged(nameof(NewFiber));
+                    IsNewCableSelected = value.CableIdDesc.Equals("New");
+                    OnPropertyChanged(nameof(CableTypeList));
+                    OnPropertyChanged(nameof(IsNewCableSelected));
                 }
             }
         }
@@ -166,8 +161,7 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
-        [ObservableProperty]
-        bool newFiber;
+        [ObservableProperty] bool isNewCableSelected;
 
         public ObservableCollection<AFiberCable> aFiberCableList
         {
@@ -205,19 +199,27 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<ModelDetail>();
                     var table = conn.Table<ModelDetail>().ToList();
+                    Console.WriteLine();
                     if (SelectedManufacturer?.ManufKey != null)
                         table = conn.Table<ModelDetail>().Where(a => a.ManufKey == SelectedManufacturer.ManufKey).ToList();
 
-                    foreach (var col in table)
+
+                    try
                     {
-                        col.ModelNumber = HttpUtility.HtmlDecode(col.ModelNumber); // should use for escape char 
-                        if (col.ModelCode1 == "") // sometimes this model entri is null
-                            col.ModelCode1 = col.ModelCode2;
-                        if (col.ModelCode2 == "")
-                            col.ModelCode2 = col.ModelCode1;
+                        foreach (var col in table)
+                        {
+                            col.ModelNumber = HttpUtility.HtmlDecode(col.ModelNumber); // should use for escape char 
+                            if (col.ModelCode1 == "") // sometimes this model entri is null
+                                col.ModelCode1 = col.ModelCode2;
+                            if (col.ModelCode2 == "")
+                                col.ModelCode2 = col.ModelCode1;
+                        }
                     }
-                    _modelDetailList = new ObservableCollection<ModelDetail>(table);
-                    return _modelDetailList;
+                    catch(Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                    return new ObservableCollection<ModelDetail>(table);
                 }
             }
         }
@@ -240,6 +242,7 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+        //[ObservableProperty] CableType selectedCableType;
         public ObservableCollection<CableType> CableTypeList
         {
             get
@@ -248,12 +251,34 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<CableType>();
                     var table = conn.Table<CableType>().ToList();
-                    if(SelectedFiberCable != null)
-                        table = conn.Table<CableType>().Where(a => a.CodeCableKey == SelectedFiberCable.CableType).ToList();
+                    Console.WriteLine();
                     return new ObservableCollection<CableType>(table);
                 }
             }
         }
+        /*public ObservableCollection<CableType> CableTypeList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<CableType>();
+                    var table = conn.Table<CableType>().ToList();
+                    Console.WriteLine();
+                    try
+                    {
+                        if (SelectedFiberCable != null)
+                            table = conn.Table<CableType>().Where(a => a.CodeCableKey == SelectedFiberCable.CableType).ToList();
+                        return new ObservableCollection<CableType>(table);
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine();
+                        return new ObservableCollection<CableType>();
+                    }
+                }
+            }
+        }*/
 
         public ObservableCollection<Sheath> SheathList
         {
@@ -263,6 +288,7 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<Sheath>();
                     var table = conn.Table<Sheath>().ToList();
+                    Console.WriteLine();
                     return new ObservableCollection<Sheath>(table);
                 }
             }
@@ -276,6 +302,7 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<FiberInstallType>();
                     var table = conn.Table<FiberInstallType>().ToList();
+                    Console.WriteLine();
                     return new ObservableCollection<FiberInstallType>(table);
                 }
             }
@@ -285,22 +312,11 @@ namespace FTCollectorApp.ViewModel
         //public ICommand SaveCommand { get; set; }
         //public ICommand SaveBackCommand { get; set; }
 
-        [ICommand]
-        async void ReturnToMain()
-        {
-            if (Session.stage.Equals("A"))
-                await Application.Current.MainPage.Navigation.PushAsync(new AsBuiltDocMenu());
-            if (Session.stage.Equals("I"))
-                await Application.Current.MainPage.Navigation.PushAsync(new MainMenuInstall());
-        }
         List<KeyValuePair<string, string>> keyvaluepair()
         {
 
             string CableName = string.Empty;
-            if (SelectedFiberCable?.CableIdDesc is null)
-                CableName = "NA";
-            else
-                CableName = SelectedFiberCable.CableIdDesc;
+
 
             //if (string.IsNullOrWhiteSpace(NewCableName) ? SelectedFiberCable.CableIdDesc : NewCableName;
 
@@ -314,7 +330,7 @@ namespace FTCollectorApp.ViewModel
                 color = "62.5";
 
             var keyValues = new List<KeyValuePair<string, string>>{
-                new KeyValuePair<string, string>("cable_id", CableName), // this is should be 
+                new KeyValuePair<string, string>("cable_id", NewCableName ), // this is should be 
                 new KeyValuePair<string, string>("manufacturer", SelectedManufacturer?.ManufKey is null ? "0" : SelectedManufacturer.ManufKey),
                 new KeyValuePair<string, string>("model", SelectedModelDetail?.ModelKey is null ? "0" : SelectedModelDetail.ModelKey ),
                 new KeyValuePair<string, string>("manufactured_date", SelectedManufacturedDate.ToString("yyyy-MM-dd")),

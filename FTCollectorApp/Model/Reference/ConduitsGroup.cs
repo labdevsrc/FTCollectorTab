@@ -10,7 +10,7 @@ namespace FTCollectorApp.Model.Reference
         [PrimaryKey, AutoIncrement]
         public int id { get; set; }
         public string ConduitKey { get; set; }
-
+        public string CreatedBy { get; set; }
         public string Direction { get; set; }
         public string DirCnt { get; set; }
         public string HosTagNumber { get; set; }
