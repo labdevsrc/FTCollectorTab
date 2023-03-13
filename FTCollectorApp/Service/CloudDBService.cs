@@ -76,10 +76,10 @@ namespace FTCollectorApp.Service
 
             return JsonConvert.DeserializeObject<T>(json);
         }
-        public static async Task PostJobEvent(string param1, string param2) => await PostJobEvent(param1, param2, "");
-        public static async Task PostJobEvent() => await PostJobEvent("", "", "");
-        public static async Task PostJobEvent(string odo) => await PostJobEvent("", odo, "");
-        public static async Task PostJobEvent(string param1, string param2, string perDiem)
+        public static async Task PostJobEvent(string param1, string param2) => await PostJobEvent(param1, param2, "", "");
+        public static async Task PostJobEvent() => await PostJobEvent("", "", "", "");
+        public static async Task PostJobEvent(string odo) => await PostJobEvent("", odo, "", "");
+        public static async Task PostJobEvent(string param1, string param2, string perDiem, string job_phase)
         {
 
             var keyValues = new List<KeyValuePair<string, string>>{
@@ -96,7 +96,7 @@ namespace FTCollectorApp.Service
                 // xSaveJobEvents.php Line 60 : $latitude =$_POST['lattitude2'];
                 new KeyValuePair<string, string>("manual_latti", Session.gps_sts == "1" ? "0":Session.manual_latti),
                 new KeyValuePair<string, string>("manual_longi", Session.gps_sts == "1" ? "0":Session.manual_longi),
-
+                new KeyValuePair<string, string>("job_phase", job_phase ),
                 // xSaveJobEvents.php Line 73 : $longitude=$_POST['longitude2'];
                 // xSaveJobEvents.php Line 74 : $latitude =$_POST['lattitude2'];
                 new KeyValuePair<string, string>("lattitude2", Session.live_lattitude),

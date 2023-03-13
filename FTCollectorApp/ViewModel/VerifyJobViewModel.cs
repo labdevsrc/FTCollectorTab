@@ -142,6 +142,8 @@ namespace FTCollectorApp.ViewModel
                     Session.jobnum = value.JobNumber;
                     Session.OwnerName = value.OwnerName;
 
+                    OnPropertyChanged(nameof(JobPhaseList));
+
                     // Put to property location
                     //Application.Current.Properties[JobNumberKey] = value.JobNumber;
                     //Application.Current.Properties[JobOwnerKey] = value.OwnerName;
@@ -161,8 +163,15 @@ namespace FTCollectorApp.ViewModel
             get
             {
                 var PhasesList = new List<string>();
-                for (int i = 0; i <  int.Parse(Session.phases) ; i++) {
-                    PhasesList.Add(i.ToString());
+                if (Session.phases != null)
+                {
+                    if (int.Parse(Session.phases) > 0)
+                    {
+                        for (int i = 0; i < int.Parse(Session.phases); i++)
+                        {
+                            PhasesList.Add(i.ToString());
+                        }
+                    }
                 }
                 return new ObservableCollection<string>(PhasesList);
             }
@@ -332,6 +341,7 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] string startTimeEmp5;
         [ObservableProperty] string startTimeEmp6;
 
+        [ObservableProperty] string leaderPhase;
         [ObservableProperty] string employee1Phase;
         [ObservableProperty] string employee2Phase;
         [ObservableProperty] string employee3Phase;
@@ -556,11 +566,12 @@ namespace FTCollectorApp.ViewModel
                             SelectedCrewInfoDetails.Add(new CrewInfoDetail
                             {
                                 id = 1, FullName = CrewLeader, TeamUserKey = Session.uid,
+                                Phase = LeaderPhase,
                                 StartTime = StartTimeLeader,
                             });
 
                             try {
-                                await CloudDBService.PostTimeSheet(Session.uid.ToString(), StartTimeLeader, "", PerDiemEmp1);
+                                await CloudDBService.PostTimeSheet(Session.uid.ToString(), StartTimeLeader, LeaderPhase, PerDiemEmp1);
                                 ErrorMessageCrew = "";
                             }
                             catch
@@ -1004,7 +1015,7 @@ namespace FTCollectorApp.ViewModel
 
                     //ODOPopupCommand.Execute(null);
 
-                    Session.event_type = "10"; // ClockOut
+                    Session.event_type = "10"; // Equipment out
                     await CloudDBService.PostJobEvent();
                     //await CloudDBService.PostTimeSheet(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), "12");
 

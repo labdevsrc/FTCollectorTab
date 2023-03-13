@@ -98,7 +98,7 @@ namespace FTCollectorApp.View
                 
 
 
-                await CloudDBService.PostJobEvent(user_hours.ToString(), user_minutes.ToString(), perDiemIdx);
+                await CloudDBService.PostJobEvent(user_hours.ToString(), user_minutes.ToString());
                 if (Session.crewCnt == 0)
                 {
                     // navigate directly to BeginWorkPate
