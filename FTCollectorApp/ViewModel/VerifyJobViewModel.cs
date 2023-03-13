@@ -137,6 +137,7 @@ namespace FTCollectorApp.ViewModel
                     Session.jobkey = QueryOwnerJobNumber.Select(a => a.JobKey).First();
                     Session.ownerCD = QueryOwnerJobNumber.Select(a => a.OWNER_CD).First();
                     Session.countycode = QueryOwnerJobNumber.Select(a => a.CountyCode).First();
+                    Session.phases = QueryOwnerJobNumber.Select(a => a.JobPhases).First();
                     Session.JobShowAll = QueryOwnerJobNumber.Select(a => a.ShowAll).First();
                     Session.jobnum = value.JobNumber;
                     Session.OwnerName = value.OwnerName;
@@ -153,6 +154,21 @@ namespace FTCollectorApp.ViewModel
 
             }
         }
+
+
+
+        public ObservableCollection<string> JobPhaseList {
+            get
+            {
+                var PhasesList = new List<string>();
+                for (int i = 0; i <  int.Parse(Session.phases) ; i++) {
+                    PhasesList.Add(i.ToString());
+                }
+                return new ObservableCollection<string>(PhasesList);
+            }
+        }
+
+
 
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(JobNumbers))]
@@ -316,12 +332,12 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] string startTimeEmp5;
         [ObservableProperty] string startTimeEmp6;
 
-        [ObservableProperty] string employee1Labor;
-        [ObservableProperty] string employee2Labor;
-        [ObservableProperty] string employee3Labor;
-        [ObservableProperty] string employee4Labor;
-        [ObservableProperty] string employee5Labor;
-        [ObservableProperty] string employee6Labor;
+        [ObservableProperty] string employee1Phase;
+        [ObservableProperty] string employee2Phase;
+        [ObservableProperty] string employee3Phase;
+        [ObservableProperty] string employee4Phase;
+        [ObservableProperty] string employee5Phase;
+        [ObservableProperty] string employee6Phase;
 
         [ObservableProperty] string errorMessageCrew = string.Empty;
 
@@ -544,7 +560,7 @@ namespace FTCollectorApp.ViewModel
                             });
 
                             try {
-                                await CloudDBService.PostTimeSheet(Session.uid.ToString(), StartTimeLeader, Employee1Labor, PerDiemEmp1);
+                                await CloudDBService.PostTimeSheet(Session.uid.ToString(), StartTimeLeader, "", PerDiemEmp1);
                                 ErrorMessageCrew = "";
                             }
                             catch
@@ -562,13 +578,13 @@ namespace FTCollectorApp.ViewModel
                                 id = 2,
                                 FullName = Employee1Name?.FullName,
                                 TeamUserKey = Employee1Name.TeamUserKey,
-                                StartTime = StartTimeEmp1, LaborClass = Employee1Labor, PerDiem = PerDiemEmp1
+                                StartTime = StartTimeEmp1, Phase = Employee1Phase, PerDiem = PerDiemEmp1
                             });
 
                             try
                             {
                                 await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(),
-                                    StartTimeEmp1, Employee1Labor, PerDiemEmp1);
+                                    StartTimeEmp1, Employee1Phase, PerDiemEmp1);
                                 ErrorMessageCrew = "";
                             }
                             catch
@@ -584,11 +600,12 @@ namespace FTCollectorApp.ViewModel
                             {
                                 id = 3,
                                 FullName = Employee2Name?.FullName, TeamUserKey = Employee2Name.TeamUserKey,
-                                StartTime = StartTimeEmp2, LaborClass = Employee2Labor, PerDiem = PerDiemEmp2
+                                StartTime = StartTimeEmp2,
+                                Phase = Employee2Phase, PerDiem = PerDiemEmp2
 
                             });
                             await CloudDBService.PostTimeSheet(Employee2Name?.TeamUserKey.ToString(),
-                                StartTimeEmp2, Employee2Labor, PerDiemEmp2);
+                                StartTimeEmp2, Employee2Phase, PerDiemEmp2);
 
                         }
 
@@ -600,12 +617,12 @@ namespace FTCollectorApp.ViewModel
                                 FullName = Employee3Name?.FullName,
                                 TeamUserKey = Employee3Name.TeamUserKey,
                                 StartTime = StartTimeEmp3,
-                                LaborClass = Employee3Labor,
+                                Phase = Employee3Phase,
                                 PerDiem = PerDiemEmp3
 
                             });
                             await CloudDBService.PostTimeSheet(Employee3Name?.TeamUserKey.ToString(),
-                                StartTimeEmp3, Employee3Labor, PerDiemEmp3);
+                                StartTimeEmp3, Employee3Phase, PerDiemEmp3);
 
                         }
 
@@ -617,11 +634,11 @@ namespace FTCollectorApp.ViewModel
                                 FullName = Employee4Name?.FullName,
                                 TeamUserKey = Employee4Name.TeamUserKey,
                                 StartTime = StartTimeEmp4,
-                                LaborClass = Employee4Labor,
+                                Phase = Employee4Phase,
                                 PerDiem = PerDiemEmp4
 
                             });
-                            await CloudDBService.PostTimeSheet(Employee4Name?.TeamUserKey.ToString(), StartTimeEmp4, Employee4Labor, PerDiemEmp4);
+                            await CloudDBService.PostTimeSheet(Employee4Name?.TeamUserKey.ToString(), StartTimeEmp4, Employee4Phase, PerDiemEmp4);
                         }
 
 
@@ -633,11 +650,11 @@ namespace FTCollectorApp.ViewModel
                                 FullName = Employee5Name?.FullName,
                                 TeamUserKey = Employee5Name.TeamUserKey,
                                 StartTime = StartTimeEmp5,
-                                LaborClass = Employee5Labor,
+                                Phase = Employee5Phase,
                                 PerDiem = PerDiemEmp5
 
                             });
-                            await CloudDBService.PostTimeSheet(Employee5Name?.TeamUserKey.ToString(), StartTimeEmp5, Employee5Labor, PerDiemEmp5);
+                            await CloudDBService.PostTimeSheet(Employee5Name?.TeamUserKey.ToString(), StartTimeEmp5, Employee5Phase, PerDiemEmp5);
                         }
 
                         if (Employee6Name?.FullName.Length > 1 && StartTimeEmp6.Length > 3)
@@ -648,12 +665,12 @@ namespace FTCollectorApp.ViewModel
                                 FullName = Employee6Name?.FullName,
                                 TeamUserKey = Employee6Name.TeamUserKey,
                                 StartTime = StartTimeEmp6,
-                                LaborClass = Employee6Labor,
+                                Phase = Employee6Phase,
                                 PerDiem = PerDiemEmp6
 
                             });
                             await CloudDBService.PostTimeSheet(Employee6Name?.TeamUserKey.ToString(),
-                                StartTimeEmp6, Employee6Labor, PerDiemEmp6);
+                                StartTimeEmp6, Employee6Phase, PerDiemEmp6);
                         }
 
 

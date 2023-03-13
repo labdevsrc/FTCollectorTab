@@ -27,5 +27,6 @@ namespace FTCollectorApp.Model
         public int UserId { get; set; } //FK
 
         public string TimesheetStatus { get; set; }
+        public string JobPhases { get; set; } = "1";
     }
 }

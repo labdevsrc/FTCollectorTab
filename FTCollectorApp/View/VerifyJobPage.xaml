@@ -336,8 +336,7 @@
                                     Title="Employee" FontSize="Small" TextColor="Black">
 
                             </Picker>
-                            <Picker  Grid.Row="2" Grid.Column="1" Title="Labor" 
-                                     SelectedIndex="{Binding Employee1Labor,Mode=TwoWay}" 
+                            <!--<Picker  Grid.Row="2" Grid.Column="1" Title="Labor" SelectedIndex="{Binding Employee1Labor,Mode=TwoWay}"
                                      TextColor="Black" >
                                 <Picker.Items>
                                     <x:String>Installer</x:String>
@@ -346,7 +345,11 @@
                                     <x:String>RCDD</x:String>
                                     <x:String>Designer</x:String>
                                 </Picker.Items>
-                            </Picker>
+                            </Picker>-->
+                            <local:Dropdown TextColor="Black"
+                                Grid.Row="2" Grid.Column="1" 
+                                ItemsSource="{Binding JobPhaseList}"
+                                            SelectedItem ="{Binding Employee1Phase, Mode=TwoWay}"/>
 
                             <Picker  Grid.Row="2" Grid.Column="2"  SelectedIndex ="{Binding Employee1IsDriver,Mode=TwoWay}"
                                      Title="Driver" TextColor="Black"  >
@@ -375,7 +378,7 @@
                                    ItemDisplayBinding="{Binding FullName}"
                                     
                                     FontSize="Small" TextColor="Black"/>
-                            <Picker Grid.Row="3" Grid.Column="1" SelectedIndex="{Binding Employee2Labor,Mode=TwoWay}" 
+                            <!--<Picker Grid.Row="3" Grid.Column="1" SelectedIndex="{Binding Employee2Labor,Mode=TwoWay}" 
                                     Title="Select labor" TextColor="Black" 
                                     >
                                 <Picker.Items>
@@ -385,7 +388,11 @@
                                     <x:String>RCDD</x:String>
                                     <x:String>Designer</x:String>
                                 </Picker.Items>
-                            </Picker>
+                            </Picker>-->
+                            <local:Dropdown TextColor="Black"
+                                Grid.Row="3" Grid.Column="1"
+                                ItemsSource="{Binding JobPhaseList}"
+                                            SelectedItem ="{Binding Employee2Phase, Mode=TwoWay}"/>                            
                             <Picker Grid.Row="3" Grid.Column="2" SelectedIndex ="{Binding Employee2IsDriver,Mode=TwoWay}"
                                     Title="Passenger"  TextColor="Black"  >
                                 <Picker.Items>
@@ -410,7 +417,7 @@
                                    SelectedItem="{Binding Employee3Name,Mode=TwoWay}"
                                    ItemDisplayBinding="{Binding FullName}"
                                     Title="Select Employee" FontSize="Small" TextColor="Black" />
-                            <Picker Grid.Row="4" Grid.Column="1" SelectedIndex="{Binding Employee3Labor,Mode=TwoWay}" 
+                            <!--<Picker Grid.Row="4" Grid.Column="1" SelectedIndex="{Binding Employee3Labor,Mode=TwoWay}" 
                                     Title="Select labor" TextColor="Black">
                                 <Picker.Items>
                                     <x:String>Installer</x:String>
@@ -419,7 +426,12 @@
                                     <x:String>RCDD</x:String>
                                     <x:String>Designer</x:String>
                                 </Picker.Items>
-                            </Picker>
+                            </Picker>-->
+                            <local:Dropdown TextColor="Black"
+                                Grid.Row="4" Grid.Column="1"
+                                ItemsSource="{Binding JobPhaseList}"
+                                            SelectedItem ="{Binding Employee3Phase, Mode=TwoWay}"/>
+
                             <Picker Grid.Row="4" Grid.Column="2"  SelectedIndex ="{Binding Employee3IsDriver,Mode=TwoWay}" 
                                     Title="Passenger" TextColor="Black" >
                                 <Picker.Items>
@@ -443,7 +455,7 @@
                                    SelectedItem="{Binding Employee4Name,Mode=TwoWay}"
                                    ItemDisplayBinding="{Binding FullName}"
                                     Title="Select Employee" FontSize="Small" TextColor="Black" />
-                            <Picker Grid.Row="5" Grid.Column="1" SelectedIndex="{Binding Employee4Labor,Mode=TwoWay}" 
+                            <!--<Picker Grid.Row="5" Grid.Column="1" SelectedIndex="{Binding Employee4Labor,Mode=TwoWay}" 
                                     Title="Select labor" TextColor="Black" >
                                 <Picker.Items>
                                     <x:String>Installer</x:String>
@@ -452,7 +464,11 @@
                                     <x:String>RCDD</x:String>
                                     <x:String>Designer</x:String>
                                 </Picker.Items>
-                            </Picker>
+                            </Picker>-->
+                            <local:Dropdown TextColor="Black"
+                                Grid.Row="5" Grid.Column="1"
+                                ItemsSource="{Binding JobPhaseList}"
+                                            SelectedItem ="{Binding Employee4Phase, Mode=TwoWay}"/>
                             <Picker Grid.Row="5" Grid.Column="2"  SelectedIndex ="{Binding Employee4IsDriver,Mode=TwoWay}" 
                                     Title="Passenger" TextColor="Black"  >
                                 <Picker.Items>
@@ -476,7 +492,7 @@
                                    ItemDisplayBinding="{Binding FullName}"
                                     
                                     Title="Select Employee" FontSize="Small" TextColor="Black" />
-                            <Picker Grid.Row="6" Grid.Column="1" SelectedIndex="{Binding Employee5Labor,Mode=TwoWay}"
+                            <!--<Picker Grid.Row="6" Grid.Column="1" SelectedIndex="{Binding Employee5Labor,Mode=TwoWay}"
                                     Title="Select labor" TextColor="Black">
                                 <Picker.Items>
                                     <x:String>Installer</x:String>
@@ -485,7 +501,11 @@
                                     <x:String>RCDD</x:String>
                                     <x:String>Designer</x:String>
                                 </Picker.Items>
-                            </Picker>
+                            </Picker>-->
+                            <local:Dropdown TextColor="Black"
+                                Grid.Row="6" Grid.Column="1"
+                                ItemsSource="{Binding JobPhaseList}"
+                                            SelectedItem ="{Binding Employee5Phase, Mode=TwoWay}"/>
                             <Picker Grid.Row="6" Grid.Column="2"  SelectedIndex ="{Binding Employee5IsDriver,Mode=TwoWay}"
                                     Title="Passenger" TextColor="Black"  >
                                 <Picker.Items>
@@ -511,7 +531,7 @@
                                    ItemDisplayBinding="{Binding FullName}"
                                     
                                     Title="Select Employee" FontSize="Small" TextColor="Black" />
-                            <Picker Grid.Row="7" Grid.Column="1" SelectedIndex="{Binding Employee6Labor,Mode=TwoWay}"
+                            <!--<Picker Grid.Row="7" Grid.Column="1" SelectedIndex="{Binding Employee6Labor,Mode=TwoWay}"
                                     Title="Select labor" TextColor="Black">
                                 <Picker.Items>
                                     <x:String>Installer</x:String>
@@ -520,7 +540,11 @@
                                     <x:String>RCDD</x:String>
                                     <x:String>Designer</x:String>
                                 </Picker.Items>
-                            </Picker>
+                            </Picker>-->
+                            <local:Dropdown TextColor="Black"
+                                Grid.Row="7" Grid.Column="1"
+                                ItemsSource="{Binding JobPhaseList}"
+                                            SelectedItem ="{Binding Employee6Phase, Mode=TwoWay}"/>
                             <Picker Grid.Row="7" Grid.Column="2"  SelectedIndex ="{Binding Employee6IsDriver,Mode=TwoWay}"
                                     Title="Passenger" TextColor="Black"  >
                                 <Picker.Items>

@@ -15,6 +15,8 @@ namespace FTCollectorApp.Model.Reference
         public string EndOfDayTime { get; set; }
 
         public string LaborClass { get; set; }
+        public string Phase { get; set; }
         public int PerDiem { get; set; }
+
     }
 }

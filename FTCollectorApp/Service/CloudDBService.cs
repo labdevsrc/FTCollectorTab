@@ -166,7 +166,7 @@ namespace FTCollectorApp.Service
             }
         }
 
-        public static async Task PostTimeSheet(string employeeid, string timeinput, string laboridx, int perdiemidx)
+        public static async Task PostTimeSheet(string employeeid, string timeinput, string job_phase, int perdiemidx)
         {
             try
             {
@@ -199,7 +199,8 @@ namespace FTCollectorApp.Service
 
                     new KeyValuePair<string, string>("ev_type", Session.event_type),
                     new KeyValuePair<string, string>("per_diem", perdiemidx.ToString()),
-                    new KeyValuePair<string, string>("labor_classification", laboridx ),
+                    new KeyValuePair<string, string>("job_phase", job_phase ),
+                    
                     //new KeyValuePair<string, string>("odometer", param2.ToString()), // only for sending odometer 
                 
                     new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
