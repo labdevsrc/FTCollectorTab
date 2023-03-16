@@ -76,6 +76,8 @@ namespace FTCollectorApp.Service
 
             return JsonConvert.DeserializeObject<T>(json);
         }
+
+        public static async Task PostJobEvent(string param1, string param2, string job_phase) => await PostJobEvent(param1, param2, "", job_phase);
         public static async Task PostJobEvent(string param1, string param2) => await PostJobEvent(param1, param2, "", "");
         public static async Task PostJobEvent() => await PostJobEvent("", "", "", "");
         public static async Task PostJobEvent(string odo) => await PostJobEvent("", odo, "", "");
@@ -662,7 +664,7 @@ namespace FTCollectorApp.Service
         }
 
 
-        public static async Task SaveCrewdata(string OWNER_CD, string name1, string name2, string name3, string name4, string name5, string name6, string diem1, string diem2, string diem3, string diem4, string diem5, string diem6, string driver11, string driver12, string driver13, string driver14, string driver15, string driver16)
+        public static async Task SaveCrewdata(string OWNER_CD, string job_phase, string name1, string name2, string name3, string name4, string name5, string name6, string diem1, string diem2, string diem3, string diem4, string diem5, string diem6, string driver11, string driver12, string driver13, string driver14, string driver15, string driver16)
         {
 
             var keyValues = new List<KeyValuePair<string, string>>{
@@ -671,6 +673,7 @@ namespace FTCollectorApp.Service
                 new KeyValuePair<string, string>("jobnum", Session.jobnum),
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
                 new KeyValuePair<string, string>("OWNER_CD", OWNER_CD),
+                new KeyValuePair<string, string>("job_phase",job_phase ),
                 new KeyValuePair<string, string>("name1", name1),
                 new KeyValuePair<string, string>("name2", name2),
                 new KeyValuePair<string, string>("name3", name3),

@@ -167,7 +167,7 @@ namespace FTCollectorApp.ViewModel
                 {
                     if (int.Parse(Session.phases) > 0)
                     {
-                        for (int i = 0; i < int.Parse(Session.phases); i++)
+                        for (int i = 1; i <= int.Parse(Session.phases); i++)
                         {
                             PhasesList.Add(i.ToString());
                         }
@@ -333,21 +333,98 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] int perDiemEmp5 = 0;
         [ObservableProperty] int perDiemEmp6 = 0;
 
-        [ObservableProperty] string startTimeLeader;
-        [ObservableProperty] string startTimeEmp1;
-        [ObservableProperty] string startTimeEmp2;
-        [ObservableProperty] string startTimeEmp3;
-        [ObservableProperty] string startTimeEmp4;
-        [ObservableProperty] string startTimeEmp5;
-        [ObservableProperty] string startTimeEmp6;
+        [ObservableProperty] bool isTimeLeaderInvalid = false;
+        [ObservableProperty] bool isTimeEmp1Invalid = false;
+        [ObservableProperty] bool isTimeEmp2Invalid = false;
+        [ObservableProperty] bool isTimeEmp3Invalid = false;
+        [ObservableProperty] bool isTimeEmp4Invalid = false;
+        [ObservableProperty] bool isTimeEmp5Invalid = false;
+        [ObservableProperty] bool isTimeEmp6Invalid = false;
 
-        [ObservableProperty] string leaderPhase;
-        [ObservableProperty] string employee1Phase;
-        [ObservableProperty] string employee2Phase;
-        [ObservableProperty] string employee3Phase;
-        [ObservableProperty] string employee4Phase;
-        [ObservableProperty] string employee5Phase;
-        [ObservableProperty] string employee6Phase;
+        string startTimeLeader = string.Empty;
+        public string? StartTimeLeader 
+        {
+            get => startTimeLeader;
+            set
+            {
+                SetProperty(ref startTimeLeader, value);
+                IsTimeLeaderInvalid = !IsValidTimeFormat(startTimeLeader);
+            }
+        }
+
+        string startTimeEmp1 = string.Empty;
+        public string? StartTimeEmp1
+        {
+            get => startTimeEmp1;
+            set
+            {
+                SetProperty(ref startTimeEmp1, value);
+                IsTimeEmp1Invalid = !IsValidTimeFormat(startTimeEmp1);
+            }
+        }
+
+        string startTimeEmp2 = string.Empty;
+        public string? StartTimeEmp2
+        {
+            get => startTimeEmp2;
+            set
+            {
+                SetProperty(ref startTimeEmp2, value);
+                IsTimeEmp2Invalid = !IsValidTimeFormat(startTimeEmp2);
+            }
+        }
+
+        string startTimeEmp3 = string.Empty;
+        public string? StartTimeEmp3
+        {
+            get => startTimeEmp3;
+            set
+            {
+                SetProperty(ref startTimeEmp3, value);
+                IsTimeEmp3Invalid = !IsValidTimeFormat(startTimeEmp3);
+            }
+        }
+
+        string startTimeEmp4 = string.Empty;
+        public string? StartTimeEmp4
+        {
+            get => startTimeEmp4;
+            set
+            {
+                SetProperty(ref startTimeEmp4, value);
+                IsTimeEmp4Invalid = !IsValidTimeFormat(startTimeEmp4);
+            }
+        }
+
+        string startTimeEmp5 = string.Empty;
+        public string? StartTimeEmp5
+        {
+            get => startTimeEmp5;
+            set
+            {
+                SetProperty(ref startTimeEmp5, value);
+                IsTimeEmp5Invalid = !IsValidTimeFormat(startTimeEmp5);
+            }
+        }
+
+        string startTimeEmp6 = string.Empty;
+        public string? StartTimeEmp6
+        {
+            get => startTimeEmp6;
+            set
+            {
+                SetProperty(ref startTimeEmp6, value);
+                IsTimeEmp6Invalid = !IsValidTimeFormat(startTimeEmp6);
+            }
+        }
+
+        public bool IsValidTimeFormat(string input)
+        {
+            TimeSpan dummyOutput;
+            return TimeSpan.TryParse(input, out dummyOutput);
+        }
+
+        [ObservableProperty] string selectedPhase;
 
         [ObservableProperty] string errorMessageCrew = string.Empty;
 
@@ -566,12 +643,12 @@ namespace FTCollectorApp.ViewModel
                             SelectedCrewInfoDetails.Add(new CrewInfoDetail
                             {
                                 id = 1, FullName = CrewLeader, TeamUserKey = Session.uid,
-                                Phase = LeaderPhase,
+                                Phase = SelectedPhase,
                                 StartTime = StartTimeLeader,
                             });
 
                             try {
-                                await CloudDBService.PostTimeSheet(Session.uid.ToString(), StartTimeLeader, LeaderPhase, PerDiemEmp1);
+                                await CloudDBService.PostTimeSheet(Session.uid.ToString(), StartTimeLeader, SelectedPhase, PerDiemEmp1);
                                 ErrorMessageCrew = "";
                             }
                             catch
@@ -589,13 +666,13 @@ namespace FTCollectorApp.ViewModel
                                 id = 2,
                                 FullName = Employee1Name?.FullName,
                                 TeamUserKey = Employee1Name.TeamUserKey,
-                                StartTime = StartTimeEmp1, Phase = Employee1Phase, PerDiem = PerDiemEmp1
+                                StartTime = StartTimeEmp1, Phase = SelectedPhase, PerDiem = PerDiemEmp1
                             });
 
                             try
                             {
                                 await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(),
-                                    StartTimeEmp1, Employee1Phase, PerDiemEmp1);
+                                    StartTimeEmp1, SelectedPhase, PerDiemEmp1);
                                 ErrorMessageCrew = "";
                             }
                             catch
@@ -612,11 +689,11 @@ namespace FTCollectorApp.ViewModel
                                 id = 3,
                                 FullName = Employee2Name?.FullName, TeamUserKey = Employee2Name.TeamUserKey,
                                 StartTime = StartTimeEmp2,
-                                Phase = Employee2Phase, PerDiem = PerDiemEmp2
+                                Phase = SelectedPhase, PerDiem = PerDiemEmp2
 
                             });
                             await CloudDBService.PostTimeSheet(Employee2Name?.TeamUserKey.ToString(),
-                                StartTimeEmp2, Employee2Phase, PerDiemEmp2);
+                                StartTimeEmp2, SelectedPhase, PerDiemEmp2);
 
                         }
 
@@ -628,12 +705,12 @@ namespace FTCollectorApp.ViewModel
                                 FullName = Employee3Name?.FullName,
                                 TeamUserKey = Employee3Name.TeamUserKey,
                                 StartTime = StartTimeEmp3,
-                                Phase = Employee3Phase,
+                                Phase = SelectedPhase,
                                 PerDiem = PerDiemEmp3
 
                             });
                             await CloudDBService.PostTimeSheet(Employee3Name?.TeamUserKey.ToString(),
-                                StartTimeEmp3, Employee3Phase, PerDiemEmp3);
+                                StartTimeEmp3, SelectedPhase, PerDiemEmp3);
 
                         }
 
@@ -645,11 +722,11 @@ namespace FTCollectorApp.ViewModel
                                 FullName = Employee4Name?.FullName,
                                 TeamUserKey = Employee4Name.TeamUserKey,
                                 StartTime = StartTimeEmp4,
-                                Phase = Employee4Phase,
+                                Phase = SelectedPhase,
                                 PerDiem = PerDiemEmp4
 
                             });
-                            await CloudDBService.PostTimeSheet(Employee4Name?.TeamUserKey.ToString(), StartTimeEmp4, Employee4Phase, PerDiemEmp4);
+                            await CloudDBService.PostTimeSheet(Employee4Name?.TeamUserKey.ToString(), StartTimeEmp4, SelectedPhase, PerDiemEmp4);
                         }
 
 
@@ -661,11 +738,11 @@ namespace FTCollectorApp.ViewModel
                                 FullName = Employee5Name?.FullName,
                                 TeamUserKey = Employee5Name.TeamUserKey,
                                 StartTime = StartTimeEmp5,
-                                Phase = Employee5Phase,
+                                Phase = SelectedPhase,
                                 PerDiem = PerDiemEmp5
 
                             });
-                            await CloudDBService.PostTimeSheet(Employee5Name?.TeamUserKey.ToString(), StartTimeEmp5, Employee5Phase, PerDiemEmp5);
+                            await CloudDBService.PostTimeSheet(Employee5Name?.TeamUserKey.ToString(), StartTimeEmp5, SelectedPhase, PerDiemEmp5);
                         }
 
                         if (Employee6Name?.FullName.Length > 1 && StartTimeEmp6.Length > 3)
@@ -676,12 +753,12 @@ namespace FTCollectorApp.ViewModel
                                 FullName = Employee6Name?.FullName,
                                 TeamUserKey = Employee6Name.TeamUserKey,
                                 StartTime = StartTimeEmp6,
-                                Phase = Employee6Phase,
+                                Phase = SelectedPhase,
                                 PerDiem = PerDiemEmp6
 
                             });
                             await CloudDBService.PostTimeSheet(Employee6Name?.TeamUserKey.ToString(),
-                                StartTimeEmp6, Employee6Phase, PerDiemEmp6);
+                                StartTimeEmp6, SelectedPhase, PerDiemEmp6);
                         }
 
 
@@ -690,8 +767,9 @@ namespace FTCollectorApp.ViewModel
 
 
                         Session.event_type = "3";  //crew assembled
-                        await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString());
-                        await CloudDBService.SaveCrewdata(Session.ownerCD,
+                        await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase);
+                        //await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString());
+                        await CloudDBService.SaveCrewdata(Session.ownerCD, SelectedPhase,
                             Employee1Name?.TeamUserKey.ToString(),
                             Employee2Name?.TeamUserKey.ToString(),
                             Employee3Name?.TeamUserKey.ToString(), Employee4Name?.TeamUserKey.ToString(),
@@ -730,10 +808,10 @@ namespace FTCollectorApp.ViewModel
                 canExecute: () =>
                 {
                     Console.WriteLine();
-                    return true;
-                    //return Employee1Name?.FullName.Length > 1 || Employee2Name?.FullName.Length > 1 ||
-                    //        Employee3Name?.FullName.Length > 1 || Employee4Name?.FullName.Length > 1 ||
-                    //        Employee5Name?.FullName.Length > 1 || Employee6Name?.FullName.Length > 1;
+                    //return true;
+                    return Employee1Name?.FullName.Length > 1 || Employee2Name?.FullName.Length > 1 ||
+                            Employee3Name?.FullName.Length > 1 || Employee4Name?.FullName.Length > 1 ||
+                            Employee5Name?.FullName.Length > 1 || Employee6Name?.FullName.Length > 1;
                 }
             );
 
@@ -1071,7 +1149,7 @@ namespace FTCollectorApp.ViewModel
                     IsBusy = true;
                     try
                     {
-                        await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString());
+                        await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase);
                         var speaker = DependencyService.Get<ITextToSpeech>();
                         speaker?.Speak("Job verified!");
 
@@ -1102,13 +1180,99 @@ namespace FTCollectorApp.ViewModel
 
         }
 
-        [ObservableProperty] string lunchInTimeLeader = string.Empty;
+        [ObservableProperty] bool isLITimeLeaderInvalid = false;
+        [ObservableProperty] bool isLITimeEmp1Invalid = false;
+        [ObservableProperty] bool isLITimeEmp2Invalid = false;
+        [ObservableProperty] bool isLITimeEmp3Invalid = false;
+        [ObservableProperty] bool isLITimeEmp4Invalid = false;
+        [ObservableProperty] bool isLITimeEmp5Invalid = false;
+        [ObservableProperty] bool isLITimeEmp6Invalid = false;
+
+        string lunchInTimeLeader;
+        public string? LunchInTimeLeader
+        {
+            get => lunchInTimeLeader;
+            set
+            {
+                SetProperty(ref lunchInTimeLeader, value);
+                IsLITimeLeaderInvalid = !IsValidTimeFormat(lunchInTimeLeader);
+            }
+        }
+
+        string lunchInTime1;
+        public string? LunchInTime1
+        {
+            get => lunchInTime1;
+            set
+            {
+                SetProperty(ref lunchInTime1, value);
+                IsLITimeEmp1Invalid = !IsValidTimeFormat(lunchInTime1);
+            }
+        }
+
+        string lunchInTime2;
+        public string? LunchInTime2
+        {
+            get => lunchInTime2;
+            set
+            {
+                SetProperty(ref lunchInTime2, value);
+                IsLITimeEmp2Invalid = !IsValidTimeFormat(lunchInTime2);
+            }
+        }
+
+        string lunchInTime3;
+        public string? LunchInTime3
+        {
+            get => lunchInTime3;
+            set
+            {
+                SetProperty(ref lunchInTime3, value);
+                IsLITimeEmp3Invalid = !IsValidTimeFormat(lunchInTime3);
+            }
+        }
+
+        string lunchInTime4;
+        public string? LunchInTime4
+        {
+            get => lunchInTime4;
+            set
+            {
+                SetProperty(ref lunchInTime4, value);
+                IsLITimeEmp4Invalid = !IsValidTimeFormat(lunchInTime4);
+            }
+        }
+
+        string lunchInTime5;
+        public string? LunchInTime5
+        {
+            get => lunchInTime5;
+            set
+            {
+                SetProperty(ref lunchInTime5, value);
+                IsLITimeEmp5Invalid = !IsValidTimeFormat(lunchInTime5);
+            }
+        }
+
+        string lunchInTime6;
+        public string? LunchInTime6
+        {
+            get => lunchInTime6;
+            set
+            {
+                SetProperty(ref lunchInTime6, value);
+                IsLITimeEmp6Invalid = !IsValidTimeFormat(lunchInTime6);
+            }
+        }
+
+
+        /*[ObservableProperty] string lunchInTimeLeader = string.Empty;
         [ObservableProperty] string lunchInTime1 = string.Empty;
         [ObservableProperty] string lunchInTime2 = string.Empty;
         [ObservableProperty] string lunchInTime3 = string.Empty;
         [ObservableProperty] string lunchInTime4 = string.Empty;
         [ObservableProperty] string lunchInTime5 = string.Empty;
-        [ObservableProperty] string lunchInTime6 = string.Empty;
+        [ObservableProperty] string lunchInTime6 = string.Empty;*/
 
 
         [ObservableProperty] string lunchOutTimeLeader = string.Empty;
@@ -1152,7 +1316,7 @@ namespace FTCollectorApp.ViewModel
         }
         List<CrewInfoDetail> SelectedCrewInfoDetails = new List<CrewInfoDetail>();
 
-        [ObservableProperty] CrewInfoDetail employee5Name;
+
         [ObservableProperty] CrewInfoDetail employee6Name;
         private CrewInfoDetail employee1Name;
         public CrewInfoDetail Employee1Name
@@ -1161,7 +1325,7 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref employee1Name, value);
-                StartTimeEmp1 = DateTime.Now.ToString("HH:mm");
+                //StartTimeEmp1 = DateTime.Now.ToString("HH:mm");
                 (CrewSaveCommand as Command).ChangeCanExecute();
             }
         }
@@ -1173,7 +1337,7 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref employee2Name, value);
-                StartTimeEmp2 = DateTime.Now.ToString("HH:mm");
+                //StartTimeEmp2 = DateTime.Now.ToString("HH:mm");
                 (CrewSaveCommand as Command).ChangeCanExecute();
             }
         }
@@ -1185,7 +1349,7 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref employee3Name, value);
-                StartTimeEmp3 = DateTime.Now.ToString("HH:mm");
+                //StartTimeEmp3 = DateTime.Now.ToString("HH:mm");
                 (CrewSaveCommand as Command).ChangeCanExecute();
             }
         }
@@ -1197,11 +1361,21 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref employee4Name, value);
-                StartTimeEmp4 = DateTime.Now.ToString("HH:mm");
+                //StartTimeEmp4 = DateTime.Now.ToString("HH:mm");
                 (CrewSaveCommand as Command).ChangeCanExecute();
             }
         }
-
+        private CrewInfoDetail employee5Name;
+        public CrewInfoDetail Employee5Name
+        {
+            get => employee5Name;
+            set
+            {
+                SetProperty(ref employee5Name, value);
+                //StartTimeEmp4 = DateTime.Now.ToString("HH:mm");
+                (CrewSaveCommand as Command).ChangeCanExecute();
+            }
+        }
 
 
         [ObservableProperty] int employee1IsDriver = 0;

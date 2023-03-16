@@ -108,7 +108,7 @@ namespace FTCollectorApp.View
                 String driver16 = "";
 
                 IsBusy = true;
-                await CloudDBService.SaveCrewdata( OWNER_CD, name1, name2, name3, name4, name5, name6, diem1, diem2, diem3, diem4, diem5, diem6, driver11, driver12, driver13, driver14, driver15, driver16);
+                await CloudDBService.SaveCrewdata( OWNER_CD, "1",name1, name2, name3, name4, name5, name6, diem1, diem2, diem3, diem4, diem5, diem6, driver11, driver12, driver13, driver14, driver15, driver16);
                 IsBusy = false;
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {

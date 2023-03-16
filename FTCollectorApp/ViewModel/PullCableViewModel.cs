@@ -24,8 +24,8 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] Site selectedSiteIn;
         [ObservableProperty] ConduitsGroup selectedDuctOut;
         [ObservableProperty] ConduitsGroup selectedDuctIn;
-        [ObservableProperty] string sheathInCnt="0";
-        [ObservableProperty] string sheathOutCnt="0";
+        [ObservableProperty] string sheathOutNumber = string.Empty;
+        [ObservableProperty] string sheathInNumber = string.Empty;
 
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(CableIdByTypeList))]
@@ -35,7 +35,7 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] AFiberCable selectedCableId;
         public ObservableCollection<CableType> CableTypeList
         {
-            get 
+            get
             {
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
@@ -121,11 +121,18 @@ namespace FTCollectorApp.ViewModel
                     conn.CreateTable<Site>();
                     Console.WriteLine();
                     var table = conn.Table<Site>().Where(a => a.OwnerKey == Session.ownerkey && a.JobNumber == Session.jobnum).ToList();
+                    foreach (var col in table)
+                    {
+                        if (col.SiteName == null)
+                            col.SiteName = col.TagNumber;
+                    }
+
                     Console.WriteLine();
                     return new ObservableCollection<Site>(table);
                 }
             }
         }
+
 
 
         public ObservableCollection<ConduitsGroup> DuctInOutList
@@ -135,14 +142,20 @@ namespace FTCollectorApp.ViewModel
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<ConduitsGroup>();
-                    Console.WriteLine(); 
+                    Console.WriteLine();
                     try
                     {
                         string CreatorID = Session.uid.ToString();
-                        var table = conn.Table<ConduitsGroup>().Where(a => a.OwnerKey == Session.ownerkey && a.CreatedBy == CreatorID).ToList();
+                        var table = conn.Table<ConduitsGroup>().Where(a => a.OwnerKey == Session.ownerkey
+                        && a.CreatedBy == CreatorID).GroupBy(a => a.HosTagNumber).First().ToList();
                         Console.WriteLine();
+
+                        if (SelectedDuctIn?.HosTagNumber != null)
+                            table = conn.Table<ConduitsGroup>().Where(a => a.HosTagNumber
+                            == SelectedDuctIn.HosTagNumber).ToList();
                         return new ObservableCollection<ConduitsGroup>(table);
-                    }catch(Exception e)
+                    }
+                    catch (Exception e)
                     {
                         Console.WriteLine(e);
                     }
@@ -150,6 +163,8 @@ namespace FTCollectorApp.ViewModel
                 }
             }
         }
+
+
 
         [ObservableProperty] string loadingText = "";
         [ObservableProperty] bool isBusy = false;
@@ -175,7 +190,14 @@ namespace FTCollectorApp.ViewModel
         public PullCableViewModel()
         {
             Console.WriteLine();
-            SyncAWSDB();
+            try
+            {
+                SyncAWSDB();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
 
@@ -223,15 +245,20 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("jobnum", Session.jobnum), //  7 
                 new KeyValuePair<string, string>("stage", Session.stage),
 
-                new KeyValuePair<string, string>("cable_id_key", SelectedFiberCable.AFRKey), 
+                new KeyValuePair<string, string>("cable_id_key", SelectedFiberCable.AFRKey),
                 new KeyValuePair<string, string>("to_duct", SelectedDuctOut.ConduitKey),
                 new KeyValuePair<string, string>("from_duct", SelectedDuctIn.ConduitKey),
+                new KeyValuePair<string, string>("to_duct_dir", SelectedDuctOut.ConduitKey),
+                new KeyValuePair<string, string>("from_duct_dir", SelectedDuctIn.ConduitKey),
+                new KeyValuePair<string, string>("to_duct_dir_cnt", SelectedDuctOut.ConduitKey),
+                new KeyValuePair<string, string>("from_duct_dir_cnt", SelectedDuctIn.ConduitKey),
+
                 new KeyValuePair<string, string>("to_tagnumber", SelectedSiteIn.TagNumber),
                 new KeyValuePair<string, string>("from_tagnumber", SelectedSiteOut.TagNumber),
                 new KeyValuePair<string, string>("cabletype", SelectedCableType.CodeCableKey),
-                new KeyValuePair<string, string>("install", SelectedSiteOut.TagNumber),
-                new KeyValuePair<string, string>("sheathout", SheathOutCnt.ToString()),
-                new KeyValuePair<string, string>("sheathin", SelectedSiteOut.ToString()),
+                new KeyValuePair<string, string>("install", SelectedInstallType.FbrInstallKey),
+                new KeyValuePair<string, string>("sheathout", SheathOutNumber),
+                new KeyValuePair<string, string>("sheathin", SheathInNumber),
             };
             return keyValues;
         }
