@@ -326,6 +326,10 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         string entryOdometer;
 
+        [ObservableProperty] string selectedCrewForEq;
+        [ObservableProperty] string crewEqIndex;
+
+
         [ObservableProperty] int perDiemEmp1 = 0;
         [ObservableProperty] int perDiemEmp2 = 0;
         [ObservableProperty] int perDiemEmp3 = 0;
@@ -333,90 +337,13 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] int perDiemEmp5 = 0;
         [ObservableProperty] int perDiemEmp6 = 0;
 
-        [ObservableProperty] bool isTimeLeaderInvalid = false;
-        [ObservableProperty] bool isTimeEmp1Invalid = false;
-        [ObservableProperty] bool isTimeEmp2Invalid = false;
-        [ObservableProperty] bool isTimeEmp3Invalid = false;
-        [ObservableProperty] bool isTimeEmp4Invalid = false;
-        [ObservableProperty] bool isTimeEmp5Invalid = false;
-        [ObservableProperty] bool isTimeEmp6Invalid = false;
-
-        string startTimeLeader = string.Empty;
-        public string? StartTimeLeader 
-        {
-            get => startTimeLeader;
-            set
-            {
-                SetProperty(ref startTimeLeader, value);
-                IsTimeLeaderInvalid = !IsValidTimeFormat(startTimeLeader);
-            }
-        }
-
-        string startTimeEmp1 = string.Empty;
-        public string? StartTimeEmp1
-        {
-            get => startTimeEmp1;
-            set
-            {
-                SetProperty(ref startTimeEmp1, value);
-                IsTimeEmp1Invalid = !IsValidTimeFormat(startTimeEmp1);
-            }
-        }
-
-        string startTimeEmp2 = string.Empty;
-        public string? StartTimeEmp2
-        {
-            get => startTimeEmp2;
-            set
-            {
-                SetProperty(ref startTimeEmp2, value);
-                IsTimeEmp2Invalid = !IsValidTimeFormat(startTimeEmp2);
-            }
-        }
-
-        string startTimeEmp3 = string.Empty;
-        public string? StartTimeEmp3
-        {
-            get => startTimeEmp3;
-            set
-            {
-                SetProperty(ref startTimeEmp3, value);
-                IsTimeEmp3Invalid = !IsValidTimeFormat(startTimeEmp3);
-            }
-        }
-
-        string startTimeEmp4 = string.Empty;
-        public string? StartTimeEmp4
-        {
-            get => startTimeEmp4;
-            set
-            {
-                SetProperty(ref startTimeEmp4, value);
-                IsTimeEmp4Invalid = !IsValidTimeFormat(startTimeEmp4);
-            }
-        }
-
-        string startTimeEmp5 = string.Empty;
-        public string? StartTimeEmp5
-        {
-            get => startTimeEmp5;
-            set
-            {
-                SetProperty(ref startTimeEmp5, value);
-                IsTimeEmp5Invalid = !IsValidTimeFormat(startTimeEmp5);
-            }
-        }
-
-        string startTimeEmp6 = string.Empty;
-        public string? StartTimeEmp6
-        {
-            get => startTimeEmp6;
-            set
-            {
-                SetProperty(ref startTimeEmp6, value);
-                IsTimeEmp6Invalid = !IsValidTimeFormat(startTimeEmp6);
-            }
-        }
+        [ObservableProperty] string startTimeLeader = string.Empty;
+        [ObservableProperty] string startTimeEmp1 = string.Empty;
+        [ObservableProperty] string startTimeEmp2 = string.Empty;
+        [ObservableProperty] string startTimeEmp3 = string.Empty;
+        [ObservableProperty] string startTimeEmp4 = string.Empty;
+        [ObservableProperty] string startTimeEmp5 = string.Empty;
+        [ObservableProperty] string startTimeEmp6 = string.Empty;
 
         public bool IsValidTimeFormat(string input)
         {
@@ -638,7 +565,7 @@ namespace FTCollectorApp.ViewModel
                         Console.WriteLine();
 
                         // Put to list view
-                        if (StartTimeLeader.Length > 3 && StartTimeLeader.Length > 3)
+                        if (StartTimeLeader.Length >= 3)
                         {
                             SelectedCrewInfoDetails.Add(new CrewInfoDetail
                             {
@@ -649,17 +576,15 @@ namespace FTCollectorApp.ViewModel
 
                             try {
                                 await CloudDBService.PostTimeSheet(Session.uid.ToString(), StartTimeLeader, SelectedPhase, PerDiemEmp1);
-                                ErrorMessageCrew = "";
                             }
                             catch
                             {
-                                ErrorMessageCrew = "Invalid format (HH:MM)";
                                 Console.WriteLine();
                             }
                         }
 
-
-                        if (Employee1Name?.FullName.Length > 1 && StartTimeEmp1.Length > 3)
+                        
+                        if (Employee1Name?.FullName.Length > 1 && StartTimeEmp1.Length >= 3)
                         {
                             SelectedCrewInfoDetails.Add(new CrewInfoDetail
                             {
@@ -673,16 +598,14 @@ namespace FTCollectorApp.ViewModel
                             {
                                 await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(),
                                     StartTimeEmp1, SelectedPhase, PerDiemEmp1);
-                                ErrorMessageCrew = "";
                             }
                             catch
                             {
-                                ErrorMessageCrew = "Invalid format (HH:MM)";
                                 Console.WriteLine();
                             }
                         }
 
-                        if (Employee2Name?.FullName.Length > 1 && StartTimeEmp2.Length > 3)
+                        if (Employee2Name?.FullName.Length > 1 && StartTimeEmp2.Length >= 3)
                         {
                             SelectedCrewInfoDetails.Add(new CrewInfoDetail
                             {
@@ -697,7 +620,7 @@ namespace FTCollectorApp.ViewModel
 
                         }
 
-                        if (Employee3Name?.FullName.Length > 1 && StartTimeEmp3.Length > 3)
+                        if (Employee3Name?.FullName.Length > 1 && StartTimeEmp3.Length >= 3)
                         {
                             SelectedCrewInfoDetails.Add(new CrewInfoDetail
                             {
@@ -714,7 +637,7 @@ namespace FTCollectorApp.ViewModel
 
                         }
 
-                        if (Employee4Name?.FullName.Length > 1 && StartTimeEmp4.Length > 3)
+                        if (Employee4Name?.FullName.Length > 1 && StartTimeEmp4.Length >= 3)
                         {
                             SelectedCrewInfoDetails.Add(new CrewInfoDetail
                             {
@@ -730,7 +653,7 @@ namespace FTCollectorApp.ViewModel
                         }
 
 
-                        if (Employee5Name?.FullName.Length > 1 && StartTimeEmp5.Length > 3)
+                        if (Employee5Name?.FullName.Length > 1 && StartTimeEmp5.Length >= 3)
                         {
                             SelectedCrewInfoDetails.Add(new CrewInfoDetail
                             {
@@ -745,7 +668,7 @@ namespace FTCollectorApp.ViewModel
                             await CloudDBService.PostTimeSheet(Employee5Name?.TeamUserKey.ToString(), StartTimeEmp5, SelectedPhase, PerDiemEmp5);
                         }
 
-                        if (Employee6Name?.FullName.Length > 1 && StartTimeEmp6.Length > 3)
+                        if (Employee6Name?.FullName.Length > 1 && StartTimeEmp6.Length >= 3)
                         {
                             SelectedCrewInfoDetails.Add(new CrewInfoDetail
                             {
@@ -824,35 +747,35 @@ namespace FTCollectorApp.ViewModel
                     {
                         var tmp = SelectedCrewInfoDetails.Where(a => a.id == 1).First();
 
-                        await CloudDBService.PostTimeSheet(Session.uid.ToString(), LunchOutTimeLeader, "", 0);
+                        await CloudDBService.PostTimeSheet(Session.uid.ToString(), LunchOutTimeLeader, SelectedPhase, 0);
                     }
 
                     if (Employee1Name?.FullName.Length > 1 && LunchOutTime1.Length > 3)
                     {
-                        await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(), LunchOutTime1, "", 0);
+                        await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(), LunchOutTime1, SelectedPhase, 0);
                     }
 
                     if (Employee2Name?.FullName.Length > 1 && LunchOutTime2.Length > 3)
                     {
-                        await CloudDBService.PostTimeSheet(Employee2Name?.TeamUserKey.ToString(), LunchOutTime2, "", 0);
+                        await CloudDBService.PostTimeSheet(Employee2Name?.TeamUserKey.ToString(), LunchOutTime2, SelectedPhase, 0);
                     }
 
                     if (Employee3Name?.FullName.Length > 1 && LunchOutTime3.Length > 3)
                     {
-                        await CloudDBService.PostTimeSheet(Employee3Name?.TeamUserKey.ToString(), LunchOutTime3, "", 0);
+                        await CloudDBService.PostTimeSheet(Employee3Name?.TeamUserKey.ToString(), LunchOutTime3, SelectedPhase, 0);
                     }
                     if (Employee4Name?.FullName.Length > 1 && LunchOutTime4.Length > 3)
                     {
-                        await CloudDBService.PostTimeSheet(Employee4Name?.TeamUserKey.ToString(), LunchOutTime4, "", 0);
+                        await CloudDBService.PostTimeSheet(Employee4Name?.TeamUserKey.ToString(), LunchOutTime4, SelectedPhase, 0);
                     }
                     if (Employee5Name?.FullName.Length > 1 && LunchOutTime5.Length > 3)
                     {
-                        await CloudDBService.PostTimeSheet(Employee5Name?.TeamUserKey.ToString(), LunchOutTime5, "", 0);
+                        await CloudDBService.PostTimeSheet(Employee5Name?.TeamUserKey.ToString(), LunchOutTime5, SelectedPhase, 0);
                     }
 
                     if (Employee6Name?.FullName.Length > 1 && LunchOutTime6.Length > 3)
                     {
-                        await CloudDBService.PostTimeSheet(Employee6Name?.TeamUserKey.ToString(), LunchOutTime6, "", 0);
+                        await CloudDBService.PostTimeSheet(Employee6Name?.TeamUserKey.ToString(), LunchOutTime6, SelectedPhase, 0);
                     }
 
                 },
@@ -869,33 +792,33 @@ namespace FTCollectorApp.ViewModel
                     //each employee
                     if (LunchInTimeLeader.Length > 3)
                     {
-                        await CloudDBService.PostTimeSheet(Session.uid.ToString(), LunchInTimeLeader, "", 0);
+                        await CloudDBService.PostTimeSheet(Session.uid.ToString(), LunchInTimeLeader, SelectedPhase, 0);
                     }
 
                     if (Employee1Name?.FullName.Length > 1 && LunchInTime1.Length > 3)
                     {
-                        await CloudDBService.PostTimeSheet(Employee1Name.TeamUserKey.ToString(), LunchInTime1, "", 0);
+                        await CloudDBService.PostTimeSheet(Employee1Name.TeamUserKey.ToString(), LunchInTime1, SelectedPhase, 0);
 
                     }
 
                     if (Employee2Name?.FullName.Length > 1 && LunchInTime2.Length > 3)
                     {
-                        await CloudDBService.PostTimeSheet(Employee2Name.TeamUserKey.ToString(), LunchInTime2, "", 0);
+                        await CloudDBService.PostTimeSheet(Employee2Name.TeamUserKey.ToString(), LunchInTime2, SelectedPhase, 0);
                     }
 
                     if (Employee3Name?.FullName.Length > 1 && LunchInTime3.Length > 3)
                     {
-                        await CloudDBService.PostTimeSheet(Employee3Name.TeamUserKey.ToString(), LunchInTime3, "", 0);
+                        await CloudDBService.PostTimeSheet(Employee3Name.TeamUserKey.ToString(), LunchInTime3, SelectedPhase, 0);
                     }
 
                     if (Employee4Name?.FullName.Length > 1 && LunchInTime4.Length > 3)
                     {
-                        await CloudDBService.PostTimeSheet(Employee4Name.TeamUserKey.ToString(), LunchInTime4, "", 0);
+                        await CloudDBService.PostTimeSheet(Employee4Name.TeamUserKey.ToString(), LunchInTime4, SelectedPhase, 0);
                     }
 
                     if (Employee5Name?.FullName.Length > 1 && LunchInTime5.Length > 3)
                     {
-                        await CloudDBService.PostTimeSheet(Employee5Name.TeamUserKey.ToString(), LunchInTime5, "", 0);
+                        await CloudDBService.PostTimeSheet(Employee5Name.TeamUserKey.ToString(), LunchInTime5, SelectedPhase, 0);
                     }
 
 
@@ -1094,8 +1017,23 @@ namespace FTCollectorApp.ViewModel
                     //ODOPopupCommand.Execute(null);
 
                     Session.event_type = "10"; // Equipment out
-                    await CloudDBService.PostJobEvent();
-                    //await CloudDBService.PostTimeSheet(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), "12");
+                    await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase);
+                    if (SelectedCrewForEq1?.FullName.Length > 3 && SelectedEq1Number.EquipmentNumber.Length > 1)
+                    {
+                        //await CloudDBService.PostTimeSheet(Session.uid.ToString(), LunchOutTimeLeader, SelectedPhase, 0);
+                        await CloudDBService.PostJobEquipment(SelectedCrewForEq1?.TeamUserKey.ToString(), SelectedPhase, SelectedEq1Number.EquipmentId);
+
+                    }
+                    if (SelectedCrewForEq2?.FullName.Length > 3 && SelectedEq2Number.EquipmentNumber.Length > 1)
+                    {
+                        //await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(), LunchOutTime1, SelectedPhase, 0);
+                        await CloudDBService.PostJobEquipment(SelectedCrewForEq2?.TeamUserKey.ToString(), SelectedPhase, SelectedEq2Number.EquipmentId);
+                    }
+                    if (SelectedCrewForEq3?.FullName.Length > 3 && SelectedEq3Number.EquipmentNumber.Length > 1)
+                    {
+                        //await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(), LunchOutTime1, SelectedPhase, 0);
+                        await CloudDBService.PostJobEquipment(SelectedCrewForEq3?.TeamUserKey.ToString(), SelectedPhase, SelectedEq3Number.EquipmentId);
+                    }
 
                 }
             );
@@ -1180,90 +1118,21 @@ namespace FTCollectorApp.ViewModel
 
         }
 
-        [ObservableProperty] bool isLITimeLeaderInvalid = false;
+        /*[ObservableProperty] bool isLITimeLeaderInvalid = false;
         [ObservableProperty] bool isLITimeEmp1Invalid = false;
         [ObservableProperty] bool isLITimeEmp2Invalid = false;
         [ObservableProperty] bool isLITimeEmp3Invalid = false;
         [ObservableProperty] bool isLITimeEmp4Invalid = false;
         [ObservableProperty] bool isLITimeEmp5Invalid = false;
-        [ObservableProperty] bool isLITimeEmp6Invalid = false;
+        [ObservableProperty] bool isLITimeEmp6Invalid = false;*/
 
-        string lunchInTimeLeader;
-        public string? LunchInTimeLeader
-        {
-            get => lunchInTimeLeader;
-            set
-            {
-                SetProperty(ref lunchInTimeLeader, value);
-                IsLITimeLeaderInvalid = !IsValidTimeFormat(lunchInTimeLeader);
-            }
-        }
-
-        string lunchInTime1;
-        public string? LunchInTime1
-        {
-            get => lunchInTime1;
-            set
-            {
-                SetProperty(ref lunchInTime1, value);
-                IsLITimeEmp1Invalid = !IsValidTimeFormat(lunchInTime1);
-            }
-        }
-
-        string lunchInTime2;
-        public string? LunchInTime2
-        {
-            get => lunchInTime2;
-            set
-            {
-                SetProperty(ref lunchInTime2, value);
-                IsLITimeEmp2Invalid = !IsValidTimeFormat(lunchInTime2);
-            }
-        }
-
-        string lunchInTime3;
-        public string? LunchInTime3
-        {
-            get => lunchInTime3;
-            set
-            {
-                SetProperty(ref lunchInTime3, value);
-                IsLITimeEmp3Invalid = !IsValidTimeFormat(lunchInTime3);
-            }
-        }
-
-        string lunchInTime4;
-        public string? LunchInTime4
-        {
-            get => lunchInTime4;
-            set
-            {
-                SetProperty(ref lunchInTime4, value);
-                IsLITimeEmp4Invalid = !IsValidTimeFormat(lunchInTime4);
-            }
-        }
-
-        string lunchInTime5;
-        public string? LunchInTime5
-        {
-            get => lunchInTime5;
-            set
-            {
-                SetProperty(ref lunchInTime5, value);
-                IsLITimeEmp5Invalid = !IsValidTimeFormat(lunchInTime5);
-            }
-        }
-
-        string lunchInTime6;
-        public string? LunchInTime6
-        {
-            get => lunchInTime6;
-            set
-            {
-                SetProperty(ref lunchInTime6, value);
-                IsLITimeEmp6Invalid = !IsValidTimeFormat(lunchInTime6);
-            }
-        }
+        [ObservableProperty] string lunchInTimeLeader;
+        [ObservableProperty] string lunchInTime1;
+        [ObservableProperty] string lunchInTime2;
+        [ObservableProperty] string lunchInTime3;
+        [ObservableProperty] string lunchInTime4;
+        [ObservableProperty] string lunchInTime5;
+        [ObservableProperty] string lunchInTime6;
 
 
         /*[ObservableProperty] string lunchInTimeLeader = string.Empty;
@@ -1316,8 +1185,6 @@ namespace FTCollectorApp.ViewModel
         }
         List<CrewInfoDetail> SelectedCrewInfoDetails = new List<CrewInfoDetail>();
 
-
-        [ObservableProperty] CrewInfoDetail employee6Name;
         private CrewInfoDetail employee1Name;
         public CrewInfoDetail Employee1Name
         {
@@ -1377,6 +1244,17 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+        private CrewInfoDetail employee6Name;
+        public CrewInfoDetail Employee6Name
+        {
+            get => employee6Name;
+            set
+            {
+                SetProperty(ref employee6Name, value);
+                //StartTimeEmp4 = DateTime.Now.ToString("HH:mm");
+                (CrewSaveCommand as Command).ChangeCanExecute();
+            }
+        }
 
         [ObservableProperty] int employee1IsDriver = 0;
         [ObservableProperty] int employee2IsDriver = 0;
@@ -1467,9 +1345,26 @@ namespace FTCollectorApp.ViewModel
 
         }
 
-        [ObservableProperty] string selectedEqType;
-        [ObservableProperty] string selectedEqDetailType;
-        [ObservableProperty] string selectedEqDetailAsset;
+        EquipmentType selectedEqType;
+        public EquipmentType? SelectedEqType
+        {
+            get => selectedEqType;
+            set
+            {
+                SetProperty(ref selectedEqType, value);
+                OnPropertyChanged(nameof(EquipmentDetailTypes));
+            }
+        }
+
+        [ObservableProperty] EquipmentDetailType selectedEq1Number;
+        [ObservableProperty] EquipmentDetailType selectedEq2Number;
+        [ObservableProperty] EquipmentDetailType selectedEq3Number;
+        [ObservableProperty] CrewInfoDetail selectedCrewForEq1;
+        [ObservableProperty] CrewInfoDetail selectedCrewForEq2;
+        [ObservableProperty] CrewInfoDetail selectedCrewForEq3;
+
+
+
         [ObservableProperty] EquipmentType selectedCheckInEq;
         [ObservableProperty] bool equipment1Checked = false;
         [ObservableProperty] bool equipment2Checked = false;
@@ -1500,8 +1395,12 @@ namespace FTCollectorApp.ViewModel
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<EquipmentDetailType>();
-                    var selected = SelectedEqType.ToString();
-                    var table = conn.Table<EquipmentDetailType>().Where(g => g.EquipmentType == SelectedEqType).ToList();
+                    var table = conn.Table<EquipmentDetailType>().ToList();
+                    Console.WriteLine();
+
+                    if(SelectedEqType?.EquipCodeKey != null)
+                        table = conn.Table<EquipmentDetailType>().Where(g => g.EquipmentType == SelectedEqType.EquipCodeKey).ToList();
+                    Console.WriteLine();
                     return new ObservableCollection<EquipmentDetailType>(table);
                 }
             }

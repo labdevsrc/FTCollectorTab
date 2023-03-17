@@ -17,7 +17,6 @@ namespace FTCollectorApp.Model
         public string OWNER_CD { get; set; }
         public string TagNumber { get; set; }
 
-        public string phases { get; set; }
         public string SiteId { get; set; }
 
         public string SiteName { get; set; }

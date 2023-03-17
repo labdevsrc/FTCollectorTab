@@ -9,7 +9,6 @@ namespace FTCollectorApp.Model.Reference
     {
         [PrimaryKey,AutoIncrement]
         public int id { get; set; }
-        public string OwnerKey { get; set; }
         public string OwnerName { get; set; }
         public string EndUserKey { get; set; }
         public string AltOwnerKey { get; set; }

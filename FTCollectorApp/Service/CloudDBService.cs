@@ -168,19 +168,105 @@ namespace FTCollectorApp.Service
             }
         }
 
+        
+        public static async Task PostJobEquipment(string employeeid, string job_phase, string equipmentid)
+        {
+            try
+            {
+                var keyValues = new List<KeyValuePair<string, string>>{
+                    new KeyValuePair<string, string>("employeeid",employeeid),
+                    new KeyValuePair<string, string>("equipment_id",equipmentid),
+                    new KeyValuePair<string, string>("jobnum",Session.jobnum),
+                    new KeyValuePair<string, string>("uid", Session.uid.ToString()),
+                    new KeyValuePair<string, string>("job_phase", job_phase ),                                    
+                    new KeyValuePair<string, string>("date_out", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+                };
+
+
+                // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+                HttpContent content = new FormUrlEncodedContent(keyValues);
+
+                HttpResponseMessage response = null;
+
+                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                {
+                    response = await client.PostAsync(Constants.InsertJobEquipmentUrl, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[CloudService] Response from {Constants.InsertTimeSheetUrl} OK = 200 , content :" + isi);
+                    }
+                }
+                else
+                {
+                    // Put to Pending Sync
+                    var app = Application.Current as App;
+                    app.TaskCount += 1;
+
+
+                    keyValues.Add(new KeyValuePair<string, string>("Status", "Pending"));
+
+                    // put keyvaluepair to App properties as Hash<taskid, string keyvaluepair> with json 
+                    // store 
+                    // app.Properties[$"Task-{app.TaskCount}"] = JsonConvert.SerializeObject(keyValues);
+                    // var storedPendingTaskName = app.PendingTask;
+                    // List<string> tasklist = JsonConvert.DeserializeObject(storedPendingTaskName);
+
+
+                    // Serialize 
+                    var test = new Dictionary<string, List<KeyValuePair<string, string>>>();
+                    test.Add($"Task-{app.TaskCount}", keyValues);
+
+                    // To serialize the hashtable and its key/value pairs,
+                    // you must first open a stream for writing.
+                    // In this case, use a file stream.
+                    FileStream fs = new FileStream("PendingTaskFile.dat", FileMode.Append);
+
+                    // Construct a BinaryFormatter and use it to serialize the data to the stream.
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    try
+                    {
+                        formatter.Serialize(fs, test);
+                    }
+                    finally
+                    {
+                        fs.Close();
+                    }
+
+                }
+
+            }
+            catch (SerializationException e)
+            {
+                Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                throw;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("EXCEPTION  : " + e.ToString());
+                //await Application.Current.MainPage.DisplayAlert("Error", "Invalid Time Format (HH:MM)", "OK");
+                return;
+            }
+        }
+
         public static async Task PostTimeSheet(string employeeid, string timeinput, string job_phase, int perdiemidx)
         {
             try
             {
-                var hours = DateTime.Parse(timeinput).Hour;
-                var mins = DateTime.Parse(timeinput).Minute;
+
+
+                var hours = DateTime.Parse(timeinput).Hour.ToString();
+                var mins = DateTime.Parse(timeinput).Minute.ToString();
 
                 await LocationService.GetLocation();
-                Session.accuracy = String.Format("{0:0.######}", LocationService.Coords.Accuracy);
-                Session.live_longitude = String.Format("{0:0.######}", LocationService.Coords.Longitude);
-                Session.live_lattitude = String.Format("{0:0.######}", LocationService.Coords.Latitude);
-                Session.altitude = String.Format("{0:0.######}", LocationService.Coords.Altitude);
-
+                if (LocationService.Coords != null)
+                {
+                    Console.WriteLine();
+                    Session.accuracy = String.Format("{0:0.######}", LocationService.Coords.Accuracy);
+                    Session.live_longitude = String.Format("{0:0.######}", LocationService.Coords.Longitude);
+                    Session.live_lattitude = String.Format("{0:0.######}", LocationService.Coords.Latitude);
+                    Session.altitude = String.Format("{0:0.######}", LocationService.Coords.Altitude);
+                }
 
                 var keyValues = new List<KeyValuePair<string, string>>{
 
@@ -188,8 +274,8 @@ namespace FTCollectorApp.Service
                     new KeyValuePair<string, string>("jobnum",Session.jobnum),
                     new KeyValuePair<string, string>("uid", Session.uid.ToString()),
 
-                    new KeyValuePair<string, string>("hr",  hours.ToString()),
-                    new KeyValuePair<string, string>("min", mins.ToString()),
+                    new KeyValuePair<string, string>("hr",  hours),
+                    new KeyValuePair<string, string>("min", mins),
 
                     new KeyValuePair<string, string>("gps_sts", Session.gps_sts),
 
