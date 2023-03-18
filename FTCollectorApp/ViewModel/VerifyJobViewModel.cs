@@ -142,7 +142,7 @@ namespace FTCollectorApp.ViewModel
                     Session.jobnum = value.JobNumber;
                     Session.OwnerName = value.OwnerName;
 
-                    OnPropertyChanged(nameof(JobPhaseList));
+                    //OnPropertyChanged(nameof(JobPhaseDetailList));
 
                     // Put to property location
                     //Application.Current.Properties[JobNumberKey] = value.JobNumber;
@@ -159,7 +159,7 @@ namespace FTCollectorApp.ViewModel
 
 
 
-        public ObservableCollection<string> JobPhaseList {
+        /*public ObservableCollection<string> JobPhaseList {
             get
             {
                 var PhasesList = new List<string>();
@@ -175,7 +175,7 @@ namespace FTCollectorApp.ViewModel
                 }
                 return new ObservableCollection<string>(PhasesList);
             }
-        }
+        }*/
 
 
 
@@ -357,9 +357,15 @@ namespace FTCollectorApp.ViewModel
 
         [ObservableProperty] int clockOutPerDiem;
 
+        async void LoginPopUpCall()
+        {
+            await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new LoginPopUp());
+        }
         public VerifyJobViewModel()
         {
             bool SomethingWrong = false;
+
+            LoginPopUpCall();
 
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
             {
@@ -1126,13 +1132,13 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] bool isLITimeEmp5Invalid = false;
         [ObservableProperty] bool isLITimeEmp6Invalid = false;*/
 
-        [ObservableProperty] string lunchInTimeLeader;
-        [ObservableProperty] string lunchInTime1;
-        [ObservableProperty] string lunchInTime2;
-        [ObservableProperty] string lunchInTime3;
-        [ObservableProperty] string lunchInTime4;
-        [ObservableProperty] string lunchInTime5;
-        [ObservableProperty] string lunchInTime6;
+        [ObservableProperty] string lunchInTimeLeader = string.Empty;
+        [ObservableProperty] string lunchInTime1 = string.Empty;
+        [ObservableProperty] string lunchInTime2 = string.Empty;
+        [ObservableProperty] string lunchInTime3 = string.Empty;
+        [ObservableProperty] string lunchInTime4 = string.Empty;
+        [ObservableProperty] string lunchInTime5 = string.Empty;
+        [ObservableProperty] string lunchInTime6 = string.Empty;
 
 
         /*[ObservableProperty] string lunchInTimeLeader = string.Empty;
@@ -1344,6 +1350,29 @@ namespace FTCollectorApp.ViewModel
             }
 
         }
+
+
+
+        public ObservableCollection<JobPhaseDetail> JobPhaseDetailList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<JobPhaseDetail>();
+                    var table = conn.Table<JobPhaseDetail>().ToList();
+                    foreach(var col in table)
+                    {
+                        col.NumDesc = col.PhaseNumber + " " + col.Description;
+                    }
+                    return new ObservableCollection<JobPhaseDetail>(table);
+                }
+            }
+        }
+
+
+
+        /// Equipment 
 
         EquipmentType selectedEqType;
         public EquipmentType? SelectedEqType

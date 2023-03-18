@@ -35,7 +35,6 @@ namespace FTCollectorApp
             try
             {
                 Routes.Add(nameof(VerifyJobPage), typeof(VerifyJobPage));
-                Routes.Add(nameof(MainSitePageX), typeof(MainSitePageX));
 
                 Routes.Add(nameof(BdSiteNew), typeof(BdSiteNew)); // Portrait, 3 columns of BdSite
                 Routes.Add(nameof(CabinetSitePageView), typeof(CabinetSitePageView));
@@ -53,6 +52,8 @@ namespace FTCollectorApp
                 Routes.Add(nameof(TabbedSitePage), typeof(TabbedSitePage));
 
                 Routes.Add(nameof(MainPageP), typeof(MainPageP)); //Portrait of SplashDownloadPage, Tab name : MainPAge
+                //Routes.Add(nameof(MainSitePageX), typeof(MainSitePageX)); obsolete - nolonger use
+
 
 
                 foreach (var item in Routes)

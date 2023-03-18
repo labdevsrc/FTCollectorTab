@@ -11,19 +11,14 @@ namespace FTCollectorApp.Konverter
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             TimeSpan dummyOutput;
-            var result = false;
-            Console.WriteLine(value.ToString());
-            try
+            var displayInvalidtime = false;
+            if (value != null)
             {
-                result = !TimeSpan.TryParse(value.ToString(), out dummyOutput);
-                Console.WriteLine(result);
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e.ToString());
+                Console.WriteLine(value.ToString());
+                displayInvalidtime = !TimeSpan.TryParse(value.ToString(), out dummyOutput);
             }
             Console.WriteLine();
-            return result;
+            return displayInvalidtime;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

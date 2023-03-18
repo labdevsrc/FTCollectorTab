@@ -7,7 +7,7 @@ namespace FTCollectorApp.Model
 {
     public class Crewdefault
     {
-        [PrimaryKey, AutoIncrement]
+
         public int Id { get; set; }
         public int crew_leader { get; set; }
 

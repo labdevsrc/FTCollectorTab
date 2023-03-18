@@ -18,7 +18,8 @@
 
             <StackLayout Orientation="Vertical" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
                 <StackLayout Padding="20,10,20,5" >
-                    <Grid RowDefinitions="*,*" ColumnDefinitions="*,*,*,*">
+                    <Grid ColumnDefinitions="*,*,*,*">
+                        <!-- Remove icons 
                         <StackLayout Orientation="Vertical" HeightRequest="110">
                             <Button Text="{x:Static fa:FontAwesomeIcons.User}" FontSize="40"
                                         FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" 
@@ -33,53 +34,46 @@
                             <Label HorizontalOptions="Center" Text="Enter Crew"/>
                         </StackLayout>
 
-                        <!--Equipment Checkout-->
                         <StackLayout Grid.Column="2" Orientation="Vertical" HeightRequest="110">
                             <Button Text="{x:Static fa:FontAwesomeIcons.UserGear}" FontSize="40"
                                        FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" Command="{Binding DisplayEquipmentCheckOutCommand}" />
                             <Label HorizontalOptions="Center" Text="Eq. Checkout"/>
                         </StackLayout>
-                        <!--Equipment Checkin-->
                         <StackLayout Grid.Column="3" Orientation="Vertical" HeightRequest="110">
                             <Button Text="{x:Static fa:FontAwesomeIcons.Gears}" FontSize="40"
                                        FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" Command="{Binding DisplayEquipmentCheckInCommand}" />                        
                             <Label HorizontalOptions="Center" Text="Eq. Checkin"/>
                         </StackLayout>
-                        <!--Odometer-->
                         <StackLayout Grid.Column="4" Orientation="Vertical" HeightRequest="110">
 
                             <Button Text="{x:Static fa:FontAwesomeIcons.GaugeHigh}" FontSize="40"
                                        FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" Command="{Binding ODOPopupCommand}" />
                             <Label HorizontalOptions="Center" Text="Odometer In"/>
-                        </StackLayout>
+                        </StackLayout> -->                        
                         
                         <!-- 2nd row -->
-                        <StackLayout Grid.Row="1" Grid.Column="0" IsVisible="{Binding IsVerified}"
+                        <StackLayout  Grid.Column="0" IsVisible="{Binding IsVerified}"
                                         Orientation="Vertical" HeightRequest="100">
                             <Button Text="Lunch Out" FontSize="Small" HeightRequest="90" WidthRequest="90" 
                                         Command="{Binding LunchOutCommand}" />
                         </StackLayout>
-                        <StackLayout Grid.Row="1" Grid.Column="2" IsVisible="{Binding IsVerified}" 
-                                     Orientation="Vertical" HeightRequest="100">
-                            <Button Text="Lunch In" FontSize="Small" IsEnabled="False"
-                                HeightRequest="90" WidthRequest="120" Command="{Binding LunchInCommand}" />
-                        </StackLayout>
-
-                        <StackLayout Grid.Row="1" Grid.Column="1" IsVisible="{Binding IsVerified}" 
+                        <StackLayout Grid.Column="1" IsVisible="{Binding IsVerified}" 
                                      Orientation="Vertical" HeightRequest="100">
                             <Button Text="End of Day" FontSize="Small"
                                     FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="120" 
                                     Command="{Binding ToggleEndofDayCommand}" />
                         </StackLayout>
-
-                        <!--Func#1-->
-
-                        <StackLayout Grid.Row="1" Grid.Column="3" Orientation="Vertical" IsVisible="{Binding IsVerified}"
+                        <StackLayout Grid.Column="2" IsVisible="{Binding IsVerified}" 
+                                     Orientation="Vertical" HeightRequest="100">
+                            <Button Text="Lunch In" FontSize="Small" IsEnabled="False"
+                                HeightRequest="90" WidthRequest="120" Command="{Binding LunchInCommand}" />
+                        </StackLayout>
+                        <StackLayout Grid.Column="3" Orientation="Vertical" IsVisible="{Binding IsVerified}"
                                      HeightRequest="110">
                             <Button Text="Func#2" FontSize="Medium" IsEnabled="False"
                                 HeightRequest="90" WidthRequest="120"  />
                         </StackLayout>
-                        <StackLayout Grid.Row="1" Grid.Column="4" Orientation="Vertical" IsVisible="{Binding IsVerified}"
+                        <StackLayout Grid.Column="4" Orientation="Vertical" IsVisible="{Binding IsVerified}"
                                      HeightRequest="110">
                             <Button Text="Func#3" FontSize="Medium" IsEnabled="False"
                                 HeightRequest="90" WidthRequest="120"  />
@@ -97,7 +91,9 @@
                         <Picker ItemsSource="{Binding JobNumbers}" ItemDisplayBinding="{Binding JobNumber}" 
                                 SelectedItem="{Binding SelectedJob, Mode=TwoWay}" TextColor="Black" />
                         <Label Text="Job Phase"/>
-                        <Picker ItemsSource="{Binding JobPhaseList}" SelectedItem="{Binding SelectedPhase, Mode=TwoWay}" TextColor="Black" />
+                        <Picker  ItemDisplayBinding="{Binding NumDesc}"
+                            ItemsSource="{Binding JobPhaseDetailList}" 
+                            SelectedItem="{Binding SelectedPhase, Mode=TwoWay}" TextColor="Black" />
 
                         <Label Text="Job Location *"/>
                         <local:BorderColorEntry Text="{Binding SelectedJob.JobLocation}"   IsEnabled="False"/>

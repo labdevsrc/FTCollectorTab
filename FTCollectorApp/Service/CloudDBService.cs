@@ -978,7 +978,10 @@ namespace FTCollectorApp.Service
         public static Task<IEnumerable<ExcludeSite>> GetExcludeSite() =>
            GetDropDownParamsAsync<IEnumerable<ExcludeSite>>("exclude_site");
 
-        
+        public static Task<IEnumerable<JobPhaseDetail>> GetJobPhasesDetail() =>
+           GetDropDownParamsAsync<IEnumerable<JobPhaseDetail>>("job_phases_detail");
+
+
         async static Task<T> GetDropDownParamsAsync<T>(string type)
         {
             var keyValues = new List<KeyValuePair<string, string>>{

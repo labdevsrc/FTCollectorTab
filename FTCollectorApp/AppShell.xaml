@@ -86,7 +86,8 @@
 
     <FlyoutItem Title="+"
                 FlyoutDisplayOptions="AsMultipleItems">
-        <Tab Title="MAIN"
+        <!-- test - remove login -->
+        <!--<Tab Title="MAIN"
              Route="MainPageP" 
              >
             <Tab.Icon>
@@ -99,7 +100,7 @@
                           Title="DB SYNC"
                           Icon="download.png"
                           ContentTemplate="{DataTemplate viewsitep:MainPageP}" />
-        </Tab>
+        </Tab>-->
 
         <Tab Title="JOB AND CREW" x:Name="tabJobCrew" 
              Route="VerifyJobPage">
@@ -121,7 +122,9 @@
             </ShellContent>
 
         </Tab>
+        <!-- disable for test - end -->
 
+        <!-- obsolete from here -->
         <!--<Tab Title="SITE" 
              Route="MainSitePageX">
             <Tab.Icon>
@@ -163,7 +166,9 @@
             </ShellContent>
 
         </Tab>-->
-
+        <!-- obsolete untill here -->
+        
+        
         <Tab Title="Site" 
              Route="TabbedSitePage">
             <Tab.Icon>

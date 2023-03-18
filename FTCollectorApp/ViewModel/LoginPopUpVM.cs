@@ -18,10 +18,10 @@ using System.Windows.Input;
 
 namespace FTCollectorApp.ViewModel
 {
-    public partial class SplashDownloadViewModel : ObservableObject
+    public partial class LoginPopUpVM : ObservableObject
     {
 
-        public SplashDownloadViewModel()
+        public LoginPopUpVM()
         {
 
             DisplayPendingTaskCommand = new Command(async () => DisplayPendingTaskCommandExecute());
@@ -75,7 +75,7 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        string version = "20230318"; // change here for release
+        string version = "20230318B"; // change here for release
 
         string apkVersion;
         public string ApkVersion
@@ -293,7 +293,7 @@ namespace FTCollectorApp.ViewModel
             IsTabBarDisplayed = true;   // display bottom Tab Bar
 
 
-
+            await Rg.Plugins.Popup.Services.PopupNavigation.PopAsync();
 
 
             // open dialog

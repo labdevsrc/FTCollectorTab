@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SQLite;
 
 namespace FTCollectorApp.Model.Reference
 {
     public class CrewInfoDetail
     {
+        [PrimaryKey, AutoIncrement]
         public int id { get; set; }
         public int TeamUserKey { get; set; }
         public string FullName { get; set; }
