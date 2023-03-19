@@ -447,7 +447,7 @@ namespace FTCollectorApp.ViewModel
 
                 var portType = await CloudDBService.GetCodePortType(); //code_port_type
                 var portTable = await CloudDBService.GetPortTable(); //port table
-
+                var equipCO = await CloudDBService.GetEquipCO(); //equipment_for_checkout
 
                 LoadingText = "Downloading code_locate_point table";
 
@@ -659,9 +659,9 @@ namespace FTCollectorApp.ViewModel
                     conn.DeleteAll<EquipmentType>();
                     conn.InsertAll(equipmentType);
 
-                    conn.CreateTable<EquipmentDetailType>();
-                    conn.DeleteAll<EquipmentDetailType>();
-                    conn.InsertAll(equipmentDetail);
+                    conn.CreateTable<EquipmentCO>();
+                    conn.DeleteAll<EquipmentCO>();
+                    conn.InsertAll(equipCO);
 
                     conn.CreateTable<UnitOfMeasure>();
                     conn.DeleteAll<UnitOfMeasure>();

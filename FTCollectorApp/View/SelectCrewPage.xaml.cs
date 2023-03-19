@@ -177,7 +177,7 @@ namespace FTCollectorApp.View
                     foreach (var s in Crewtable)
                     {
 
-                        Console.WriteLine(s.Id + "- " + s.crew_leader + " " + s.team_member + " " + s.created_on);
+                        Console.WriteLine(s.id + "- " + s.crew_leader + " " + s.team_member + " " + s.created_on);
                     }
                 }
             }

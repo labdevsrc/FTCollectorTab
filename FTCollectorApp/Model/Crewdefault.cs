@@ -5,10 +5,11 @@ using SQLite;
 
 namespace FTCollectorApp.Model
 {
+   
     public class Crewdefault
     {
-
-        public int Id { get; set; }
+        [AutoIncrement, PrimaryKey]
+        public int id { get; set; }
         public int crew_leader { get; set; }
 
         public string team_member { get; set; }

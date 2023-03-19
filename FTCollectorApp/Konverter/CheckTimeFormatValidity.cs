@@ -15,7 +15,8 @@ namespace FTCollectorApp.Konverter
             if (value != null)
             {
                 Console.WriteLine(value.ToString());
-                displayInvalidtime = !TimeSpan.TryParse(value.ToString(), out dummyOutput);
+                if(value.ToString().Length > 1)
+                    displayInvalidtime = !TimeSpan.TryParse(value.ToString(), out dummyOutput);
             }
             Console.WriteLine();
             return displayInvalidtime;

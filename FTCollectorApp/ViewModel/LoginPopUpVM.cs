@@ -27,7 +27,7 @@ namespace FTCollectorApp.ViewModel
             DisplayPendingTaskCommand = new Command(async () => DisplayPendingTaskCommandExecute());
             //DownloadTablesCommand = new Command(async () => DownloadTablesCommandExecute());
             DisplayAllertCommand = new Command(async () => DisplayWarning());
-            TestCommand = new Command(async () => Test());
+            //TestCommand = new Command(async () => Test());
             Console.WriteLine();
 
             CheckEntriesCommand = new Command(ExecuteCheckEntriesCommand);
@@ -75,7 +75,7 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        string version = "20230318B"; // change here for release
+        string version = "20230319A"; // change here for release
 
         string apkVersion;
         public string ApkVersion
@@ -131,15 +131,22 @@ namespace FTCollectorApp.ViewModel
 
             Thread.Sleep(3000);
             LoadingText = "Download done! Populating SQLite...";
-            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+
+            try { 
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+
+
+                    LoadingText = "Insert code tables ...";
+
+                    conn.CreateTable<Site>();
+                    conn.DeleteAll<Site>();
+                    conn.InsertAll(contentSite);
+                }
+            }
+            catch (Exception e)
             {
-
-
-                LoadingText = "Insert code tables ...";
-
-                conn.CreateTable<Site>();
-                conn.DeleteAll<Site>();
-                conn.InsertAll(contentSite);
+                Console.WriteLine(e.ToString());
             }
 
             IsBusy = false;
@@ -293,6 +300,8 @@ namespace FTCollectorApp.ViewModel
             IsTabBarDisplayed = true;   // display bottom Tab Bar
 
 
+
+
             await Rg.Plugins.Popup.Services.PopupNavigation.PopAsync();
 
 
@@ -302,6 +311,8 @@ namespace FTCollectorApp.ViewModel
             Session.event_type = "1"; // Login
             await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString());
 
+            //MessagingCenter.Send("LoginOK", "LoginToVerifyJobCh");
+            MessagingCenter.Send<LoginPopUpVM>(this, "LoginToVerifyJobCh");
         }
 
 
@@ -458,63 +469,20 @@ namespace FTCollectorApp.ViewModel
                 var suspList = await CloudDBService.GetSuspendedTrace(); //gps_point
                 var excludeSiteEntry = await CloudDBService.GetExcludeSite(); //exclude_site
 
+                var equipCO = await CloudDBService.GetEquipCO(); //equipment_for_checkout
                 //Thread.Sleep(5000);
                 LoadingText = "Download done! Populating SQLite...";
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
-                    conn.CreateTable<UnSyncTaskList>();
-
-                    conn.CreateTable<DuctUsed>();
-                    conn.DeleteAll<DuctUsed>();
-                    conn.InsertAll(contentDuctUsed);
-
-                    conn.CreateTable<JobPhaseDetail>();
-                    conn.DeleteAll<JobPhaseDetail>();
-                    conn.InsertAll(contentJobPhase);
-
-
-                    conn.CreateTable<SuspendedTrace>();
-                    conn.DeleteAll<SuspendedTrace>();
-                    conn.InsertAll(suspList);
-
-                    conn.CreateTable<GpsPoint>();
-                    conn.DeleteAll<GpsPoint>();
-                    conn.InsertAll(max_gps_point);
-
-
-                    conn.CreateTable<Owner>();
-                    conn.DeleteAll<Owner>();
-                    conn.InsertAll(contentOwner);
-
-
-                    conn.CreateTable<CodeLocatePoint>();
-                    conn.DeleteAll<CodeLocatePoint>();
-                    conn.InsertAll(codeLocatePoint);
-
-                    conn.CreateTable<PortType>();
-                    conn.DeleteAll<PortType>();
-                    conn.InsertAll(portType);
-
-                    conn.CreateTable<Ports>();
-                    conn.DeleteAll<Ports>();
-                    conn.InsertAll(portTable);
-
-                    conn.CreateTable<DuctInstallType>();
-                    conn.DeleteAll<DuctInstallType>();
-                    conn.InsertAll(ductInstallType);
-
-
-                    conn.CreateTable<DuctInstallType>();
-                    conn.DeleteAll<DuctInstallType>();
-                    conn.InsertAll(ductInstallType);
-
-                    conn.CreateTable<FiberInstallType>();
-                    conn.DeleteAll<FiberInstallType>();
-                    conn.InsertAll(fiberInstallType);
-
                     conn.CreateTable<User>();
                     conn.DeleteAll<User>();
                     conn.InsertAll(contentUser);
+
+
+                    conn.CreateTable<Site>();
+                    conn.DeleteAll<Site>();
+                    conn.InsertAll(contentSite);
+
 
                     conn.CreateTable<Job>();
                     conn.DeleteAll<Job>();
@@ -523,6 +491,12 @@ namespace FTCollectorApp.ViewModel
                     conn.CreateTable<CodeSiteType>();
                     conn.DeleteAll<CodeSiteType>();
                     conn.InsertAll(contentCodeSiteType);
+
+
+                    conn.CreateTable<JobPhaseDetail>();
+                    conn.DeleteAll<JobPhaseDetail>();
+                    conn.InsertAll(contentJobPhase);
+
 
                     conn.CreateTable<Crewdefault>();
                     conn.DeleteAll<Crewdefault>();
@@ -539,6 +513,14 @@ namespace FTCollectorApp.ViewModel
                     conn.CreateTable<KeyType>();
                     conn.DeleteAll<KeyType>();
                     conn.InsertAll(contentKeyType);
+
+                    conn.CreateTable<EquipmentType>();
+                    conn.DeleteAll<EquipmentType>();
+                    conn.InsertAll(equipmentType);
+
+                    conn.CreateTable<EquipmentDetailType>();
+                    conn.DeleteAll<EquipmentDetailType>();
+                    conn.InsertAll(equipmentDetail);
 
                     conn.CreateTable<MaterialCode>();
                     conn.DeleteAll<MaterialCode>();
@@ -607,6 +589,65 @@ namespace FTCollectorApp.ViewModel
                     conn.DeleteAll<Chassis>();
                     conn.InsertAll(contentChassis);
 
+                    conn.CreateTable<UnitOfMeasure>();
+                    conn.DeleteAll<UnitOfMeasure>();
+                    conn.InsertAll(unitOfmeasure);
+
+                    conn.CreateTable<AFiberCable>();
+                    conn.DeleteAll<AFiberCable>();
+                    conn.InsertAll(contentAFCable);
+
+                    conn.CreateTable<DuctInstallType>();
+                    conn.DeleteAll<DuctInstallType>();
+                    conn.InsertAll(ductInstallType);
+
+                    conn.CreateTable<FiberInstallType>();
+                    conn.DeleteAll<FiberInstallType>();
+                    conn.InsertAll(fiberInstallType);
+
+                    conn.CreateTable<DuctUsed>();
+                    conn.DeleteAll<DuctUsed>();
+                    conn.InsertAll(contentDuctUsed);
+
+
+
+                    /////
+
+
+                    conn.CreateTable<UnSyncTaskList>();
+
+
+
+
+                    conn.CreateTable<SuspendedTrace>();
+                    conn.DeleteAll<SuspendedTrace>();
+                    conn.InsertAll(suspList);
+
+                    conn.CreateTable<GpsPoint>();
+                    conn.DeleteAll<GpsPoint>();
+                    conn.InsertAll(max_gps_point);
+
+
+                    conn.CreateTable<Owner>();
+                    conn.DeleteAll<Owner>();
+                    conn.InsertAll(contentOwner);
+
+
+                    conn.CreateTable<CodeLocatePoint>();
+                    conn.DeleteAll<CodeLocatePoint>();
+                    conn.InsertAll(codeLocatePoint);
+
+                    conn.CreateTable<PortType>();
+                    conn.DeleteAll<PortType>();
+                    conn.InsertAll(portType);
+
+                    conn.CreateTable<Ports>();
+                    conn.DeleteAll<Ports>();
+                    conn.InsertAll(portTable);
+
+
+
+
                     conn.CreateTable<ChassisType>();
                     conn.DeleteAll<ChassisType>();
                     conn.InsertAll(contentChassisType);
@@ -647,25 +688,14 @@ namespace FTCollectorApp.ViewModel
                     conn.DeleteAll<BuildingType>();
                     conn.InsertAll(contentBuildingType);
 
-                    conn.CreateTable<AFiberCable>();
-                    conn.DeleteAll<AFiberCable>();
-                    conn.InsertAll(contentAFCable);
 
                     conn.CreateTable<CableType>();
                     conn.DeleteAll<CableType>();
                     conn.InsertAll(contentCableType);
 
-                    conn.CreateTable<EquipmentType>();
-                    conn.DeleteAll<EquipmentType>();
-                    conn.InsertAll(equipmentType);
 
-                    conn.CreateTable<EquipmentDetailType>();
-                    conn.DeleteAll<EquipmentDetailType>();
-                    conn.InsertAll(equipmentDetail);
 
-                    conn.CreateTable<UnitOfMeasure>();
-                    conn.DeleteAll<UnitOfMeasure>();
-                    conn.InsertAll(unitOfmeasure);
+
 
                     conn.CreateTable<DuctInstallType>();
                     conn.DeleteAll<DuctInstallType>();
@@ -687,16 +717,13 @@ namespace FTCollectorApp.ViewModel
                     conn.InsertAll(contentslotBladeTray);
 
 
-
-
-                    conn.CreateTable<Site>();
-                    conn.DeleteAll<Site>();
-                    conn.InsertAll(contentSite);
-
-
                     conn.CreateTable<ExcludeSite>();
                     conn.DeleteAll<ExcludeSite>();
                     conn.InsertAll(excludeSiteEntry);
+
+                    conn.CreateTable<EquipmentCO>();
+                    conn.DeleteAll<EquipmentCO>();
+                    conn.InsertAll(equipCO);
 
                 }
                 LoadingText = "Populating Local SQLite done!";

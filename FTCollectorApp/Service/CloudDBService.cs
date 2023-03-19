@@ -169,20 +169,20 @@ namespace FTCollectorApp.Service
         }
 
         
-        public static async Task PostJobEquipment(string employeeid, string job_phase, string equipmentid)
+        public static async Task PostJobEquipment(string job_phase, string equipmentid, string miles)
         {
             try
             {
                 var keyValues = new List<KeyValuePair<string, string>>{
-                    new KeyValuePair<string, string>("employeeid",employeeid),
+                    new KeyValuePair<string, string>("employeeid",Session.uid.ToString()),
                     new KeyValuePair<string, string>("equipment_id",equipmentid),
                     new KeyValuePair<string, string>("jobnum",Session.jobnum),
-                    new KeyValuePair<string, string>("uid", Session.uid.ToString()),
                     new KeyValuePair<string, string>("job_phase", job_phase ),                                    
                     new KeyValuePair<string, string>("date_out", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+                    new KeyValuePair<string, string>("mileshour",miles)
                 };
 
-
+                Console.WriteLine();
                 // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
                 HttpContent content = new FormUrlEncodedContent(keyValues);
 
@@ -194,7 +194,7 @@ namespace FTCollectorApp.Service
                     if (response.IsSuccessStatusCode)
                     {
                         var isi = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine($"[CloudService] Response from {Constants.InsertTimeSheetUrl} OK = 200 , content :" + isi);
+                        Console.WriteLine($"[CloudService] Response from {Constants.InsertJobEquipmentUrl} OK = 200 , content :" + isi);
                     }
                 }
                 else
@@ -967,6 +967,9 @@ namespace FTCollectorApp.Service
         public static Task<IEnumerable<Ports>> GetPortTable() =>
            GetDropDownParamsAsync<IEnumerable<Ports>>("port_table");
 
+        public static Task<IEnumerable<EquipmentCO>> GetEquipCO() =>
+           GetDropDownParamsAsync<IEnumerable<EquipmentCO>>("equipment_for_checkout");
+        
         public static Task<IEnumerable<CodeLocatePoint>> GetLocatePoint() =>
            GetDropDownParamsAsync<IEnumerable<CodeLocatePoint>>("code_locate_point");
 
