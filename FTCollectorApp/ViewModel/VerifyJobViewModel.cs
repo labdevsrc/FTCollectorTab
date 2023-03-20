@@ -1056,14 +1056,29 @@ namespace FTCollectorApp.ViewModel
                     // do something
                     // goto equipment checkin
 
-                    IsDisplayJobEntries = false;
-                    IsDisplayCrewList = false;
+                    try
+                    {
+                        if (SelectedEqIn1?.EqDesc.Length > 1)
+                        {
+                            //await CloudDBService.PostTimeSheet(Session.uid.ToString(), LunchOutTimeLeader, SelectedPhase, 0);
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq1?.EqKey, MilesHourIn1, "0");
 
-                    IsEqCheckOutDisplayed = false;
-                    IsEqCheckInDisplayed = false;
-                    IsDisplayOdoEnd = true;
-
-                    ODOPopupCommand.Execute(null);
+                        }
+                        if (SelectedEqIn2?.EqDesc.Length > 1)
+                        {
+                            //await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(), LunchOutTime1, SelectedPhase, 0);
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq2?.EqKey, MilesHourIn2, "0");
+                        }
+                        if (SelectedEqIn3?.EqDesc.Length > 1)
+                        {
+                            //await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(), LunchOutTime1, SelectedPhase, 0);
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq3?.EqKey, MilesHourIn3, "0");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
 
                 }
             );
@@ -1108,24 +1123,31 @@ namespace FTCollectorApp.ViewModel
                     Session.event_type = "4"; // Equipment out
                     await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
 
+                    Session.event_type = "8"; // Odo
+                    await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
+
+                    // start ODO entered , enable all icon
+                    IsStartODOEntered = true;
+                    IsDisplayOdoStart = false;
+                    IsDisplayOdoEnd = false;
 
                     try
                     {
                         if (SelectedEq1?.EqDesc.Length > 1)
                         {
                             //await CloudDBService.PostTimeSheet(Session.uid.ToString(), LunchOutTimeLeader, SelectedPhase, 0);
-                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq1?.EqKey, MilesHour1);
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq1?.EqKey, "0", MilesHour1);
 
                         }
                         if (SelectedEq2?.EqDesc.Length > 1)
                         {
                             //await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(), LunchOutTime1, SelectedPhase, 0);
-                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq2?.EqKey, MilesHour2);
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq2?.EqKey,"0", MilesHour2);
                         }
                         if (SelectedEq3?.EqDesc.Length > 1)
                         {
                             //await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(), LunchOutTime1, SelectedPhase, 0);
-                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq3?.EqKey, MilesHour3);
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq3?.EqKey, "0", MilesHour3);
                         }
                     }
                     catch(Exception e)
@@ -1457,14 +1479,25 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] EquipmentCO selectedEq3;
 
 
-        [ObservableProperty] EquipmentType selectedCheckInEq;
-        [ObservableProperty] bool equipment1Checked = false;
-        [ObservableProperty] bool equipment2Checked = false;
-        [ObservableProperty] bool equipment3Checked = false;
-        [ObservableProperty] bool equipment4Checked = false;
-        [ObservableProperty] bool equipment5Checked = false;
-        [ObservableProperty] bool equipment6Checked = false;
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(Equipment1CI))] EquipmentType selectedEqIn1Type;
 
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(Equipment2CI))] EquipmentType selectedEqIn2Type;
+
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(Equipment3CI))] EquipmentType selectedEqIn3Type;
+
+
+        [ObservableProperty] EquipmentCO selectedEqIn1;
+        [ObservableProperty] EquipmentCO selectedEqIn2;
+        [ObservableProperty] EquipmentCO selectedEqIn3;
+
+        [ObservableProperty] string milesHourIn1;
+        [ObservableProperty] string milesHourIn2;
+        [ObservableProperty] string milesHourIn3;
+
+        [ObservableProperty] EquipmentType selectedCheckInEq;
 
         /////////// Equipment Checkout ////////////
         public ObservableCollection<EquipmentType> EquipmentTypes
@@ -1534,6 +1567,61 @@ namespace FTCollectorApp.ViewModel
 
             }
         }
+
+        public ObservableCollection<EquipmentCO> Equipment1CI
+        {
+            get
+            {
+                var table = _equipmentCO.ToList();
+                try
+                {
+                    table = _equipmentCO.Where(a => a.TypeKey == SelectedEqIn1Type?.EquipCodeKey).ToList();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+                return new ObservableCollection<EquipmentCO>(table);
+
+            }
+        }
+
+        public ObservableCollection<EquipmentCO> Equipment2CI
+        {
+            get
+            {
+                var table = _equipmentCO.ToList();
+                try
+                {
+                    table = _equipmentCO.Where(a => a.TypeKey == SelectedEqIn2Type?.EquipCodeKey).ToList();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+                return new ObservableCollection<EquipmentCO>(table);
+
+            }
+        }
+
+        public ObservableCollection<EquipmentCO> Equipment3CI
+        {
+            get
+            {
+                var table = _equipmentCO.ToList();
+                try
+                {
+                    table = _equipmentCO.Where(a => a.TypeKey == SelectedEqIn3Type?.EquipCodeKey).ToList();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+                return new ObservableCollection<EquipmentCO>(table);
+
+            }
+        }
+
     }
         ////////////////////
         ///

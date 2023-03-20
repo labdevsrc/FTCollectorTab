@@ -169,7 +169,7 @@ namespace FTCollectorApp.Service
         }
 
         
-        public static async Task PostJobEquipment(string job_phase, string equipmentid, string miles)
+        public static async Task PostJobEquipment(string job_phase, string equipmentid, string milesin, string milesout)
         {
             try
             {
@@ -178,8 +178,10 @@ namespace FTCollectorApp.Service
                     new KeyValuePair<string, string>("equipment_id",equipmentid),
                     new KeyValuePair<string, string>("jobnum",Session.jobnum),
                     new KeyValuePair<string, string>("job_phase", job_phase ),                                    
-                    new KeyValuePair<string, string>("date_out", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
-                    new KeyValuePair<string, string>("mileshour",miles)
+                    new KeyValuePair<string, string>("date_out", milesin.Equals("0") ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"):"0"),
+                    new KeyValuePair<string, string>("date_returned", milesout.Equals("0") ? DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"):"0"),
+                    new KeyValuePair<string, string>("hours_or_miles_out", milesout),
+                    new KeyValuePair<string, string>("hours_or_miles_in",milesin)
                 };
 
                 Console.WriteLine();
