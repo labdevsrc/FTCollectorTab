@@ -542,10 +542,8 @@ namespace FTCollectorApp.ViewModel
                     IsLunchOutDisplay = false;
                     IsDisplayEndOfDay = true;
 
-
                     (ToggleCrewListCommand as Command).ChangeCanExecute();
                     (DisplayEquipmentCheckOutCommand as Command).ChangeCanExecute();
-
                     //calculate from Clock in to Lunch out
 
                     //check if clockintime > lunchout
@@ -554,7 +552,7 @@ namespace FTCollectorApp.ViewModel
                 },
                 canExecute: () =>
                 {
-                    return !IsDisplayCrewList;
+                    return !IsLunchIn;
                 }
 
                 );
@@ -868,6 +866,10 @@ namespace FTCollectorApp.ViewModel
                         await CloudDBService.PostTimeSheet(Employee5Name.TeamUserKey.ToString(), LunchInTime5, SelectedPhase.PhaseNumber, 0);
                     }
 
+                    IsLunchIn = false; // end of Lunch in, refresh Equipment in & Endof day button
+                    (DisplayEquipmentCheckInCommand as Command).ChangeCanExecute();
+                    (ToggleEndofDayCommand as Command).ChangeCanExecute();
+                    (ArriveFromSiteCommand as Command).ChangeCanExecute();
 
                 },
                 canExecute: () =>
@@ -892,9 +894,11 @@ namespace FTCollectorApp.ViewModel
 
 
                             IsLunchOut = false;
-                            IsLunchIn = true;
+                            IsLunchIn = true; // when lunchout button clicked, it will enable Lunchin button
                             (LunchInCommand as Command).ChangeCanExecute();
                             (LunchOutCommand as Command).ChangeCanExecute();
+                            (DisplayEquipmentCheckInCommand as Command).ChangeCanExecute();
+                            (ToggleEndofDayCommand as Command).ChangeCanExecute();
 
                             // hide other display
                             IsDisplayJobEntries = false;
@@ -1046,7 +1050,7 @@ namespace FTCollectorApp.ViewModel
                 canExecute: () =>
                 {
                     Console.WriteLine();
-                    return !IsDisplayCrewList && IsVerified;
+                    return !IsLunchIn;
                 }
             );
 
@@ -1130,6 +1134,8 @@ namespace FTCollectorApp.ViewModel
                     IsStartODOEntered = true;
                     IsDisplayOdoStart = false;
                     IsDisplayOdoEnd = false;
+                    IsLeaveToSiteBtnEnabled = true;
+                    (LeaveJobToSiteCommand as Command).ChangeCanExecute();
 
                     try
                     {
@@ -1142,7 +1148,7 @@ namespace FTCollectorApp.ViewModel
                         if (SelectedEq2?.EqDesc.Length > 1)
                         {
                             //await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(), LunchOutTime1, SelectedPhase, 0);
-                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq2?.EqKey,"0", MilesHour2);
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq2?.EqKey, "0", MilesHour2);
                         }
                         if (SelectedEq3?.EqDesc.Length > 1)
                         {
@@ -1150,7 +1156,7 @@ namespace FTCollectorApp.ViewModel
                             await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq3?.EqKey, "0", MilesHour3);
                         }
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         Console.WriteLine(e);
                     }
@@ -1193,15 +1199,45 @@ namespace FTCollectorApp.ViewModel
                 }
               );
 
+            LeaveJobToSiteCommand = new Command(
+                execute: async () =>
+                {
+                    Session.event_type = "6"; //left for job site
+                    await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
+                    IsLeaveToSiteBtnEnabled = false;
+                    IsArrivedFromSiteBtnEnabled = true;
+                    (ArriveFromSiteCommand as Command).ChangeCanExecute();
+                },
+                canExecute: () => {
+
+                    return IsStartODOEntered;
+                }
+            );
+
+            ArriveFromSiteCommand = new Command(
+                execute: async  () =>
+                {
+                    Session.event_type = "7"; //left for job site
+                    await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
+                    IsArrivedFromSiteBtnEnabled = false;
+                    IsLeaveToSiteBtnEnabled = false;
+                    (LeaveJobToSiteCommand as Command).ChangeCanExecute();
+                },
+                canExecute: () => {
+
+                    return IsLunchIn;
+                }
+            );
+
+
         }
 
-        /*[ObservableProperty] bool isLITimeLeaderInvalid = false;
-        [ObservableProperty] bool isLITimeEmp1Invalid = false;
-        [ObservableProperty] bool isLITimeEmp2Invalid = false;
-        [ObservableProperty] bool isLITimeEmp3Invalid = false;
-        [ObservableProperty] bool isLITimeEmp4Invalid = false;
-        [ObservableProperty] bool isLITimeEmp5Invalid = false;
-        [ObservableProperty] bool isLITimeEmp6Invalid = false;*/
+        [ObservableProperty] bool isArrivedFromSiteBtnEnabled = true;
+        [ObservableProperty] bool isLeaveToSiteBtnEnabled = false;
+
+        public ICommand LeaveJobToSiteCommand { get; set; }
+        public ICommand ArriveFromSiteCommand { get; set; }
+
 
         [ObservableProperty] string lunchInTimeLeader = string.Empty;
         [ObservableProperty] string lunchInTime1 = string.Empty;
@@ -1210,15 +1246,6 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] string lunchInTime4 = string.Empty;
         [ObservableProperty] string lunchInTime5 = string.Empty;
         [ObservableProperty] string lunchInTime6 = string.Empty;
-
-
-        /*[ObservableProperty] string lunchInTimeLeader = string.Empty;
-        [ObservableProperty] string lunchInTime1 = string.Empty;
-        [ObservableProperty] string lunchInTime2 = string.Empty;
-        [ObservableProperty] string lunchInTime3 = string.Empty;
-        [ObservableProperty] string lunchInTime4 = string.Empty;
-        [ObservableProperty] string lunchInTime5 = string.Empty;
-        [ObservableProperty] string lunchInTime6 = string.Empty;*/
 
 
         [ObservableProperty] string lunchOutTimeLeader = string.Empty;
@@ -1264,6 +1291,8 @@ namespace FTCollectorApp.ViewModel
         }
         List<CrewInfoDetail> SelectedCrewInfoDetails = new List<CrewInfoDetail>();
 
+
+        //[ObservableProperty] CrewInfoDetail employee1Name;
         private CrewInfoDetail employee1Name;
         public CrewInfoDetail Employee1Name
         {

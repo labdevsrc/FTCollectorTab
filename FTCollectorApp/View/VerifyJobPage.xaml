@@ -13,16 +13,17 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-        
-        <AbsoluteLayout VerticalOptions="FillAndExpand" HorizontalOptions="CenterAndExpand" >
 
-            <StackLayout Orientation="Vertical" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
-                <StackLayout Padding="20,10,20,5" >
+        <AbsoluteLayout>
+
+            <StackLayout Padding="20,10,20,5" Orientation="Vertical" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <!--<StackLayout Padding="20,10,20,5" >-->
                     <Grid ColumnDefinitions="*,*,*,*">
                         <!-- Remove icons 
                         <StackLayout Orientation="Vertical" HeightRequest="110">
-                            <Button Text="{x:Static fa:FontAwesomeIcons.User}" FontSize="40"
-                                        FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" 
+                            <Button Text="{x:Static fa:FontAwesomeIcons.User}" 
+                                        FontFamily="FontAwesome6Solid" 
+                        FontSize="40" HeightRequest="90" WidthRequest="90" 
                                     Command="{Binding ToggleJobEntriesCommand}" />
 
                             <Label HorizontalOptions="Center" Text="Verify Job"/>
@@ -59,25 +60,33 @@
                         </StackLayout>
                         <StackLayout Grid.Column="1" IsVisible="{Binding IsStartODOEntered}" 
                                      Orientation="Vertical" HeightRequest="100">
+                            <Button Text="Lunch In" FontSize="Small" IsEnabled="False"
+                                HeightRequest="90" WidthRequest="120" Command="{Binding LunchInCommand}" />
+                        </StackLayout>
+                        <StackLayout Grid.Column="2" Orientation="Vertical" IsVisible="{Binding IsStartODOEntered}"
+                                     HeightRequest="110">
+                            <Button Text="Equip Checkin" FontSize="Small" IsEnabled="False"
+                                HeightRequest="90" WidthRequest="120" Command="{Binding DisplayEquipmentCheckInCommand}" />
+                        </StackLayout>
+                        <StackLayout Grid.Column="3" IsVisible="{Binding IsStartODOEntered}" 
+                                     Orientation="Vertical" HeightRequest="100">
                             <Button Text="End of Day" FontSize="Small"
                                     FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="120" 
                                     Command="{Binding ToggleEndofDayCommand}" />
                         </StackLayout>
-                        <StackLayout Grid.Column="2" IsVisible="{Binding IsStartODOEntered}" 
-                                     Orientation="Vertical" HeightRequest="100">
-                            <Button Text="Lunch In" FontSize="Small" IsEnabled="False"
-                                HeightRequest="90" WidthRequest="120" Command="{Binding LunchInCommand}" />
-                        </StackLayout>
-                        <StackLayout Grid.Column="3" Orientation="Vertical" IsVisible="{Binding IsStartODOEntered}"
+
+
+                        <!--<StackLayout Grid.Column="4" Orientation="Vertical" IsVisible="{Binding IsStartODOEntered}"
                                      HeightRequest="110">
-                            <Button Text="Equip Checkin" FontSize="Medium" IsEnabled="False"
-                                HeightRequest="90" WidthRequest="120" Command="{Binding DisplayEquipmentCheckInCommand}" />
-                        </StackLayout>
-                        <StackLayout Grid.Column="4" Orientation="Vertical" IsVisible="{Binding IsStartODOEntered}"
-                                     HeightRequest="110">
-                            <Button Text="End Odo" FontSize="Medium" IsEnabled="False"
+                            <Button Text="Leave Site" FontSize="Small" IsEnabled="False"
                                 HeightRequest="90" WidthRequest="120"  />
                         </StackLayout>
+
+                        <StackLayout Grid.Column="5" Orientation="Vertical" IsVisible="{Binding IsStartODOEntered}"
+                                     HeightRequest="110">
+                            <Button Text="Arrive From Site" FontSize="Small" IsEnabled="False"
+                                HeightRequest="90" WidthRequest="120"  />
+                        </StackLayout>-->
 
                     </Grid>
                     
@@ -678,7 +687,7 @@
 
             </StackLayout>
 
-            </StackLayout>
+            <!--</StackLayout>-->
 
         <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
                  AbsoluteLayout.LayoutFlags="PositionProportional"
@@ -689,7 +698,25 @@
             <Label Text="Loading..." HorizontalOptions="Center" TextColor="White"/>
 
         </StackLayout>
+
+                <Button x:Name="fab2Site"
+                    BackgroundColor="OrangeRed" IsEnabled="{Binding IsLeaveToSiteBtnEnabled}"
+                    CornerRadius="40"
+                    Text="{x:Static fa:FontAwesomeIcons.ArrowRight}" FontSize="40" FontFamily="FontAwesome6Solid" 
+                    AbsoluteLayout.LayoutFlags="PositionProportional"  
+                    AbsoluteLayout.LayoutBounds="0.95,0.95,80,80" 
+                    Command="{Binding LeaveJobToSiteCommand}" />
+
+                <Button x:Name="fabFromSite"
+                    BackgroundColor="Aqua" IsEnabled="{Binding IsArrivedFromSiteBtnEnabled}"
+                    Text="{x:Static fa:FontAwesomeIcons.ArrowLeft}" FontFamily="FontAwesome6Solid" 
+                    CornerRadius="40"
+                    AbsoluteLayout.LayoutFlags="PositionProportional"  
+                    AbsoluteLayout.LayoutBounds="0.95,0.95,80,80" 
+                    Command="{Binding ArriveFromSiteCommand}" />
+
         </AbsoluteLayout>
+
     </ContentPage.Content>
 
 </ContentPage>
