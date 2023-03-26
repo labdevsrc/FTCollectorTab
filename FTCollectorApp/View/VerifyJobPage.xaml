@@ -425,33 +425,37 @@
                             <Label Grid.Row="1" Grid.Column="1" Text="Description" />
                             <Label Grid.Row="1" Grid.Column="2" Text="Miles or Hours" />
 
-
-                            <Picker Grid.Row="2" Grid.Column="0" 
+                            <Label Grid.Row="2" Grid.Column="0" Text="{Binding Eq1TypeTitle,Mode=TwoWay}" />
+                            <Label Grid.Row="2" Grid.Column="0" Text="{Binding Eq2TypeTitle,Mode=TwoWay}" />
+                        <!--<Picker Grid.Row="2" Grid.Column="0" 
+                                Title="{Binding Eq1TypeTitle,Mode=TwoWay}"
                                 SelectedItem="{Binding SelectedEqIn1Type, Mode=TwoWay}"
                                 ItemsSource="{Binding EquipmentTypes}" 
                                 ItemDisplayBinding="{Binding EquipCodeDesc}" />
                             <Picker Grid.Row="2" Grid.Column="1" 
                                 SelectedItem="{Binding SelectedEqIn1, Mode=TwoWay}"                                            
                                 ItemsSource="{Binding Equipment1CI}" 
-                                ItemDisplayBinding="{Binding EqDesc}" />
+                                ItemDisplayBinding="{Binding EqDesc}" />-->
                             <Entry Grid.Row="2" Grid.Column="2"  MaxLength="9" Text="{Binding MilesHourIn1,Mode=TwoWay}"/>
 
-
-                            <Picker Grid.Row="3" Grid.Column="0" Margin="5,5,10,5" 
+                        <Label Grid.Row="3" Grid.Column="0" Text="{Binding Eq2TypeTitle,Mode=TwoWay}" />
+                        <!--<Picker Grid.Row="3" Grid.Column="0" Margin="5,5,10,5" 
+                                Title="{Binding Eq2TypeTitle,Mode=TwoWay}"                                    
                                 SelectedItem="{Binding SelectedEqIn2Type, Mode=TwoWay}"
                                 ItemsSource="{Binding EquipmentTypes}"
-                                ItemDisplayBinding="{Binding EquipCodeDesc}"/>
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"/>-->
                             <Picker Grid.Row="3" Grid.Column="1" Margin="5,5,10,5" 
                                 SelectedItem="{Binding SelectedEqIn2, Mode=TwoWay}"                                            
                                 ItemsSource="{Binding Equipment2CI}" 
                                 ItemDisplayBinding="{Binding EqDesc}" />
                             <Entry Grid.Row="3" Grid.Column="2" MaxLength="9"  Text="{Binding MilesHourIn2,Mode=TwoWay}"/>
 
-
-                            <Picker Grid.Row="4" Grid.Column="0" Margin="5,5,10,5" 
+                        <Label Grid.Row="4" Grid.Column="0" Text="{Binding Eq3TypeTitle,Mode=TwoWay}" />
+                        <!--<Picker Grid.Row="4" Grid.Column="0" Margin="5,5,10,5" 
+                                Title="{Binding Eq3TypeTitle,Mode=TwoWay}"                                       
                                 SelectedItem="{Binding SelectedEqIn3Type, Mode=TwoWay}"
                                 ItemsSource="{Binding EquipmentTypes}"
-                                ItemDisplayBinding="{Binding EquipCodeDesc}"/>
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"/>-->
                             <Picker Grid.Row="4" Grid.Column="1" Margin="5,5,10,5" 
                                 SelectedItem="{Binding SelectedEqIn3, Mode=TwoWay}"                                            
                                 ItemsSource="{Binding Equipment3CI}" 
