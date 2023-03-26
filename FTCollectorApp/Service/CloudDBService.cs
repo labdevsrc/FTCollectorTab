@@ -86,6 +86,7 @@ namespace FTCollectorApp.Service
 
             var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("jobnum",Session.jobnum),
+                new KeyValuePair<string, string>("jobkey",Session.jobkey),
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
 
                 new KeyValuePair<string, string>("hr", param1),
@@ -102,7 +103,7 @@ namespace FTCollectorApp.Service
                 // xSaveJobEvents.php Line 73 : $longitude=$_POST['longitude2'];
                 // xSaveJobEvents.php Line 74 : $latitude =$_POST['lattitude2'];
                 new KeyValuePair<string, string>("lattitude2", Session.live_lattitude),
-                new KeyValuePair<string, string>("longitude2", Session.live_lattitude),
+                new KeyValuePair<string, string>("longitude2", Session.live_longitude),
                 new KeyValuePair<string, string>("evtype", Session.event_type),
                 new KeyValuePair<string, string>("odometer", param2.ToString()), // only for sending odometer 
                 
@@ -274,6 +275,8 @@ namespace FTCollectorApp.Service
 
                     new KeyValuePair<string, string>("employeeid",employeeid),
                     new KeyValuePair<string, string>("jobnum",Session.jobnum),
+
+                    new KeyValuePair<string, string>("jobkey",Session.jobkey),
                     new KeyValuePair<string, string>("uid", Session.uid.ToString()),
 
                     new KeyValuePair<string, string>("hr",  hours),

@@ -118,8 +118,8 @@
 
 
                     <StackLayout WidthRequest="500" Margin="20" IsVisible="{Binding IsDisplayCrewList}">
-                        <Frame CornerRadius="5" HasShadow="true" HeightRequest="20">
-                            <Label FontSize="Medium" Text="Select Crew" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+                        <Frame CornerRadius="5" HasShadow="true" >
+                            <Label HeightRequest="30" FontSize="Medium" Text="Select Crew" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
                         </Frame>
                         <Label Text="{Binding CrewLeader , StringFormat='Crew Leader : {0}'}" 
                                     VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
@@ -334,71 +334,7 @@
                         <Button Grid.Column="2" Text="Save" VerticalOptions="Center" Command="{Binding ODOSaveCommand} "/>
                     </Grid>
                     
-                    <StackLayout IsVisible="{Binding IsDisplayEndOfDay}"  >
-                        <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="*,*,*" >
-                            <Label  Text="Employee" FontSize="Medium" />
-                            <Picker Grid.Row="1" Grid.Column="0" FontSize="Medium"
-                                    ItemsSource ="{Binding FinishDayList}"   VerticalOptions="Center"
-                                        SelectedItem="{Binding SelectedCrewForEndOfDay, Mode=TwoWay}" 
-                                        Title="Select Crew"
-                                        ItemDisplayBinding="{Binding FullName}"/>
 
-                            <Label Grid.Column="1" Text="ClockOut" FontSize="Medium" />
-                            <Label Grid.Column="2" Text="PerDiem" FontSize="Medium" />
-
-                            <Entry  Grid.Row="1" Grid.Column="1" Text="{Binding ClockOutTime, Mode=TwoWay}" />
-                            <Picker  Grid.Row="1" Grid.Column="2" SelectedIndex="{Binding ClockOutPerDiem, Mode=TwoWay}" >
-                                <Picker.Items>
-                                    <x:String>No</x:String>
-                                    <x:String>Full day</x:String>
-                                    <x:String>Half day</x:String>
-                                </Picker.Items>
-                            </Picker>
-                            <Button Grid.Row="1" Grid.Column="3" Text="Save TimeSheet" 
-                                   Command="{Binding SaveTimeSheetCommand}" />
-
-                        </Grid>
-                        <!--<ListView  ItemsSource ="{Binding FinishDayList}" 
-                              SelectedItem="{Binding SelectedCrewForEndOfDay, Mode=TwoWay}"
-                                   HeightRequest="100"
-                                   >
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <TextCell Text="{Binding FullName}" Height="40">
-                                    </TextCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>-->
-                    </StackLayout>
-                    
-                    <!-- End of Day -->
-                    <StackLayout  Margin="5"  IsVisible="{Binding IsDisplayEndOfDayForm}" >
-                        
-                        <Label Text="By signing this daily time report, I verify that my individual hours are correctly reported,and I also acknowledge that I have not been involved in a vehicle accident, incident or work related injury
-                               during this work period. 
-                               I understand that falsification of any information or making false statements will be considered grounds for dismissal." 
-                            VerticalOptions="CenterAndExpand" 
-                            HorizontalOptions="CenterAndExpand" />
-                        <Grid ColumnDefinitions="*,*, *, *" RowDefinitions="*,*,*,*,*"  Padding="20">
-                            <Label  Text="Clock in time" HorizontalOptions="Start" VerticalOptions="Center" />
-                            <Entry Grid.Row="0" Grid.Column="1" Text="{Binding ClockIntime, Mode=TwoWay}" VerticalOptions="Center"  />
-                            <Label Grid.Row="1" Grid.Column="0" Text="Lunch out time" HorizontalOptions="Start" VerticalOptions="Center" />
-                            <Entry Grid.Row="1" Grid.Column="1" Text="{Binding LunchOutTime, Mode=TwoWay}" VerticalOptions="Center"/>
-                            <Label Grid.Row="2" Grid.Column="0" Text="Lunch in time" HorizontalOptions="Start" VerticalOptions="Center" />
-                            <Entry Grid.Row="2" Grid.Column="1" Text="{Binding LunchInTime, Mode=TwoWay}" VerticalOptions="Center"/>
-                            <Label Grid.Row="3" Grid.Column="0" Text="Clock out time" HorizontalOptions="Start" VerticalOptions="Center" />
-                            <Entry Grid.Row="3" Grid.Column="1" Text="{Binding ClockOutTimeForm, Mode=TwoWay}" VerticalOptions="Center"/>
-                            <Label Grid.Row="4" Grid.Column="0" Text="Total Hours for Today" HorizontalOptions="Start" VerticalOptions="Center" />
-                            <Entry Grid.Row="4" Grid.Column="1" Text="{Binding TotalHoursForToday, Mode=TwoWay}"  VerticalOptions="Center"/>
-                        </Grid>
-                        <Label Text="{Binding SelectedCrewForEndOfDay.FullName, StringFormat= 'Selected : Employee Name {0}'}" />
-                       
-                        <forms:SignaturePadView x:Name="signaturePad"  BackgroundImage="sign_bg.png"
-                        BackgroundColor="LightGray"  StrokeColor="Black"  StrokeWidth="3" />
-
-                        <!--<Button Text="Save" Command="{Binding SaveEndOfDayCommand}" HorizontalOptions="End" 
-                                WidthRequest="100" HeightRequest="40"/>-->
-                    </StackLayout>
 
                     <StackLayout WidthRequest="500" Margin="20" Padding="20" IsVisible="{Binding IsEqCheckOutDisplayed}">
 
@@ -537,7 +473,7 @@
                                     <Label Text="Employee Name" />
                                     <Label Grid.Column="1" Text="Lunch Out Time"  />
                                     <Label Grid.Column="0" Grid.Row="1" Text="{Binding CrewLeader}" VerticalOptions="Center" />
-                                    <Entry x:Name="entryLO1" Grid.Column="1" Grid.Row="1"  Text="{Binding LunchOutTimeLeader, Mode=OneWay}" VerticalOptions="Center"/>
+                                <Entry x:Name="entryLO1" Grid.Column="1" Grid.Row="1"  Text="{Binding LunchOutTimeLeader, Mode=TwoWay}" VerticalOptions="Center"/>
                                     <Label Grid.Column="2" Grid.Row="1"  FontSize="10" VerticalOptions="Center" 
                                         IsVisible="{Binding Source={x:Reference entryLO1}, Path=Text,
                                         Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
@@ -613,7 +549,7 @@
                                     <Label Text="Employee Name" />
                                     <Label Grid.Column="1" Text="Lunch In Time" />
                                     <Label Grid.Column="0" Grid.Row="1" Text="{Binding CrewLeader}" VerticalOptions="Center" />
-                                    <Entry x:Name="entryLI1" Grid.Column="1" Grid.Row="1"  Text="{Binding LunchInTimeLeader, Mode=OneWay}" VerticalOptions="Center"/>
+                                <Entry x:Name="entryLI1" Grid.Column="1" Grid.Row="1"  Text="{Binding LunchInTimeLeader, Mode=TwoWay}" VerticalOptions="Center"/>
                                     <Label Grid.Column="2" Grid.Row="1"  FontSize="10" VerticalOptions="Center" 
                                         IsVisible="{Binding Source={x:Reference entryLI1}, Path=Text,
                                         Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
@@ -638,7 +574,9 @@
                                         Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
 
 
-                                    <Label Grid.Column="0" Grid.Row="5" Text="{Binding Employee4Name.FullName}" />
+                                    <Label x:Name="emp4" Grid.Column="0" Grid.Row="5" Text="{Binding Employee4Name.FullName}"
+                                           IsEnabled="{Binding Source={x:Reference emp4} , Path=Text.Length }"                                           
+                                           />
                                     <Entry x:Name="entryLI5"  Grid.Column="1" Grid.Row="5"  Text="{Binding LunchInTime4, Mode=TwoWay}" />
                                     <Label Grid.Column="2" Grid.Row="5"  FontSize="10" VerticalOptions="Center" 
                                         IsVisible="{Binding Source={x:Reference entryLI5}, Path=Text,
@@ -646,7 +584,9 @@
 
 
 
-                                    <Label Grid.Column="0" Grid.Row="6" Text="{Binding Employee5Name.FullName}" />
+                                    <Label x:Name="emp5" Grid.Column="0" Grid.Row="6" Text="{Binding Employee5Name.FullName}" 
+                                         IsEnabled="{Binding Source={x:Reference emp5} , Path=Text.Length }"  
+                                           />
                                     <Entry x:Name="entryLI6"  Grid.Column="1" Grid.Row="6"  Text="{Binding LunchInTime5, Mode=TwoWay}" />
                                     <Label Grid.Column="2" Grid.Row="6"  FontSize="10" VerticalOptions="Center" 
                                         IsVisible="{Binding Source={x:Reference entryLI6}, Path=Text,
@@ -685,6 +625,127 @@
                 <Button Text="Equipment CheckIn"  Command="{Binding DisplayEquipmentCheckInCommand}"/>
                 <Button Text="Odometer Input" Command="{Binding ODOPopupCommand}"/>-->
 
+                <StackLayout IsVisible="{Binding IsDisplayEndOfDay}"  >
+                    <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="*,*,*" >
+                        
+                        <!-- table header -->
+                        <Label  Text="Employee" FontSize="Medium" />
+                        <Label Grid.Column="1" Text="ClockOut" FontSize="Medium" />
+                        <Label Grid.Column="2" Text="PerDiem" FontSize="Medium" />
+
+
+                        
+
+                        <!-- row  - Leader -->
+                        <Label  Grid.Row="1"  Text="{Binding CrewLeader}" VerticalOptions="Center"/>
+                        <Entry  Grid.Row="1" Grid.Column="1" Text="{Binding LClockOutTime, Mode=TwoWay}"  VerticalOptions="Center" />
+                        <Picker Grid.Row="1" Grid.Column="2" SelectedIndex="{Binding LClockOutPerDiem, Mode=TwoWay}"  VerticalOptions="Center">
+                            <Picker.Items>
+                                <x:String>No</x:String>
+                                <x:String>Full day</x:String>
+                                <x:String>Half day</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Button Grid.Row="1" Grid.Column="3"  HeightRequest="60" Text="Save TimeSheet" FontSize="Small" Command="{Binding SaveTimeSheetCommand}" 
+                                CommandParameter="Leader"/>
+
+                        <!-- row 2 - employee 1 -->
+                        <Label  Grid.Row="2"  Text="{Binding Employee1Name.FullName}" />
+                        <Entry  Grid.Row="2" Grid.Column="1" Text="{Binding Emp1ClockOutTime, Mode=TwoWay}" />
+                        <Picker  Grid.Row="2" Grid.Column="2" SelectedIndex="{Binding Emp1ClockOutPerDiem, Mode=TwoWay}" >
+                            <Picker.Items>
+                                <x:String>No</x:String>
+                                <x:String>Full day</x:String>
+                                <x:String>Half day</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Button Grid.Row="2" Grid.Column="3" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheetCommand}" 
+                                CommandParameter="Emp1"/>
+
+                        <!-- row 3 - employee 2 -->
+                        <Label  Grid.Row="3"  Text="{Binding Employee2Name.FullName}" />
+                        <Entry  Grid.Row="3" Grid.Column="1" Text="{Binding Emp2ClockOutTime, Mode=TwoWay}" />
+                        <Picker  Grid.Row="3" Grid.Column="2" SelectedIndex="{Binding Emp2ClockOutPerDiem, Mode=TwoWay}" >
+                            <Picker.Items>
+                                <x:String>No</x:String>
+                                <x:String>Full day</x:String>
+                                <x:String>Half day</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Button Grid.Row="3" Grid.Column="3" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheetCommand}" 
+                                CommandParameter="Emp2"/>
+
+                        <!-- row 4 - employee 3 -->
+                        <Label  Grid.Row="4"  Text="{Binding Employee3Name.FullName}" />
+                        <Entry  Grid.Row="4" Grid.Column="1" Text="{Binding Emp3ClockOutTime, Mode=TwoWay}" />
+                        <Picker  Grid.Row="4" Grid.Column="2" SelectedIndex="{Binding Emp3ClockOutPerDiem, Mode=TwoWay}" >
+                            <Picker.Items>
+                                <x:String>No</x:String>
+                                <x:String>Full day</x:String>
+                                <x:String>Half day</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Button Grid.Row="4" Grid.Column="3" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheetCommand}" 
+                                CommandParameter="Emp3"/>
+
+                        <!-- row 5 - employee 4 -->
+                        <Label  Grid.Row="4"  Text="{Binding Employee4Name.FullName}" />
+                        <Entry  Grid.Row="4" Grid.Column="1" Text="{Binding Emp4ClockOutTime, Mode=TwoWay}" />
+                        <Picker  Grid.Row="4" Grid.Column="2" SelectedIndex="{Binding Emp4ClockOutPerDiem, Mode=TwoWay}" >
+                            <Picker.Items>
+                                <x:String>No</x:String>
+                                <x:String>Full day</x:String>
+                                <x:String>Half day</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Button Grid.Row="4" Grid.Column="3" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheetCommand}" 
+                                CommandParameter="Emp4"/>
+                        
+                    </Grid>
+                    <!--<ListView  ItemsSource ="{Binding FinishDayList}" 
+                              SelectedItem="{Binding SelectedCrewForEndOfDay, Mode=TwoWay}"
+                                   HeightRequest="100"
+                                   >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextCell Text="{Binding FullName}" Height="40">
+                                    </TextCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>-->
+                </StackLayout>
+
+                <!-- End of Day -->
+                <StackLayout  Margin="5"  IsVisible="{Binding IsDisplayEndOfDayForm}" >
+
+                    <Label Text="By signing this daily time report, I verify that my individual hours are correctly reported,and I also acknowledge that I have not been involved in a vehicle accident, incident or work related injury
+                               during this work period. 
+                               I understand that falsification of any information or making false statements will be considered grounds for dismissal." 
+                            VerticalOptions="CenterAndExpand" 
+                            HorizontalOptions="CenterAndExpand" />
+                    <Grid ColumnDefinitions="*,*, *, *" RowDefinitions="*,*,*,*,*"  Padding="20">
+                        <Label  Text="Clock in time" HorizontalOptions="Start" VerticalOptions="Center" />
+                        <Entry Grid.Row="0" Grid.Column="1" Text="{Binding ClockIntime, Mode=TwoWay}" VerticalOptions="Center"  />
+                        <Label Grid.Row="1" Grid.Column="0" Text="Lunch out time" HorizontalOptions="Start" VerticalOptions="Center" />
+                        <Entry Grid.Row="1" Grid.Column="1" Text="{Binding LunchOutTime, Mode=TwoWay}" VerticalOptions="Center"/>
+                        <Label Grid.Row="2" Grid.Column="0" Text="Lunch in time" HorizontalOptions="Start" VerticalOptions="Center" />
+                        <Entry Grid.Row="2" Grid.Column="1" Text="{Binding LunchInTime, Mode=TwoWay}" VerticalOptions="Center"/>
+                        <Label Grid.Row="3" Grid.Column="0" Text="Clock out time" HorizontalOptions="Start" VerticalOptions="Center" />
+                        <Entry Grid.Row="3" Grid.Column="1" Text="{Binding ClockOutTimeForm, Mode=TwoWay}" VerticalOptions="Center"/>
+                        <Label Grid.Row="4" Grid.Column="0" Text="Total Hours for Today" HorizontalOptions="Start" VerticalOptions="Center" />
+                        <Entry Grid.Row="4" Grid.Column="1" Text="{Binding TotalHoursForToday, Mode=TwoWay}"  VerticalOptions="Center"/>
+                    </Grid>
+                    <Label Text="{Binding SelectedCrewForEndOfDay.FullName, StringFormat= 'Selected : Employee Name {0}'}" />
+
+                    <forms:SignaturePadView x:Name="signaturePad"  BackgroundImage="sign_bg.png"
+                        BackgroundColor="LightGray"  StrokeColor="Black"  StrokeWidth="3" />
+
+                    <!--<Button Text="Save" Command="{Binding SaveEndOfDayCommand}" HorizontalOptions="End" 
+                                WidthRequest="100" HeightRequest="40"/>-->
+                </StackLayout>
+
+
+
             </StackLayout>
 
             <!--</StackLayout>-->
@@ -700,19 +761,20 @@
         </StackLayout>
 
                 <Button x:Name="fab2Site"
-                    BackgroundColor="OrangeRed" IsEnabled="{Binding IsLeaveToSiteBtnEnabled}"
-                    CornerRadius="40"
-                    Text="{x:Static fa:FontAwesomeIcons.ArrowRight}" FontSize="40" FontFamily="FontAwesome6Solid" 
+                    BackgroundColor="OrangeRed" IsEnabled="{Binding IsLeaveToSiteBtnEnabled}" IsVisible="{Binding IsStartODOEntered}"
+                    CornerRadius="5" ImageSource="leavetosite.png" 
+                    Text="Leave for Job" FontSize="Small" 
                     AbsoluteLayout.LayoutFlags="PositionProportional"  
-                    AbsoluteLayout.LayoutBounds="0.95,0.95,80,80" 
+                    AbsoluteLayout.LayoutBounds="0.9,0.95,150,80" 
                     Command="{Binding LeaveJobToSiteCommand}" />
 
                 <Button x:Name="fabFromSite"
-                    BackgroundColor="Aqua" IsEnabled="{Binding IsArrivedFromSiteBtnEnabled}"
-                    Text="{x:Static fa:FontAwesomeIcons.ArrowLeft}" FontFamily="FontAwesome6Solid" 
-                    CornerRadius="40"
+                    BackgroundColor="Aqua" IsEnabled="{Binding IsArrivedFromSiteBtnEnabled}" IsVisible="{Binding IsStartODOEntered}"
+                    ImageSource="arrivefromsite.png"
+                        Text="&lt;&lt; Arrive from site" FontSize="Small" 
+                    CornerRadius="5" 
                     AbsoluteLayout.LayoutFlags="PositionProportional"  
-                    AbsoluteLayout.LayoutBounds="0.95,0.95,80,80" 
+                    AbsoluteLayout.LayoutBounds="0.9,0.95,180,80" 
                     Command="{Binding ArriveFromSiteCommand}" />
 
         </AbsoluteLayout>
