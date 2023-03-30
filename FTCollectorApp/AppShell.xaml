@@ -386,18 +386,5 @@
     </Shell.MenuItemTemplate>-->
     </FlyoutItem>
 
-    
-    
-    
-    <ShellContent Route="login"
-                  Style="{StaticResource AboutShell}"
-                  Title="LOGIN"
-                  Icon="info.png"
-                  ContentTemplate="{DataTemplate views:SplashDownloadPage}" />
-
-    <MenuItem Text="Help"
-              IconImageSource="help.png"
-              Command="{Binding HelpCommand}"
-              CommandParameter="https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell" />
 
 </Shell>    

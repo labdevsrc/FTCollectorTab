@@ -762,6 +762,7 @@ namespace FTCollectorApp.Service
                 new KeyValuePair<string, string>("evtype",Session.CrewAssembled),
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                 new KeyValuePair<string, string>("jobnum", Session.jobnum),
+                new KeyValuePair<string, string>("jobkey", Session.jobkey),
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
                 new KeyValuePair<string, string>("OWNER_CD", OWNER_CD),
                 new KeyValuePair<string, string>("job_phase",job_phase ),

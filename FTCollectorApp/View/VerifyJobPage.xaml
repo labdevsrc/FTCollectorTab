@@ -10,8 +10,14 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <conv:CheckTimeFormatValidity x:Key="isTimeNotValid" />
+            <conv:FalseJikaNol x:Key="FalseJikaNol" />
+            <xct:IntToBoolConverter x:Key="IntToBoolConverter" />            
         </ResourceDictionary>
     </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem  Command="{Binding LogOutCommand}" Text="LOGOUT" Order="Primary" Priority="0" />
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
 
         <AbsoluteLayout>
@@ -419,50 +425,33 @@
                             <Label Grid.Row="0" Grid.ColumnSpan="3" Text="Equipment Check In " FontSize="30"
                                     VerticalOptions="Center" HorizontalOptions="Center" />
                         </Frame>
-                        <Grid RowDefinitions="*,0.4*,*,*,*" ColumnDefinitions="*,2*,*" Padding="5,10,10,5">
+                    <Grid RowDefinitions="*,0.4*,*,0.3*,*,0.3*,*,0.3*" ColumnDefinitions="*,1.5*,0.3*,*" Padding="5,10,10,5">
 
-                            <Label Grid.Row="1" Grid.Column="0" Text="Type*" />
-                            <Label Grid.Row="1" Grid.Column="1" Text="Description" />
-                            <Label Grid.Row="1" Grid.Column="2" Text="Miles or Hours" />
+                            <Label Grid.Column="0" Text="Type*" />
+                            <Label Grid.Column="1" Text="Description" />
+                            <Label Grid.Column="2" Text="Check" />
+                            <Label Grid.Column="3" Text="Miles or Hours" />
+                            <BoxView Grid.Row="1" Grid.ColumnSpan="4"  Color="Gray" HeightRequest="2" HorizontalOptions="Fill" />
+                            <Label Grid.Row="2" Grid.Column="0" Text="{Binding Eq1TypeTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <Label Grid.Row="2" Grid.Column="1" Text="{Binding Eq1DescTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <CheckBox Grid.Row="2" Grid.Column="2" IsChecked="{Binding Eq1IsReturned,Mode=TwoWay}" />
+                            <Entry Grid.Row="2" Grid.Column="3"  MaxLength="9" Text="{Binding MilesHourIn1,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <Label Grid.Row="3" Grid.Column="3" IsVisible="{Binding IsErrorMsg1Display}"/>
+                        
+                        
+                            <Label Grid.Row="4" Grid.Column="0" Text="{Binding Eq2TypeTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <Label Grid.Row="4" Grid.Column="1" Text="{Binding Eq2DescTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <CheckBox Grid.Row="4" Grid.Column="2" IsChecked="{Binding Eq2IsReturned,Mode=TwoWay}" />
+                            <Entry Grid.Row="4" Grid.Column="3" MaxLength="9"  Text="{Binding MilesHourIn2,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <Label Grid.Row="5" Grid.Column="3" IsVisible="{Binding IsErrorMsg2Display}"/>
 
-                            <Label Grid.Row="2" Grid.Column="0" Text="{Binding Eq1TypeTitle,Mode=TwoWay}" />
-                            <Label Grid.Row="2" Grid.Column="0" Text="{Binding Eq2TypeTitle,Mode=TwoWay}" />
-                        <!--<Picker Grid.Row="2" Grid.Column="0" 
-                                Title="{Binding Eq1TypeTitle,Mode=TwoWay}"
-                                SelectedItem="{Binding SelectedEqIn1Type, Mode=TwoWay}"
-                                ItemsSource="{Binding EquipmentTypes}" 
-                                ItemDisplayBinding="{Binding EquipCodeDesc}" />
-                            <Picker Grid.Row="2" Grid.Column="1" 
-                                SelectedItem="{Binding SelectedEqIn1, Mode=TwoWay}"                                            
-                                ItemsSource="{Binding Equipment1CI}" 
-                                ItemDisplayBinding="{Binding EqDesc}" />-->
-                            <Entry Grid.Row="2" Grid.Column="2"  MaxLength="9" Text="{Binding MilesHourIn1,Mode=TwoWay}"/>
-
-                        <Label Grid.Row="3" Grid.Column="0" Text="{Binding Eq2TypeTitle,Mode=TwoWay}" />
-                        <!--<Picker Grid.Row="3" Grid.Column="0" Margin="5,5,10,5" 
-                                Title="{Binding Eq2TypeTitle,Mode=TwoWay}"                                    
-                                SelectedItem="{Binding SelectedEqIn2Type, Mode=TwoWay}"
-                                ItemsSource="{Binding EquipmentTypes}"
-                                ItemDisplayBinding="{Binding EquipCodeDesc}"/>-->
-                            <Picker Grid.Row="3" Grid.Column="1" Margin="5,5,10,5" 
-                                SelectedItem="{Binding SelectedEqIn2, Mode=TwoWay}"                                            
-                                ItemsSource="{Binding Equipment2CI}" 
-                                ItemDisplayBinding="{Binding EqDesc}" />
-                            <Entry Grid.Row="3" Grid.Column="2" MaxLength="9"  Text="{Binding MilesHourIn2,Mode=TwoWay}"/>
-
-                        <Label Grid.Row="4" Grid.Column="0" Text="{Binding Eq3TypeTitle,Mode=TwoWay}" />
-                        <!--<Picker Grid.Row="4" Grid.Column="0" Margin="5,5,10,5" 
-                                Title="{Binding Eq3TypeTitle,Mode=TwoWay}"                                       
-                                SelectedItem="{Binding SelectedEqIn3Type, Mode=TwoWay}"
-                                ItemsSource="{Binding EquipmentTypes}"
-                                ItemDisplayBinding="{Binding EquipCodeDesc}"/>-->
-                            <Picker Grid.Row="4" Grid.Column="1" Margin="5,5,10,5" 
-                                SelectedItem="{Binding SelectedEqIn3, Mode=TwoWay}"                                            
-                                ItemsSource="{Binding Equipment3CI}" 
-                                ItemDisplayBinding="{Binding EqDesc}" />
-                            <Entry Grid.Row="4" Grid.Column="2" MaxLength="9"  Text="{Binding MilesHourIn3,Mode=TwoWay}"/>
-                        </Grid>
-                        <Button Text="Save" Command="{Binding SaveEqCheckInCommand}"/>
+                            <Label Grid.Row="6" Grid.Column="0" Text="{Binding Eq3TypeTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <Label Grid.Row="6" Grid.Column="1" Text="{Binding Eq3DescTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <CheckBox Grid.Row="6" Grid.Column="2" IsChecked="{Binding Eq3IsReturned,Mode=TwoWay}" />
+                            <Entry Grid.Row="6" Grid.Column="3" MaxLength="9"  Text="{Binding MilesHourIn3,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <Label Grid.Row="7" Grid.Column="3" IsVisible="{Binding IsErrorMsg3Display}"/>
+                    </Grid>
+                        <Button Text="Return Equipment" Command="{Binding SaveEqCheckInCommand}"/>
                     </StackLayout>
 
 
@@ -507,14 +496,19 @@
                                         IsVisible="{Binding Source={x:Reference entryLO5}, Path=Text,
                                         Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
 
-                                    <Label Grid.Column="0" Grid.Row="6" Text="{Binding Employee5Name.FullName}" VerticalOptions="Center"/>
-                                    <Entry Grid.Column="1" Grid.Row="6" x:Name="entryLO6"  Text="{Binding LunchOutTime5, Mode=TwoWay}" VerticalOptions="Center"/>
+                                   <Label Grid.Column="0" Grid.Row="6" x:Name="emp5Name" Text="{Binding Employee5Name.FullName}" VerticalOptions="Center"/>
+                                    <Entry Grid.Column="1" Grid.Row="6" x:Name="entryLO6"  Text="{Binding LunchOutTime5, Mode=TwoWay}" 
+                                           IsVisible="{Binding Source={x:Reference emp5Name}, Path=Text.Length, Converter={StaticResource FalseJikaNol}}" VerticalOptions="Center"/>
                                     <Label Grid.Column="2" Grid.Row="6"  FontSize="10" VerticalOptions="Center" 
                                         IsVisible="{Binding Source={x:Reference entryLO6}, Path=Text,
                                         Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
 
-                                    <Label Grid.Column="0" Grid.Row="7" Text="{Binding Employee6Name.FullName}" VerticalOptions="Center"/>
-                                    <Entry Grid.Column="1" Grid.Row="7" x:Name="entryLO7"  Text="{Binding LunchOutTime6, Mode=TwoWay}" VerticalOptions="Center"/>
+                                    <Label Grid.Column="0" Grid.Row="7" x:Name="emp6Name" Text="{Binding Employee6Name.FullName}" VerticalOptions="Center"/>
+                                    <Entry Grid.Column="1" Grid.Row="7" x:Name="entryLO7"  Text="{Binding LunchOutTime6, Mode=TwoWay}" VerticalOptions="Center"
+                                           IsVisible="{Binding Source={x:Reference emp6Name}, Path=Text.Length,
+                                        Converter={StaticResource FalseJikaNol}}"
+                                           
+                                           />
                                     <Label Grid.Column="2" Grid.Row="7"  FontSize="10" VerticalOptions="Center" 
                                         IsVisible="{Binding Source={x:Reference entryLO7}, Path=Text,
                                         Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
@@ -654,9 +648,9 @@
                                 CommandParameter="Leader"/>
 
                         <!-- row 2 - employee 1 -->
-                        <Label  Grid.Row="2"  Text="{Binding Employee1Name.FullName}" />
-                        <Entry  Grid.Row="2" Grid.Column="1" Text="{Binding Emp1ClockOutTime, Mode=TwoWay}" />
-                        <Picker  Grid.Row="2" Grid.Column="2" SelectedIndex="{Binding Emp1ClockOutPerDiem, Mode=TwoWay}" >
+                        <Label  Grid.Row="2"  Text="{Binding Employee1Name.FullName}"  VerticalOptions="Center" />
+                        <Entry  Grid.Row="2" Grid.Column="1" Text="{Binding Emp1ClockOutTime, Mode=TwoWay}"  VerticalOptions="Center" />
+                        <Picker  Grid.Row="2" Grid.Column="2" SelectedIndex="{Binding Emp1ClockOutPerDiem, Mode=TwoWay}"   VerticalOptions="Center" >
                             <Picker.Items>
                                 <x:String>No</x:String>
                                 <x:String>Full day</x:String>
@@ -667,35 +661,42 @@
                                 CommandParameter="Emp1"/>
 
                         <!-- row 3 - employee 2 -->
-                        <Label  Grid.Row="3"  Text="{Binding Employee2Name.FullName}" />
-                        <Entry  Grid.Row="3" Grid.Column="1" Text="{Binding Emp2ClockOutTime, Mode=TwoWay}" />
-                        <Picker  Grid.Row="3" Grid.Column="2" SelectedIndex="{Binding Emp2ClockOutPerDiem, Mode=TwoWay}" >
-                            <Picker.Items>
+                        <Label  Grid.Row="3" x:Name="EODemp2" Text="{Binding Employee2Name.FullName}"  VerticalOptions="Center" />
+                        <Entry  Grid.Row="3" Grid.Column="1" Text="{Binding Emp2ClockOutTime, Mode=TwoWay}" 
+                                IsVisible="{Binding Source={x:Reference EODemp2}, Path=Text.Length, Converter={StaticResource FalseJikaNol}}"  VerticalOptions="Center" />
+                        <Picker  Grid.Row="3" Grid.Column="2" SelectedIndex="{Binding Emp2ClockOutPerDiem, Mode=TwoWay}" 
+                                IsVisible="{Binding Source={x:Reference EODemp2}, Path=Text.Length, Converter={StaticResource FalseJikaNol}}"  VerticalOptions="Center" >
+
+                        <Picker.Items>
                                 <x:String>No</x:String>
                                 <x:String>Full day</x:String>
                                 <x:String>Half day</x:String>
                             </Picker.Items>
                         </Picker>
-                        <Button Grid.Row="3" Grid.Column="3" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheetCommand}" 
-                                CommandParameter="Emp2"/>
-
+                        <Button Grid.Row="3" Grid.Column="3" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheetCommand}"  CommandParameter="Emp2"
+                                IsVisible="{Binding Source={x:Reference EODemp2}, Path=Text.Length, Converter={StaticResource FalseJikaNol}}"/>
                         <!-- row 4 - employee 3 -->
-                        <Label  Grid.Row="4"  Text="{Binding Employee3Name.FullName}" />
-                        <Entry  Grid.Row="4" Grid.Column="1" Text="{Binding Emp3ClockOutTime, Mode=TwoWay}" />
-                        <Picker  Grid.Row="4" Grid.Column="2" SelectedIndex="{Binding Emp3ClockOutPerDiem, Mode=TwoWay}" >
-                            <Picker.Items>
+                        <Label  Grid.Row="4" x:Name="EODemp3" Text="{Binding Employee3Name.FullName}"  VerticalOptions="Center" />
+                        <Entry  Grid.Row="4" Grid.Column="1" Text="{Binding Emp3ClockOutTime, Mode=TwoWay}" 
+                                IsVisible="{Binding Source={x:Reference EODemp3}, Path=Text.Length, Converter={StaticResource FalseJikaNol}}"  VerticalOptions="Center" />
+                        <Picker  Grid.Row="4" Grid.Column="2" SelectedIndex="{Binding Emp3ClockOutPerDiem, Mode=TwoWay}" 
+                                IsVisible="{Binding Source={x:Reference EODemp3}, Path=Text.Length, Converter={StaticResource FalseJikaNol}}"  VerticalOptions="Center" >
+                        <Picker.Items>
                                 <x:String>No</x:String>
                                 <x:String>Full day</x:String>
                                 <x:String>Half day</x:String>
                             </Picker.Items>
                         </Picker>
                         <Button Grid.Row="4" Grid.Column="3" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheetCommand}" 
-                                CommandParameter="Emp3"/>
+                               IsVisible="{Binding Source={x:Reference EODemp3}, Path=Text.Length, Converter={StaticResource FalseJikaNol}}"  CommandParameter="Emp3"/>
 
                         <!-- row 5 - employee 4 -->
-                        <Label  Grid.Row="4"  Text="{Binding Employee4Name.FullName}" />
-                        <Entry  Grid.Row="4" Grid.Column="1" Text="{Binding Emp4ClockOutTime, Mode=TwoWay}" />
-                        <Picker  Grid.Row="4" Grid.Column="2" SelectedIndex="{Binding Emp4ClockOutPerDiem, Mode=TwoWay}" >
+                        <Label  Grid.Row="4"  x:Name="EODemp4"  Text="{Binding Employee4Name.FullName}"  VerticalOptions="Center"  />
+                        <Entry  Grid.Row="4" Grid.Column="1" Text="{Binding Emp4ClockOutTime, Mode=TwoWay}" 
+                                IsVisible="{Binding Source={x:Reference EODemp4}, Path=Text.Length, Converter={StaticResource FalseJikaNol}}"  VerticalOptions="Center"  />
+                        <Picker  Grid.Row="4" Grid.Column="2" SelectedIndex="{Binding Emp4ClockOutPerDiem, Mode=TwoWay}" 
+                                 IsVisible="{Binding Source={x:Reference EODemp4}, Path=Text.Length, Converter={StaticResource FalseJikaNol}}"  VerticalOptions="Center" 
+                                 >
                             <Picker.Items>
                                 <x:String>No</x:String>
                                 <x:String>Full day</x:String>
@@ -703,7 +704,7 @@
                             </Picker.Items>
                         </Picker>
                         <Button Grid.Row="4" Grid.Column="3" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheetCommand}" 
-                                CommandParameter="Emp4"/>
+                                 IsVisible="{Binding Source={x:Reference EODemp4}, Path=Text.Length, Converter={StaticResource FalseJikaNol}}" CommandParameter="Emp4"/>
                         
                     </Grid>
                     <!--<ListView  ItemsSource ="{Binding FinishDayList}" 
@@ -765,21 +766,37 @@
         </StackLayout>
 
                 <Button x:Name="fab2Site"
-                    BackgroundColor="OrangeRed" IsEnabled="{Binding IsLeaveToSiteBtnEnabled}" IsVisible="{Binding IsStartODOEntered}"
-                    CornerRadius="5" ImageSource="leavetosite.png" 
-                    Text="Leave for Job" FontSize="Small" 
+                    BackgroundColor="OrangeRed" IsVisible="{Binding IsLeaveToSiteBtnEnabled}"
+                    CornerRadius="5" 
+                    Text="Leave for Job" FontSize="Small"                          
                     AbsoluteLayout.LayoutFlags="PositionProportional"  
-                    AbsoluteLayout.LayoutBounds="0.9,0.95,150,80" 
+                    AbsoluteLayout.LayoutBounds="0.9,0.94,150,80" 
                     Command="{Binding LeaveJobToSiteCommand}" />
 
                 <Button x:Name="fabFromSite"
-                    BackgroundColor="Aqua" IsEnabled="{Binding IsArrivedFromSiteBtnEnabled}" IsVisible="{Binding IsStartODOEntered}"
-                    ImageSource="arrivefromsite.png"
-                        Text="&lt;&lt; Arrive from site" FontSize="Small" 
+                    BackgroundColor="Aqua" IsVisible="{Binding IsArrivedFromSiteBtnEnabled}"
+                    Text="&lt;&lt; Arrive from site" FontSize="Small"  
                     CornerRadius="5" 
                     AbsoluteLayout.LayoutFlags="PositionProportional"  
-                    AbsoluteLayout.LayoutBounds="0.9,0.95,180,80" 
+                    AbsoluteLayout.LayoutBounds="0.9,0.94,150,80" 
                     Command="{Binding ArriveFromSiteCommand}" />
+
+            <!-- ImageSource="leavetosite.png" 
+                    ImageSource="arrivefromsite.png"
+                        ImageSource="arrivefromsite.png"           
+            -->
+                <Button x:Name="arrivedY"
+                        BackgroundColor="Aqua" IsVisible="{Binding IsArrivedAtYardBtnEnabled}"
+
+                        Text="&lt;&lt; Arrive @Yard" FontSize="Small" 
+                        CornerRadius="5" 
+                        AbsoluteLayout.LayoutFlags="PositionProportional"  
+                        AbsoluteLayout.LayoutBounds="0.9,0.94,150,80" 
+                        Command="{Binding ArriveAtYardCommand}" />
+                <!--<Label Text="{Binding TodoButton, Mode=TwoWay}"  BackgroundColor="Transparent"
+                        AbsoluteLayout.LayoutFlags="PositionProportional"  
+                        AbsoluteLayout.LayoutBounds="0.9,0.98,50,80"                                      
+                   />-->
 
         </AbsoluteLayout>
 

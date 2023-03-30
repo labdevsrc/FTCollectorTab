@@ -357,6 +357,15 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] string milesHour2 = string.Empty;
         [ObservableProperty] string milesHour3 = string.Empty;
 
+        [ObservableProperty] string eq1TypeTitle;
+        [ObservableProperty] string eq2TypeTitle;
+        [ObservableProperty] string eq3TypeTitle;
+        [ObservableProperty] string eq4TypeTitle;
+
+        [ObservableProperty] string eq1DescTitle;
+        [ObservableProperty] string eq2DescTitle;
+        [ObservableProperty] string eq3DescTitle;
+        [ObservableProperty] string eq4DescTitle;
 
         async void LoginPopUpCall()
         {
@@ -433,7 +442,7 @@ namespace FTCollectorApp.ViewModel
 
                         Console.WriteLine();
                     }
-                    else if(param.Equals("Emp1"))
+                    else if (param.Equals("Emp1"))
                     {
                         LunchInTime = LunchInTime1;
                         LunchOutTime = LunchOutTime1;
@@ -442,8 +451,8 @@ namespace FTCollectorApp.ViewModel
                         ClockOutTime = Emp1ClockOutTime;
                         Fullname = Employee1Name.FullName;
 
-                        CrewKey = SelectedCrewInfoDetails[1].TeamUserKey; //.Where(a => a.id == 2).Select(b => b.TeamUserKey).ToString();
-                        
+                        CrewKey = SelectedCrewInfoDetails[1].TeamUserKey.ToString(); //.Where(a => a.id == 2).Select(b => b.TeamUserKey).ToString();
+
                         await CloudDBService.PostTimeSheet(CrewKey, ClockOutTime, SelectedPhase.PhaseNumber, Emp1ClockOutPerDiem);
 
                         Console.WriteLine();
@@ -453,7 +462,8 @@ namespace FTCollectorApp.ViewModel
                         LunchInTime = LunchInTime2;
                         LunchOutTime = LunchOutTime2;
                         ClockOutTimeForm = Emp2ClockOutTime;
-                        CrewKey = SelectedCrewInfoDetails[2].TeamUserKey; //.Where(a => a.id == 3).Select(b => b.TeamUserKey).ToString();
+                        ClockIntime = StartTimeEmp2;
+                        CrewKey = SelectedCrewInfoDetails[2].TeamUserKey.ToString(); //.Where(a => a.id == 3).Select(b => b.TeamUserKey).ToString();
                         ClockOutTime = Emp2ClockOutTime;
                         Fullname = Employee2Name.FullName;
                         await CloudDBService.PostTimeSheet(CrewKey, ClockOutTime, SelectedPhase.PhaseNumber, Emp2ClockOutPerDiem);
@@ -464,7 +474,8 @@ namespace FTCollectorApp.ViewModel
                         LunchInTime = LunchInTime3;
                         LunchOutTime = LunchOutTime3;
                         ClockOutTimeForm = Emp3ClockOutTime;
-                        CrewKey = SelectedCrewInfoDetails[3].TeamUserKey; //.Where(a => a.id == 4).Select(b => b.TeamUserKey).ToString();
+                        ClockIntime = StartTimeEmp3;
+                        CrewKey = SelectedCrewInfoDetails[3].TeamUserKey.ToString(); //.Where(a => a.id == 4).Select(b => b.TeamUserKey).ToString();
                         ClockOutTime = Emp3ClockOutTime;
                         Fullname = Employee3Name.FullName;
                         await CloudDBService.PostTimeSheet(CrewKey, ClockOutTime, SelectedPhase.PhaseNumber, Emp3ClockOutPerDiem);
@@ -476,7 +487,8 @@ namespace FTCollectorApp.ViewModel
                         LunchInTime = LunchInTime4;
                         LunchOutTime = LunchOutTime4;
                         ClockOutTimeForm = Emp4ClockOutTime;
-                        CrewKey = SelectedCrewInfoDetails[4].TeamUserKey; //.Where(a => a.id == 5).Select(b => b.TeamUserKey).ToString();
+                        ClockIntime = StartTimeEmp4;
+                        CrewKey = SelectedCrewInfoDetails[4].TeamUserKey.ToString(); //.Where(a => a.id == 5).Select(b => b.TeamUserKey).ToString();
                         ClockOutTime = Emp4ClockOutTime;
                         Fullname = Employee4Name.FullName;
                         await CloudDBService.PostTimeSheet(CrewKey, ClockOutTime, SelectedPhase.PhaseNumber, Emp4ClockOutPerDiem);
@@ -484,51 +496,6 @@ namespace FTCollectorApp.ViewModel
                         Console.WriteLine();
                     }
 
-
-                    /*if (SelectedCrewForEndOfDay.id == 1)
-                    {
-                        LunchInTime = LunchInTimeLeader;
-                        LunchOutTime = LunchOutTimeLeader;
-                        ClockOutTimeForm = LClockOutTime;
-                    }
-                    else if (SelectedCrewForEndOfDay.id == 2)
-                    {
-                        LunchInTime = LunchInTime1;
-                        LunchOutTime = LunchOutTime1;
-                    }
-                    else if (SelectedCrewForEndOfDay.id == 3)
-                    {
-                        LunchInTime = LunchInTime2;
-                        LunchOutTime = LunchOutTime2;
-                    }
-                    else if (SelectedCrewForEndOfDay.id == 4)
-                    {
-                        LunchInTime = LunchInTime3;
-                        LunchOutTime = LunchOutTime3;
-                    }
-                    else if (SelectedCrewForEndOfDay.id == 5)
-                    {
-                        LunchInTime = LunchInTime4;
-                        LunchOutTime = LunchOutTime4;
-                    }
-                    else if (SelectedCrewForEndOfDay.id == 6)
-                    {
-                        LunchInTime = LunchInTime5;
-                        LunchOutTime = LunchOutTime5;
-                    }
-                    else if (SelectedCrewForEndOfDay.id == 7)
-                    {
-                        LunchInTime = LunchInTime6;
-                        LunchOutTime = LunchOutTime6;
-                    }
-
-
-
-                    // upload to timesheet Clockout
-                    Session.event_type = "16";
-                    if (ClockOutTime.Length > 3)
-                        await CloudDBService.PostTimeSheet(SelectedCrewForEndOfDay.TeamUserKey.ToString(),
-                        ClockOutTime, "", ClockOutPerDiem);*/
                     Console.WriteLine();
                     try
                     {
@@ -548,33 +515,6 @@ namespace FTCollectorApp.ViewModel
 
                 }
             );
-
-            /*MoveToSitePageCommand = new Command(
-                execute: () =>
-                {
-                    var tabbedPage = this.Parent as TabbedPage;
-                    tabbedPage.CurrentPage = tabbedPage.Children[1];
-                }
-            );
-
-            ToggleJobEntriesCommand = new Command(
-                execute: () =>
-                {
-                    IsDisplayCrewList = false;
-                    IsDisplayOdo = false;
-                    IsDisplayEndOfDayForm = false;
-                    IsDisplayEndOfDay = false;
-                    IsDisplayJobEntries = !IsDisplayJobEntries;
-                    IsLunchOutDisplay = false;
-                    IsLunchInDisplay = false;
-                },
-                canExecute: () =>
-                {
-                    return !IsDisplayCrewList;
-                }
-            );*/
-
-
 
 
             ToggleCrewListCommand = new Command(
@@ -771,10 +711,6 @@ namespace FTCollectorApp.ViewModel
 
                         await Application.Current.MainPage.DisplayAlert("Updated", "Crew member updated", "OK");
                         DisplayEquipmentCheckInCommand?.Execute(null); // show Crew List 
-
-
-
-
                         IsDisplayCrewList = false;
 
                         (DisplayEquipmentCheckOutCommand as Command).ChangeCanExecute();
@@ -843,10 +779,12 @@ namespace FTCollectorApp.ViewModel
                         await CloudDBService.PostTimeSheet(Employee6Name?.TeamUserKey.ToString(), LunchOutTime6, SelectedPhase.PhaseNumber, 0);
                     }
 
+                    ClearAllPage();
+
                 },
                 canExecute: () =>
                 {
-                    return true;
+                    return DisableLunchOutSaveBtn;
                 }
             );
 
@@ -889,8 +827,11 @@ namespace FTCollectorApp.ViewModel
                     IsLunchIn = false; // end of Lunch in, refresh Equipment in & Endof day button
                     (DisplayEquipmentCheckInCommand as Command).ChangeCanExecute();
                     (ToggleEndofDayCommand as Command).ChangeCanExecute();
+
+                    IsArrivedFromSiteBtnEnabled = true;
                     (ArriveFromSiteCommand as Command).ChangeCanExecute();
 
+                    ClearAllPage();
                 },
                 canExecute: () =>
                 {
@@ -906,15 +847,15 @@ namespace FTCollectorApp.ViewModel
                         try
                         {
 
-                            string curHHMM = DateTime.Now.ToString("H:m");
-                            string curHour = DateTime.Now.ToString("%H");
-                            string curMinute = DateTime.Now.ToString("%m");
-                            Application.Current.Properties["LunchOutHH"] = curHour;
-                            Application.Current.Properties["LunchOutMM"] = curMinute;
-
+                            //TodoButton = string.Empty;
 
                             IsLunchOut = false;
                             IsLunchIn = true; // when lunchout button clicked, it will enable Lunchin button
+
+                            // enable save button 
+                            DisableLunchOutSaveBtn = true;
+                            (SaveLunchOutCommand as Command).ChangeCanExecute();
+
                             (LunchInCommand as Command).ChangeCanExecute();
                             (LunchOutCommand as Command).ChangeCanExecute();
                             (DisplayEquipmentCheckInCommand as Command).ChangeCanExecute();
@@ -938,7 +879,7 @@ namespace FTCollectorApp.ViewModel
                     canExecute: () =>
                     {
                         Console.WriteLine();
-                        return !IsDisplayCrewList && IsLunchOut;
+                        return IsLunchOut;
                     }
                 );
 
@@ -953,9 +894,8 @@ namespace FTCollectorApp.ViewModel
 
                     IsLunchIn = false;
                     (LunchInCommand as Command).ChangeCanExecute();
+                    //TodoButton = string.Empty;
 
-                    IsArrivedFromSiteBtnEnabled = true;
-                    (ArriveFromSiteCommand as Command).ChangeCanExecute();
 
                 },
                 canExecute: () =>
@@ -977,6 +917,8 @@ namespace FTCollectorApp.ViewModel
 
                     //check if clockintime > lunchout
                     Console.WriteLine();
+                    //TodoButton = string.Empty;
+
 
                 },
                 canExecute: () =>
@@ -998,62 +940,39 @@ namespace FTCollectorApp.ViewModel
                 }
             );
 
-            /*ODOPopupCommand = new Command(
-                execute: async () =>
-                {
-                    IsDisplayOdoStart = !IsStartODOEntered;
-                    IsDisplayOdoEnd = IsStartODOEntered;
-                    IsDisplayCrewList = false;
-                    IsDisplayJobEntries = false;
-                    IsDisplayEndOfDay = false;
-                    IsDisplayEndOfDayForm = false;
-                    IsLunchInDisplay = false;
-                    IsLunchOutDisplay = false;
-
-                },
-                canExecute: () =>
-                {
-                    Console.WriteLine();
-                    return true; // !IsDisplayCrewList && IsVerified;
-                }
-
-
-            );
-
-
-
-            ODOSaveCommand = new Command(
-                execute: async () =>
-                {
-                    IsBusy = true;
-                    try
-                    {
-                        Session.event_type = "8";
-                        await CloudDBService.PostJobEvent(EntryOdometer);
-
-                    }
-                    catch
-                    {
-                        await Application.Current.MainPage.DisplayAlert("Error", "Update JobEvent table failed. Check again internet connection", "CLOSE");
-                    }
-                    IsBusy = false;
-                    IsStartODOEntered = true;
-                    IsDisplayOdoStart = false;
-                    IsDisplayOdoEnd = false;
-
-                }
-
-            );*/
-
             DisplayEquipmentCheckInCommand = new Command(
                 execute: () =>
                 {
                     ClearAllPage();
                     IsEqCheckInDisplayed = true;
 
+                    try
+                    {
 
-                    Application.Current.Properties["Eq1Type"] = SelectedEq1Type?.EquipCodeDesc;
-                    Application.Current.Properties["Eq1Desc"] = SelectedEq1?.EqDesc;
+                        if (Application.Current.Properties.ContainsKey("Eq1Type"))
+                        {
+                            Eq1TypeTitle = Application.Current.Properties["Eq1Type"] as string;
+                            Eq1DescTitle = Application.Current.Properties["Eq1Desc"] as string;
+                        }
+                        if (Application.Current.Properties.ContainsKey("Eq2Type"))
+                        {
+                            Eq2TypeTitle = Application.Current.Properties["Eq2Type"] as string;
+                            Eq2DescTitle = Application.Current.Properties["Eq2Desc"] as string;
+                        }
+                        if (Application.Current.Properties.ContainsKey("Eq3Type"))
+                        {
+                            Eq3TypeTitle = Application.Current.Properties["Eq3Type"] as string;
+                            Eq3DescTitle = Application.Current.Properties["Eq3Desc"] as string;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("DisplayEquipmentCheckInCommand " + e.ToString());
+                    }
+                    //TodoButton = string.Empty;
+
+                    Console.WriteLine();
+
 
                 },
                 canExecute: () =>
@@ -1066,42 +985,52 @@ namespace FTCollectorApp.ViewModel
             SaveEqCheckInCommand = new Command(
                 execute: async () =>
                 {
-                    // do something
-                    // goto equipment checkin
 
                     try
                     {
-                        if (SelectedEqIn1?.EqDesc.Length > 1)
+                        if (Eq1IsReturned)
                         {
-                            //await CloudDBService.PostTimeSheet(Session.uid.ToString(), LunchOutTimeLeader, SelectedPhase, 0);
                             await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq1?.EqKey, MilesHourIn1, "0");
+                            Console.WriteLine(Eq1IsReturned);
+                        };
+                        if (Eq2IsReturned)
+                        {
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq2?.EqKey, MilesHourIn2, "0");
+                            Console.WriteLine(Eq2IsReturned);
+                        };
+                        if (Eq3IsReturned)
+                        { 
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq3?.EqKey, MilesHourIn3, "0");
+                            Console.WriteLine(Eq3IsReturned);
+                        };
 
+                        /*if (SelectedEqIn1?.EqDesc.Length > 1)
+                        {
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq1?.EqKey, MilesHourIn1, "0");
                         }
                         if (SelectedEqIn2?.EqDesc.Length > 1)
                         {
-                            //await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(), LunchOutTime1, SelectedPhase, 0);
                             await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq2?.EqKey, MilesHourIn2, "0");
                         }
                         if (SelectedEqIn3?.EqDesc.Length > 1)
                         {
-                            //await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(), LunchOutTime1, SelectedPhase, 0);
                             await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq3?.EqKey, MilesHourIn3, "0");
                         }
 
-                        if (SelectedEqIn1?.EqDesc.Length == 0 && SelectedEqIn1?.EqDesc.Length == 0
-                        && SelectedEqIn1?.EqDesc.Length == 0)
+                        if (SelectedEqIn1?.EqDesc.Length == 0 && SelectedEqIn2?.EqDesc.Length == 0
+                        && SelectedEqIn2?.EqDesc.Length == 0)
                         {
                             await Application.Current.MainPage.DisplayAlert("Input Error", "Return Equipment is Empty", "Back");
                             return;
-                        }
+                        }*/
+                        //TodoButton = string.Empty;
 
                         bool answer = await Application.Current.MainPage.DisplayAlert("Upload Done", "Job Equipment table uploaded", "Finish The Day", "Back");
-                        if(answer) {
+                        if (answer) {
                             ClearAllPage();
                             IsDisplayEndOfDay = true;
-
                         }
-                    
+
 
                     }
                     catch (Exception e)
@@ -1138,36 +1067,71 @@ namespace FTCollectorApp.ViewModel
                     //Session.event_type = "8"; // Odo
                     //await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
 
-                    
-                    IsStartODOEntered = true; // start ODO entered , enable all icon
+
+                    //IsStartODOEntered = true; // start ODO entered , enable all icon
                     IsDisplayOdoStart = false;
                     IsDisplayOdoEnd = false;
 
                     IsLeaveToSiteBtnEnabled = true;// enable fab button
+                    //TodoButton = "Leave to Site";
                     (LeaveJobToSiteCommand as Command).ChangeCanExecute();
 
                     try
                     {
                         if (SelectedEq1?.EqDesc.Length > 1)
                         {
-                            //await CloudDBService.PostTimeSheet(Session.uid.ToString(), LunchOutTimeLeader, SelectedPhase, 0);
-                            Application.Current.Properties["Eq1Type"] = SelectedEq1Type?.EquipCodeDesc;
-                            Application.Current.Properties["Eq1Desc"] = SelectedEq1?.EqDesc;
+                            if (Application.Current.Properties.ContainsKey("Eq1Type"))
+                            {
+                                Application.Current.Properties["Eq1Type"] = SelectedEq1Type?.EquipCodeDesc;
+                                Application.Current.Properties["Eq1Desc"] = SelectedEq1?.EqDesc;
+                                Application.Current.Properties["COMiles1"] = MilesHour1;
+
+                            }
+                            else
+                            {
+                                Application.Current.Properties.Add("Eq1Type", SelectedEq1Type?.EquipCodeDesc);
+                                Application.Current.Properties.Add("Eq1Desc", SelectedEq1?.EqDesc);
+                                Application.Current.Properties.Add("COMiles1", MilesHour1);
+                            }
+
                             await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq1?.EqKey, "0", MilesHour1);
 
                         }
                         if (SelectedEq2?.EqDesc.Length > 1)
                         {
-                            Application.Current.Properties["Eq2Type"] = SelectedEq2Type?.EquipCodeDesc;
-                            Application.Current.Properties["Eq2Desc"] = SelectedEq2?.EqDesc;
+
+
+                            if (Application.Current.Properties.ContainsKey("Eq2Type"))
+                            {
+                                Application.Current.Properties["Eq2Type"] = SelectedEq2Type?.EquipCodeDesc;
+                                Application.Current.Properties["Eq2Desc"] = SelectedEq2?.EqDesc;
+                                Application.Current.Properties["COMiles2"] = MilesHour2;
+                            }
+                            else
+                            {
+                                Application.Current.Properties.Add("Eq2Type", SelectedEq2Type?.EquipCodeDesc);
+                                Application.Current.Properties.Add("Eq2Desc", SelectedEq2?.EqDesc);
+                                Application.Current.Properties.Add("COMiles2", MilesHour2);
+                            }
+
                             //await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(), LunchOutTime1, SelectedPhase, 0);
                             await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq2?.EqKey, "0", MilesHour2);
                         }
                         if (SelectedEq3?.EqDesc.Length > 1)
                         {
-                            Application.Current.Properties["Eq3Type"] = SelectedEq3Type?.EquipCodeDesc;
-                            Application.Current.Properties["Eq3Desc"] = SelectedEq3?.EqDesc;
-                            //await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(), LunchOutTime1, SelectedPhase, 0);
+                            if (Application.Current.Properties.ContainsKey("Eq3Type"))
+                            {
+                                Application.Current.Properties["Eq3Type"] = SelectedEq3Type?.EquipCodeDesc;
+                                Application.Current.Properties["Eq3Desc"] = SelectedEq3?.EqDesc;
+                                Application.Current.Properties["COMiles3"] = MilesHour3;
+                            }
+                            else
+                            {
+                                Application.Current.Properties.Add("Eq3Type", SelectedEq3Type?.EquipCodeDesc);
+                                Application.Current.Properties.Add("Eq3Desc", SelectedEq3?.EqDesc);
+                                Application.Current.Properties.Add("COMiles3", MilesHour3);
+                            }
+
                             await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq3?.EqKey, "0", MilesHour3);
                         }
                     }
@@ -1220,23 +1184,28 @@ namespace FTCollectorApp.ViewModel
                     Session.event_type = "6"; //left for job site
                     await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
                     IsLeaveToSiteBtnEnabled = false;
+                    IsStartODOEntered = true;
+                    (LunchOutCommand as Command).ChangeCanExecute();
+                    //TodoButton = "Leave Job";
 
                 },
                 canExecute: () => {
 
-                    return IsStartODOEntered;
+                    return IsLeaveToSiteBtnEnabled;// IsStartODOEntered;
                 }
             );
 
             ArriveFromSiteCommand = new Command(
-                execute: async  () =>
+                execute: async () =>
                 {
                     Session.event_type = "7"; //left for job site
                     await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
                     IsArrivedFromSiteBtnEnabled = false;
                     IsLeaveToSiteBtnEnabled = false;
-                    
+                    IsArrivedAtYardBtnEnabled = true;
+                    //TodoButton = "Arrive@Yard";
                     (ArriveFromSiteCommand as Command).ChangeCanExecute();
+                    (ArriveAtYardCommand as Command).ChangeCanExecute();
                 },
                 canExecute: () => {
 
@@ -1244,6 +1213,35 @@ namespace FTCollectorApp.ViewModel
                 }
             );
 
+            ArriveAtYardCommand = new Command(
+                execute: async () =>
+                {
+                    Session.event_type = "9"; //left for job site
+                    await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
+                    IsArrivedFromSiteBtnEnabled = false;
+                    IsLeaveToSiteBtnEnabled = false;
+                    IsArrivedAtYardBtnEnabled = false;
+                    //TodoButton = string.Empty;
+                    (ArriveFromSiteCommand as Command).ChangeCanExecute();
+                    (ArriveAtYardCommand as Command).ChangeCanExecute();
+                },
+                canExecute: () => {
+
+                    return IsArrivedAtYardBtnEnabled;
+                }
+            );
+
+            LogOutCommand = new Command(
+                execute: async () =>
+                {
+                    Session.event_type = "12"; //left for job site
+                    await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
+
+                    bool answer = await Application.Current.MainPage.DisplayAlert("Confirm", "Are you sure want to Logout ?", "Yes", "No");
+                    if (answer)
+                        System.Diagnostics.Process.GetCurrentProcess().Kill();
+                }
+            );
 
         }
 
@@ -1263,10 +1261,19 @@ namespace FTCollectorApp.ViewModel
             IsDisplayEndOfDay = false;
         }
 
-
+        [ObservableProperty] bool isArrivedAtYardBtnEnabled = false;
         [ObservableProperty] bool isArrivedFromSiteBtnEnabled = false;
         [ObservableProperty] bool isLeaveToSiteBtnEnabled = false;
+        [ObservableProperty] bool disableLunchOutSaveBtn = false;
+        //[ObservableProperty] string todoButton = string.Empty;
 
+        [ObservableProperty] bool eq1IsReturned = false;
+        [ObservableProperty] bool eq2IsReturned = false;
+        [ObservableProperty] bool eq3IsReturned = false;
+
+
+        public ICommand ArriveAtYardCommand { get; set; }
+        public ICommand LogOutCommand { get; set; }
         public ICommand LeaveJobToSiteCommand { get; set; }
         public ICommand ArriveFromSiteCommand { get; set; }
 
@@ -1468,43 +1475,6 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-
-        async Task JobSaveEvent()
-        {
-            Console.WriteLine("JobSaveEvent");
-            try
-            {
-                await LocationService.GetLocation();
-                Session.accuracy = String.Format("{0:0.######}", LocationService.Coords.Accuracy);
-                Session.live_longitude = String.Format("{0:0.######}", LocationService.Coords.Longitude);
-                Session.live_lattitude = String.Format("{0:0.######}", LocationService.Coords.Latitude);
-                Session.altitude = String.Format("{0:0.######}", LocationService.Coords.Altitude);
-
-                //DateTime dt = DateTime.Parse(sStartTime.Trim());
-                //int user_hours = int.Parse(dt.ToString("HH"));
-                //int user_minutes = int.Parse(dt.ToString("mm"));
-
-                DateTime curTime = DateTime.Now;
-                int user_hours = curTime.Hour;
-                int user_minutes = curTime.Minute;
-                Console.WriteLine("HH " + user_hours);
-                Console.WriteLine("MM " + user_minutes);
-                //int user_hours = int.Parse(DateTime.Now.ToString("%HH"));
-                //int user_minutes = int.Parse(DateTime.Now.ToString("%mm"));
-                Console.WriteLine();
-                await CloudDBService.PostJobEvent(user_hours.ToString(), user_minutes.ToString());
-
-            }
-            catch
-            {
-
-                await Application.Current.MainPage.DisplayAlert("Warning", "Time format must be HH:MM", "OK");
-            }
-
-        }
-
-
-
         public ObservableCollection<JobPhaseDetail> JobPhaseDetailList
         {
             get
@@ -1572,10 +1542,37 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] EquipmentCO selectedEqIn2;
         [ObservableProperty] EquipmentCO selectedEqIn3;
 
-        [ObservableProperty] string milesHourIn1;
+        [ObservableProperty] bool isErrorMsg1Display;
+        [ObservableProperty] bool isErrorMsg2Display;
+        [ObservableProperty] bool isErrorMsg3Display;
+
+        [ObservableProperty] string errorMsg1;
+        [ObservableProperty] string errorMsg2;
+        [ObservableProperty] string errorMsg3;
+
+        string milesHourIn1;
+        public string MilesHourIn1
+        {
+            get => milesHourIn1;
+            set
+            {
+                if (Application.Current.Properties.ContainsKey("COMiles1"))
+                {
+                    var COMiles1 = Application.Current.Properties["COMiles1"] as string;
+                    Console.WriteLine();
+                    if (int.Parse(value) < int.Parse(COMiles1))
+                    {
+                        ErrorMsg1 = "Miles must be greater";
+                        IsErrorMsg1Display = true;
+                        Console.WriteLine();
+                        return;
+                    }
+                }
+                SetProperty(ref milesHourIn1, value);
+            }
+        }
         [ObservableProperty] string milesHourIn2;
         [ObservableProperty] string milesHourIn3;
-
         [ObservableProperty] EquipmentType selectedCheckInEq;
 
         /////////// Equipment Checkout ////////////
