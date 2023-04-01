@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage Title="Enter Miles"  xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.EnterMiles">
+
+    <StackLayout WidthRequest="300"
+                    Margin="20"
+                    Padding="20"
+                    BackgroundColor="White"
+                    HorizontalOptions="Center"
+                    VerticalOptions="CenterAndExpand">
+        <Label Text="Enter Current Miles :" />
+        <local:BorderEntry Margin="10,5,10,5" Text="{Binding MilesHours, Mode=TwoWay}" MaxLength="9"/>
+        <Button Text="Save" WidthRequest="80" HorizontalOptions="End" Command="{Binding SaveCommand}"/>
+
+    </StackLayout>
+</pages:PopupPage>

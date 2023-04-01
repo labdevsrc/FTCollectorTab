@@ -77,22 +77,22 @@ namespace FTCollectorApp.Service
             return JsonConvert.DeserializeObject<T>(json);
         }
 
-        public static async Task PostJobEvent(string param1, string param2, string job_phase) => await PostJobEvent(param1, param2, "", job_phase);
-        public static async Task PostJobEvent(string param1, string param2) => await PostJobEvent(param1, param2, "", "");
-        public static async Task PostJobEvent() => await PostJobEvent("", "", "", "");
-        public static async Task PostJobEvent(string odo) => await PostJobEvent("", odo, "", "");
-        public static async Task PostJobEvent(string param1, string param2, string perDiem, string job_phase)
+        public static async Task PostJobEvent(string param1, string param2, string job_phase) => await PostJobEvent(param1, param2, 0, job_phase,"","");
+        public static async Task PostJobEvent(string param1, string param2) => await PostJobEvent(param1, param2, 0, "", "","");
+        public static async Task PostJobEvent() => await PostJobEvent("", "", 0, "","","");
+        public static async Task PostJobEvent(string miles_hours) => await PostJobEvent("", "", 0, "", miles_hours,"");
+        public static async Task PostJobEvent(string param1, string param2, int perDiem, string job_phase, string miles_hours, string crewid)
         {
 
             var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("jobnum",Session.jobnum),
                 new KeyValuePair<string, string>("jobkey",Session.jobkey),
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
-
+                new KeyValuePair<string, string>("crewid", crewid),
                 new KeyValuePair<string, string>("hr", param1),
                 new KeyValuePair<string, string>("min", param2),
 
-                new KeyValuePair<string, string>("perdiem",perDiem),
+                new KeyValuePair<string, string>("perdiem", perDiem.ToString()),
                 new KeyValuePair<string, string>("gps_sts", Session.gps_sts),
 
                 // xSaveJobEvents.php Line 59 : $longitude=$_POST['longitude2'];
@@ -105,7 +105,7 @@ namespace FTCollectorApp.Service
                 new KeyValuePair<string, string>("lattitude2", Session.live_lattitude),
                 new KeyValuePair<string, string>("longitude2", Session.live_longitude),
                 new KeyValuePair<string, string>("evtype", Session.event_type),
-                new KeyValuePair<string, string>("odometer", param2.ToString()), // only for sending odometer 
+                new KeyValuePair<string, string>("miles_hours", miles_hours), // only for sending odometer 
                 
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
 
@@ -755,7 +755,8 @@ namespace FTCollectorApp.Service
         }
 
 
-        public static async Task SaveCrewdata(string OWNER_CD, string job_phase, string name1, string name2, string name3, string name4, string name5, string name6, string diem1, string diem2, string diem3, string diem4, string diem5, string diem6, string driver11, string driver12, string driver13, string driver14, string driver15, string driver16)
+        public static async Task SaveCrewdata(string OWNER_CD, string job_phase, string name1, string name2, string name3, string name4, string name5, string name6,
+            string diemLeader, string diem1, string diem2, string diem3, string diem4, string diem5, string diem6, string driver11, string driver12, string driver13, string driver14, string driver15, string driver16)
         {
 
             var keyValues = new List<KeyValuePair<string, string>>{
@@ -772,6 +773,7 @@ namespace FTCollectorApp.Service
                 new KeyValuePair<string, string>("name4", name4),
                 new KeyValuePair<string, string>("name5", name5),
                 new KeyValuePair<string, string>("name6", name6),
+                new KeyValuePair<string, string>("diemLeader", diemLeader), //20230331, add leader perdiem
                 new KeyValuePair<string, string>("diem1", diem1),
                 new KeyValuePair<string, string>("diem2", diem2),
                 new KeyValuePair<string, string>("diem3", diem3),

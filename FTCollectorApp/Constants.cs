@@ -17,7 +17,7 @@ namespace FTCollectorApp
         public const string InsertJobEquipmentUrl = "xPostJobEquipment.php";
         public const string GetJobTableUrl = "xamarinJob.php";
         public const string GetEndUserTableUrl = "xamarinLogin.php";
-        public const string InsertJobEvents = "xSaveJobEvents.php";
+        public const string InsertJobEvents = "InsertJobEvents.php"; // xSaveJobEvents.php";
         public const string GetSiteTableUrl= "xGetSite.php";
         public const string GetCrewdefaultTableUrl = "getCrewdefault.php";
         public const string GetCodeSiteTypeTableUrl = "xGetCodeSiteType.php";

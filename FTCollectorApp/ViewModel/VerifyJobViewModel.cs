@@ -324,7 +324,7 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] string selectedCrewForEq;
         [ObservableProperty] string crewEqIndex;
 
-
+        [ObservableProperty] int perDiemL = 0; // 20230331
         [ObservableProperty] int perDiemEmp1 = 0;
         [ObservableProperty] int perDiemEmp2 = 0;
         [ObservableProperty] int perDiemEmp3 = 0;
@@ -356,16 +356,30 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] string milesHour1 = string.Empty;
         [ObservableProperty] string milesHour2 = string.Empty;
         [ObservableProperty] string milesHour3 = string.Empty;
+        [ObservableProperty] string milesHour4 = string.Empty;
+        [ObservableProperty] string milesHour5 = string.Empty;
+        [ObservableProperty] string milesHour6 = string.Empty;
+        [ObservableProperty] string milesHour7 = string.Empty;
+
+
 
         [ObservableProperty] string eq1TypeTitle;
         [ObservableProperty] string eq2TypeTitle;
         [ObservableProperty] string eq3TypeTitle;
         [ObservableProperty] string eq4TypeTitle;
+        [ObservableProperty] string eq5TypeTitle;
+        [ObservableProperty] string eq6TypeTitle;
+        [ObservableProperty] string eq7TypeTitle;
 
         [ObservableProperty] string eq1DescTitle;
         [ObservableProperty] string eq2DescTitle;
         [ObservableProperty] string eq3DescTitle;
         [ObservableProperty] string eq4DescTitle;
+        [ObservableProperty] string eq5DescTitle;
+        [ObservableProperty] string eq6DescTitle;
+        [ObservableProperty] string eq7DescTitle;
+
+        List<CrewInfoDetail> CrewInfoDetailList = new List<CrewInfoDetail>();
 
         async void LoginPopUpCall()
         {
@@ -391,8 +405,57 @@ namespace FTCollectorApp.ViewModel
                 Console.WriteLine();
             });
 
+            MessagingCenter.Subscribe<EnterMilesVM>(this, "ConfirmMiles", (sender) =>
+            {
 
+                ClearAllPage();
+                Console.WriteLine( );
 
+                if(Session.event_type == "6") // Left For Job
+                {
+                    // after save Miles Hours Left For Job
+                    // 1. Display Arrived at Job button
+                    IsArrivedAtSiteBtnEnabled = true;
+                    (ArrivedAtSiteCommand as Command).ChangeCanExecute();
+                    // 2. Disable Left For Job button
+                    IsLeftForJobBtnEnabled = false;
+                    (LeftForJobCommand as Command).ChangeCanExecute();
+
+                }
+
+                if (Session.event_type == "7") // Arrived At Job
+                {
+                    // after save Miles Hours Arrived at Job
+                    // Display all Lunchout Lunchin dll
+                    IsStartODOEntered = true;
+                    (LunchOutCommand as Command).ChangeCanExecute();
+                }
+
+                if (Session.event_type == "8") // Left Job
+                {
+                    IsStartODOEntered = false;
+                    (LunchOutCommand as Command).ChangeCanExecute();
+
+                    // after save Miles Hours Left Job
+                    // 1. Display Arrived at Yard Button
+                    IsArrivedAtYardBtnEnabled = true;
+                    (ArriveAtYardCommand as Command).ChangeCanExecute();
+                }
+
+                if (Session.event_type == "9") // Arrived at Yard
+                {
+                    IsStartODOEntered = true;
+                    (LunchOutCommand as Command).ChangeCanExecute();
+
+                    // after save Miles Hours Arrive at Yard
+                    // 1. Hide Arrived at Yard Button
+                    IsArrivedAtYardBtnEnabled = false;
+                    (ArriveAtYardCommand as Command).ChangeCanExecute();
+                }
+
+            });
+
+            // Initial ItemsSource for Job Entries and Equipment Check out/check in 
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
             {
                 try
@@ -413,6 +476,25 @@ namespace FTCollectorApp.ViewModel
                 }
 
             }
+
+
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<User>();
+                var table = conn.Table<User>();
+
+                foreach (var col in table)
+                {
+                    CrewInfoDetailList.Add(new CrewInfoDetail
+                    {
+                        FullName = col.first_name + " " + col.last_name,
+                        TeamUserKey = col.UserKey
+                    });
+
+                }
+            }
+
+
             Console.WriteLine();
 
             GPSSettingCommand = new Command(() => DisplayGPSSettingCommand());
@@ -425,8 +507,8 @@ namespace FTCollectorApp.ViewModel
 
                     var CrewKey = "0";
                     var Fullname = string.Empty;
-                    //ClockIntime = SelectedCrewForEndOfDay.StartTime;
-                    //ClockOutTimeForm = ClockOutTime;
+                    int PerDiemTemp = 0;
+
                     Session.event_type = "16";
 
                     if (param.Equals("Leader"))
@@ -437,9 +519,8 @@ namespace FTCollectorApp.ViewModel
                         ClockIntime = StartTimeLeader;
                         ClockOutTime = LClockOutTime;
                         Fullname = CrewLeader;
+                        PerDiemTemp = LClockOutPerDiem;
                         CrewKey = Session.uid.ToString();
-                        await CloudDBService.PostTimeSheet(CrewKey, ClockOutTime, SelectedPhase.PhaseNumber, LClockOutPerDiem);
-
                         Console.WriteLine();
                     }
                     else if (param.Equals("Emp1"))
@@ -450,11 +531,8 @@ namespace FTCollectorApp.ViewModel
                         ClockIntime = StartTimeEmp1;
                         ClockOutTime = Emp1ClockOutTime;
                         Fullname = Employee1Name.FullName;
-
+                        PerDiemTemp = Emp1ClockOutPerDiem;
                         CrewKey = SelectedCrewInfoDetails[1].TeamUserKey.ToString(); //.Where(a => a.id == 2).Select(b => b.TeamUserKey).ToString();
-
-                        await CloudDBService.PostTimeSheet(CrewKey, ClockOutTime, SelectedPhase.PhaseNumber, Emp1ClockOutPerDiem);
-
                         Console.WriteLine();
                     }
                     else if (param.Equals("Emp2"))
@@ -466,7 +544,7 @@ namespace FTCollectorApp.ViewModel
                         CrewKey = SelectedCrewInfoDetails[2].TeamUserKey.ToString(); //.Where(a => a.id == 3).Select(b => b.TeamUserKey).ToString();
                         ClockOutTime = Emp2ClockOutTime;
                         Fullname = Employee2Name.FullName;
-                        await CloudDBService.PostTimeSheet(CrewKey, ClockOutTime, SelectedPhase.PhaseNumber, Emp2ClockOutPerDiem);
+                        PerDiemTemp = Emp2ClockOutPerDiem;
                         Console.WriteLine();
                     }
                     else if (param.Equals("Emp3"))
@@ -478,8 +556,7 @@ namespace FTCollectorApp.ViewModel
                         CrewKey = SelectedCrewInfoDetails[3].TeamUserKey.ToString(); //.Where(a => a.id == 4).Select(b => b.TeamUserKey).ToString();
                         ClockOutTime = Emp3ClockOutTime;
                         Fullname = Employee3Name.FullName;
-                        await CloudDBService.PostTimeSheet(CrewKey, ClockOutTime, SelectedPhase.PhaseNumber, Emp3ClockOutPerDiem);
-
+                        PerDiemTemp = Emp3ClockOutPerDiem;
                         Console.WriteLine();
                     }
                     else if (param.Equals("Emp4"))
@@ -491,14 +568,18 @@ namespace FTCollectorApp.ViewModel
                         CrewKey = SelectedCrewInfoDetails[4].TeamUserKey.ToString(); //.Where(a => a.id == 5).Select(b => b.TeamUserKey).ToString();
                         ClockOutTime = Emp4ClockOutTime;
                         Fullname = Employee4Name.FullName;
-                        await CloudDBService.PostTimeSheet(CrewKey, ClockOutTime, SelectedPhase.PhaseNumber, Emp4ClockOutPerDiem);
-
+                        PerDiemTemp = Emp4ClockOutPerDiem;
                         Console.WriteLine();
                     }
 
                     Console.WriteLine();
                     try
                     {
+                        await CloudDBService.PostTimeSheet(CrewKey, ClockOutTime, SelectedPhase.PhaseNumber, PerDiemTemp);
+                        await CloudDBService.PostJobEvent(DateTime.Parse(ClockOutTime).Hour.ToString(),
+                            DateTime.Parse(ClockOutTime).Minute.ToString(), PerDiemTemp, SelectedPhase.PhaseNumber, "0", CrewKey);
+
+
                         TimeSpan totaltime = DateTime.Parse(LunchOutTime).Subtract(DateTime.Parse(ClockIntime)) + DateTime.Parse(ClockOutTime).Subtract(DateTime.Parse(LunchInTime));
                         TotalHoursForToday = totaltime.ToString(@"hh\:mm\:ss");
                         await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new TimeSheetSignature(
@@ -572,11 +653,12 @@ namespace FTCollectorApp.ViewModel
                                 TeamUserKey = Session.uid,
                                 Phase = SelectedPhase.PhaseNumber,
                                 StartTime = StartTimeLeader,
+                                PerDiem = PerDiemL
                             });
 
                             try
                             {
-                                await CloudDBService.PostTimeSheet(Session.uid.ToString(), StartTimeLeader, SelectedPhase.PhaseNumber, PerDiemEmp1);
+                                await CloudDBService.PostTimeSheet(Session.uid.ToString(), StartTimeLeader, SelectedPhase.PhaseNumber, PerDiemL); //20230331
                             }
                             catch
                             {
@@ -599,8 +681,7 @@ namespace FTCollectorApp.ViewModel
 
                             try
                             {
-                                await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(),
-                                    StartTimeEmp1, SelectedPhase.PhaseNumber, PerDiemEmp1);
+                                await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(),StartTimeEmp1, SelectedPhase.PhaseNumber, PerDiemEmp1);
                             }
                             catch
                             {
@@ -702,6 +783,7 @@ namespace FTCollectorApp.ViewModel
                             Employee2Name?.TeamUserKey.ToString(),
                             Employee3Name?.TeamUserKey.ToString(), Employee4Name?.TeamUserKey.ToString(),
                             Employee5Name?.TeamUserKey.ToString(), Employee6Name?.TeamUserKey.ToString(),
+                            PerDiemL.ToString(),
                             PerDiemEmp1.ToString(), PerDiemEmp2.ToString(), PerDiemEmp3.ToString(),
                             PerDiemEmp4.ToString(), PerDiemEmp5.ToString(), PerDiemEmp6.ToString(),
                             Employee1IsDriver.ToString(), Employee2IsDriver.ToString(),
@@ -828,8 +910,11 @@ namespace FTCollectorApp.ViewModel
                     (DisplayEquipmentCheckInCommand as Command).ChangeCanExecute();
                     (ToggleEndofDayCommand as Command).ChangeCanExecute();
 
-                    IsArrivedFromSiteBtnEnabled = true;
-                    (ArriveFromSiteCommand as Command).ChangeCanExecute();
+
+                    // after lunchin, display Left Job button
+                    IsLeftJobBtnEnabled = true;
+                    (LeftJobCommand as Command).ChangeCanExecute();
+
 
                     ClearAllPage();
                 },
@@ -917,8 +1002,13 @@ namespace FTCollectorApp.ViewModel
 
                     //check if clockintime > lunchout
                     Console.WriteLine();
-                    //TodoButton = string.Empty;
-
+                    //set initial value of perdiem to crew list perdiem;
+                    LClockOutPerDiem = PerDiemL;
+                    Emp1ClockOutPerDiem = PerDiemEmp1;
+                    Emp2ClockOutPerDiem = PerDiemEmp2;
+                    Emp3ClockOutPerDiem = PerDiemEmp3;
+                    Emp4ClockOutPerDiem = PerDiemEmp4;
+                    Emp5ClockOutPerDiem = PerDiemEmp5;
 
                 },
                 canExecute: () =>
@@ -1004,6 +1094,19 @@ namespace FTCollectorApp.ViewModel
                             Console.WriteLine(Eq3IsReturned);
                         };
 
+                        if (Eq4IsReturned)
+                        {
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq4?.EqKey, MilesHourIn3, "0");
+                            Console.WriteLine(Eq4IsReturned);
+                        };
+
+                        if (Eq5IsReturned)
+                        {
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq5?.EqKey, MilesHourIn3, "0");
+                            Console.WriteLine(Eq5IsReturned);
+                        };
+
+
                         /*if (SelectedEqIn1?.EqDesc.Length > 1)
                         {
                             await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq1?.EqKey, MilesHourIn1, "0");
@@ -1062,7 +1165,8 @@ namespace FTCollectorApp.ViewModel
                     IsEqCheckOutDisplayed = false;
 
                     Session.event_type = "4"; // Equipment out
-                    await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
+                    await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), 
+                        DateTime.Now.Minute.ToString(), 0, SelectedPhase.PhaseNumber,"", MilesHour1); //20230331
 
                     //Session.event_type = "8"; // Odo
                     //await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
@@ -1134,6 +1238,78 @@ namespace FTCollectorApp.ViewModel
 
                             await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq3?.EqKey, "0", MilesHour3);
                         }
+
+                        if (SelectedEq4?.EqDesc.Length > 1)
+                        {
+                            if (Application.Current.Properties.ContainsKey("Eq4Type"))
+                            {
+                                Application.Current.Properties["Eq4Type"] = SelectedEq4Type?.EquipCodeDesc;
+                                Application.Current.Properties["Eq4Desc"] = SelectedEq4?.EqDesc;
+                                Application.Current.Properties["COMiles4"] = MilesHour4;
+                            }
+                            else
+                            {
+                                Application.Current.Properties.Add("Eq4Type", SelectedEq4Type?.EquipCodeDesc);
+                                Application.Current.Properties.Add("Eq4Desc", SelectedEq4?.EqDesc);
+                                Application.Current.Properties.Add("COMiles4", MilesHour4);
+                            }
+
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq4?.EqKey, "0", MilesHour4);
+                        }
+
+                        if (SelectedEq5?.EqDesc.Length > 1)
+                        {
+                            if (Application.Current.Properties.ContainsKey("Eq5Type"))
+                            {
+                                Application.Current.Properties["Eq5Type"] = SelectedEq5Type?.EquipCodeDesc;
+                                Application.Current.Properties["Eq5Desc"] = SelectedEq5?.EqDesc;
+                                Application.Current.Properties["COMiles5"] = MilesHour5;
+                            }
+                            else
+                            {
+                                Application.Current.Properties.Add("Eq5Type", SelectedEq5Type?.EquipCodeDesc);
+                                Application.Current.Properties.Add("Eq5Desc", SelectedEq5?.EqDesc);
+                                Application.Current.Properties.Add("COMiles5", MilesHour5);
+                            }
+
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq5?.EqKey, "0", MilesHour5);
+                        }
+
+                        if (SelectedEq6?.EqDesc.Length > 1)
+                        {
+                            if (Application.Current.Properties.ContainsKey("Eq6Type"))
+                            {
+                                Application.Current.Properties["Eq6Type"] = SelectedEq6Type?.EquipCodeDesc;
+                                Application.Current.Properties["Eq6Desc"] = SelectedEq6?.EqDesc;
+                                Application.Current.Properties["COMiles6"] = MilesHour6;
+                            }
+                            else
+                            {
+                                Application.Current.Properties.Add("Eq6Type", SelectedEq6Type?.EquipCodeDesc);
+                                Application.Current.Properties.Add("Eq6Desc", SelectedEq6?.EqDesc);
+                                Application.Current.Properties.Add("COMiles6", MilesHour6);
+                            }
+
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq6?.EqKey, "0", MilesHour6);
+                        }
+
+                        if (SelectedEq7?.EqDesc.Length > 1)
+                        {
+                            if (Application.Current.Properties.ContainsKey("Eq7Type"))
+                            {
+                                Application.Current.Properties["Eq7Type"] = SelectedEq7Type?.EquipCodeDesc;
+                                Application.Current.Properties["Eq7Desc"] = SelectedEq7?.EqDesc;
+                                Application.Current.Properties["COMiles7"] = MilesHour7;
+                            }
+                            else
+                            {
+                                Application.Current.Properties.Add("Eq7Type", SelectedEq7Type?.EquipCodeDesc);
+                                Application.Current.Properties.Add("Eq7Desc", SelectedEq7?.EqDesc);
+                                Application.Current.Properties.Add("COMiles7", MilesHour7);
+                            }
+
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq7?.EqKey, "0", MilesHour7);
+                        }
                     }
                     catch (Exception e)
                     {
@@ -1178,15 +1354,14 @@ namespace FTCollectorApp.ViewModel
                 }
               );
 
-            LeaveJobToSiteCommand = new Command(
+            LeftForJobCommand = new Command(
                 execute: async () =>
                 {
-                    Session.event_type = "6"; //left for job site
-                    await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
+                    Session.event_type = "6"; //left for job site event                   
+                    await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new EnterMiles()); // open miles hours window
                     IsLeaveToSiteBtnEnabled = false;
-                    IsStartODOEntered = true;
+                    IsArrivedAtSiteBtnEnabled = true;
                     (LunchOutCommand as Command).ChangeCanExecute();
-                    //TodoButton = "Leave Job";
 
                 },
                 canExecute: () => {
@@ -1195,21 +1370,44 @@ namespace FTCollectorApp.ViewModel
                 }
             );
 
-            ArriveFromSiteCommand = new Command(
+            ArrivedAtSiteCommand = new Command(
+                execute: async () =>
+                {
+                    Session.event_type = "8"; //arrived@ job site
+                    await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new EnterMiles());
+                    IsArrivedAtSiteBtnEnabled = false;
+                    (ArrivedAtSiteCommand as Command).ChangeCanExecute();
+
+                    // activate 4 button above
+                    IsStartODOEntered = true;
+                    (LunchOutCommand as Command).ChangeCanExecute();
+
+                },
+                canExecute: () => {
+
+                    return IsArrivedAtSiteBtnEnabled;
+                }
+            );
+
+
+
+            LeftJobCommand = new Command(
                 execute: async () =>
                 {
                     Session.event_type = "7"; //left for job site
-                    await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
-                    IsArrivedFromSiteBtnEnabled = false;
+                    await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new EnterMiles());
+
+                    //await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
+                    IsLeftJobBtnEnabled = false;
                     IsLeaveToSiteBtnEnabled = false;
                     IsArrivedAtYardBtnEnabled = true;
                     //TodoButton = "Arrive@Yard";
-                    (ArriveFromSiteCommand as Command).ChangeCanExecute();
+                    (LeftJobCommand as Command).ChangeCanExecute();
                     (ArriveAtYardCommand as Command).ChangeCanExecute();
                 },
                 canExecute: () => {
 
-                    return IsArrivedFromSiteBtnEnabled;
+                    return IsLeftJobBtnEnabled;
                 }
             );
 
@@ -1218,11 +1416,11 @@ namespace FTCollectorApp.ViewModel
                 {
                     Session.event_type = "9"; //left for job site
                     await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
-                    IsArrivedFromSiteBtnEnabled = false;
+                    IsLeftJobBtnEnabled = false;
                     IsLeaveToSiteBtnEnabled = false;
                     IsArrivedAtYardBtnEnabled = false;
                     //TodoButton = string.Empty;
-                    (ArriveFromSiteCommand as Command).ChangeCanExecute();
+                    (LeftJobCommand as Command).ChangeCanExecute();
                     (ArriveAtYardCommand as Command).ChangeCanExecute();
                 },
                 canExecute: () => {
@@ -1261,8 +1459,9 @@ namespace FTCollectorApp.ViewModel
             IsDisplayEndOfDay = false;
         }
 
+        [ObservableProperty] bool isArrivedAtSiteBtnEnabled = false;
         [ObservableProperty] bool isArrivedAtYardBtnEnabled = false;
-        [ObservableProperty] bool isArrivedFromSiteBtnEnabled = false;
+        [ObservableProperty] bool isLeftJobBtnEnabled = false;
         [ObservableProperty] bool isLeaveToSiteBtnEnabled = false;
         [ObservableProperty] bool disableLunchOutSaveBtn = false;
         //[ObservableProperty] string todoButton = string.Empty;
@@ -1270,12 +1469,15 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] bool eq1IsReturned = false;
         [ObservableProperty] bool eq2IsReturned = false;
         [ObservableProperty] bool eq3IsReturned = false;
-
+        [ObservableProperty] bool eq4IsReturned = false;
+        [ObservableProperty] bool eq5IsReturned = false;
+        [ObservableProperty] bool eq6IsReturned = false;
 
         public ICommand ArriveAtYardCommand { get; set; }
+        public ICommand ArrivedAtSiteCommand { get; set; }
         public ICommand LogOutCommand { get; set; }
         public ICommand LeaveJobToSiteCommand { get; set; }
-        public ICommand ArriveFromSiteCommand { get; set; }
+        public ICommand LeftJobCommand { get; set; }
 
 
         [ObservableProperty] string lunchInTimeLeader = string.Empty;
@@ -1304,12 +1506,12 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] string? emp4ClockOutTime;
         [ObservableProperty] string? emp5ClockOutTime;
 
-        [ObservableProperty] int lClockOutPerDiem;
-        [ObservableProperty] int emp1ClockOutPerDiem;
-        [ObservableProperty] int emp2ClockOutPerDiem;
-        [ObservableProperty] int emp3ClockOutPerDiem;
-        [ObservableProperty] int emp4ClockOutPerDiem;
-        [ObservableProperty] int emp5ClockOutPerDiem;
+        [ObservableProperty] int lClockOutPerDiem = 0;
+        [ObservableProperty] int emp1ClockOutPerDiem = 0;
+        [ObservableProperty] int emp2ClockOutPerDiem = 0;
+        [ObservableProperty] int emp3ClockOutPerDiem = 0;
+        [ObservableProperty] int emp4ClockOutPerDiem = 0;
+        [ObservableProperty] int emp5ClockOutPerDiem = 0;
 
 
 
@@ -1350,15 +1552,17 @@ namespace FTCollectorApp.ViewModel
         List<CrewInfoDetail> SelectedCrewInfoDetails = new List<CrewInfoDetail>();
 
 
-        //[ObservableProperty] CrewInfoDetail employee1Name;
         private CrewInfoDetail employee1Name;
         public CrewInfoDetail Employee1Name
         {
             get => employee1Name;
             set
             {
+                //  remove already selected crew didn't worked
+                // CrewInfoDetailList.Remove(value);
+                // OnPropertyChanged(nameof(SelectableCrewList));
+
                 SetProperty(ref employee1Name, value);
-                //StartTimeEmp1 = DateTime.Now.ToString("HH:mm");
                 (CrewSaveCommand as Command).ChangeCanExecute();
             }
         }
@@ -1370,7 +1574,6 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref employee2Name, value);
-                //StartTimeEmp2 = DateTime.Now.ToString("HH:mm");
                 (CrewSaveCommand as Command).ChangeCanExecute();
             }
         }
@@ -1382,7 +1585,6 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref employee3Name, value);
-                //StartTimeEmp3 = DateTime.Now.ToString("HH:mm");
                 (CrewSaveCommand as Command).ChangeCanExecute();
             }
         }
@@ -1394,8 +1596,9 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref employee4Name, value);
-                //StartTimeEmp4 = DateTime.Now.ToString("HH:mm");
+
                 (CrewSaveCommand as Command).ChangeCanExecute();
+
             }
         }
         private CrewInfoDetail employee5Name;
@@ -1405,8 +1608,6 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref employee5Name, value);
-                //StartTimeEmp4 = DateTime.Now.ToString("HH:mm");
-                (CrewSaveCommand as Command).ChangeCanExecute();
             }
         }
 
@@ -1417,8 +1618,6 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref employee6Name, value);
-                //StartTimeEmp4 = DateTime.Now.ToString("HH:mm");
-                (CrewSaveCommand as Command).ChangeCanExecute();
             }
         }
 
@@ -1439,29 +1638,14 @@ namespace FTCollectorApp.ViewModel
 
         [ObservableProperty] string totalHoursForToday;
 
+
+
+
         public ObservableCollection<CrewInfoDetail> SelectableCrewList
         {
             get
             {
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<User>();
-                    var table = conn.Table<User>();
-                    List<CrewInfoDetail> temp = new List<CrewInfoDetail>();
-                    foreach (var col in table)
-                    {
-                        temp.Add(new CrewInfoDetail
-                        {
-                            FullName = col.first_name + " " + col.last_name,
-                            TeamUserKey = col.UserKey
-                        });
-                        // table.Select(a => a.first_name).First() + " " + table.Select(a => a.last_name).First(),
-                        // TeamUserKey = table.Select(c => c.UserKey).First()
-                    }
-
-                    Console.WriteLine();
-                    return new ObservableCollection<CrewInfoDetail>(temp);
-                }
+                return new ObservableCollection<CrewInfoDetail>(CrewInfoDetailList);
             }
         }
 
@@ -1511,7 +1695,7 @@ namespace FTCollectorApp.ViewModel
 
 
 
-        /// Equipment 
+        /// EquipmentCO = Equipment Check Out that use in Check out page
 
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(Equipment1CO))] EquipmentType selectedEq1Type;
@@ -1522,12 +1706,30 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(Equipment3CO))] EquipmentType selectedEq3Type;
 
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(Equipment4CO))] EquipmentType selectedEq4Type;
 
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(Equipment5CO))] EquipmentType selectedEq5Type;
+
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(Equipment6CO))] EquipmentType selectedEq6Type;
+
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(Equipment7CO))] EquipmentType selectedEq7Type;
+
+        // 
         [ObservableProperty] EquipmentCO selectedEq1;
         [ObservableProperty] EquipmentCO selectedEq2;
         [ObservableProperty] EquipmentCO selectedEq3;
+        [ObservableProperty] EquipmentCO selectedEq4;
+        [ObservableProperty] EquipmentCO selectedEq5;
+        [ObservableProperty] EquipmentCO selectedEq6;
+        [ObservableProperty] EquipmentCO selectedEq7;
 
 
+
+        /// EquipmentCO = Equipment Check Out that use in Check In page
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(Equipment1CI))] EquipmentType selectedEqIn1Type;
 
@@ -1537,10 +1739,26 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(Equipment3CI))] EquipmentType selectedEqIn3Type;
 
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(Equipment4CI))] EquipmentType selectedEqIn4Type;
+
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(Equipment5CI))] EquipmentType selectedEqIn5Type;
+
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(Equipment6CI))] EquipmentType selectedEqIn6Type;
+
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(Equipment7CI))] EquipmentType selectedEqIn7Type;
 
         [ObservableProperty] EquipmentCO selectedEqIn1;
         [ObservableProperty] EquipmentCO selectedEqIn2;
         [ObservableProperty] EquipmentCO selectedEqIn3;
+        [ObservableProperty] EquipmentCO selectedEqIn4;
+        [ObservableProperty] EquipmentCO selectedEqIn5;
+        [ObservableProperty] EquipmentCO selectedEqIn6;
+        [ObservableProperty] EquipmentCO selectedEqIn7;
+
 
         [ObservableProperty] bool isErrorMsg1Display;
         [ObservableProperty] bool isErrorMsg2Display;
@@ -1550,7 +1768,7 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] string errorMsg2;
         [ObservableProperty] string errorMsg3;
 
-        string milesHourIn1;
+        /*string milesHourIn1;
         public string MilesHourIn1
         {
             get => milesHourIn1;
@@ -1570,9 +1788,16 @@ namespace FTCollectorApp.ViewModel
                 }
                 SetProperty(ref milesHourIn1, value);
             }
-        }
+        }*/
+
+        [ObservableProperty] string milesHourIn1;
         [ObservableProperty] string milesHourIn2;
         [ObservableProperty] string milesHourIn3;
+        [ObservableProperty] string milesHourIn4;
+        [ObservableProperty] string milesHourIn5;
+        [ObservableProperty] string milesHourIn6;
+        [ObservableProperty] string milesHourIn7;
+
         [ObservableProperty] EquipmentType selectedCheckInEq;
 
         /////////// Equipment Checkout ////////////
@@ -1644,6 +1869,82 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+
+        public ObservableCollection<EquipmentCO> Equipment4CO
+        {
+            get
+            {
+                var table = _equipmentCO.ToList();
+                try
+                {
+                    table = _equipmentCO.Where(a => a.TypeKey == SelectedEq4Type?.EquipCodeKey).ToList();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+                return new ObservableCollection<EquipmentCO>(table);
+
+            }
+        }
+
+
+        public ObservableCollection<EquipmentCO> Equipment5CO
+        {
+            get
+            {
+                var table = _equipmentCO.ToList();
+                try
+                {
+                    table = _equipmentCO.Where(a => a.TypeKey == SelectedEq5Type?.EquipCodeKey).ToList();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+                return new ObservableCollection<EquipmentCO>(table);
+
+            }
+        }
+
+        public ObservableCollection<EquipmentCO> Equipment6CO
+        {
+            get
+            {
+                var table = _equipmentCO.ToList();
+                try
+                {
+                    table = _equipmentCO.Where(a => a.TypeKey == SelectedEq6Type?.EquipCodeKey).ToList();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+                return new ObservableCollection<EquipmentCO>(table);
+
+            }
+        }
+
+
+        public ObservableCollection<EquipmentCO> Equipment7CO
+        {
+            get
+            {
+                var table = _equipmentCO.ToList();
+                try
+                {
+                    table = _equipmentCO.Where(a => a.TypeKey == SelectedEq7Type?.EquipCodeKey).ToList();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+                return new ObservableCollection<EquipmentCO>(table);
+
+            }
+        }
+
+        /// check in  equipment list ///
         public ObservableCollection<EquipmentCO> Equipment1CI
         {
             get
@@ -1698,6 +1999,77 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+        public ObservableCollection<EquipmentCO> Equipment4CI
+        {
+            get
+            {
+                var table = _equipmentCO.ToList();
+                try
+                {
+                    table = _equipmentCO.Where(a => a.TypeKey == SelectedEqIn4Type?.EquipCodeKey).ToList();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+                return new ObservableCollection<EquipmentCO>(table);
+
+            }
+        }
+
+        public ObservableCollection<EquipmentCO> Equipment5CI
+        {
+            get
+            {
+                var table = _equipmentCO.ToList();
+                try
+                {
+                    table = _equipmentCO.Where(a => a.TypeKey == SelectedEqIn5Type?.EquipCodeKey).ToList();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+                return new ObservableCollection<EquipmentCO>(table);
+
+            }
+        }
+
+        public ObservableCollection<EquipmentCO> Equipment6CI
+        {
+            get
+            {
+                var table = _equipmentCO.ToList();
+                try
+                {
+                    table = _equipmentCO.Where(a => a.TypeKey == SelectedEqIn6Type?.EquipCodeKey).ToList();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+                return new ObservableCollection<EquipmentCO>(table);
+
+            }
+        }
+
+        public ObservableCollection<EquipmentCO> Equipment7CI
+        {
+            get
+            {
+                var table = _equipmentCO.ToList();
+                try
+                {
+                    table = _equipmentCO.Where(a => a.TypeKey == SelectedEqIn7Type?.EquipCodeKey).ToList();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+                return new ObservableCollection<EquipmentCO>(table);
+
+            }
+        }
     }
         ////////////////////
         ///

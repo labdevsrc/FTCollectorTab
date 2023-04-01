@@ -148,9 +148,17 @@
                             <Label   Grid.Row="2" Grid.Column="2" FontSize="10" VerticalOptions="Center" 
                             IsVisible="{Binding Source={x:Reference entryCrewL}, Path=Text,
                                         Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
+                            <Picker  Grid.Row="1" Grid.Column="3"  SelectedIndex="{Binding PerDiemL,Mode=TwoWay}"
+                                         Title="per diem" TextColor="Black"  >
+                                <Picker.Items>
+                                    <x:String>No</x:String>
+                                    <x:String>Full day</x:String>
+                                    <x:String>Half day</x:String>
+                                </Picker.Items>
+                            </Picker>
 
 
-                            <!-- start employee 1 row -->
+                        <!-- start employee 1 row -->
                             <!--<Label Grid.Row="2" Grid.Column="0" Text="{Binding Employee1Name.FullName}"
                                    VerticalOptions="Center" TextColor="Black" />-->
                             <Picker Grid.Row="3" Grid.Column="0" 
@@ -386,37 +394,48 @@
                                 ItemDisplayBinding="{Binding EqDesc}" />
                             <Entry Grid.Row="4" Grid.Column="2" MaxLength="9"  Text="{Binding MilesHour3,Mode=TwoWay}"/>
 
-
-                            <!--<local:Dropdown Grid.Row="5" Grid.Column="0" Margin="5,5,10,5" 
+                        <Picker Grid.Row="5" Grid.Column="0" Margin="5,5,10,5" 
+                                SelectedItem="{Binding SelectedEq4Type, Mode=TwoWay}"
                                 ItemsSource="{Binding EquipmentTypes}"
-                                ItemDisplayBinding="{Binding EquipCodeDesc}"  />
-                            <local:Dropdown Grid.Row="5" Grid.Column="1" Margin="5,5,10,5" 
-                                ItemsSource="{Binding EquipmentDetailAssets}" 
-                                ItemDisplayBinding="{Binding EquipmentNumber}" />
-                            <local:Dropdown Grid.Row="5" Grid.Column="2" Margin="5,5,10,5"
-                                            ItemDisplayBinding="{Binding EquipmentDesc}"  />
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"/>
+                        <Picker Grid.Row="5" Grid.Column="1" Margin="5,5,10,5" 
+                                SelectedItem="{Binding SelectedEq4, Mode=TwoWay}"                                            
+                                ItemsSource="{Binding Equipment4CO}" 
+                                ItemDisplayBinding="{Binding EqDesc}" />
+                        <Entry Grid.Row="5" Grid.Column="2" MaxLength="9"  Text="{Binding MilesHour4,Mode=TwoWay}"/>
 
-
-                            <local:Dropdown Grid.Row="6" Grid.Column="0" Margin="5,5,10,5" 
+                        <Picker Grid.Row="6" Grid.Column="0" Margin="5,5,10,5" 
+                                SelectedItem="{Binding SelectedEq5Type, Mode=TwoWay}"
                                 ItemsSource="{Binding EquipmentTypes}"
-                                ItemDisplayBinding="{Binding EquipCodeDesc}"  />
-                            <local:Dropdown Grid.Row="6" Grid.Column="1" Margin="5,5,10,5" 
-                                ItemsSource="{Binding EquipmentDetailAssets}" 
-                                ItemDisplayBinding="{Binding EquipmentNumber}" />
-                            <local:Dropdown Grid.Row="6" Grid.Column="2" Margin="5,5,10,5" 
-                                            ItemDisplayBinding="{Binding EquipmentDesc}"  />
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"/>
+                        <Picker Grid.Row="6" Grid.Column="1" Margin="5,5,10,5" 
+                                SelectedItem="{Binding SelectedEq5, Mode=TwoWay}"                                            
+                                ItemsSource="{Binding Equipment5CO}" 
+                                ItemDisplayBinding="{Binding EqDesc}" />
+                        <Entry Grid.Row="6" Grid.Column="2" MaxLength="9"  Text="{Binding MilesHour5,Mode=TwoWay}"/>
 
-
-                            <local:Dropdown Grid.Row="6" Grid.Column="0" Margin="5,5,10,5" 
+                        <Picker Grid.Row="7" Grid.Column="0" Margin="5,5,10,5" 
+                                SelectedItem="{Binding SelectedEq6Type, Mode=TwoWay}"
                                 ItemsSource="{Binding EquipmentTypes}"
-                                ItemDisplayBinding="{Binding EquipCodeDesc}" />
-                            <local:Dropdown Grid.Row="6" Grid.Column="1" Margin="5,5,10,5" 
-                                ItemsSource="{Binding EquipmentDetailAssets}" 
-                                ItemDisplayBinding="{Binding EquipmentNumber}" />
-                            <local:Dropdown Grid.Row="6" Grid.Column="2" Margin="5,5,10,5"
-                                            ItemDisplayBinding="{Binding EquipmentDesc}"  />-->
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"/>
+                        <Picker Grid.Row="7" Grid.Column="1" Margin="5,5,10,5" 
+                                SelectedItem="{Binding SelectedEq6, Mode=TwoWay}"                                            
+                                ItemsSource="{Binding Equipment6CO}" 
+                                ItemDisplayBinding="{Binding EqDesc}" />
+                        <Entry Grid.Row="7" Grid.Column="2" MaxLength="9"  Text="{Binding MilesHour6,Mode=TwoWay}"/>
 
-                        </Grid>
+                        <Picker Grid.Row="8" Grid.Column="0" Margin="5,5,10,5" 
+                                SelectedItem="{Binding SelectedEq7Type, Mode=TwoWay}"
+                                ItemsSource="{Binding EquipmentTypes}"
+                                ItemDisplayBinding="{Binding EquipCodeDesc}"/>
+                        <Picker Grid.Row="8" Grid.Column="1" Margin="5,5,10,5" 
+                                SelectedItem="{Binding SelectedEq7, Mode=TwoWay}"                                            
+                                ItemsSource="{Binding Equipment7CO}" 
+                                ItemDisplayBinding="{Binding EqDesc}" />
+                        <Entry Grid.Row="8" Grid.Column="2" MaxLength="9"  Text="{Binding MilesHour7,Mode=TwoWay}"/>
+
+
+                    </Grid>
                         <Button Text="Finished Packing Equipment" Command="{Binding SaveEqCheckOutCommand}"/>
                     </StackLayout>
 
@@ -425,7 +444,7 @@
                             <Label Grid.Row="0" Grid.ColumnSpan="3" Text="Equipment Check In " FontSize="30"
                                     VerticalOptions="Center" HorizontalOptions="Center" />
                         </Frame>
-                    <Grid RowDefinitions="*,0.4*,*,0.3*,*,0.3*,*,0.3*" ColumnDefinitions="*,1.5*,0.3*,*" Padding="5,10,10,5">
+                    <Grid RowDefinitions="*,0.4*,*,*,*,*,*,*" ColumnDefinitions="*,1.5*,0.3*,*" Padding="5,10,10,5">
 
                             <Label Grid.Column="0" Text="Type*" />
                             <Label Grid.Column="1" Text="Description" />
@@ -436,20 +455,33 @@
                             <Label Grid.Row="2" Grid.Column="1" Text="{Binding Eq1DescTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
                             <CheckBox Grid.Row="2" Grid.Column="2" IsChecked="{Binding Eq1IsReturned,Mode=TwoWay}" />
                             <Entry Grid.Row="2" Grid.Column="3"  MaxLength="9" Text="{Binding MilesHourIn1,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
-                            <Label Grid.Row="3" Grid.Column="3" IsVisible="{Binding IsErrorMsg1Display}"/>
-                        
-                        
-                            <Label Grid.Row="4" Grid.Column="0" Text="{Binding Eq2TypeTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
-                            <Label Grid.Row="4" Grid.Column="1" Text="{Binding Eq2DescTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
-                            <CheckBox Grid.Row="4" Grid.Column="2" IsChecked="{Binding Eq2IsReturned,Mode=TwoWay}" />
-                            <Entry Grid.Row="4" Grid.Column="3" MaxLength="9"  Text="{Binding MilesHourIn2,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
-                            <Label Grid.Row="5" Grid.Column="3" IsVisible="{Binding IsErrorMsg2Display}"/>
 
-                            <Label Grid.Row="6" Grid.Column="0" Text="{Binding Eq3TypeTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
-                            <Label Grid.Row="6" Grid.Column="1" Text="{Binding Eq3DescTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
-                            <CheckBox Grid.Row="6" Grid.Column="2" IsChecked="{Binding Eq3IsReturned,Mode=TwoWay}" />
-                            <Entry Grid.Row="6" Grid.Column="3" MaxLength="9"  Text="{Binding MilesHourIn3,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
-                            <Label Grid.Row="7" Grid.Column="3" IsVisible="{Binding IsErrorMsg3Display}"/>
+
+                            <Label Grid.Row="3" Grid.Column="0" Text="{Binding Eq2TypeTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <Label Grid.Row="3" Grid.Column="1" Text="{Binding Eq2DescTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <CheckBox Grid.Row="3" Grid.Column="2" IsChecked="{Binding Eq2IsReturned,Mode=TwoWay}" />
+                            <Entry Grid.Row="3" Grid.Column="3" MaxLength="9"  Text="{Binding MilesHourIn2,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+
+                            <Label Grid.Row="4" Grid.Column="0" Text="{Binding Eq3TypeTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <Label Grid.Row="4" Grid.Column="1" Text="{Binding Eq3DescTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <CheckBox Grid.Row="4" Grid.Column="2" IsChecked="{Binding Eq3IsReturned,Mode=TwoWay}" />
+                            <Entry Grid.Row="4" Grid.Column="3" MaxLength="9"  Text="{Binding MilesHourIn3,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+
+                            <Label Grid.Row="5" Grid.Column="0" Text="{Binding Eq4TypeTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <Label Grid.Row="5" Grid.Column="1" Text="{Binding Eq4DescTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <CheckBox Grid.Row="5" Grid.Column="2" IsChecked="{Binding Eq4IsReturned,Mode=TwoWay}" />
+                            <Entry Grid.Row="5" Grid.Column="3" MaxLength="9"  Text="{Binding MilesHourIn4,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+
+                            <Label Grid.Row="6" Grid.Column="0" Text="{Binding Eq5TypeTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <Label Grid.Row="6" Grid.Column="1" Text="{Binding Eq5DescTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <CheckBox Grid.Row="6" Grid.Column="2" IsChecked="{Binding Eq5IsReturned,Mode=TwoWay}" />
+                            <Entry Grid.Row="6" Grid.Column="3" MaxLength="9"  Text="{Binding MilesHourIn5,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+
+                            <Label Grid.Row="7" Grid.Column="0" Text="{Binding Eq6TypeTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <Label Grid.Row="7" Grid.Column="1" Text="{Binding Eq6DescTitle,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+                            <CheckBox Grid.Row="7" Grid.Column="2" IsChecked="{Binding Eq6IsReturned,Mode=TwoWay}" />
+                            <Entry Grid.Row="7" Grid.Column="3" MaxLength="9"  Text="{Binding MilesHourIn6,Mode=TwoWay}" FontSize="Medium" VerticalOptions="Center"/>
+
                     </Grid>
                         <Button Text="Return Equipment" Command="{Binding SaveEqCheckInCommand}"/>
                     </StackLayout>
@@ -637,7 +669,8 @@
                         <!-- row  - Leader -->
                         <Label  Grid.Row="1"  Text="{Binding CrewLeader}" VerticalOptions="Center"/>
                         <Entry  Grid.Row="1" Grid.Column="1" Text="{Binding LClockOutTime, Mode=TwoWay}"  VerticalOptions="Center" />
-                        <Picker Grid.Row="1" Grid.Column="2" SelectedIndex="{Binding LClockOutPerDiem, Mode=TwoWay}"  VerticalOptions="Center">
+                        <Picker Grid.Row="1" Title="{Binding }"
+                                Grid.Column="2" SelectedIndex="{Binding LClockOutPerDiem, Mode=TwoWay}"  VerticalOptions="Center">
                             <Picker.Items>
                                 <x:String>No</x:String>
                                 <x:String>Full day</x:String>
@@ -765,34 +798,42 @@
 
         </StackLayout>
 
-                <Button x:Name="fab2Site"
-                    BackgroundColor="OrangeRed" IsVisible="{Binding IsLeaveToSiteBtnEnabled}"
+            <Button
+                    BackgroundColor="OrangeRed" IsVisible="{Binding IsLeftForJobBtnEnabled}"
                     CornerRadius="5" 
-                    Text="Leave for Job" FontSize="Small"                          
+                    Text="Leave For Job" FontSize="Small"                          
                     AbsoluteLayout.LayoutFlags="PositionProportional"  
                     AbsoluteLayout.LayoutBounds="0.9,0.94,150,80" 
-                    Command="{Binding LeaveJobToSiteCommand}" />
+                    Command="{Binding LeftForJobCommand}"/>
 
-                <Button x:Name="fabFromSite"
-                    BackgroundColor="Aqua" IsVisible="{Binding IsArrivedFromSiteBtnEnabled}"
-                    Text="&lt;&lt; Arrive from site" FontSize="Small"  
+            <Button
+                    BackgroundColor="OrangeRed" IsVisible="{Binding IsArrivedAtSiteBtnEnabled}"
+                    CornerRadius="5" 
+                    Text="Arrived  At Job" FontSize="Small"                          
+                    AbsoluteLayout.LayoutFlags="PositionProportional"  
+                    AbsoluteLayout.LayoutBounds="0.9,0.94,150,80" 
+                    Command="{Binding ArrivedAtSiteCommand}" />
+
+            <Button 
+                    BackgroundColor="Aqua" IsVisible="{Binding IsLeftJobBtnEnabled}"
+                    Text="&lt;&lt; Left Job" FontSize="Small"  
                     CornerRadius="5" 
                     AbsoluteLayout.LayoutFlags="PositionProportional"  
                     AbsoluteLayout.LayoutBounds="0.9,0.94,150,80" 
-                    Command="{Binding ArriveFromSiteCommand}" />
+                    Command="{Binding LeftJobCommand}" />
 
             <!-- ImageSource="leavetosite.png" 
                     ImageSource="arrivefromsite.png"
                         ImageSource="arrivefromsite.png"           
             -->
-                <Button x:Name="arrivedY"
-                        BackgroundColor="Aqua" IsVisible="{Binding IsArrivedAtYardBtnEnabled}"
+            <Button 
+                    BackgroundColor="Aqua" IsVisible="{Binding IsArrivedAtYardBtnEnabled}"
 
-                        Text="&lt;&lt; Arrive @Yard" FontSize="Small" 
-                        CornerRadius="5" 
-                        AbsoluteLayout.LayoutFlags="PositionProportional"  
-                        AbsoluteLayout.LayoutBounds="0.9,0.94,150,80" 
-                        Command="{Binding ArriveAtYardCommand}" />
+                    Text="&lt;&lt; Arrive @Yard" FontSize="Small" 
+                    CornerRadius="5" 
+                    AbsoluteLayout.LayoutFlags="PositionProportional"  
+                    AbsoluteLayout.LayoutBounds="0.9,0.94,150,80" 
+                    Command="{Binding ArriveAtYardCommand}" />
                 <!--<Label Text="{Binding TodoButton, Mode=TwoWay}"  BackgroundColor="Transparent"
                         AbsoluteLayout.LayoutFlags="PositionProportional"  
                         AbsoluteLayout.LayoutBounds="0.9,0.98,50,80"                                      
