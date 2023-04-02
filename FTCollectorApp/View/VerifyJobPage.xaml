@@ -444,7 +444,7 @@
                             <Label Grid.Row="0" Grid.ColumnSpan="3" Text="Equipment Check In " FontSize="30"
                                     VerticalOptions="Center" HorizontalOptions="Center" />
                         </Frame>
-                    <Grid RowDefinitions="*,0.4*,*,*,*,*,*,*" ColumnDefinitions="*,1.5*,0.3*,*" Padding="5,10,10,5">
+                    <Grid RowDefinitions="*,0.1*,*,*,*,*,*,*" ColumnDefinitions="*,1.5*,0.3*,*" Padding="5,10,10,5">
 
                             <Label Grid.Column="0" Text="Type*" />
                             <Label Grid.Column="1" Text="Description" />

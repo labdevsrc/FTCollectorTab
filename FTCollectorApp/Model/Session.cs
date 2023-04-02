@@ -93,7 +93,16 @@ namespace FTCollectorApp.Model
 
         public const string EventLogin = "1";
         public const string JOB_VERIFIED = "2";
+        public const string JOBEVENT_VERIFIED = "2";
+
+        public const string JOBEVENT_LEFT_FOR_JOB = "6";
+        public const string JOBEVENT_ARRIVED_AT_JOB = "7";
+        public const string JOBEVENT_LEFT_JOB = "8";
+        public const string JOBEVENT_ARRIVED_AT_YARD = "9";
+
         public const string CrewAssembled = "3";
+        public const string JOBEVENT_LUNCHOUT = "13";
+        public const string JOBEVENT_LUNCHIN = "14";
         public const string LunchOut = "13";
         public const string LunchIn = "14";
         public const string ClockIn = "15";

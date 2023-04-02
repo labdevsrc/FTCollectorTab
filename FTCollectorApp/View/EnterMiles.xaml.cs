@@ -25,7 +25,7 @@ namespace FTCollectorApp.View
 			Console.WriteLine();
 			BindingContext = new EnterMilesVM();
 			Console.WriteLine();
-			//this.CloseWhenBackgroundIsClicked= false;
+			this.CloseWhenBackgroundIsClicked= false;
 		}
 
 

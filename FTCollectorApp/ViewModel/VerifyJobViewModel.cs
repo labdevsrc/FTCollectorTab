@@ -269,6 +269,7 @@ namespace FTCollectorApp.ViewModel
         public ICommand SaveEqCheckOutCommand { get; set; }
         public ICommand SaveEqCheckInCommand { get; set; }
 
+
         public ICommand DisplayEquipmentCheckInCommand { get; set; }
         public ICommand DisplayEquipmentCheckOutCommand { get; set; }
 
@@ -293,11 +294,11 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         bool isLunchOut = true;
 
-        [ObservableProperty]
-        bool isLunchIn = false;
+        [ObservableProperty] bool isLunchIn = false;
 
-        [ObservableProperty]
-        bool isLunchOutDisplay = false;
+        [ObservableProperty] bool isEqCheckIn = false;
+        
+        [ObservableProperty] bool isLunchOutDisplay = false;
 
         [ObservableProperty]
         bool isLunchInDisplay = false;
@@ -427,8 +428,11 @@ namespace FTCollectorApp.ViewModel
                 {
                     // after save Miles Hours Arrived at Job
                     // Display all Lunchout Lunchin dll
+                    IsArrivedAtSiteBtnEnabled = false;
+                    (ArrivedAtSiteCommand as Command).ChangeCanExecute();
                     IsStartODOEntered = true;
                     (LunchOutCommand as Command).ChangeCanExecute();
+                    (DisplayEquipmentCheckInCommand as Command).ChangeCanExecute();
                 }
 
                 if (Session.event_type == "8") // Left Job
@@ -445,12 +449,9 @@ namespace FTCollectorApp.ViewModel
                 if (Session.event_type == "9") // Arrived at Yard
                 {
                     IsStartODOEntered = true;
-                    (LunchOutCommand as Command).ChangeCanExecute();
-
-                    // after save Miles Hours Arrive at Yard
-                    // 1. Hide Arrived at Yard Button
-                    IsArrivedAtYardBtnEnabled = false;
-                    (ArriveAtYardCommand as Command).ChangeCanExecute();
+                    Console.WriteLine(); // check Lunchin, LunchOut , Equipment Checkin
+                    (ToggleEndofDayCommand as Command).ChangeCanExecute();
+                    RefreshFAButton(); // clean up
                 }
 
             });
@@ -937,6 +938,7 @@ namespace FTCollectorApp.ViewModel
                             IsLunchOut = false;
                             IsLunchIn = true; // when lunchout button clicked, it will enable Lunchin button
 
+
                             // enable save button 
                             DisableLunchOutSaveBtn = true;
                             (SaveLunchOutCommand as Command).ChangeCanExecute();
@@ -1013,7 +1015,7 @@ namespace FTCollectorApp.ViewModel
                 },
                 canExecute: () =>
                 {
-                    return !IsLunchIn && !IsLunchOut;
+                    return !IsLunchIn && !IsLunchOut && !isEqCheckIn;
                 }
 
                 );
@@ -1035,7 +1037,7 @@ namespace FTCollectorApp.ViewModel
                 {
                     ClearAllPage();
                     IsEqCheckInDisplayed = true;
-
+                    IsEqCheckIn = true;
                     try
                     {
 
@@ -1054,6 +1056,16 @@ namespace FTCollectorApp.ViewModel
                             Eq3TypeTitle = Application.Current.Properties["Eq3Type"] as string;
                             Eq3DescTitle = Application.Current.Properties["Eq3Desc"] as string;
                         }
+                        if (Application.Current.Properties.ContainsKey("Eq4Type"))
+                        {
+                            Eq4TypeTitle = Application.Current.Properties["Eq4Type"] as string;
+                            Eq4DescTitle = Application.Current.Properties["Eq4Desc"] as string;
+                        }
+                        if (Application.Current.Properties.ContainsKey("Eq5Type"))
+                        {
+                            Eq5TypeTitle = Application.Current.Properties["Eq5Type"] as string;
+                            Eq5DescTitle = Application.Current.Properties["Eq5Desc"] as string;
+                        }
                     }
                     catch (Exception e)
                     {
@@ -1068,7 +1080,7 @@ namespace FTCollectorApp.ViewModel
                 canExecute: () =>
                 {
                     Console.WriteLine();
-                    return !IsLunchIn;
+                    return !IsLunchIn & !IsLunchOut;
                 }
             );
 
@@ -1096,44 +1108,28 @@ namespace FTCollectorApp.ViewModel
 
                         if (Eq4IsReturned)
                         {
-                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq4?.EqKey, MilesHourIn3, "0");
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq4?.EqKey, MilesHourIn4, "0");
                             Console.WriteLine(Eq4IsReturned);
                         };
 
                         if (Eq5IsReturned)
                         {
-                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq5?.EqKey, MilesHourIn3, "0");
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq5?.EqKey, MilesHourIn5, "0");
                             Console.WriteLine(Eq5IsReturned);
                         };
 
-
-                        /*if (SelectedEqIn1?.EqDesc.Length > 1)
+                        if (Eq6IsReturned)
                         {
-                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq1?.EqKey, MilesHourIn1, "0");
-                        }
-                        if (SelectedEqIn2?.EqDesc.Length > 1)
-                        {
-                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq2?.EqKey, MilesHourIn2, "0");
-                        }
-                        if (SelectedEqIn3?.EqDesc.Length > 1)
-                        {
-                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq3?.EqKey, MilesHourIn3, "0");
-                        }
-
-                        if (SelectedEqIn1?.EqDesc.Length == 0 && SelectedEqIn2?.EqDesc.Length == 0
-                        && SelectedEqIn2?.EqDesc.Length == 0)
-                        {
-                            await Application.Current.MainPage.DisplayAlert("Input Error", "Return Equipment is Empty", "Back");
-                            return;
-                        }*/
-                        //TodoButton = string.Empty;
+                            await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq6?.EqKey, MilesHourIn6, "0");
+                            Console.WriteLine(Eq6IsReturned);
+                        };
 
                         bool answer = await Application.Current.MainPage.DisplayAlert("Upload Done", "Job Equipment table uploaded", "Finish The Day", "Back");
                         if (answer) {
                             ClearAllPage();
                             IsDisplayEndOfDay = true;
                         }
-
+                        IsEqCheckIn = false;
 
                     }
                     catch (Exception e)
@@ -1176,9 +1172,9 @@ namespace FTCollectorApp.ViewModel
                     IsDisplayOdoStart = false;
                     IsDisplayOdoEnd = false;
 
-                    IsLeaveToSiteBtnEnabled = true;// enable fab button
+                    IsLeftForJobBtnEnabled = true;// enable fab button
                     //TodoButton = "Leave to Site";
-                    (LeaveJobToSiteCommand as Command).ChangeCanExecute();
+                    (LeftForJobCommand as Command).ChangeCanExecute();
 
                     try
                     {
@@ -1359,28 +1355,20 @@ namespace FTCollectorApp.ViewModel
                 {
                     Session.event_type = "6"; //left for job site event                   
                     await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new EnterMiles()); // open miles hours window
-                    IsLeaveToSiteBtnEnabled = false;
-                    IsArrivedAtSiteBtnEnabled = true;
-                    (LunchOutCommand as Command).ChangeCanExecute();
 
                 },
                 canExecute: () => {
 
-                    return IsLeaveToSiteBtnEnabled;// IsStartODOEntered;
+                    return IsLeftForJobBtnEnabled;// IsStartODOEntered;
                 }
             );
 
             ArrivedAtSiteCommand = new Command(
                 execute: async () =>
                 {
-                    Session.event_type = "8"; //arrived@ job site
+                    Session.event_type = "7"; //arrived@ job site
                     await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new EnterMiles());
-                    IsArrivedAtSiteBtnEnabled = false;
-                    (ArrivedAtSiteCommand as Command).ChangeCanExecute();
 
-                    // activate 4 button above
-                    IsStartODOEntered = true;
-                    (LunchOutCommand as Command).ChangeCanExecute();
 
                 },
                 canExecute: () => {
@@ -1394,16 +1382,9 @@ namespace FTCollectorApp.ViewModel
             LeftJobCommand = new Command(
                 execute: async () =>
                 {
-                    Session.event_type = "7"; //left for job site
+                    Session.event_type = "8"; //left for job site
                     await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new EnterMiles());
 
-                    //await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
-                    IsLeftJobBtnEnabled = false;
-                    IsLeaveToSiteBtnEnabled = false;
-                    IsArrivedAtYardBtnEnabled = true;
-                    //TodoButton = "Arrive@Yard";
-                    (LeftJobCommand as Command).ChangeCanExecute();
-                    (ArriveAtYardCommand as Command).ChangeCanExecute();
                 },
                 canExecute: () => {
 
@@ -1415,13 +1396,8 @@ namespace FTCollectorApp.ViewModel
                 execute: async () =>
                 {
                     Session.event_type = "9"; //left for job site
-                    await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
-                    IsLeftJobBtnEnabled = false;
-                    IsLeaveToSiteBtnEnabled = false;
-                    IsArrivedAtYardBtnEnabled = false;
-                    //TodoButton = string.Empty;
-                    (LeftJobCommand as Command).ChangeCanExecute();
-                    (ArriveAtYardCommand as Command).ChangeCanExecute();
+                    await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new EnterMiles());
+                    RefreshFAButton(); // pull all Is FAB button state to false, then invoke all ChangeExecute
                 },
                 canExecute: () => {
 
@@ -1444,7 +1420,15 @@ namespace FTCollectorApp.ViewModel
         }
 
 
+        void RefreshFAButton()
+        {
+            IsLeftForJobBtnEnabled = false; (LeftForJobCommand as Command).ChangeCanExecute();
+            IsArrivedAtSiteBtnEnabled = false; (ArrivedAtSiteCommand as Command).ChangeCanExecute();
+            IsLeftJobBtnEnabled = false; (LeftJobCommand as Command).ChangeCanExecute();
+            IsArrivedAtYardBtnEnabled = false; (ArriveAtYardCommand as Command).ChangeCanExecute();
 
+
+        }
         void ClearAllPage()
         {
             IsDisplayJobEntries = false;
@@ -1459,10 +1443,10 @@ namespace FTCollectorApp.ViewModel
             IsDisplayEndOfDay = false;
         }
 
+        [ObservableProperty] bool isLeftForJobBtnEnabled = false;
         [ObservableProperty] bool isArrivedAtSiteBtnEnabled = false;
-        [ObservableProperty] bool isArrivedAtYardBtnEnabled = false;
         [ObservableProperty] bool isLeftJobBtnEnabled = false;
-        [ObservableProperty] bool isLeaveToSiteBtnEnabled = false;
+        [ObservableProperty] bool isArrivedAtYardBtnEnabled = false;
         [ObservableProperty] bool disableLunchOutSaveBtn = false;
         //[ObservableProperty] string todoButton = string.Empty;
 
@@ -1472,12 +1456,16 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] bool eq4IsReturned = false;
         [ObservableProperty] bool eq5IsReturned = false;
         [ObservableProperty] bool eq6IsReturned = false;
+        [ObservableProperty] bool eq7IsReturned = false;
 
-        public ICommand ArriveAtYardCommand { get; set; }
+
         public ICommand ArrivedAtSiteCommand { get; set; }
+        public ICommand LeftForJobCommand { get; set; }
+
         public ICommand LogOutCommand { get; set; }
-        public ICommand LeaveJobToSiteCommand { get; set; }
+
         public ICommand LeftJobCommand { get; set; }
+        public ICommand ArriveAtYardCommand { get; set; }
 
 
         [ObservableProperty] string lunchInTimeLeader = string.Empty;
