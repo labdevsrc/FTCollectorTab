@@ -31,8 +31,8 @@ namespace FTCollectorApp.Model
 
         public static string event_type { get; set; }
 
-        public static string? phases { get; set; } 
-
+        public static string? curphase { get; set; }
+        public static string? max_phases { get; set; }
 
         public static string stage { get; set; }
         public static ArrayList sessioncrew { get; set; }

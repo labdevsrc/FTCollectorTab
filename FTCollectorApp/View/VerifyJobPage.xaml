@@ -145,9 +145,9 @@
                                    VerticalOptions="Center" TextColor="Black" />
 
                             <Entry x:Name="entryCrewL"  Grid.Row="1" Grid.Column="2" Text="{Binding StartTimeLeader,Mode=TwoWay}"  />
-                            <Label   Grid.Row="2" Grid.Column="2" FontSize="10" VerticalOptions="Center" 
-                            IsVisible="{Binding Source={x:Reference entryCrewL}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
+                            <Label   Grid.Row="2" Grid.Column="2" FontSize="10" VerticalOptions="Center" IsVisible="{Binding IsTimeLeaderInvalid}" Text="Invalid HH:MM" TextColor="Red" />
+                            <!--IsVisible="{Binding Source={x:Reference entryCrewL}, Path=Text,
+                                        Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />-->
                             <Picker  Grid.Row="1" Grid.Column="3"  SelectedIndex="{Binding PerDiemL,Mode=TwoWay}"
                                          Title="per diem" TextColor="Black"  >
                                 <Picker.Items>
@@ -177,9 +177,10 @@
                                 </Picker.Items>
                             </Picker>
                             <Entry x:Name="entryCrew1"  Grid.Row="3" Grid.Column="2" Text="{Binding StartTimeEmp1,Mode=TwoWay}" />
-                            <Label   Grid.Row="4" Grid.Column="2" FontSize="10" VerticalOptions="Center" 
-                            IsVisible="{Binding Source={x:Reference entryCrew1}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
+                            <Label   Grid.Row="4" Grid.Column="2" FontSize="10" VerticalOptions="Center" IsVisible="{Binding IsTimeEmp1Invalid}"
+                                     Text="Invalid HH:MM" TextColor="Red"  />
+                            <!--IsVisible="{Binding Source={x:Reference entryCrew1}, Path=Text,
+                                        Converter={StaticResource isTimeNotValid}}" />-->
 
                             <Picker  Grid.Row="3" Grid.Column="3"  SelectedIndex="{Binding PerDiemEmp1,Mode=TwoWay}"
                                      Title="per diem" TextColor="Black"  >
@@ -208,10 +209,10 @@
                                 </Picker.Items>
                             </Picker>
                             <Entry x:Name="entryCrew2"  Grid.Row="5" Grid.Column="2" Text="{Binding StartTimeEmp2,Mode=TwoWay}" />
-                            <Label   Grid.Row="6" Grid.Column="2" FontSize="10" VerticalOptions="Center" 
-                            IsVisible="{Binding Source={x:Reference entryCrew2}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
-
+                            <Label Grid.Row="6" Grid.Column="2" FontSize="10" VerticalOptions="Center" IsVisible="{Binding IsTimeEmp2Invalid}"
+                                         Text="Invalid HH:MM" TextColor="Red"  />
+                            <!--IsVisible="{Binding Source={x:Reference entryCrew1}, Path=Text,
+                                            Converter={StaticResource isTimeNotValid}}" />-->
                             <Picker  Grid.Row="5" Grid.Column="3"  SelectedIndex ="{Binding PerDiemEmp2,Mode=TwoWay}"
                                      Title="per diem" TextColor="Black"  >
                                 <Picker.Items>
@@ -236,9 +237,10 @@
                                 </Picker.Items>
                             </Picker>
                             <Entry x:Name="entryCrew3"  Grid.Row="7" Grid.Column="2" Text="{Binding StartTimeEmp3,Mode=TwoWay}" />
-                            <Label   Grid.Row="8" Grid.Column="2" FontSize="10" VerticalOptions="Center" 
-                            IsVisible="{Binding Source={x:Reference entryCrew3}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
+                            <Label   Grid.Row="8" Grid.Column="2" FontSize="10" VerticalOptions="Center" Text="Invalid HH:MM" TextColor="Red"
+                                 IsVisible="{Binding IsTimeEmp3Invalid}" />
+                            <!--IsVisible="{Binding Source={x:Reference entryCrew3}, Path=Text,
+                                        Converter={StaticResource isTimeNotValid}}"   -->
                             <Picker  Grid.Row="7" Grid.Column="3"  SelectedIndex="{Binding PerDiemEmp3,Mode=TwoWay}"
                                      Title="per diem" TextColor="Black"  >
                                 <Picker.Items>
@@ -262,9 +264,10 @@
                                 </Picker.Items>
                             </Picker>
                             <Entry x:Name="entryCrew4"  Grid.Row="9" Grid.Column="2" Text="{Binding StartTimeEmp4,Mode=TwoWay}" />
-                            <Label   Grid.Row="10" Grid.Column="2" FontSize="10" VerticalOptions="Center" 
-                            IsVisible="{Binding Source={x:Reference entryCrew4}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
+                        <Label   Grid.Row="10" Grid.Column="2" FontSize="10" VerticalOptions="Center" Text="Invalid HH:MM" TextColor="Red" 
+                                 IsVisible="{Binding IsTimeEmp4Invalid}" />
+                        <!--IsVisible="{Binding Source={x:Reference entryCrew4}, Path=Text,
+                                        Converter={StaticResource isTimeNotValid}}"  />-->
                             <Picker  Grid.Row="9" Grid.Column="3"  SelectedIndex="{Binding PerDiemEmp4,Mode=TwoWay}"
                                      Title="per diem" TextColor="Black"  >
                                 <Picker.Items>
@@ -288,9 +291,10 @@
                                 </Picker.Items>
                             </Picker>
                             <Entry  x:Name="entryCrew5" Grid.Row="11" Grid.Column="2" Text="{Binding StartTimeEmp5,Mode=TwoWay}" />
-                            <Label   Grid.Row="12" Grid.Column="2" FontSize="10" VerticalOptions="Center" 
-                            IsVisible="{Binding Source={x:Reference entryCrew5}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
+                            <Label   Grid.Row="12" Grid.Column="2" FontSize="10" VerticalOptions="Center" Text="Invalid HH:MM" TextColor="Red" 
+                                     IsVisible="{Binding IsTimeEmp5Invalid}" />
+                            <!--IsVisible="{Binding Source={x:Reference entryCrew5}, Path=Text,
+                                        Converter={StaticResource isTimeNotValid}}"  />-->
                             <Picker  Grid.Row="11" Grid.Column="3"  
                                      SelectedIndex="{Binding PerDiemEmp5,Mode=TwoWay}"
                                      Title="per diem" TextColor="Black"  >
@@ -316,9 +320,10 @@
                                 </Picker.Items>
                             </Picker>
                             <Entry x:Name="entryCrew6"  Grid.Row="13" Grid.Column="2" Text="{Binding StartTimeEmp6,Mode=TwoWay}" />
-                            <Label   Grid.Row="14" Grid.Column="2" FontSize="10" VerticalOptions="Center" 
-                            IsVisible="{Binding Source={x:Reference entryCrew6}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
+                        <Label   Grid.Row="14" Grid.Column="2" FontSize="10" VerticalOptions="Center" Text="Invalid HH:MM" TextColor="Red" 
+                                 IsVisible="{Binding IsTimeEmp6Invalid}" />
+                            <!--IsVisible="{Binding Source={x:Reference entryCrew6}, Path=Text,
+                                        Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />-->
                             <Picker  Grid.Row="13" Grid.Column="3"  
                                      SelectedIndex="{Binding PerDiemEmp6,Mode=TwoWay}"
                                      Title="per diem" TextColor="Black"  >
@@ -331,8 +336,9 @@
 
                         </Grid>
 
-                        <Button Text="Save" Command="{Binding CrewSaveCommand}" BackgroundColor="{StaticResource blueColor}"/>
-                        <Label Text="{Binding ErrorMessageCrew1}" FontSize="Small" TextColor="Red"/>
+                    <Button Text="Save" Command="{Binding CrewSaveCommand}" BackgroundColor="{StaticResource blueColor}">
+                    </Button>
+                    <Label Text="{Binding ErrorMessageCrew1}" FontSize="Small" TextColor="Red"/>
 
                     </StackLayout>
                     <!-- Start Odometer Detail Entries -->
@@ -494,7 +500,7 @@
                         </Frame>
                         <Frame CornerRadius="5" HasShadow="True" VerticalOptions="Fill">
                             <StackLayout>
-                                <Grid ColumnDefinitions="*,*" RowDefinitions="*,*,*,*,*,*,*,*" >
+                                <Grid ColumnDefinitions="*,*,*" RowDefinitions="*,*,*,*,*,*,*,*" >
                                     <Label Text="Employee Name" />
                                     <Label Grid.Column="1" Text="Lunch Out Time"  />
                                     <Label Grid.Column="0" Grid.Row="1" Text="{Binding CrewLeader}" VerticalOptions="Center" />
@@ -579,54 +585,49 @@
                                     <Label Text="Employee Name" />
                                     <Label Grid.Column="1" Text="Lunch In Time" />
                                     <Label Grid.Column="0" Grid.Row="1" Text="{Binding CrewLeader}" VerticalOptions="Center" />
-                                <Entry x:Name="entryLI1" Grid.Column="1" Grid.Row="1"  Text="{Binding LunchInTimeLeader, Mode=TwoWay}" VerticalOptions="Center"/>
+                                    <Entry x:Name="entryLI1" Grid.Column="1" Grid.Row="1"  Text="{Binding LunchInTimeLeader, Mode=TwoWay}" VerticalOptions="Center"/>
                                     <Label Grid.Column="2" Grid.Row="1"  FontSize="10" VerticalOptions="Center" 
-                                        IsVisible="{Binding Source={x:Reference entryLI1}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
+                                           IsVisible="{Binding IsLILeaderInvalid}" Text="Invalid HH:MM" TextColor="Red"  />
+                                
+                                    <!--IsVisible="{Binding Source={x:Reference entryLI1}, Path=Text,
+                                        Converter={StaticResource isTimeNotValid}}" -->
                                     
                                     <Label Grid.Column="0" Grid.Row="2" Text="{Binding Employee1Name.FullName}" VerticalOptions="Center"/>
                                     <Entry x:Name="entryLI2" Grid.Column="1" Grid.Row="2"  Text="{Binding LunchInTime1, Mode=TwoWay}" VerticalOptions="Center"/>
                                     <Label Grid.Column="2" Grid.Row="2"  FontSize="10" VerticalOptions="Center" 
-                                        IsVisible="{Binding Source={x:Reference entryLI2}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
+                                           IsVisible="{Binding IsLIEmp2Invalid}" Text="Invalid HH:MM" TextColor="Red" />
+                                    <!--IsVisible="{Binding Source={x:Reference entryLI2}, Path=Text,
+                                        Converter={StaticResource isTimeNotValid}}"  />-->
 
                                     <Label Grid.Column="0" Grid.Row="3" Text="{Binding Employee2Name.FullName}" VerticalOptions="Center"/>
                                     <Entry x:Name="entryLI3"  Grid.Column="1" Grid.Row="3"  Text="{Binding LunchInTime2, Mode=TwoWay}" VerticalOptions="Center"/>
                                     <Label Grid.Column="2" Grid.Row="3"  FontSize="10" VerticalOptions="Center" 
-                                        IsVisible="{Binding Source={x:Reference entryLI3}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
+                                       IsVisible="{Binding IsLIEmp3Invalid}"  Text="Invalid HH:MM" TextColor="Red"  />
+                                    <!--IsVisible="{Binding Source={x:Reference entryLI3}, Path=Text,
+                                        Converter={StaticResource isTimeNotValid}}" />-->
 
 
                                     <Label Grid.Column="0" Grid.Row="4" Text="{Binding Employee3Name.FullName}" VerticalOptions="Center"/>
                                     <Entry x:Name="entryLI4"  Grid.Column="1" Grid.Row="4"  Text="{Binding LunchInTime3, Mode=TwoWay}" VerticalOptions="Center"/>
                                     <Label Grid.Column="2" Grid.Row="4"  FontSize="10" VerticalOptions="Center" 
-                                        IsVisible="{Binding Source={x:Reference entryLI4}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
+                                        IsVisible="{Binding IsLIEmp3Invalid}" Text="Invalid HH:MM" TextColor="Red"  />
 
-
-                                    <Label x:Name="emp4" Grid.Column="0" Grid.Row="5" Text="{Binding Employee4Name.FullName}"
-                                           IsEnabled="{Binding Source={x:Reference emp4} , Path=Text.Length }"                                           
-                                           />
+                                    <Label x:Name="emp4" Grid.Column="0" Grid.Row="5" Text="{Binding Employee4Name.FullName}" VerticalOptions="Center" />
+                                    <!--IsEnabled="{Binding Source={x:Reference emp4} , Path=Text.Length }"/>-->
                                     <Entry x:Name="entryLI5"  Grid.Column="1" Grid.Row="5"  Text="{Binding LunchInTime4, Mode=TwoWay}" />
                                     <Label Grid.Column="2" Grid.Row="5"  FontSize="10" VerticalOptions="Center" 
-                                        IsVisible="{Binding Source={x:Reference entryLI5}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
+                                       IsVisible="{Binding IsLIEmp4Invalid}" Text="Invalid HH:MM" TextColor="Red" />
 
-
-
-                                    <Label x:Name="emp5" Grid.Column="0" Grid.Row="6" Text="{Binding Employee5Name.FullName}" 
-                                         IsEnabled="{Binding Source={x:Reference emp5} , Path=Text.Length }"  
-                                           />
+                                    <Label x:Name="emp5" Grid.Column="0" Grid.Row="6" Text="{Binding Employee5Name.FullName}" VerticalOptions="Center"/>
                                     <Entry x:Name="entryLI6"  Grid.Column="1" Grid.Row="6"  Text="{Binding LunchInTime5, Mode=TwoWay}" />
                                     <Label Grid.Column="2" Grid.Row="6"  FontSize="10" VerticalOptions="Center" 
-                                        IsVisible="{Binding Source={x:Reference entryLI6}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
+                                       IsVisible="{Binding IsLIEmp5Invalid}" Text="Invalid HH:MM" TextColor="Red"  />
+ 
 
                                     <Label Grid.Column="0" Grid.Row="7" Text="{Binding Employee6Name.FullName}" />
                                     <Entry x:Name="entryLI7"  Grid.Column="1" Grid.Row="7"  Text="{Binding LunchInTime6, Mode=TwoWay}" />
                                     <Label Grid.Column="2" Grid.Row="7"  FontSize="10" VerticalOptions="Center" 
-                                        IsVisible="{Binding Source={x:Reference entryLI7}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />
+                                       IsVisible="{Binding IsLIEmp6Invalid}" Text="Invalid HH:MM" TextColor="Red"  />
 
                                     <Button Grid.Column="2" Grid.Row="7" Text="Save" Command="{Binding SaveLunchInCommand}" />
 

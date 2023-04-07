@@ -15,9 +15,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Input;
+using Xamarin.CommunityToolkit.Converters;
 using Xamarin.Forms;
 
 namespace FTCollectorApp.ViewModel
@@ -140,7 +142,7 @@ namespace FTCollectorApp.ViewModel
                     Session.jobkey = QueryOwnerJobNumber.Select(a => a.JobKey).First();
                     Session.ownerCD = QueryOwnerJobNumber.Select(a => a.OWNER_CD).First();
                     Session.countycode = QueryOwnerJobNumber.Select(a => a.CountyCode).First();
-                    Session.phases = QueryOwnerJobNumber.Select(a => a.JobPhases).First();
+                    Session.max_phases = QueryOwnerJobNumber.Select(a => a.JobPhases).First();
                     Session.JobShowAll = QueryOwnerJobNumber.Select(a => a.ShowAll).First();
                     Session.jobnum = value.JobNumber;
                     Session.OwnerName = value.OwnerName;
@@ -297,7 +299,7 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] bool isLunchIn = false;
 
         [ObservableProperty] bool isEqCheckIn = false;
-        
+
         [ObservableProperty] bool isLunchOutDisplay = false;
 
         [ObservableProperty]
@@ -333,13 +335,275 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] int perDiemEmp5 = 0;
         [ObservableProperty] int perDiemEmp6 = 0;
 
-        [ObservableProperty] string startTimeLeader = string.Empty;
-        [ObservableProperty] string startTimeEmp1 = string.Empty;
-        [ObservableProperty] string startTimeEmp2 = string.Empty;
-        [ObservableProperty] string startTimeEmp3 = string.Empty;
-        [ObservableProperty] string startTimeEmp4 = string.Empty;
-        [ObservableProperty] string startTimeEmp5 = string.Empty;
-        [ObservableProperty] string startTimeEmp6 = string.Empty;
+        string startTimeLeader = string.Empty;
+        string pattern = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$";
+        //string pattern = "\\d{1,2}:\\d{2}";
+        public string StartTimeLeader
+        {
+            get => startTimeLeader;
+            set
+            {
+                SetProperty(ref startTimeLeader, value);
+                if (value.Length > 1)
+                {
+                    IsTimeLeaderInvalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    IsSaveButtonEnableL = !IsTimeLeaderInvalid;
+                    (CrewSaveCommand as Command).ChangeCanExecute();
+                }
+            }
+
+        }
+
+        [ObservableProperty] bool isSaveButtonEnableL = false;
+        [ObservableProperty] bool isSaveButtonEnable1 = false;
+        [ObservableProperty] bool isSaveButtonEnable2 = false;
+        [ObservableProperty] bool isSaveButtonEnable3 = false;
+        [ObservableProperty] bool isSaveButtonEnable4 = false;
+        [ObservableProperty] bool isCurrentEmpBlank = false;
+
+        string startTimeEmp1 = string.Empty;
+        public string StartTimeEmp1
+        {
+            get => startTimeEmp1;
+            set
+            {
+                SetProperty(ref startTimeEmp1, value);
+                if (value.Length > 1)
+                {
+                    IsTimeEmp1Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    IsCurrentEmpBlank = false;
+                    if (Employee1Name == null)
+                        IsCurrentEmpBlank = true;
+                    (CrewSaveCommand as Command).ChangeCanExecute();
+                }
+            }
+
+        }
+
+        string startTimeEmp2 = string.Empty;
+        public string StartTimeEmp2
+        {
+            get => startTimeEmp2;
+            set
+            {
+                SetProperty(ref startTimeEmp2, value);
+                if (value.Length > 1)
+                {
+                    IsTimeEmp2Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    IsCurrentEmpBlank = false;
+                    if (Employee2Name == null)
+                        IsCurrentEmpBlank = true;
+                    (CrewSaveCommand as Command).ChangeCanExecute();
+                }
+            }
+
+        }
+
+        string startTimeEmp3 = string.Empty;
+        public string StartTimeEmp3
+        {
+            get => startTimeEmp3;
+            set
+            {
+                SetProperty(ref startTimeEmp3, value);
+                if (value.Length > 1)
+                {
+                    IsTimeEmp3Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    IsCurrentEmpBlank = false;
+                    if (Employee3Name == null)
+                        IsCurrentEmpBlank = true;
+                    (CrewSaveCommand as Command).ChangeCanExecute();
+                }
+            }
+
+        }
+
+        string startTimeEmp4 = string.Empty;
+        public string StartTimeEmp4
+        {
+            get => startTimeEmp4;
+            set
+            {
+                SetProperty(ref startTimeEmp4, value);
+                if (value.Length > 1)
+                {
+                    IsTimeEmp4Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    IsSaveButtonEnable4 = Employee4Name == null ? false : !IsTimeEmp4Invalid;
+                    (CrewSaveCommand as Command).ChangeCanExecute();
+                }
+            }
+
+        }
+
+        string startTimeEmp5 = string.Empty;
+        public string StartTimeEmp5
+        {
+            get => startTimeEmp5;
+            set
+            {
+                SetProperty(ref startTimeEmp5, value);
+                if (value.Length > 1)
+                {
+                    IsTimeEmp5Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    (CrewSaveCommand as Command).ChangeCanExecute();
+                }
+            }
+
+        }
+
+        string startTimeEmp6 = string.Empty;
+        public string StartTimeEmp6
+        {
+            get => startTimeEmp6;
+            set
+            {
+                SetProperty(ref startTimeEmp6, value);
+                if (value.Length > 1)
+                {
+
+                    IsTimeEmp6Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    (CrewSaveCommand as Command).ChangeCanExecute();
+                }
+            }
+
+        }
+
+
+        [ObservableProperty] bool isTimeLeaderInvalid= false;
+        [ObservableProperty] bool isTimeEmp1Invalid = false;
+        [ObservableProperty] bool isTimeEmp2Invalid = false; 
+        [ObservableProperty] bool isTimeEmp3Invalid = false;
+        [ObservableProperty] bool isTimeEmp4Invalid = false;
+        [ObservableProperty] bool isTimeEmp5Invalid = false;
+        [ObservableProperty] bool isTimeEmp6Invalid = false;
+
+        [ObservableProperty] bool isLILeaderInvalid = false;
+        [ObservableProperty] bool isLIEmp1Invalid = false;
+        [ObservableProperty] bool isLIEmp2Invalid = false;
+        [ObservableProperty] bool isLIEmp3Invalid = false;
+        [ObservableProperty] bool isLIEmp4Invalid = false;
+        [ObservableProperty] bool isLIEmp5Invalid = false;
+        [ObservableProperty] bool isLIEmp6Invalid = false;
+
+        string lunchInTimeLeader = string.Empty;
+        public string LunchInTimeLeader
+        {
+            get => lunchInTimeLeader;
+            set
+            {
+                SetProperty(ref lunchInTimeLeader, value);
+                if (value.Length > 1)
+                {
+
+                    IsLILeaderInvalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    (SaveLunchInCommand as Command).ChangeCanExecute();
+                }
+            }
+
+        }
+
+        string lunchInTime1 = string.Empty;
+        public string LunchInTime1
+        {
+            get => lunchInTime1;
+            set
+            {
+                SetProperty(ref lunchInTime1, value);
+                if (value.Length > 1)
+                {
+
+                    IsLIEmp1Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    (SaveLunchInCommand as Command).ChangeCanExecute();
+                }
+            }
+
+        }
+
+        string lunchInTime2 = string.Empty;
+        public string LunchInTime2
+        {
+            get => lunchInTime2;
+            set
+            {
+                SetProperty(ref lunchInTime2, value);
+                if (value.Length > 1)
+                {
+
+                    IsLIEmp2Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    (SaveLunchInCommand as Command).ChangeCanExecute();
+                }
+            }
+
+        }
+
+        string lunchInTime3 = string.Empty;
+        public string LunchInTime3
+        {
+            get => lunchInTime3;
+            set
+            {
+                SetProperty(ref lunchInTime3, value);
+                if (value.Length > 1)
+                {
+
+                    IsLIEmp3Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    (SaveLunchInCommand as Command).ChangeCanExecute();
+                }
+            }
+
+        }
+
+
+        string lunchInTime4 = string.Empty;
+        public string LunchInTime4
+        {
+            get => lunchInTime4;
+            set
+            {
+                SetProperty(ref lunchInTime4, value);
+                if (value.Length > 1)
+                {
+
+                    IsLIEmp5Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    (SaveLunchInCommand as Command).ChangeCanExecute();
+                }
+            }
+
+        }
+
+        string lunchInTime5 = string.Empty;
+        public string LunchInTime5
+        {
+            get => lunchInTime5;
+            set
+            {
+                SetProperty(ref lunchInTime5, value);
+                if (value.Length > 1)
+                {
+
+                    IsLIEmp6Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    (SaveLunchInCommand as Command).ChangeCanExecute();
+                }
+            }
+
+        }
+
+        string lunchInTime6 = string.Empty;
+        public string LunchInTime6
+        {
+            get => lunchInTime6;
+            set
+            {
+                SetProperty(ref lunchInTime6, value);
+                if (value.Length > 1)
+                {
+
+                    IsLIEmp6Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    (SaveLunchInCommand as Command).ChangeCanExecute();
+                }
+            }
+
+        }
 
         public bool IsValidTimeFormat(string input)
         {
@@ -410,9 +674,9 @@ namespace FTCollectorApp.ViewModel
             {
 
                 ClearAllPage();
-                Console.WriteLine( );
+                Console.WriteLine();
 
-                if(Session.event_type == "6") // Left For Job
+                if (Session.event_type == "6") // Left For Job
                 {
                     // after save Miles Hours Left For Job
                     // 1. Display Arrived at Job button
@@ -605,16 +869,8 @@ namespace FTCollectorApp.ViewModel
                     ClearAllPage();
                     IsDisplayCrewList = true;
 
-                    /*IsDisplayJobEntries = false;
-                    IsDisplayOdoStart = false;
-                    IsDisplayOdoEnd = false;
-                    IsDisplayEndOfDay = false;
-                    IsDisplayEndOfDayForm = false;
-                    IsEqCheckInDisplayed = false;
-                    IsEqCheckOutDisplayed = false;
-                    IsLunchInDisplay = false;
-                    IsLunchOutDisplay = false;*/
-
+                    IsTimeLeaderInvalid = true;
+                    (CrewSaveCommand as Command).ChangeCanExecute();
                 },
                 canExecute: () =>
                 {
@@ -629,9 +885,9 @@ namespace FTCollectorApp.ViewModel
                     Console.WriteLine();
                     try
                     {
-                        string curHHMM = DateTime.Now.ToString("HM:mm");
-                        string curHour = DateTime.Now.ToString("HH");
-                        string curMinute = DateTime.Now.ToString("mm");
+                        if(IsCurrentEmpBlank)
+                            await Application.Current.MainPage.DisplayAlert("Input Invalid", "Employee or Crew should not empty", "BACK");
+
                         // preserve LunchOut time here
                         Console.WriteLine();
 
@@ -682,7 +938,7 @@ namespace FTCollectorApp.ViewModel
 
                             try
                             {
-                                await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(),StartTimeEmp1, SelectedPhase.PhaseNumber, PerDiemEmp1);
+                                await CloudDBService.PostTimeSheet(Employee1Name?.TeamUserKey.ToString(), StartTimeEmp1, SelectedPhase.PhaseNumber, PerDiemEmp1);
                             }
                             catch
                             {
@@ -811,14 +1067,25 @@ namespace FTCollectorApp.ViewModel
                     {
                         Console.WriteLine("Exception " + e);
                     }
+
+
                 },
+                //crewsavecommand_canexecute
                 canExecute: () =>
                 {
                     Console.WriteLine();
-                    //return true;
-                    return Employee1Name?.FullName.Length > 1 || Employee2Name?.FullName.Length > 1 ||
-                            Employee3Name?.FullName.Length > 1 || Employee4Name?.FullName.Length > 1 ||
-                            Employee5Name?.FullName.Length > 1 || Employee6Name?.FullName.Length > 1;
+
+
+                    var retval = true;
+
+                    if (IsCurrentEmpBlank || 
+                    IsTimeLeaderInvalid || IsTimeEmp1Invalid || IsTimeEmp2Invalid || IsTimeEmp3Invalid
+                    || IsTimeEmp4Invalid || IsTimeEmp5Invalid || IsTimeEmp6Invalid
+                    )                     
+                        retval = false;
+                    
+                    return retval;
+
                 }
             );
 
@@ -1319,6 +1586,7 @@ namespace FTCollectorApp.ViewModel
                 execute: async () =>
                 {
                     Session.event_type = Session.JOB_VERIFIED;
+                    Session.curphase = SelectedPhase.PhaseNumber;
                     IsBusy = true;
                     try
                     {
@@ -1411,7 +1679,7 @@ namespace FTCollectorApp.ViewModel
                     Session.event_type = "12"; //left for job site
                     await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), SelectedPhase.PhaseNumber);
 
-                    bool answer = await Application.Current.MainPage.DisplayAlert("Confirm", "Are you sure want to Logout ?", "Yes", "No");
+                    bool answer = await Application.Current.MainPage.DisplayAlert("Logout", "Ready to Logout ?", "Yes", "No");
                     if (answer)
                         System.Diagnostics.Process.GetCurrentProcess().Kill();
                 }
@@ -1467,14 +1735,6 @@ namespace FTCollectorApp.ViewModel
         public ICommand LeftJobCommand { get; set; }
         public ICommand ArriveAtYardCommand { get; set; }
 
-
-        [ObservableProperty] string lunchInTimeLeader = string.Empty;
-        [ObservableProperty] string lunchInTime1 = string.Empty;
-        [ObservableProperty] string lunchInTime2 = string.Empty;
-        [ObservableProperty] string lunchInTime3 = string.Empty;
-        [ObservableProperty] string lunchInTime4 = string.Empty;
-        [ObservableProperty] string lunchInTime5 = string.Empty;
-        [ObservableProperty] string lunchInTime6 = string.Empty;
 
 
         [ObservableProperty] string lunchOutTimeLeader = string.Empty;
@@ -1551,6 +1811,12 @@ namespace FTCollectorApp.ViewModel
                 // OnPropertyChanged(nameof(SelectableCrewList));
 
                 SetProperty(ref employee1Name, value);
+                if (string.IsNullOrEmpty(StartTimeEmp1))
+                {
+                    Console.WriteLine();
+                    IsTimeEmp1Invalid = true;
+                }
+
                 (CrewSaveCommand as Command).ChangeCanExecute();
             }
         }
@@ -1562,6 +1828,10 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref employee2Name, value);
+                if (string.IsNullOrEmpty(StartTimeEmp2)) { 
+                    Console.WriteLine();
+                    IsTimeEmp2Invalid = true;
+                }
                 (CrewSaveCommand as Command).ChangeCanExecute();
             }
         }
@@ -1573,6 +1843,11 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref employee3Name, value);
+                if (string.IsNullOrEmpty(StartTimeEmp3))
+                {
+                    Console.WriteLine();
+                    IsTimeEmp3Invalid = true;
+                }
                 (CrewSaveCommand as Command).ChangeCanExecute();
             }
         }
@@ -1584,7 +1859,8 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref employee4Name, value);
-
+                if (string.IsNullOrEmpty(StartTimeEmp4))
+                    IsTimeEmp4Invalid = true;
                 (CrewSaveCommand as Command).ChangeCanExecute();
 
             }
@@ -1657,11 +1933,11 @@ namespace FTCollectorApp.ViewModel
                     var table = conn.Table<JobPhaseDetail>().ToList();
 
                     var PhaseDescList = new List<JobPhaseDetail>();
-                    if (Session.phases != null)
+                    if (Session.max_phases != null)
                     {
                         foreach (var col in table)
                         {
-                            if (int.Parse(col.PhaseNumber) <= int.Parse(Session.phases))
+                            if (int.Parse(col.PhaseNumber) <= int.Parse(Session.max_phases))
                             {
                                 col.NumDesc = col.PhaseNumber + " " + col.Description;
                                 PhaseDescList.Add(col);

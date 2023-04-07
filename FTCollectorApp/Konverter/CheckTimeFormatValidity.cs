@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 using Xamarin.Forms;
 
 namespace FTCollectorApp.Konverter
@@ -15,8 +16,12 @@ namespace FTCollectorApp.Konverter
             if (value != null)
             {
                 Console.WriteLine(value.ToString());
-                if(value.ToString().Length > 1)
-                    displayInvalidtime = !TimeSpan.TryParse(value.ToString(), out dummyOutput);
+                if (value.ToString().Length > 1)
+                {
+                    //    displayInvalidtime = !TimeSpan.TryParse(value.ToString(), out dummyOutput);
+                    string pattern = "\\d{1,2}:\\d{2}";
+                    displayInvalidtime = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                }
             }
             Console.WriteLine();
             return displayInvalidtime;

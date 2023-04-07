@@ -18,7 +18,7 @@ namespace FTCollectorApp.View
             IsBusy = true;
             try
             {
-                await CloudDBService.PostJobEvent(entryOdometer.Text);
+                //await CloudDBService.PostJobEvent(entryOdometer.Text);
 
 
                 /* Tab Navigation */

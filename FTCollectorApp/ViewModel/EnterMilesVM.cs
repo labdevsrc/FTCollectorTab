@@ -27,7 +27,7 @@ namespace FTCollectorApp.ViewModel
                     try
                     {
                         await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(),
-                            0, Session.phases, MilesHours, Session.uid.ToString());
+                            0, Session.curphase, MilesHours, Session.uid.ToString());
 
 
                         await Rg.Plugins.Popup.Services.PopupNavigation.PopAsync();
