@@ -265,6 +265,13 @@ namespace FTCollectorApp.ViewModel
         public ICommand SaveEndOfDayCommand { get; set; }
 
         public ICommand SaveTimeSheetCommand { get; set; }
+        public ICommand SaveTimeSheetLCommand { get; set; }
+        public ICommand SaveTimeSheet1Command { get; set; }
+        public ICommand SaveTimeSheet2Command { get; set; }
+        public ICommand SaveTimeSheet3Command { get; set; }
+        public ICommand SaveTimeSheet4Command { get; set; }
+        public ICommand SaveTimeSheet5Command { get; set; }
+        public ICommand SaveTimeSheet6Command { get; set; }
         public ICommand CrewSaveCommand { get; set; }
         public ICommand SaveLunchInCommand { get; set; }
         public ICommand SaveLunchOutCommand { get; set; }
@@ -334,10 +341,12 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] int perDiemEmp4 = 0;
         [ObservableProperty] int perDiemEmp5 = 0;
         [ObservableProperty] int perDiemEmp6 = 0;
+        [ObservableProperty] bool isCurrentEmpBlank = false;
 
         string startTimeLeader = string.Empty;
         string pattern = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$";
-        //string pattern = "\\d{1,2}:\\d{2}";
+        //string pattern = "\\d{1,2}:\\d{2}"; // obsolete, too buggy
+
         public string StartTimeLeader
         {
             get => startTimeLeader;
@@ -347,19 +356,12 @@ namespace FTCollectorApp.ViewModel
                 if (value.Length > 1)
                 {
                     IsTimeLeaderInvalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
-                    IsSaveButtonEnableL = !IsTimeLeaderInvalid;
                     (CrewSaveCommand as Command).ChangeCanExecute();
                 }
             }
 
         }
 
-        [ObservableProperty] bool isSaveButtonEnableL = false;
-        [ObservableProperty] bool isSaveButtonEnable1 = false;
-        [ObservableProperty] bool isSaveButtonEnable2 = false;
-        [ObservableProperty] bool isSaveButtonEnable3 = false;
-        [ObservableProperty] bool isSaveButtonEnable4 = false;
-        [ObservableProperty] bool isCurrentEmpBlank = false;
 
         string startTimeEmp1 = string.Empty;
         public string StartTimeEmp1
@@ -428,7 +430,7 @@ namespace FTCollectorApp.ViewModel
                 if (value.Length > 1)
                 {
                     IsTimeEmp4Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
-                    IsSaveButtonEnable4 = Employee4Name == null ? false : !IsTimeEmp4Invalid;
+                    IsCurrentEmpBlank = Employee4Name == null ? true : false;
                     (CrewSaveCommand as Command).ChangeCanExecute();
                 }
             }
@@ -445,6 +447,7 @@ namespace FTCollectorApp.ViewModel
                 if (value.Length > 1)
                 {
                     IsTimeEmp5Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    IsCurrentEmpBlank = Employee5Name == null ? true : false;
                     (CrewSaveCommand as Command).ChangeCanExecute();
                 }
             }
@@ -462,6 +465,7 @@ namespace FTCollectorApp.ViewModel
                 {
 
                     IsTimeEmp6Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    IsCurrentEmpBlank = Employee6Name == null ? true : false;
                     (CrewSaveCommand as Command).ChangeCanExecute();
                 }
             }
@@ -476,6 +480,168 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] bool isTimeEmp4Invalid = false;
         [ObservableProperty] bool isTimeEmp5Invalid = false;
         [ObservableProperty] bool isTimeEmp6Invalid = false;
+
+        [ObservableProperty] bool isLOLeaderInvalid = false;
+        [ObservableProperty] bool isLOEmp1Invalid = false;
+        [ObservableProperty] bool isLOEmp2Invalid = false;
+        [ObservableProperty] bool isLOEmp3Invalid = false;
+        [ObservableProperty] bool isLOEmp4Invalid = false;
+        [ObservableProperty] bool isLOEmp5Invalid = false;
+        [ObservableProperty] bool isLOEmp6Invalid = false;
+
+
+        static string INVALID_TIME_ERR_MESSAGE = "Invalid HH:MM";
+        static string LUNCHOUTIME_ERR_MESSAGE = "Must be later than Clockin Time";
+        static string LUNCHINTIME_ERR_MESSAGE = "Must be later than LunchOut Time";
+        static string CLOCKOUTTIME_ERR_MESSAGE = "Must be later than Lunchin Time";
+
+
+        [ObservableProperty] string errorMessageL = INVALID_TIME_ERR_MESSAGE;
+        [ObservableProperty] string errorMessageEmp1 = INVALID_TIME_ERR_MESSAGE;
+        [ObservableProperty] string errorMessageEmp2 = INVALID_TIME_ERR_MESSAGE;
+        [ObservableProperty] string errorMessageEmp3 = INVALID_TIME_ERR_MESSAGE;
+        [ObservableProperty] string errorMessageEmp4 = INVALID_TIME_ERR_MESSAGE;
+        [ObservableProperty] string errorMessageEmp5 = INVALID_TIME_ERR_MESSAGE;
+        [ObservableProperty] string errorMessageEmp6 = INVALID_TIME_ERR_MESSAGE;
+
+        string? lunchOutTimeLeader = string.Empty;
+
+
+        public string? LunchOutTimeLeader
+        {
+            get => lunchOutTimeLeader;
+            set
+            {
+                SetProperty(ref lunchOutTimeLeader, value);
+                (IsLOLeaderInvalid , ErrorMessageL) = IsTimeGapNegativeNew(StartTimeLeader, value);
+                (SaveLunchOutCommand as Command).ChangeCanExecute();
+                /*if (value.Length > 1)
+                {
+                    ErrorMessageL = INVALID_TIME_ERR_MESSAGE;
+
+                    IsLOLeaderInvalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    if (!IsLOLeaderInvalid) {
+                        if (IsTimeGapNegative(StartTimeLeader, value))
+                        {
+                            IsLOLeaderInvalid = true;
+                            ErrorMessageL = "Must be later than " + StartTimeLeader;
+                        }
+                    }
+                    (SaveLunchOutCommand as Command).ChangeCanExecute();
+                }*/
+            }
+        }
+        [ObservableProperty] string errmessage;
+
+        static int TIMEGAP_MINIMUM = 1;
+        (bool,string) IsTimeGapNegativeNew(string baseTime, string currTime)
+        {
+            errmessage = INVALID_TIME_ERR_MESSAGE;
+            if (currTime.Length > 1)
+            { 
+                bool temp = !Regex.IsMatch(currTime.ToString(), pattern, RegexOptions.CultureInvariant);
+                if (!temp)
+                {
+                    var gaptime = DateTime.Parse(currTime).Subtract(DateTime.Parse(baseTime));
+                    var gapminutes = gaptime.TotalMinutes;
+                    if (gapminutes < TIMEGAP_MINIMUM)
+                    {
+                        errmessage = "Must be later than " + baseTime;
+                    Console.WriteLine();
+                        return (true,errmessage);
+                    }
+                }
+                return (temp,errmessage);
+            }
+            return (false,errmessage);
+        }
+
+        bool IsTimeGapNegative(string baseTime, string currTime)
+        {
+            var gaptime = DateTime.Parse(currTime).Subtract(DateTime.Parse(baseTime));
+            var gapminutes = gaptime.TotalMinutes;
+            return gapminutes < TIMEGAP_MINIMUM ? true : false;
+        }
+
+        string? lunchOutTime1 = string.Empty;
+        public string? LunchOutTime1
+        {
+            get => lunchOutTime1;
+            set
+            {
+                SetProperty(ref lunchOutTime1, value);
+                ErrorMessageEmp1 = INVALID_TIME_ERR_MESSAGE;
+                (IsLOEmp1Invalid, ErrorMessageEmp1) = IsTimeGapNegativeNew(StartTimeEmp1, value);
+                (SaveLunchOutCommand as Command).ChangeCanExecute();
+            }
+        }
+
+        string? lunchOutTime2 = string.Empty;
+        public string? LunchOutTime2
+        {
+            get => lunchOutTime2;
+            set
+            {
+                SetProperty(ref lunchOutTime2, value);
+                ErrorMessageEmp2 = INVALID_TIME_ERR_MESSAGE;
+                (IsLOEmp2Invalid, ErrorMessageEmp2) = IsTimeGapNegativeNew(StartTimeEmp2, value);
+                (SaveLunchOutCommand as Command).ChangeCanExecute();
+            }
+        }
+
+
+        string? lunchOutTime3 = string.Empty;
+        public string? LunchOutTime3
+        {
+            get => lunchOutTime3;
+            set
+            {
+                SetProperty(ref lunchOutTime3, value);
+                ErrorMessageEmp3 = INVALID_TIME_ERR_MESSAGE;
+                (IsLOEmp3Invalid, ErrorMessageEmp3) = IsTimeGapNegativeNew(StartTimeEmp3, value);
+                (SaveLunchOutCommand as Command).ChangeCanExecute();
+            }
+        }
+
+
+        string? lunchOutTime4 = string.Empty;
+        public string? LunchOutTime4
+        {
+            get => lunchOutTime4;
+            set
+            {
+                SetProperty(ref lunchOutTime4, value);
+                ErrorMessageEmp4 = INVALID_TIME_ERR_MESSAGE;
+                (IsLOEmp4Invalid, ErrorMessageEmp4) = IsTimeGapNegativeNew(StartTimeEmp4, value);
+                (SaveLunchOutCommand as Command).ChangeCanExecute();
+            }
+        }
+
+        string? lunchOutTime5 = string.Empty;
+        public string? LunchOutTime5
+        {
+            get => lunchOutTime5;
+            set
+            {
+                SetProperty(ref lunchOutTime5, value);
+                ErrorMessageEmp5 = INVALID_TIME_ERR_MESSAGE;
+                (IsLOEmp5Invalid, ErrorMessageEmp5) = IsTimeGapNegativeNew(StartTimeEmp5, value);
+                (SaveLunchOutCommand as Command).ChangeCanExecute();
+            }
+        }
+
+        string? lunchOutTime6 = string.Empty;
+        public string? LunchOutTime6
+        {
+            get => lunchOutTime6;
+            set
+            {
+                SetProperty(ref lunchOutTime6, value);
+                ErrorMessageEmp6 = INVALID_TIME_ERR_MESSAGE;
+                (IsLOEmp6Invalid, ErrorMessageEmp6) = IsTimeGapNegativeNew(StartTimeEmp6, value);
+                (SaveLunchOutCommand as Command).ChangeCanExecute();
+            }
+        }
 
         [ObservableProperty] bool isLILeaderInvalid = false;
         [ObservableProperty] bool isLIEmp1Invalid = false;
@@ -492,12 +658,9 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref lunchInTimeLeader, value);
-                if (value.Length > 1)
-                {
-
-                    IsLILeaderInvalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
-                    (SaveLunchInCommand as Command).ChangeCanExecute();
-                }
+                ErrorMessageL = INVALID_TIME_ERR_MESSAGE;
+                (IsLILeaderInvalid, ErrorMessageL) = IsTimeGapNegativeNew(LunchOutTimeLeader, value);
+                (SaveLunchInCommand as Command).ChangeCanExecute();
             }
 
         }
@@ -509,12 +672,9 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref lunchInTime1, value);
-                if (value.Length > 1)
-                {
-
-                    IsLIEmp1Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
-                    (SaveLunchInCommand as Command).ChangeCanExecute();
-                }
+                ErrorMessageEmp1 = INVALID_TIME_ERR_MESSAGE;
+                (IsLIEmp1Invalid, ErrorMessageEmp1) = IsTimeGapNegativeNew(LunchOutTime1, value);
+                (SaveLunchInCommand as Command).ChangeCanExecute();
             }
 
         }
@@ -526,12 +686,9 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref lunchInTime2, value);
-                if (value.Length > 1)
-                {
-
-                    IsLIEmp2Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
-                    (SaveLunchInCommand as Command).ChangeCanExecute();
-                }
+                ErrorMessageEmp2 = INVALID_TIME_ERR_MESSAGE;
+                (IsLIEmp2Invalid, ErrorMessageEmp2) = IsTimeGapNegativeNew(LunchOutTime2, value);
+                (SaveLunchInCommand as Command).ChangeCanExecute();
             }
 
         }
@@ -543,12 +700,9 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref lunchInTime3, value);
-                if (value.Length > 1)
-                {
-
-                    IsLIEmp3Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
-                    (SaveLunchInCommand as Command).ChangeCanExecute();
-                }
+                ErrorMessageEmp3 = INVALID_TIME_ERR_MESSAGE;
+                (IsLIEmp3Invalid, ErrorMessageEmp3) = IsTimeGapNegativeNew(LunchOutTime3, value);
+                (SaveLunchInCommand as Command).ChangeCanExecute();
             }
 
         }
@@ -561,12 +715,9 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref lunchInTime4, value);
-                if (value.Length > 1)
-                {
-
-                    IsLIEmp5Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
-                    (SaveLunchInCommand as Command).ChangeCanExecute();
-                }
+                ErrorMessageEmp4 = INVALID_TIME_ERR_MESSAGE;
+                (IsLIEmp4Invalid, ErrorMessageEmp4) = IsTimeGapNegativeNew(LunchOutTime4, value);
+                (SaveLunchInCommand as Command).ChangeCanExecute();
             }
 
         }
@@ -578,12 +729,9 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref lunchInTime5, value);
-                if (value.Length > 1)
-                {
-
-                    IsLIEmp6Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
-                    (SaveLunchInCommand as Command).ChangeCanExecute();
-                }
+                ErrorMessageEmp5 = INVALID_TIME_ERR_MESSAGE;
+                (IsLIEmp5Invalid, ErrorMessageEmp5) = IsTimeGapNegativeNew(LunchOutTime5, value);
+                (SaveLunchInCommand as Command).ChangeCanExecute();
             }
 
         }
@@ -595,12 +743,9 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref lunchInTime6, value);
-                if (value.Length > 1)
-                {
-
-                    IsLIEmp6Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
-                    (SaveLunchInCommand as Command).ChangeCanExecute();
-                }
+                ErrorMessageEmp6 = INVALID_TIME_ERR_MESSAGE;
+                (IsLIEmp6Invalid, ErrorMessageEmp6) = IsTimeGapNegativeNew(LunchOutTime6, value);
+                (SaveLunchInCommand as Command).ChangeCanExecute();
             }
 
         }
@@ -645,6 +790,11 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] string eq7DescTitle;
 
         List<CrewInfoDetail> CrewInfoDetailList = new List<CrewInfoDetail>();
+
+
+
+
+
 
         async void LoginPopUpCall()
         {
@@ -764,7 +914,140 @@ namespace FTCollectorApp.ViewModel
 
             GPSSettingCommand = new Command(() => DisplayGPSSettingCommand());
 
-            SaveTimeSheetCommand = new Command<string>(
+            SaveTimeSheetLCommand = new Command(
+                execute: async () =>
+                {
+                    ClearAllPage();
+                    IsDisplayEndOfDay = true;
+
+                    Session.event_type = "16";
+
+                    SaveAndDisplayTimeSheetForm(LunchInTimeLeader, LunchOutTimeLeader, LClockOutTime, StartTimeLeader, LClockOutTime, CrewLeader,
+                    LClockOutPerDiem, Session.uid.ToString());
+
+                },
+                canExecute:() =>
+                {
+                    return (LClockOutTime == null) ? false : !IsCOLTimeInvalid;
+                    /*if (LClockOutTime == null)
+                    {
+                        Console.WriteLine();
+                        return false;
+                    }
+                    else
+                    {
+                        Console.WriteLine(  );
+                        return !IsCO1TimeInvalid;
+                    }*/
+                    //return LClockOutTime?.Length==0 ? false : !IsCOLTimeInvalid;
+                }
+                
+            );
+
+            SaveTimeSheet1Command = new Command(
+                execute: async () =>
+                {
+                    ClearAllPage();
+                    IsDisplayEndOfDay = true;
+
+                    Session.event_type = "16";
+
+                    SaveAndDisplayTimeSheetForm(LunchInTime1, LunchOutTime1, Emp1ClockOutTime, StartTimeEmp1, Emp1ClockOutTime, Employee1Name.FullName,
+                    Emp1ClockOutPerDiem, SelectedCrewInfoDetails[1].TeamUserKey.ToString());
+
+                },
+                canExecute: () =>
+                {
+                    if (Emp1ClockOutTime == null) return false;
+                    else return !IsCO1TimeInvalid;
+                }
+            );
+
+            SaveTimeSheet2Command = new Command(
+                execute: async () =>
+                {
+                    ClearAllPage();
+                    IsDisplayEndOfDay = true;
+
+                    Session.event_type = "16";
+
+                    SaveAndDisplayTimeSheetForm(LunchInTime2, LunchOutTime2, Emp2ClockOutTime, StartTimeEmp2, Emp2ClockOutTime, Employee2Name.FullName,
+                    Emp2ClockOutPerDiem, SelectedCrewInfoDetails[2].TeamUserKey.ToString());
+
+                },
+                canExecute: () =>
+                {
+                    return (Emp2ClockOutTime == null) ? false : !IsCO2TimeInvalid;
+                }
+            );
+
+            SaveTimeSheet3Command = new Command(
+                execute: async () =>
+                {
+                    ClearAllPage();
+                    IsDisplayEndOfDay = true;
+
+                    Session.event_type = "16";
+
+                    SaveAndDisplayTimeSheetForm(LunchInTime3, LunchOutTime3, Emp3ClockOutTime, StartTimeEmp3, Emp3ClockOutTime, Employee3Name.FullName,
+                    Emp3ClockOutPerDiem, SelectedCrewInfoDetails[3]?.TeamUserKey.ToString());
+
+                },
+                canExecute: () =>
+                {
+                    return (Emp3ClockOutTime == null ) ? false: !IsCO3TimeInvalid;
+                }
+            );
+
+            SaveTimeSheet4Command = new Command(
+                execute: async () =>
+                {
+                    ClearAllPage();
+                    IsDisplayEndOfDay = true;
+
+                    Session.event_type = "16";
+
+                    SaveAndDisplayTimeSheetForm(LunchInTime4, LunchOutTime4, Emp4ClockOutTime, StartTimeEmp4, Emp4ClockOutTime, Employee4Name.FullName,
+                    Emp4ClockOutPerDiem, SelectedCrewInfoDetails[4]?.TeamUserKey.ToString());
+
+                },
+                canExecute: () =>
+                {
+                    return (Emp4ClockOutTime == null) ? false :  !IsCO4TimeInvalid;
+                }
+            );
+            SaveTimeSheet5Command = new Command(
+                execute: async () =>
+                {
+                    ClearAllPage();
+                    IsDisplayEndOfDay = true;
+
+                    Session.event_type = "16";
+
+                    SaveAndDisplayTimeSheetForm(LunchInTime4, LunchOutTime5, Emp5ClockOutTime, StartTimeEmp5, Emp5ClockOutTime, Employee5Name.FullName,
+                    Emp5ClockOutPerDiem, SelectedCrewInfoDetails[5]?.TeamUserKey.ToString());
+
+                },
+                canExecute: () =>
+                {
+                    return (Emp5ClockOutTime == null) ? false : !IsCO5TimeInvalid;
+                }
+            );
+            SaveTimeSheet6Command = new Command(
+                execute: async () =>
+                {
+                    ClearAllPage();
+                    IsDisplayEndOfDay = true;
+
+                    Session.event_type = "16";
+                },
+                canExecute: () =>
+                {
+                    return false;
+                }
+            );
+
+            /*SaveTimeSheetCommand = new Command<string>(
                 execute: async (string param) =>
                 {
                     ClearAllPage();
@@ -860,10 +1143,10 @@ namespace FTCollectorApp.ViewModel
                     }
 
                 }
-            );
+            );*/
 
 
-            ToggleCrewListCommand = new Command(
+                ToggleCrewListCommand = new Command(
                 execute: () =>
                 {
                     ClearAllPage();
@@ -885,9 +1168,12 @@ namespace FTCollectorApp.ViewModel
                     Console.WriteLine();
                     try
                     {
-                        if(IsCurrentEmpBlank)
+                        if (IsCurrentEmpBlank)
+                        {
+                            Console.WriteLine();
                             await Application.Current.MainPage.DisplayAlert("Input Invalid", "Employee or Crew should not empty", "BACK");
 
+                        }
                         // preserve LunchOut time here
                         Console.WriteLine();
 
@@ -1078,12 +1364,12 @@ namespace FTCollectorApp.ViewModel
 
                     var retval = true;
 
-                    if (IsCurrentEmpBlank || 
+                    if (IsCurrentEmpBlank ||
                     IsTimeLeaderInvalid || IsTimeEmp1Invalid || IsTimeEmp2Invalid || IsTimeEmp3Invalid
                     || IsTimeEmp4Invalid || IsTimeEmp5Invalid || IsTimeEmp6Invalid
-                    )                     
+                    )
                         retval = false;
-                    
+
                     return retval;
 
                 }
@@ -1134,7 +1420,14 @@ namespace FTCollectorApp.ViewModel
                 },
                 canExecute: () =>
                 {
-                    return DisableLunchOutSaveBtn;
+                    var retval = true;
+                    //return DisableLunchOutSaveBtn;
+                    if (IsLOLeaderInvalid || IsLOEmp1Invalid ||
+                    IsLOEmp2Invalid || IsLOEmp3Invalid || IsLOEmp4Invalid ||
+                        IsLOEmp5Invalid || IsLOEmp6Invalid)
+                        retval = false;
+
+                    return retval;
                 }
             );
 
@@ -1188,6 +1481,10 @@ namespace FTCollectorApp.ViewModel
                 },
                 canExecute: () =>
                 {
+                    var retvalue = true;
+                    if (IsLILeaderInvalid || IsLIEmp1Invalid || IsLIEmp2Invalid ||
+                    IsLIEmp3Invalid || IsLIEmp4Invalid || IsLIEmp5Invalid || IsLIEmp6Invalid)
+                        return false;
                     return true;
                 }
             );
@@ -1688,6 +1985,40 @@ namespace FTCollectorApp.ViewModel
         }
 
 
+        //SaveAndDisplayTimeSheetForm(LunchInTimeLeader,LunchOutTimeLeader,LClockOutTime,StartTimeLeader,LClockOutTime,CrewLeader,
+        //LClockOutPerDiem,Session.uid.ToString())
+
+        async void SaveAndDisplayTimeSheetForm(string LunchInTime, string LunchOutTime, string ClockOutTimeForm,
+           string ClockIntime, string ClockOutTime, string Fullname, int PerDiemTemp, string CrewKey)
+        {
+            /*LunchInTime = LunchInTimeLeader;
+            LunchOutTime = LunchOutTimeLeader;
+            ClockOutTimeForm = LClockOutTime;
+            ClockIntime = StartTimeLeader;
+            ClockOutTime = LClockOutTime;
+            Fullname = CrewLeader;
+            PerDiemTemp = LClockOutPerDiem;
+            CrewKey = Session.uid.ToString();*/
+            Console.WriteLine();
+
+            try
+            {
+                await CloudDBService.PostTimeSheet(CrewKey, ClockOutTime, SelectedPhase.PhaseNumber, PerDiemTemp);
+                await CloudDBService.PostJobEvent(DateTime.Parse(ClockOutTime).Hour.ToString(),
+                    DateTime.Parse(ClockOutTime).Minute.ToString(), PerDiemTemp, SelectedPhase.PhaseNumber, "0", CrewKey);
+
+
+                TimeSpan totaltime = DateTime.Parse(LunchOutTime).Subtract(DateTime.Parse(ClockIntime)) + DateTime.Parse(ClockOutTime).Subtract(DateTime.Parse(LunchInTime));
+                TotalHoursForToday = totaltime.ToString(@"hh\:mm\:ss");
+                await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new TimeSheetSignature(
+                    Fullname, CrewKey,
+                    ClockIntime, ClockOutTimeForm, LunchInTime, LunchOutTime, TotalHoursForToday));
+            }
+            catch (Exception e)
+            {
+                await Application.Current.MainPage.DisplayAlert("Exception", e.ToString(), "BACK");
+            }
+        }
         void RefreshFAButton()
         {
             IsLeftForJobBtnEnabled = false; (LeftForJobCommand as Command).ChangeCanExecute();
@@ -1737,22 +2068,181 @@ namespace FTCollectorApp.ViewModel
 
 
 
-        [ObservableProperty] string lunchOutTimeLeader = string.Empty;
-        [ObservableProperty] string lunchOutTime1 = string.Empty;
-        [ObservableProperty] string lunchOutTime2 = string.Empty;
-        [ObservableProperty] string lunchOutTime3 = string.Empty;
-        [ObservableProperty] string lunchOutTime4 = string.Empty;
-        [ObservableProperty] string lunchOutTime5 = string.Empty;
-        [ObservableProperty] string lunchOutTime6 = string.Empty;
+
+        [ObservableProperty] bool isCOLTimeInvalid = false;
+        [ObservableProperty] bool isCO1TimeInvalid = false;
+        [ObservableProperty] bool isCO2TimeInvalid = false;
+        [ObservableProperty] bool isCO3TimeInvalid = false;
+        [ObservableProperty] bool isCO4TimeInvalid = false;
+        [ObservableProperty] bool isCO5TimeInvalid = false;
+        [ObservableProperty] bool isCO6TimeInvalid = false;
 
 
         [ObservableProperty] string clockOutTime;
-        [ObservableProperty] string? lClockOutTime;
-        [ObservableProperty] string? emp1ClockOutTime;
-        [ObservableProperty] string? emp2ClockOutTime;
-        [ObservableProperty] string? emp3ClockOutTime;
-        [ObservableProperty] string? emp4ClockOutTime;
-        [ObservableProperty] string? emp5ClockOutTime;
+        string? lClockOutTime;
+        public string LClockOutTime
+        {
+            get => lClockOutTime;
+            set
+            {
+                SetProperty(ref lClockOutTime, value);
+                ErrorMessageL = INVALID_TIME_ERR_MESSAGE;
+                (IsCOLTimeInvalid, ErrorMessageL) = IsTimeGapNegativeNew(LunchInTimeLeader, value);
+                (SaveTimeSheetLCommand as Command).ChangeCanExecute();
+                /*if (value.Length > 1)
+                {
+                    ErrorMessageL = INVALID_TIME_ERR_MESSAGE;
+                    IsCOLTimeInvalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    if (!IsCOLTimeInvalid)
+                    {
+                        if (IsTimeGapNegative(LunchInTimeLeader, value))
+                        {
+                            IsCOLTimeInvalid = true;
+                            ErrorMessageL = CLOCKOUTTIME_ERR_MESSAGE;
+                        }
+                    }
+
+                    (SaveTimeSheetLCommand as Command).ChangeCanExecute();
+                    //(SaveTimeSheetCommand as Command).ChangeCanExecute();
+                }*/
+            }
+        }
+
+
+        string? emp1ClockOutTime;
+        public string Emp1ClockOutTime
+        {
+            get => emp1ClockOutTime;
+            set
+            {
+                SetProperty(ref emp1ClockOutTime, value);
+                ErrorMessageEmp1 = INVALID_TIME_ERR_MESSAGE;
+                (IsCO1TimeInvalid, ErrorMessageEmp1) = IsTimeGapNegativeNew(LunchInTime1, value);
+                (SaveTimeSheet1Command as Command).ChangeCanExecute();
+                /*if (value.Length > 1)
+                {
+                    ErrorMessageEmp1 = INVALID_TIME_ERR_MESSAGE;
+                    IsCO1TimeInvalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    if (!IsCO1TimeInvalid)
+                    {
+                        if (IsTimeGapNegative(LunchInTime1, value))
+                        {
+                            IsCO1TimeInvalid = true;
+                            ErrorMessageEmp1 = CLOCKOUTTIME_ERR_MESSAGE;
+                        }
+                    }
+                    (SaveTimeSheet1Command as Command).ChangeCanExecute();
+                }*/
+            }
+        }
+
+        string? emp2ClockOutTime;
+        public string Emp2ClockOutTime
+        {
+            get => emp2ClockOutTime;
+            set
+            {
+                SetProperty(ref emp2ClockOutTime, value);
+                ErrorMessageEmp2 = INVALID_TIME_ERR_MESSAGE;
+                (IsCO2TimeInvalid, ErrorMessageEmp2) = IsTimeGapNegativeNew(LunchInTime2, value);
+                (SaveTimeSheet2Command as Command).ChangeCanExecute();
+                /*if (value.Length > 1)
+                {
+                    ErrorMessageEmp2 = INVALID_TIME_ERR_MESSAGE;
+                    IsCO2TimeInvalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    if (!IsCO2TimeInvalid)
+                    {
+                        if (IsTimeGapNegative(LunchInTime2, value))
+                        {
+                            IsCO2TimeInvalid = true;
+                            ErrorMessageEmp2 = CLOCKOUTTIME_ERR_MESSAGE;
+                        }
+                    }
+                    (SaveTimeSheet2Command as Command).ChangeCanExecute();
+                }*/
+            }
+        }
+
+        string? emp3ClockOutTime;
+        public string Emp3ClockOutTime
+        {
+            get => emp3ClockOutTime;
+            set
+            {
+                SetProperty(ref emp3ClockOutTime, value);
+                ErrorMessageEmp3 = INVALID_TIME_ERR_MESSAGE;
+                (IsCO3TimeInvalid, ErrorMessageEmp3) = IsTimeGapNegativeNew(LunchInTime3, value);
+                (SaveTimeSheet3Command as Command).ChangeCanExecute();
+                /*if (value.Length > 1)
+                {
+                    ErrorMessageEmp3 = INVALID_TIME_ERR_MESSAGE;
+                    IsCO3TimeInvalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    if (!IsCO3TimeInvalid)
+                    {
+                        if (IsTimeGapNegative(LunchInTime3, value))
+                        {
+                            IsCO3TimeInvalid = true;
+                            ErrorMessageEmp3 = CLOCKOUTTIME_ERR_MESSAGE;
+                        }
+                    }
+                    (SaveTimeSheet3Command as Command).ChangeCanExecute();
+                }*/
+            }
+        }
+
+        string? emp4ClockOutTime;
+        public string Emp4ClockOutTime
+        {
+            get => emp4ClockOutTime;
+            set
+            {
+                SetProperty(ref emp4ClockOutTime, value);
+                ErrorMessageEmp4 = INVALID_TIME_ERR_MESSAGE;
+                (IsCO4TimeInvalid, ErrorMessageEmp4) = IsTimeGapNegativeNew(LunchInTime4, value);
+                (SaveTimeSheet4Command as Command).ChangeCanExecute();
+                /*if (value.Length > 1)
+                {
+                    ErrorMessageEmp4 = INVALID_TIME_ERR_MESSAGE;
+                    IsCO4TimeInvalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    if (!IsCO4TimeInvalid)
+                    {
+                        if (IsTimeGapNegative(LunchInTime4, value))
+                        {
+                            IsCO4TimeInvalid = true;
+                            ErrorMessageEmp4 = CLOCKOUTTIME_ERR_MESSAGE;
+                        }
+                    }
+                    (SaveTimeSheet4Command as Command).ChangeCanExecute();
+                }*/
+            }
+        }
+
+        string? emp5ClockOutTime;
+        public string Emp5ClockOutTime
+        {
+            get => emp5ClockOutTime;
+            set
+            {
+                SetProperty(ref emp5ClockOutTime, value);
+                ErrorMessageEmp5 = INVALID_TIME_ERR_MESSAGE;
+                (IsCO5TimeInvalid, ErrorMessageEmp5) = IsTimeGapNegativeNew(LunchInTime5, value);
+                (SaveTimeSheet5Command as Command).ChangeCanExecute();
+                /*if (value.Length > 1)
+                {
+                    ErrorMessageEmp4 = INVALID_TIME_ERR_MESSAGE;
+                    IsCO5TimeInvalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
+                    if (!IsCO5TimeInvalid)
+                    {
+                        if (IsTimeGapNegative(LunchInTime5, value))
+                        {
+                            IsCO5TimeInvalid = true;
+                            ErrorMessageEmp5 = CLOCKOUTTIME_ERR_MESSAGE;
+                        }
+                    }
+                    (SaveTimeSheet5Command as Command).ChangeCanExecute();
+                }*/
+            }
+        }
 
         [ObservableProperty] int lClockOutPerDiem = 0;
         [ObservableProperty] int emp1ClockOutPerDiem = 0;
@@ -1872,6 +2362,9 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref employee5Name, value);
+                if (string.IsNullOrEmpty(StartTimeEmp5))
+                    IsTimeEmp5Invalid = true;
+                (CrewSaveCommand as Command).ChangeCanExecute();
             }
         }
 
@@ -1882,6 +2375,9 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref employee6Name, value);
+                if (string.IsNullOrEmpty(StartTimeEmp6))
+                    IsTimeEmp6Invalid = true;
+                (CrewSaveCommand as Command).ChangeCanExecute();
             }
         }
 
