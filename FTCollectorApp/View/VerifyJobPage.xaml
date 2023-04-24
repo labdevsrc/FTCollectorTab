@@ -80,9 +80,14 @@
                                     FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="120" 
                                     Command="{Binding ToggleEndofDayCommand}" />
                         </StackLayout>
+                        <StackLayout Grid.Column="4" IsVisible="{Binding IsStartODOEntered}" 
+                                         Orientation="Vertical" HeightRequest="100">
+                            <Button Text="START New Job" FontSize="10" HeightRequest="90" WidthRequest="120" 
+                                        Command="{Binding ToggleBtn}" />
+                        </StackLayout>
 
 
-                        <!--<StackLayout Grid.Column="4" Orientation="Vertical" IsVisible="{Binding IsStartODOEntered}"
+                    <!--<StackLayout Grid.Column="4" Orientation="Vertical" IsVisible="{Binding IsStartODOEntered}"
                                      HeightRequest="110">
                             <Button Text="Leave Site" FontSize="Small" IsEnabled="False"
                                 HeightRequest="90" WidthRequest="120"  />

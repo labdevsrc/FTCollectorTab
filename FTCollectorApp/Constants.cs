@@ -9,9 +9,14 @@ namespace FTCollectorApp
     {
         public const bool AutoSyncAWSTables = false;
 
-        public const string LiveDBurl = "https://collector.fibertrak.com/FTService/";  //live db
-        public const string TestDBurl = "https://collector.fibertrak.com/testmobile/";  //test db
-        public static string BaseUrl = TestDBurl;
+        public const string LiveDBurl = "https://collector.fibertrak.com/FTService/";  //myfibertrak db
+        public const string FloridaDB = "https://collector.fibertrak.com/florida/";  //test db
+        public const string MariettaDB = "https://collector.fibertrak.com/mariettadb/";  //Marietta db
+        public const string GeorgiaDB = "https://collector.fibertrak.com/Georgiadb/";  //Georgia db
+        public const string TestingDB = "https://collector.fibertrak.com/TestingDB/";  //Testing db
+        
+
+        public static string BaseUrl = TestingDB;
         
         public const string InsertTimeSheetUrl = "xPostTimesCheck.php";
         public const string InsertJobEquipmentUrl = "xPostJobEquipment.php";

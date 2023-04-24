@@ -19,11 +19,11 @@ namespace FTCollectorApp.View
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class EnterMiles
 	{
-		public EnterMiles()
+		public EnterMiles(string temp)
 		{
 			InitializeComponent();
 			Console.WriteLine();
-			BindingContext = new EnterMilesVM();
+			BindingContext = new EnterMilesVM(temp);
 			Console.WriteLine();
 			this.CloseWhenBackgroundIsClicked= false;
 		}

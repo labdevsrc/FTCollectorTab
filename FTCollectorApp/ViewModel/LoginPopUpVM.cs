@@ -75,7 +75,7 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        string version = "20230415.3"; // change here for release
+        string version = "0420.1"; // change here for release
 
         string apkVersion;
         public string ApkVersion
@@ -86,9 +86,17 @@ namespace FTCollectorApp.ViewModel
                 {
                     return version + "LiveDB";
                 }
-                else if (Constants.BaseUrl.Equals(Constants.TestDBurl))
+                else if (Constants.BaseUrl.Equals(Constants.MariettaDB))
                 {
-                    return version + "TestDB";
+                    return version + "MariettaDB";
+                }
+                else if (Constants.BaseUrl.Equals(Constants.TestingDB))
+                {
+                    return version + "TestingDB";
+                }
+                else if (Constants.BaseUrl.Equals(Constants.FloridaDB))
+                {
+                    return version + "FloridaDB";
                 }
                 else
                     return version;

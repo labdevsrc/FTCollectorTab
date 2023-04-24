@@ -13,8 +13,13 @@
                     VerticalOptions="CenterAndExpand">
         <Label Text="{Binding MilesTitle}" FontSize="Medium" HorizontalOptions="Center"/>
         <Label Text="Enter Current Miles :" />
-        <local:BorderEntry Margin="10,5,10,5" Text="{Binding MilesHours, Mode=TwoWay}" MaxLength="9"/>
-        <Button Text="Save" WidthRequest="80" HorizontalOptions="End" Command="{Binding SaveCommand}"/>
+        <local:BorderEntry Text="{Binding MilesHours, Mode=TwoWay}" MaxLength="9"/>
+        <Label Text="{Binding ErrorMessage}" FontSize="Medium" TextColor="Red" />
+        <Grid ColumnDefinitions="*,*,*">
+            <Button Grid.Column="1" Text="Save" WidthRequest="80" HorizontalOptions="End" Command="{Binding SaveCommand}"/>
+            <Button Grid.Column="2" Text="Back" WidthRequest="80" HorizontalOptions="End" Command="{Binding BackCommand}"/>
+        </Grid>
+
 
     </StackLayout>
 </pages:PopupPage>

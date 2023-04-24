@@ -513,32 +513,24 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref lunchOutTimeLeader, value);
-                (IsLOLeaderInvalid , ErrorMessageL) = IsTimeGapNegativeNew(StartTimeLeader, value);
+                (IsLOLeaderInvalid , ErrorMessageL) = IsTimeGapNegativeNew(StartTimeLeader, value, CrewLeader);
                 (SaveLunchOutCommand as Command).ChangeCanExecute();
-                /*if (value.Length > 1)
-                {
-                    ErrorMessageL = INVALID_TIME_ERR_MESSAGE;
 
-                    IsLOLeaderInvalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
-                    if (!IsLOLeaderInvalid) {
-                        if (IsTimeGapNegative(StartTimeLeader, value))
-                        {
-                            IsLOLeaderInvalid = true;
-                            ErrorMessageL = "Must be later than " + StartTimeLeader;
-                        }
-                    }
-                    (SaveLunchOutCommand as Command).ChangeCanExecute();
-                }*/
             }
         }
         [ObservableProperty] string errmessage;
 
         static int TIMEGAP_MINIMUM = 1;
-        (bool,string) IsTimeGapNegativeNew(string baseTime, string currTime)
+        int cnt = 0;
+        (bool, string) IsTimeGapNegativeNew(string baseTime, string currTime, string? employeename)
         {
             errmessage = INVALID_TIME_ERR_MESSAGE;
+
+            if (baseTime == null)
+                return (false, "Base Time not valid");
+
             if (currTime.Length > 1)
-            { 
+            {
                 bool temp = !Regex.IsMatch(currTime.ToString(), pattern, RegexOptions.CultureInvariant);
                 if (!temp)
                 {
@@ -547,13 +539,30 @@ namespace FTCollectorApp.ViewModel
                     if (gapminutes < TIMEGAP_MINIMUM)
                     {
                         errmessage = "Must be later than " + baseTime;
-                    Console.WriteLine();
-                        return (true,errmessage);
+                        Console.WriteLine();
+                        cnt++;
+                        return (true, errmessage);
                     }
                 }
-                return (temp,errmessage);
+                Console.WriteLine("#1" + employeename  + " " + cnt);
+                cnt++;
+                return (temp, errmessage);
             }
-            return (false,errmessage);
+            else if (currTime.Length == 0 && employeename?.Length > 1)
+            {
+                Console.WriteLine("#2" + employeename + " " + cnt);
+                cnt++;
+                return (true, errmessage);
+            }
+            else if (currTime.Length == 0 && string.IsNullOrEmpty(employeename)) 
+            {
+                Console.WriteLine("#3" + employeename + " " + cnt);
+                cnt++;
+                return (false, errmessage);
+            }
+            Console.WriteLine("#4" + employeename + " " + cnt);
+            cnt++;
+            return (false,"");
         }
 
         bool IsTimeGapNegative(string baseTime, string currTime)
@@ -571,7 +580,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref lunchOutTime1, value);
                 ErrorMessageEmp1 = INVALID_TIME_ERR_MESSAGE;
-                (IsLOEmp1Invalid, ErrorMessageEmp1) = IsTimeGapNegativeNew(StartTimeEmp1, value);
+                (IsLOEmp1Invalid, ErrorMessageEmp1) = IsTimeGapNegativeNew(StartTimeEmp1, value, Employee1Name?.FullName);
                 (SaveLunchOutCommand as Command).ChangeCanExecute();
             }
         }
@@ -584,7 +593,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref lunchOutTime2, value);
                 ErrorMessageEmp2 = INVALID_TIME_ERR_MESSAGE;
-                (IsLOEmp2Invalid, ErrorMessageEmp2) = IsTimeGapNegativeNew(StartTimeEmp2, value);
+                (IsLOEmp2Invalid, ErrorMessageEmp2) = IsTimeGapNegativeNew(StartTimeEmp2, value, Employee2Name?.FullName);
                 (SaveLunchOutCommand as Command).ChangeCanExecute();
             }
         }
@@ -598,7 +607,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref lunchOutTime3, value);
                 ErrorMessageEmp3 = INVALID_TIME_ERR_MESSAGE;
-                (IsLOEmp3Invalid, ErrorMessageEmp3) = IsTimeGapNegativeNew(StartTimeEmp3, value);
+                (IsLOEmp3Invalid, ErrorMessageEmp3) = IsTimeGapNegativeNew(StartTimeEmp3, value, Employee3Name?.FullName);
                 (SaveLunchOutCommand as Command).ChangeCanExecute();
             }
         }
@@ -612,7 +621,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref lunchOutTime4, value);
                 ErrorMessageEmp4 = INVALID_TIME_ERR_MESSAGE;
-                (IsLOEmp4Invalid, ErrorMessageEmp4) = IsTimeGapNegativeNew(StartTimeEmp4, value);
+                (IsLOEmp4Invalid, ErrorMessageEmp4) = IsTimeGapNegativeNew(StartTimeEmp4, value, Employee4Name?.FullName);
                 (SaveLunchOutCommand as Command).ChangeCanExecute();
             }
         }
@@ -625,7 +634,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref lunchOutTime5, value);
                 ErrorMessageEmp5 = INVALID_TIME_ERR_MESSAGE;
-                (IsLOEmp5Invalid, ErrorMessageEmp5) = IsTimeGapNegativeNew(StartTimeEmp5, value);
+                (IsLOEmp5Invalid, ErrorMessageEmp5) = IsTimeGapNegativeNew(StartTimeEmp5, value, Employee5Name?.FullName);
                 (SaveLunchOutCommand as Command).ChangeCanExecute();
             }
         }
@@ -638,7 +647,8 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref lunchOutTime6, value);
                 ErrorMessageEmp6 = INVALID_TIME_ERR_MESSAGE;
-                (IsLOEmp6Invalid, ErrorMessageEmp6) = IsTimeGapNegativeNew(StartTimeEmp6, value);
+                (IsLOEmp6Invalid, ErrorMessageEmp6) = IsTimeGapNegativeNew(StartTimeEmp6, value, Employee6Name?.FullName);
+                cnt = 0;
                 (SaveLunchOutCommand as Command).ChangeCanExecute();
             }
         }
@@ -659,7 +669,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref lunchInTimeLeader, value);
                 ErrorMessageL = INVALID_TIME_ERR_MESSAGE;
-                (IsLILeaderInvalid, ErrorMessageL) = IsTimeGapNegativeNew(LunchOutTimeLeader, value);
+                (IsLILeaderInvalid, ErrorMessageL) = IsTimeGapNegativeNew(LunchOutTimeLeader, value, CrewLeader);
                 (SaveLunchInCommand as Command).ChangeCanExecute();
             }
 
@@ -673,7 +683,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref lunchInTime1, value);
                 ErrorMessageEmp1 = INVALID_TIME_ERR_MESSAGE;
-                (IsLIEmp1Invalid, ErrorMessageEmp1) = IsTimeGapNegativeNew(LunchOutTime1, value);
+                (IsLIEmp1Invalid, ErrorMessageEmp1) = IsTimeGapNegativeNew(LunchOutTime1, value, Employee1Name?.FullName);
                 (SaveLunchInCommand as Command).ChangeCanExecute();
             }
 
@@ -687,7 +697,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref lunchInTime2, value);
                 ErrorMessageEmp2 = INVALID_TIME_ERR_MESSAGE;
-                (IsLIEmp2Invalid, ErrorMessageEmp2) = IsTimeGapNegativeNew(LunchOutTime2, value);
+                (IsLIEmp2Invalid, ErrorMessageEmp2) = IsTimeGapNegativeNew(LunchOutTime2, value, Employee2Name?.FullName);
                 (SaveLunchInCommand as Command).ChangeCanExecute();
             }
 
@@ -701,7 +711,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref lunchInTime3, value);
                 ErrorMessageEmp3 = INVALID_TIME_ERR_MESSAGE;
-                (IsLIEmp3Invalid, ErrorMessageEmp3) = IsTimeGapNegativeNew(LunchOutTime3, value);
+                (IsLIEmp3Invalid, ErrorMessageEmp3) = IsTimeGapNegativeNew(LunchOutTime3, value, Employee3Name?.FullName);
                 (SaveLunchInCommand as Command).ChangeCanExecute();
             }
 
@@ -716,7 +726,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref lunchInTime4, value);
                 ErrorMessageEmp4 = INVALID_TIME_ERR_MESSAGE;
-                (IsLIEmp4Invalid, ErrorMessageEmp4) = IsTimeGapNegativeNew(LunchOutTime4, value);
+                (IsLIEmp4Invalid, ErrorMessageEmp4) = IsTimeGapNegativeNew(LunchOutTime4, value, Employee4Name?.FullName);
                 (SaveLunchInCommand as Command).ChangeCanExecute();
             }
 
@@ -730,7 +740,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref lunchInTime5, value);
                 ErrorMessageEmp5 = INVALID_TIME_ERR_MESSAGE;
-                (IsLIEmp5Invalid, ErrorMessageEmp5) = IsTimeGapNegativeNew(LunchOutTime5, value);
+                (IsLIEmp5Invalid, ErrorMessageEmp5) = IsTimeGapNegativeNew(LunchOutTime5, value, Employee5Name?.FullName);
                 (SaveLunchInCommand as Command).ChangeCanExecute();
             }
 
@@ -744,7 +754,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref lunchInTime6, value);
                 ErrorMessageEmp6 = INVALID_TIME_ERR_MESSAGE;
-                (IsLIEmp6Invalid, ErrorMessageEmp6) = IsTimeGapNegativeNew(LunchOutTime6, value);
+                (IsLIEmp6Invalid, ErrorMessageEmp6) = IsTimeGapNegativeNew(LunchOutTime6, value, Employee6Name?.FullName);
                 (SaveLunchInCommand as Command).ChangeCanExecute();
             }
 
@@ -791,8 +801,11 @@ namespace FTCollectorApp.ViewModel
 
         List<CrewInfoDetail> CrewInfoDetailList = new List<CrewInfoDetail>();
 
-
-
+        [ObservableProperty] string? arrivedAtYardTime;
+        [ObservableProperty] string? leftForJobMilesHour;
+        [ObservableProperty] string? arrivedAtJobMilesHour;
+        [ObservableProperty] string? leftJobMilesHour;
+        [ObservableProperty] string? arrivedAtYardMilesHour;
 
 
 
@@ -820,7 +833,7 @@ namespace FTCollectorApp.ViewModel
                 Console.WriteLine();
             });
 
-            MessagingCenter.Subscribe<EnterMilesVM>(this, "ConfirmMiles", (sender) =>
+            MessagingCenter.Subscribe<EnterMilesVM, string >(this, "ConfirmMiles", (senders, value) =>
             {
 
                 ClearAllPage();
@@ -828,6 +841,7 @@ namespace FTCollectorApp.ViewModel
 
                 if (Session.event_type == "6") // Left For Job
                 {
+                    LeftForJobMilesHour = value;
                     // after save Miles Hours Left For Job
                     // 1. Display Arrived at Job button
                     IsArrivedAtSiteBtnEnabled = true;
@@ -840,6 +854,7 @@ namespace FTCollectorApp.ViewModel
 
                 if (Session.event_type == "7") // Arrived At Job
                 {
+                    ArrivedAtJobMilesHour = value;
                     // after save Miles Hours Arrived at Job
                     // Display all Lunchout Lunchin dll
                     IsArrivedAtSiteBtnEnabled = false;
@@ -851,6 +866,7 @@ namespace FTCollectorApp.ViewModel
 
                 if (Session.event_type == "8") // Left Job
                 {
+                    LeftJobMilesHour = value;
                     IsStartODOEntered = false;
                     (LunchOutCommand as Command).ChangeCanExecute();
 
@@ -862,13 +878,18 @@ namespace FTCollectorApp.ViewModel
 
                 if (Session.event_type == "9") // Arrived at Yard
                 {
+                    ArrivedAtYardMilesHour = value;
+
                     IsStartODOEntered = true;
                     Console.WriteLine(); // check Lunchin, LunchOut , Equipment Checkin
+                    ArrivedAtYardTime = DateTime.Now.ToString("HH:mm");
                     (ToggleEndofDayCommand as Command).ChangeCanExecute();
                     RefreshFAButton(); // clean up
                 }
 
             });
+
+
 
             // Initial ItemsSource for Job Entries and Equipment Check out/check in 
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
@@ -1346,8 +1367,9 @@ namespace FTCollectorApp.ViewModel
                         // Display Equipment Checkout
                         DisplayEquipmentCheckOutCommand.Execute(null);
 
-
-
+                        // Update each entry in Lunchin page, Lunch out page
+                        (SaveLunchInCommand as Command).ChangeCanExecute();
+                        (SaveLunchOutCommand as Command).ChangeCanExecute();
                     }
                     catch (Exception e)
                     {
@@ -1420,13 +1442,46 @@ namespace FTCollectorApp.ViewModel
                 },
                 canExecute: () =>
                 {
-                    var retval = true;
-                    //return DisableLunchOutSaveBtn;
-                    if (IsLOLeaderInvalid || IsLOEmp1Invalid ||
-                    IsLOEmp2Invalid || IsLOEmp3Invalid || IsLOEmp4Invalid ||
-                        IsLOEmp5Invalid || IsLOEmp6Invalid)
-                        retval = false;
+                    var retval = false;
+                    if (LunchOutTimeLeader.Length > 3)
+                    {
+                        retval = !IsLOLeaderInvalid;
+                    }
 
+                    if (Employee1Name?.FullName.Length > 1 && LunchOutTime1.Length > 3)
+                    {
+                        retval = !IsLOEmp1Invalid;
+                    }
+
+                    if (Employee2Name?.FullName.Length > 1 && LunchOutTime2.Length > 3)
+                    {
+                        retval = !IsLOEmp2Invalid;
+                    }
+
+                    if (Employee3Name?.FullName.Length > 1 && LunchOutTime3.Length > 3)
+                    {
+                        retval = !IsLOEmp3Invalid;
+                    }
+
+                    if (Employee4Name?.FullName.Length > 1 && LunchOutTime4.Length > 3)
+                    {
+                        retval = !IsLOEmp4Invalid;
+                    }
+
+                    if (Employee5Name?.FullName.Length > 1 && LunchOutTime5.Length > 3)
+                    {
+                        retval = !IsLOEmp5Invalid;
+                    }
+
+                    if (Employee6Name?.FullName.Length > 1 && LunchOutTime6.Length > 3)
+                    {
+                        retval = !IsLOEmp6Invalid;
+                    }
+
+                    //var retvalue = true;
+                    //if (IsLILeaderInvalid || IsLIEmp1Invalid || IsLIEmp2Invalid ||
+                    //IsLIEmp3Invalid || IsLIEmp4Invalid || IsLIEmp5Invalid || IsLIEmp6Invalid)
+                    //    retvalue = false;
                     return retval;
                 }
             );
@@ -1481,11 +1536,41 @@ namespace FTCollectorApp.ViewModel
                 },
                 canExecute: () =>
                 {
-                    var retvalue = true;
-                    if (IsLILeaderInvalid || IsLIEmp1Invalid || IsLIEmp2Invalid ||
-                    IsLIEmp3Invalid || IsLIEmp4Invalid || IsLIEmp5Invalid || IsLIEmp6Invalid)
-                        return false;
-                    return true;
+                    var retval = false;
+                    if (LunchInTimeLeader.Length > 3)
+                    {
+                        retval = !IsLILeaderInvalid;
+                    }
+
+                    if (Employee1Name?.FullName.Length > 1 && LunchInTime1.Length > 3)
+                    {
+                        retval = !IsLIEmp1Invalid;
+                    }
+
+                    if (Employee2Name?.FullName.Length > 1 && LunchInTime2.Length > 3)
+                    {
+                        retval = !IsLIEmp2Invalid;
+                    }
+
+                    if (Employee3Name?.FullName.Length > 1 && LunchInTime3.Length > 3)
+                    {
+                        retval = !IsLIEmp3Invalid;
+                    }
+
+                    if (Employee4Name?.FullName.Length > 1 && LunchInTime4.Length > 3)
+                    {
+                        retval = !IsLIEmp4Invalid;
+                    }
+
+                    if (Employee5Name?.FullName.Length > 1 && LunchInTime5.Length > 3)
+                    {
+                        retval = !IsLIEmp5Invalid;
+                    }
+                    //var retvalue = true;
+                    //if (IsLILeaderInvalid || IsLIEmp1Invalid || IsLIEmp2Invalid ||
+                    //IsLIEmp3Invalid || IsLIEmp4Invalid || IsLIEmp5Invalid || IsLIEmp6Invalid)
+                    //    retvalue = false;
+                    return retval;
                 }
             );
 
@@ -1497,15 +1582,8 @@ namespace FTCollectorApp.ViewModel
                         try
                         {
 
-                            //TodoButton = string.Empty;
-
                             IsLunchOut = false;
                             IsLunchIn = true; // when lunchout button clicked, it will enable Lunchin button
-
-
-                            // enable save button 
-                            DisableLunchOutSaveBtn = true;
-                            (SaveLunchOutCommand as Command).ChangeCanExecute();
 
                             (LunchInCommand as Command).ChangeCanExecute();
                             (LunchOutCommand as Command).ChangeCanExecute();
@@ -1514,7 +1592,6 @@ namespace FTCollectorApp.ViewModel
 
                             ClearAllPage();
                             IsLunchOutDisplay = true;
-
 
                             var lotime = DateTime.Now; //.ToString("HH:mm");
                             LunchOutTime = DateTime.Now.ToString("HH:mm");
@@ -1569,11 +1646,11 @@ namespace FTCollectorApp.ViewModel
                     //check if clockintime > lunchout
                     Console.WriteLine();
                     //set initial value of perdiem to crew list perdiem;
-                    LClockOutPerDiem = PerDiemL;
-                    Emp1ClockOutPerDiem = PerDiemEmp1;
-                    Emp2ClockOutPerDiem = PerDiemEmp2;
-                    Emp3ClockOutPerDiem = PerDiemEmp3;
-                    Emp4ClockOutPerDiem = PerDiemEmp4;
+                    LClockOutPerDiem = 1;// PerDiemL;
+                    Emp1ClockOutPerDiem = 1; // PerDiemEmp1;
+                    Emp2ClockOutPerDiem = 1; // PerDiemEmp2;
+                    Emp3ClockOutPerDiem = 1; //PerDiemEmp3;
+                    Emp4ClockOutPerDiem = 2; //PerDiemEmp4;
                     Emp5ClockOutPerDiem = PerDiemEmp5;
 
                 },
@@ -1919,7 +1996,7 @@ namespace FTCollectorApp.ViewModel
                 execute: async () =>
                 {
                     Session.event_type = "6"; //left for job site event                   
-                    await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new EnterMiles()); // open miles hours window
+                    await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new EnterMiles("NA")); // open miles hours window
 
                 },
                 canExecute: () => {
@@ -1932,7 +2009,7 @@ namespace FTCollectorApp.ViewModel
                 execute: async () =>
                 {
                     Session.event_type = "7"; //arrived@ job site
-                    await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new EnterMiles());
+                    await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new EnterMiles(LeftForJobMilesHour));
 
 
                 },
@@ -1948,7 +2025,7 @@ namespace FTCollectorApp.ViewModel
                 execute: async () =>
                 {
                     Session.event_type = "8"; //left for job site
-                    await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new EnterMiles());
+                    await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new EnterMiles(ArrivedAtJobMilesHour));
 
                 },
                 canExecute: () => {
@@ -1961,7 +2038,7 @@ namespace FTCollectorApp.ViewModel
                 execute: async () =>
                 {
                     Session.event_type = "9"; //left for job site
-                    await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new EnterMiles());
+                    await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new EnterMiles(LeftJobMilesHour));
                     RefreshFAButton(); // pull all Is FAB button state to false, then invoke all ChangeExecute
                 },
                 canExecute: () => {
@@ -2087,7 +2164,8 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref lClockOutTime, value);
                 ErrorMessageL = INVALID_TIME_ERR_MESSAGE;
-                (IsCOLTimeInvalid, ErrorMessageL) = IsTimeGapNegativeNew(LunchInTimeLeader, value);
+                (IsCOLTimeInvalid, ErrorMessageL) = IsTimeGapNegativeNew(ArrivedAtYardTime, value, CrewLeader);
+                
                 (SaveTimeSheetLCommand as Command).ChangeCanExecute();
                 /*if (value.Length > 1)
                 {
@@ -2117,7 +2195,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref emp1ClockOutTime, value);
                 ErrorMessageEmp1 = INVALID_TIME_ERR_MESSAGE;
-                (IsCO1TimeInvalid, ErrorMessageEmp1) = IsTimeGapNegativeNew(LunchInTime1, value);
+                (IsCO1TimeInvalid, ErrorMessageEmp1) = IsTimeGapNegativeNew(ArrivedAtYardTime, value, Employee1Name?.FullName);
                 (SaveTimeSheet1Command as Command).ChangeCanExecute();
                 /*if (value.Length > 1)
                 {
@@ -2144,7 +2222,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref emp2ClockOutTime, value);
                 ErrorMessageEmp2 = INVALID_TIME_ERR_MESSAGE;
-                (IsCO2TimeInvalid, ErrorMessageEmp2) = IsTimeGapNegativeNew(LunchInTime2, value);
+                (IsCO2TimeInvalid, ErrorMessageEmp2) = IsTimeGapNegativeNew(ArrivedAtYardTime, value, Employee2Name?.FullName);
                 (SaveTimeSheet2Command as Command).ChangeCanExecute();
                 /*if (value.Length > 1)
                 {
@@ -2171,7 +2249,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref emp3ClockOutTime, value);
                 ErrorMessageEmp3 = INVALID_TIME_ERR_MESSAGE;
-                (IsCO3TimeInvalid, ErrorMessageEmp3) = IsTimeGapNegativeNew(LunchInTime3, value);
+                (IsCO3TimeInvalid, ErrorMessageEmp3) = IsTimeGapNegativeNew(ArrivedAtYardTime, value, Employee3Name?.FullName);
                 (SaveTimeSheet3Command as Command).ChangeCanExecute();
                 /*if (value.Length > 1)
                 {
@@ -2198,7 +2276,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref emp4ClockOutTime, value);
                 ErrorMessageEmp4 = INVALID_TIME_ERR_MESSAGE;
-                (IsCO4TimeInvalid, ErrorMessageEmp4) = IsTimeGapNegativeNew(LunchInTime4, value);
+                (IsCO4TimeInvalid, ErrorMessageEmp4) = IsTimeGapNegativeNew(ArrivedAtYardTime, value, Employee4Name?.FullName);
                 (SaveTimeSheet4Command as Command).ChangeCanExecute();
                 /*if (value.Length > 1)
                 {
@@ -2225,7 +2303,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref emp5ClockOutTime, value);
                 ErrorMessageEmp5 = INVALID_TIME_ERR_MESSAGE;
-                (IsCO5TimeInvalid, ErrorMessageEmp5) = IsTimeGapNegativeNew(LunchInTime5, value);
+                (IsCO5TimeInvalid, ErrorMessageEmp5) = IsTimeGapNegativeNew(ArrivedAtYardTime, value, Employee5Name?.FullName);
                 (SaveTimeSheet5Command as Command).ChangeCanExecute();
                 /*if (value.Length > 1)
                 {
