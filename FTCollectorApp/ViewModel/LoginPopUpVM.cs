@@ -75,7 +75,7 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        string version = "0420.1"; // change here for release
+        string version = "0507.1"; // change here for release
 
         string apkVersion;
         public string ApkVersion
@@ -317,7 +317,7 @@ namespace FTCollectorApp.ViewModel
             GPSSettingCommand?.Execute(null);
 
             Session.event_type = "1"; // Login
-            await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString());
+            await CloudDBService.PostJobEvent();
 
             //MessagingCenter.Send("LoginOK", "LoginToVerifyJobCh");
             MessagingCenter.Send<LoginPopUpVM>(this, "LoginToVerifyJobCh");

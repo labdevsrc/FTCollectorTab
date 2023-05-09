@@ -115,7 +115,7 @@ namespace FTCollectorApp.ViewModel
             //await Shell.Current.GoToAsync($"{nameof(VerifyJobPage)}");
             Session.LoggedIn = true;
             Session.event_type = "1";
-            await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString());
+            await CloudDBService.PostJobEvent();
 
 
             await Shell.Current.GoToAsync("..");

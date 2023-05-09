@@ -13,12 +13,12 @@ namespace FTCollectorApp.Model
         public string OWNER_CD { get; set; }
         public string stage { get; set; }
         public string OwnerName { get; set; }
-        public string JobNumber { get; set; }
+        public string JobNumber { get; set; } = string.Empty;
         public string JobKey { get; set; }
-        public string JobLocation { get; set; }
-        public string ContactName { get; set; }
-        public string CustomerName { get; set; }
-        public string CustomerPhone { get; set; }
+        public string JobLocation { get; set; } = string.Empty;
+        public string ContactName { get; set; } = string.Empty;
+        public string CustomerName { get; set; } = string.Empty;
+        public string CustomerPhone { get; set; } = string.Empty;
         public string CountyCode { get; set; }
 
         public string ShowAll { get; set; }

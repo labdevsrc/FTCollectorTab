@@ -16,6 +16,9 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem  Command="{Binding StartNewJobCommand}" Text="START NEW JOB" Order="Primary" Priority="1" />
+        <ToolbarItem  Command="{Binding CrewChangeCommand}" Text="Change Crew" Order="Primary" Priority="1" />
+
         <ToolbarItem  Command="{Binding LogOutCommand}" Text="LOGOUT" Order="Primary" Priority="0" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
@@ -75,15 +78,10 @@
                                 HeightRequest="90" WidthRequest="120" Command="{Binding DisplayEquipmentCheckInCommand}" />
                         </StackLayout>
                         <StackLayout Grid.Column="3" IsVisible="{Binding IsStartODOEntered}" 
-                                     Orientation="Vertical" HeightRequest="100">
-                            <Button Text="End of Day" FontSize="Small"
-                                    FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="120" 
-                                    Command="{Binding ToggleEndofDayCommand}" />
-                        </StackLayout>
-                        <StackLayout Grid.Column="4" IsVisible="{Binding IsStartODOEntered}" 
                                          Orientation="Vertical" HeightRequest="100">
-                            <Button Text="START New Job" FontSize="10" HeightRequest="90" WidthRequest="120" 
-                                        Command="{Binding ToggleBtn}" />
+                            <Button Text="End of Day" FontSize="Small"
+                                        FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="120" 
+                                        Command="{Binding ToggleEndofDayCommand}" />
                         </StackLayout>
 
 
@@ -103,7 +101,7 @@
                     
                     <!-- Verify Job Detail Entries -->
                     <StackLayout WidthRequest="500" Margin="20" Padding="20" IsVisible="{Binding IsDisplayJobEntries}" >
-                        <Label Text="Verify Job" FontSize="30"  HorizontalOptions="Center"/>
+                    <Label Text="{Binding VerifyJobPageTitle}" FontSize="30"  HorizontalOptions="Center"/>
                         <Label Text="Owner*" />
                         <Picker ItemsSource="{Binding OwnerList}" ItemDisplayBinding="{Binding OwnerName}" 
                                 SelectedItem="{Binding SelectedOwner, Mode=TwoWay}" TextColor="Black" />
@@ -128,7 +126,7 @@
                     </StackLayout>
 
 
-                    <StackLayout WidthRequest="500" Margin="20" IsVisible="{Binding IsDisplayCrewList}">
+                <StackLayout WidthRequest="500" Margin="20" IsVisible="{Binding IsDisplayCrewList}">
                         <Frame CornerRadius="5" HasShadow="true" >
                             <Label HeightRequest="30" FontSize="Medium" Text="Select Crew" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
                         </Frame>
@@ -141,7 +139,7 @@
                             <Label Grid.Column="3" Text="Per Diem" />
                         </Grid>
 
-                        <Grid Padding="5" ColumnDefinitions="2*,*,*,2*" 
+                        <Grid Padding="5" ColumnDefinitions="2*,*,*,2*, 0.4*" 
                               RowDefinitions="0.1*,*,0.3*,*,0.3*,*,0.3*,*,0.3*,*,0.3*,*,0.3*,*,0.3*">
 
                             <BoxView Grid.Row="0" Grid.ColumnSpan="4"  Color="Gray" HeightRequest="2" HorizontalOptions="Fill" />
@@ -163,6 +161,7 @@
                             </Picker>
 
 
+
                         <!-- start employee 1 row -->
                             <!--<Label Grid.Row="2" Grid.Column="0" Text="{Binding Employee1Name.FullName}"
                                    VerticalOptions="Center" TextColor="Black" />-->
@@ -181,11 +180,9 @@
 
                                 </Picker.Items>
                             </Picker>
-                            <Entry x:Name="entryCrew1"  Grid.Row="3" Grid.Column="2" MaxLength="5" Text="{Binding StartTimeEmp1,Mode=TwoWay}" />
+                            <Entry   Grid.Row="3" Grid.Column="2" MaxLength="5" Text="{Binding StartTimeEmp1,Mode=TwoWay}" />
                             <Label   Grid.Row="4" Grid.Column="2" FontSize="10" VerticalOptions="Center" IsVisible="{Binding IsTimeEmp1Invalid}"
                                      Text="Invalid HH:MM" TextColor="Red"  />
-                            <!--IsVisible="{Binding Source={x:Reference entryCrew1}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}" />-->
 
                             <Picker  Grid.Row="3" Grid.Column="3"  SelectedIndex="{Binding PerDiemEmp1,Mode=TwoWay}"
                                      Title="per diem" TextColor="Black"  >
@@ -195,6 +192,9 @@
                                     <x:String>Half day </x:String>
                                 </Picker.Items>
                             </Picker>
+                            <Button Grid.Row="3" Grid.Column="4"
+                                IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                                               FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew1}" />
 
 
 
@@ -226,9 +226,11 @@
                                     <x:String>Half day</x:String>
                                 </Picker.Items>
                             </Picker>
+                            <Button Grid.Row="5" Grid.Column="4"
+                                IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                                               FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew2}" />
 
-
-                            <!-- start employee 3 row -->
+                        <!-- start employee 3 row -->
                             <Picker Grid.Row="7" Grid.Column="0" 
                                    ItemsSource="{Binding SelectableCrewList}"
                                    SelectedItem="{Binding Employee3Name,Mode=TwoWay}"
@@ -254,7 +256,9 @@
                                     <x:String>Half day</x:String>
                                 </Picker.Items>
                             </Picker>
-
+                            <Button Grid.Row="7" Grid.Column="4" IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                                               FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew3}" />
+                            
                             <!-- start employee 4 row -->
                             <Picker Grid.Row="9" Grid.Column="0" 
                                    ItemsSource="{Binding SelectableCrewList}"
@@ -281,7 +285,13 @@
                                     <x:String>Half day</x:String>
                                 </Picker.Items>
                             </Picker>
-                            <!-- start employee 5th row -->
+                            <Button Grid.Row="9" Grid.Column="4"
+                                IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                                               FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew4}" />
+
+
+
+                        <!-- start employee 5th row -->
                             <Picker Grid.Row="11" Grid.Column="0" 
                                    ItemsSource="{Binding SelectableCrewList}"
                                    SelectedItem="{Binding Employee5Name,Mode=TwoWay}"
@@ -309,8 +319,11 @@
                                     <x:String>Half day</x:String>
                                 </Picker.Items>
                             </Picker>
+                            <Button Grid.Row="11" Grid.Column="4" 
+                                IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                                               FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew5}" />
 
-                            <!-- start employee 6th row -->
+                        <!-- start employee 6th row -->
                             <Picker Grid.Row="13" Grid.Column="0" 
                                    ItemsSource="{Binding SelectableCrewList}"
                                    SelectedItem="{Binding Employee6Name,Mode=TwoWay}"
@@ -338,8 +351,11 @@
                                     <x:String>Half day</x:String>
                                 </Picker.Items>
                             </Picker>
+                            <Button Grid.Row="13" Grid.Column="4" 
+                                IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                                               FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew6}" />
 
-                        </Grid>
+                    </Grid>
 
                     <Button Text="Save" Command="{Binding CrewSaveCommand}" BackgroundColor="{StaticResource blueColor}">
                     </Button>

@@ -13,7 +13,7 @@ namespace FTCollectorApp.Model.Reference
         public string PhaseNumber { get; set; }
         public string Description { get; set; }
 
-        public string NumDesc { get; set; }
+        public string NumDesc { get; set; } = string.Empty;
 
     }
 }

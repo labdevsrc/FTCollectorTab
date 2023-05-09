@@ -18,7 +18,7 @@ namespace FTCollectorApp
 
         public static string BaseUrl = TestingDB;
         
-        public const string InsertTimeSheetUrl = "xPostTimesCheck.php";
+        public const string InsertTimeSheetUrl = "InsertTimeSheet.php";
         public const string InsertJobEquipmentUrl = "xPostJobEquipment.php";
         public const string GetJobTableUrl = "xamarinJob.php";
         public const string GetEndUserTableUrl = "xamarinLogin.php";

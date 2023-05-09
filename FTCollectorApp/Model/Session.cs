@@ -26,7 +26,7 @@ namespace FTCollectorApp.Model
         public static string altitude { get; set; }
         public static string accuracy { get; set; }
         public static  string lunchinsts { get; set; }
-
+        public static int JobCnt { get; set; } = 1;
         public static string crew_leader { get; set; }
 
         public static string event_type { get; set; }

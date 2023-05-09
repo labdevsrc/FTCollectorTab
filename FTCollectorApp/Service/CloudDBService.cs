@@ -77,11 +77,13 @@ namespace FTCollectorApp.Service
             return JsonConvert.DeserializeObject<T>(json);
         }
 
-        public static async Task PostJobEvent(string param1, string param2, string job_phase) => await PostJobEvent(param1, param2, 0, job_phase,"","");
-        public static async Task PostJobEvent(string param1, string param2) => await PostJobEvent(param1, param2, 0, "", "","");
+        public static async Task PostJobEvent(string job_phase, string crewid) => await PostJobEvent(0, job_phase, "", crewid);
+        public static async Task PostJobEvent(string job_phase) => await PostJobEvent(0, job_phase,"", Session.uid.ToString());
+        public static async Task PostJobEvent() => await PostJobEvent(0, "", "", Session.uid.ToString());
         //public static async Task PostJobEvent() => await PostJobEvent("", "", 0, "","","");
         //public static async Task PostJobEvent(string miles_hours) => await PostJobEvent("", "", 0, "", miles_hours,"");
-        public static async Task PostJobEvent(string param1, string param2, int perDiem, string job_phase, string miles_hours, string crewid)
+        //public static async Task PostJobEvent(string param1, string param2, int perDiem, string job_phase, string miles_hours, string crewid)
+        public static async Task PostJobEvent(int perDiem, string job_phase, string miles_hours, string crewid)
         {
 
             var keyValues = new List<KeyValuePair<string, string>>{
@@ -89,14 +91,13 @@ namespace FTCollectorApp.Service
                 new KeyValuePair<string, string>("jobkey",Session.jobkey),
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
                 new KeyValuePair<string, string>("crewid", crewid),
-                new KeyValuePair<string, string>("hr", param1),
-                new KeyValuePair<string, string>("min", param2),
+                //new KeyValuePair<string, string>("hr", param1),
+                //new KeyValuePair<string, string>("min", param2),
 
                 new KeyValuePair<string, string>("perdiem", perDiem.ToString()),
                 new KeyValuePair<string, string>("gps_sts", Session.gps_sts),
 
-                // xSaveJobEvents.php Line 59 : $longitude=$_POST['longitude2'];
-                // xSaveJobEvents.php Line 60 : $latitude =$_POST['lattitude2'];
+
                 new KeyValuePair<string, string>("manual_latti", Session.gps_sts == "1" ? "0":Session.manual_latti),
                 new KeyValuePair<string, string>("manual_longi", Session.gps_sts == "1" ? "0":Session.manual_longi),
                 new KeyValuePair<string, string>("job_phase", Session.curphase ),

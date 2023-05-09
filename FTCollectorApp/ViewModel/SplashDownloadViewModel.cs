@@ -86,9 +86,13 @@ namespace FTCollectorApp.ViewModel
                 {
                     return version + "LiveDB";
                 }
-                else if (Constants.BaseUrl.Equals(Constants.TestDBurl))
+                else if (Constants.BaseUrl.Equals(Constants.MariettaDB))
                 {
-                    return version + "TestDB";
+                    return version + "MariettaDB";
+                }
+                else if (Constants.BaseUrl.Equals(Constants.FloridaDB))
+                {
+                    return version + "FloridaDB";
                 }
                 else
                     return version;
@@ -300,7 +304,7 @@ namespace FTCollectorApp.ViewModel
             GPSSettingCommand?.Execute(null);
 
             Session.event_type = "1"; // Login
-            await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString());
+            await CloudDBService.PostJobEvent();
 
         }
 

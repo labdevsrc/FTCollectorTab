@@ -22,8 +22,14 @@ namespace FTCollectorApp.ViewModel
             {
                 ErrorMessage = string.Empty;
                 SetProperty(ref milesHours, value);
+                (SaveCommand as Command).ChangeCanExecute();
+                // Save button enable disable only for event 7,8,9
                 if (Session.event_type == "7" || Session.event_type == "8" || Session.event_type == "9")
                 {
+
+                    if (PreviousMileshour.Equals("FinishJob"))
+                        return;
+
                     try
                     {
                         if (value.Length > 0)
@@ -40,7 +46,7 @@ namespace FTCollectorApp.ViewModel
                         Console.WriteLine( e.ToString() );
                     }
                 }
-                (SaveCommand as Command).ChangeCanExecute();
+
             }
         }
         public ICommand SaveCommand { get; set; }
@@ -48,10 +54,10 @@ namespace FTCollectorApp.ViewModel
         string PreviousMileshour;
         public EnterMilesVM(string previousmileshour)
         {
-            if (Session.event_type == Session.JOBEVENT_LEFT_FOR_JOB) MilesTitle = "Left For Job Mileage";
-            else if (Session.event_type == Session.JOBEVENT_ARRIVED_AT_JOB) MilesTitle = "Arrived at Job Mileage";
-            else if (Session.event_type == Session.JOBEVENT_LEFT_JOB) MilesTitle = "Left Job Mileage";
-            else if (Session.event_type == Session.JOBEVENT_ARRIVED_AT_YARD ) MilesTitle = "Arrive At Yard Mileage";
+            if (Session.event_type == Session.JOBEVENT_LEFT_FOR_JOB) MilesTitle = (Session.JobCnt > 1) ? "Left For Job #" + Session.JobCnt+ " Mileage" : "Left For Job Mileage";
+            else if (Session.event_type == Session.JOBEVENT_ARRIVED_AT_JOB) MilesTitle = (Session.JobCnt > 1) ? "Arrived at Job #" + Session.JobCnt + " Mileage" : "Arrived at Job Mileage";
+            else if (Session.event_type == Session.JOBEVENT_LEFT_JOB) MilesTitle = (Session.JobCnt > 1) ? "Left Job #" + Session.JobCnt + " Mileage" : "Left Job Mileage";
+            else if (Session.event_type == Session.JOBEVENT_ARRIVED_AT_YARD) MilesTitle = (Session.JobCnt > 1) ? "Arrive At Yard of Job #" + Session.JobCnt + " Mileage" : "Arrive At Yard Mileage";
 
             PreviousMileshour = previousmileshour;
             Console.WriteLine(  );
@@ -60,19 +66,25 @@ namespace FTCollectorApp.ViewModel
                 {
                     try
                     {
-
-                        await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(),
-                            0, Session.curphase, MilesHours, Session.uid.ToString());
+                        await CloudDBService.PostJobEvent(0, Session.curphase, MilesHours, Session.uid.ToString());
+                        //await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(),0, Session.curphase, MilesHours, Session.uid.ToString());
 
 
                         await Rg.Plugins.Popup.Services.PopupNavigation.PopAsync();
 
-                        MessagingCenter.Send<EnterMilesVM, string>(this, "ConfirmMiles", MilesHours);
+                        if (previousmileshour.Equals("FinishJob"))
+                        {
+                            Console.WriteLine();
+                            MessagingCenter.Send<EnterMilesVM, string>(this, "FinishJob", MilesHours);
+                            Console.WriteLine();
+                        }
+                        else
+                            MessagingCenter.Send<EnterMilesVM, string>(this, "ConfirmMiles", MilesHours);
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine();
-                        await Application.Current.MainPage.DisplayAlert("Error", "Check Network Connection ", "Back");
+                        Console.WriteLine(ex.ToString());
+                        await Application.Current.MainPage.DisplayAlert("Error", ex.ToString(), "Back");
 
                     }
                 },
