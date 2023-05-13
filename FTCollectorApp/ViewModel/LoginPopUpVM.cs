@@ -75,7 +75,7 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        string version = "0507.1"; // change here for release
+        string version = "0510.1"; // change here for release
 
         string apkVersion;
         public string ApkVersion
@@ -478,6 +478,9 @@ namespace FTCollectorApp.ViewModel
                 var excludeSiteEntry = await CloudDBService.GetExcludeSite(); //exclude_site
 
                 var equipCO = await CloudDBService.GetEquipCO(); //equipment_for_checkout
+
+                var getEvent18StartTime = await CloudDBService.GetEvent18Time(); //exclude_site
+
                 //Thread.Sleep(5000);
                 LoadingText = "Download done! Populating SQLite...";
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
@@ -733,6 +736,10 @@ namespace FTCollectorApp.ViewModel
                     conn.DeleteAll<EquipmentCO>();
                     conn.InsertAll(equipCO);
 
+
+                    conn.CreateTable<CrewInfoDetail>();
+                    conn.DeleteAll<CrewInfoDetail>();
+                    conn.InsertAll(getEvent18StartTime);
                 }
                 LoadingText = "Populating Local SQLite done!";
             }

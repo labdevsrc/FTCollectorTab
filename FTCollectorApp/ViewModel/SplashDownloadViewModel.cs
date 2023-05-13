@@ -461,12 +461,17 @@ namespace FTCollectorApp.ViewModel
 
                 var suspList = await CloudDBService.GetSuspendedTrace(); //gps_point
                 var excludeSiteEntry = await CloudDBService.GetExcludeSite(); //exclude_site
+                var getEvent18StartTime = await CloudDBService.GetEvent18Time(); //exclude_site
 
                 //Thread.Sleep(5000);
                 LoadingText = "Download done! Populating SQLite...";
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<UnSyncTaskList>();
+
+                    conn.CreateTable<CrewInfoDetail>();
+                    conn.DeleteAll<CrewInfoDetail>();
+                    conn.InsertAll(getEvent18StartTime);
 
                     conn.CreateTable<DuctUsed>();
                     conn.DeleteAll<DuctUsed>();

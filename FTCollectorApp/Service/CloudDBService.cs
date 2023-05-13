@@ -77,6 +77,7 @@ namespace FTCollectorApp.Service
             return JsonConvert.DeserializeObject<T>(json);
         }
 
+
         public static async Task PostJobEvent(string job_phase, string crewid) => await PostJobEvent(0, job_phase, "", crewid);
         public static async Task PostJobEvent(string job_phase) => await PostJobEvent(0, job_phase,"", Session.uid.ToString());
         public static async Task PostJobEvent() => await PostJobEvent(0, "", "", Session.uid.ToString());
@@ -836,7 +837,8 @@ namespace FTCollectorApp.Service
             }
         }
 
-
+        public static Task<IEnumerable<CrewInfoDetail>> GetEvent18Time() =>
+            GetDropDownParamsAsync<IEnumerable<CrewInfoDetail>>("event18_start_time");
         public static Task<IEnumerable<Manufacturer>> GetManufacturerTable() =>
             GetDropDownParamsAsync<IEnumerable<Manufacturer>>("manufacturer_list");
         public static Task<IEnumerable<JobSubmittal>> GetJobSubmittalTable() =>
@@ -998,6 +1000,7 @@ namespace FTCollectorApp.Service
         {
             var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("type",type),
+                new KeyValuePair<string, string>("uid",Session.uid.ToString()),
             };
 
             var json = String.Empty;
