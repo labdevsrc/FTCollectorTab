@@ -16,10 +16,14 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem  Command="{Binding StartNewJobCommand}" Text="START NEW JOB" Order="Primary" Priority="1" />
+        <ToolbarItem  Command="{Binding StartNewJobCommand}" Text="New Job" Order="Primary" Priority="1" />
         <ToolbarItem  Command="{Binding CrewChangeCommand}" Text="Change Crew" Order="Primary" Priority="1" />
+        <ToolbarItem  Command="{Binding SetCrewAsDefaultCommand}" Text="Set As default crew" Order="Secondary" Priority="1" />
+        <ToolbarItem  Command="{Binding LoadCrewDefaultCommand}" Text="Load default crew" Order="Secondary" Priority="2" />
+        <ToolbarItem  Command="{Binding ClearAllCommand}" Text="Clear All" Order="Secondary" Priority="3" />        
+        
 
-        <ToolbarItem  Command="{Binding LogOutCommand}" Text="LOGOUT" Order="Primary" Priority="0" />
+        <ToolbarItem  Command="{Binding LogOutCommand}" Text="LOGOUT" Order="Secondary" Priority="2" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
 
@@ -123,12 +127,227 @@
                         <local:BorderColorEntry Text="{Binding SelectedJob.CustomerPhone}"  IsEnabled="True"/>
                         <Button Text="{Binding TextStatus, Mode=TwoWay}" HorizontalOptions="EndAndExpand" BackgroundColor="{StaticResource blueColor}"
                     Command="{Binding VerifyCommand}"/>
-                    </StackLayout>
-
-
+                </StackLayout>
+                
+                
                 <StackLayout WidthRequest="500" Margin="20" IsVisible="{Binding IsDisplayCrewList}">
+                    <Frame CornerRadius="5" HasShadow="true" >
+                        <Label HeightRequest="30" FontSize="Medium" Text="{Binding TitleCrewPage}" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+                    </Frame>
+                    <Label Text="{Binding CrewLeader , StringFormat='Crew Leader : {0}'}" 
+                                    VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+                    <Grid Padding="5" ColumnDefinitions="0.5*, 2*,*,*,*, 0.4*" >
+                        <Label Grid.Column="1" Text="Crew Member" />
+                        <Label Grid.Column="2" Text="Is Driver" />
+                        <Label Grid.Column="3" Text="ClockIn" />
+                        <Label Grid.Column="4" Text="Per Diem" />
+                    </Grid>
+
+                    <Grid Padding="5" ColumnDefinitions="0.5*, 2*,*,*,*, 0.4*" 
+                          HeightRequest="600"    
+                          RowDefinitions="0.1*,*,0.3*,*,0.3*,*,0.3*,*,0.3*,*,0.3*,*,0.3*,*,0.3*">
+                        <BoxView Grid.Row="0" Grid.ColumnSpan="6"  Color="Gray" HeightRequest="2" HorizontalOptions="Fill" />
+                        <!-- crew leader -->
+                        <Label Grid.Row="1" Grid.Column="0" Text="[L]" VerticalOptions="Center" TextColor="Black"/>
+                        <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding CrewLeader}" 
+                                   VerticalOptions="Center" TextColor="Black" />
+
+                        <Entry Grid.Row="1" Grid.Column="3" MaxLength="5" Text="{Binding StartTimeLeader,Mode=TwoWay}"  />
+                        <Label Grid.Row="2" Grid.Column="3" FontSize="10" VerticalOptions="Center" IsVisible="{Binding IsTimeLeaderInvalid}" Text="Invalid HH:MM" TextColor="Red" />
+                        <Picker  Grid.Row="1" Grid.Column="4"  SelectedIndex="{Binding PerDiemL,Mode=TwoWay}"
+                                         Title="per diem" TextColor="Black"  >
+                            <Picker.Items>
+                                <x:String>No</x:String>
+                                <x:String>Full day</x:String>
+                                <x:String>Half day</x:String>
+                            </Picker.Items>
+                        </Picker>
+
+                        <!-- #1 Crew Membe -->
+                        <Button Grid.Row="3" Grid.Column="0" 
+                                Text="{x:Static fa:FontAwesomeIcons.User}" FontSize="Medium"
+                                                   FontFamily="FontAwesome6Solid" Command="{Binding CrewAddCommand}" CommandParameter="1" />
+                        <Label VerticalOptions="Center" Grid.Row="3" Grid.Column="1" Text="{Binding Employee1Name.FullName}" FontSize="Small" TextColor="Black"/>
+
+                        <Picker  Grid.Row="3" Grid.Column="2"  SelectedIndex ="{Binding Employee1IsDriver,Mode=TwoWay}"  Title="Driver" TextColor="Black"  >
+                            <Picker.Items>
+                                <x:String>Passenger</x:String>
+                                <x:String>Driver</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Entry   Grid.Row="3" Grid.Column="3" MaxLength="5" Text="{Binding StartTimeEmp1,Mode=TwoWay}" />
+                        <Label   Grid.Row="4" Grid.Column="3" FontSize="10" VerticalOptions="Center" IsVisible="{Binding IsTimeEmp1Invalid}"
+                                     Text="Invalid HH:MM" TextColor="Red"  />
+                        <Picker  Grid.Row="3" Grid.Column="4"  SelectedIndex="{Binding PerDiemEmp1,Mode=TwoWay}"
+                                     Title="per diem" TextColor="Black"  >
+                            <Picker.Items>
+                                <x:String>No</x:String>
+                                <x:String>Full day</x:String>
+                                <x:String>Half day</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Button Grid.Row="3" Grid.Column="5"
+                                IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                                               FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew1}" />
+
+
+                        <!-- #2 Crew Membe -->
+
+                        <Button Grid.Row="5" Grid.Column="0" Text="{x:Static fa:FontAwesomeIcons.User}" FontSize="Small"
+                                                   FontFamily="FontAwesome6Solid" Command="{Binding CrewAddCommand}" CommandParameter="2"/>
+                        <Label Grid.Row="5" Grid.Column="1" VerticalOptions="Center" 
+                               Text="{Binding Employee2Name.FullName}" FontSize="Small" TextColor="Black"/>
+                        <Picker  Grid.Row="5" Grid.Column="2"  SelectedIndex ="{Binding Employee2IsDriver,Mode=TwoWay}"
+                                     Title="Driver" TextColor="Black"  >
+                            <Picker.Items>
+                                <x:String>Passenger</x:String>
+                                <x:String>Driver</x:String>
+
+                            </Picker.Items>
+                        </Picker>
+                        <Entry   Grid.Row="5" Grid.Column="3" MaxLength="5" Text="{Binding StartTimeEmp2,Mode=TwoWay}" />
+                        <Label   Grid.Row="6" Grid.Column="3" FontSize="10" VerticalOptions="Center" IsVisible="{Binding IsTimeEmp2Invalid}"
+                                     Text="Invalid HH:MM" TextColor="Red"  />
+
+                        <Picker  Grid.Row="5" Grid.Column="4"  SelectedIndex="{Binding PerDiemEmp2,Mode=TwoWay}"
+                                     Title="per diem" TextColor="Black"  >
+                            <Picker.Items>
+                                <x:String>No</x:String>
+                                <x:String>Full day</x:String>
+                                <x:String>Half day</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Button Grid.Row="5" Grid.Column="5"
+                                IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                                               FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew2}" />
+
+                        <!-- #3 Crew Membe -->
+                        <Button Grid.Row="7" Grid.Column="0" Text="{x:Static fa:FontAwesomeIcons.User}" FontSize="Small"
+                                                   FontFamily="FontAwesome6Solid" Command="{Binding CrewAddCommand}" CommandParameter="3"/>
+                        <Label Grid.Row="7" Grid.Column="1" VerticalOptions="Center" 
+                               Text="{Binding Employee3Name.FullName}" FontSize="Small" TextColor="Black"/>
+                        <Picker Grid.Row="7" Grid.Column="2"  SelectedIndex ="{Binding Employee3IsDriver,Mode=TwoWay}" 
+                                    Title="Passenger" TextColor="Black" >
+                            <Picker.Items>
+                                <x:String>Passenger</x:String>
+                                <x:String>Driver</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Entry   Grid.Row="7" Grid.Column="3" MaxLength="5"  Text="{Binding StartTimeEmp3,Mode=TwoWay}" />
+                        <Label   Grid.Row="8" Grid.Column="3" FontSize="10" VerticalOptions="Center" Text="Invalid HH:MM" TextColor="Red"
+                                 IsVisible="{Binding IsTimeEmp3Invalid}" />
+                        <Picker  Grid.Row="7" Grid.Column="4"  SelectedIndex="{Binding PerDiemEmp3,Mode=TwoWay}"
+                                     Title="per diem" TextColor="Black"  >
+                            <Picker.Items>
+                                <x:String>No</x:String>
+                                <x:String>Full day</x:String>
+                                <x:String>Half day</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Button Grid.Row="7" Grid.Column="5"
+                                IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                                               FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew3}" />
+
+
+
+                        <!-- #4 Crew Member -->
+
+                        <Button Grid.Row="9" Grid.Column="0" Text="{x:Static fa:FontAwesomeIcons.User}" FontSize="Small"
+                                                   FontFamily="FontAwesome6Solid" Command="{Binding CrewAddCommand}" CommandParameter="4"/>
+                        <Label Grid.Row="9" Grid.Column="1" VerticalOptions="Center" 
+                               Text="{Binding Employee4Name.FullName}" FontSize="Small" TextColor="Black"/>
+                        <Picker Grid.Row="9" Grid.Column="2"  SelectedIndex ="{Binding Employee4IsDriver,Mode=TwoWay}" 
+                                    Title="Passenger" TextColor="Black"  >
+                            <Picker.Items>
+                                <x:String>Passenger</x:String>
+                                <x:String>Driver</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Entry Grid.Row="9" Grid.Column="3" MaxLength="5"  Text="{Binding StartTimeEmp4,Mode=TwoWay}" />
+                        <Label Grid.Row="10" Grid.Column="3" FontSize="10" VerticalOptions="Center" Text="Invalid HH:MM" TextColor="Red" 
+                                 IsVisible="{Binding IsTimeEmp4Invalid}" />
+                        <Picker  Grid.Row="9" Grid.Column="4"  SelectedIndex="{Binding PerDiemEmp4,Mode=TwoWay}"
+                                     Title="per diem" TextColor="Black"  >
+                            <Picker.Items>
+                                <x:String>No</x:String>
+                                <x:String>Full day</x:String>
+                                <x:String>Half day</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Button Grid.Row="9" Grid.Column="5"
+                                IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                                               FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew4}" />
+
+                        <!-- #5 Crew Membe -->
+                        <Button Grid.Row="11" Grid.Column="0" Text="{x:Static fa:FontAwesomeIcons.User}" FontSize="Small"
+                                                   FontFamily="FontAwesome6Solid" Command="{Binding CrewAddCommand}" CommandParameter="5"/>
+                        <Label Grid.Row="11" Grid.Column="1" VerticalOptions="Center" 
+                               Text="{Binding Employee5Name.FullName}" FontSize="Small" TextColor="Black"/>
+
+                        <Picker Grid.Row="11" Grid.Column="2"  SelectedIndex ="{Binding Employee5IsDriver,Mode=TwoWay}"
+                                    Title="Passenger" TextColor="Black"  >
+                            <Picker.Items>
+                                <x:String>Passenger</x:String>
+                                <x:String>Driver</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Entry  Grid.Row="11" Grid.Column="3" MaxLength="5" Text="{Binding StartTimeEmp5,Mode=TwoWay}" />
+                        <Label  Grid.Row="12" Grid.Column="3" FontSize="10" VerticalOptions="Center" Text="Invalid HH:MM" TextColor="Red" 
+                                     IsVisible="{Binding IsTimeEmp5Invalid}" />
+                        <Picker Grid.Row="11" Grid.Column="4"  
+                                     SelectedIndex="{Binding PerDiemEmp5,Mode=TwoWay}"
+                                     Title="per diem" TextColor="Black"  >
+                            <Picker.Items>
+                                <x:String>No</x:String>
+                                <x:String>Full day</x:String>
+                                <x:String>Half day</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Button Grid.Row="11" Grid.Column="5"
+                                IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                                               FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew5}" />
+
+
+                        <!-- #6 Crew Membe -->
+                        <Button Grid.Row="13" Grid.Column="0" Text="{x:Static fa:FontAwesomeIcons.User}" FontSize="Small"
+                                                   FontFamily="FontAwesome6Solid" Command="{Binding CrewAddCommand}" CommandParameter="6"/>
+                        <Label Grid.Row="13" Grid.Column="1" VerticalOptions="Center" 
+                               Text="{Binding Employee6Name.FullName}" FontSize="Small" TextColor="Black"/>
+
+                        <Picker Grid.Row="13" Grid.Column="2"  SelectedIndex ="{Binding Employee6IsDriver,Mode=TwoWay}"
+                                    Title="Passenger" TextColor="Black"  >
+                            <Picker.Items>
+                                <x:String>Passenger</x:String>
+                                <x:String>Driver</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Entry  Grid.Row="13" Grid.Column="3" MaxLength="5" Text="{Binding StartTimeEmp6,Mode=TwoWay}" />
+                        <Label  Grid.Row="14" Grid.Column="3" FontSize="10" VerticalOptions="Center" Text="Invalid HH:MM" TextColor="Red" 
+                                     IsVisible="{Binding IsTimeEmp6Invalid}" />
+                        <Picker Grid.Row="13" Grid.Column="4"  
+                                     SelectedIndex="{Binding PerDiemEmp6,Mode=TwoWay}"
+                                     Title="per diem" TextColor="Black"  >
+                            <Picker.Items>
+                                <x:String>No</x:String>
+                                <x:String>Full day</x:String>
+                                <x:String>Half day</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Button Grid.Row="13" Grid.Column="5"
+                                IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                                               FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew6}" />
+
+
+                    </Grid>
+
+
+                    <Button Text="Save" Command="{Binding CrewSaveCommand}" BackgroundColor="{StaticResource blueColor}"/>
+                
+                </StackLayout>
+
+                <StackLayout WidthRequest="500" Margin="20" IsVisible="{Binding IsDisplayOldCrewList}">
                         <Frame CornerRadius="5" HasShadow="true" >
-                            <Label HeightRequest="30" FontSize="Medium" Text="Select Crew" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+                            <Label HeightRequest="30" FontSize="Medium" Text="Select Crew OLD" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
                         </Frame>
                         <Label Text="{Binding CrewLeader , StringFormat='Crew Leader : {0}'}" 
                                     VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
@@ -147,7 +366,7 @@
                             <Label Grid.Row="1" Grid.Column="0" Text="{Binding CrewLeader, StringFormat='{0} [L]'}" 
                                    VerticalOptions="Center" TextColor="Black" />
 
-                            <Entry x:Name="entryCrewL"  Grid.Row="1" Grid.Column="2" MaxLength="5" Text="{Binding StartTimeLeader,Mode=TwoWay}"  />
+                            <Entry   Grid.Row="1" Grid.Column="2" MaxLength="5" Text="{Binding StartTimeLeader,Mode=TwoWay}"  />
                             <Label   Grid.Row="2" Grid.Column="2" FontSize="10" VerticalOptions="Center" IsVisible="{Binding IsTimeLeaderInvalid}" Text="Invalid HH:MM" TextColor="Red" />
                             <!--IsVisible="{Binding Source={x:Reference entryCrewL}, Path=Text,
                                         Converter={StaticResource isTimeNotValid}}" Text="Invalid HH:MM" TextColor="Red"  />-->
@@ -165,10 +384,11 @@
                         <!-- start employee 1 row -->
                             <!--<Label Grid.Row="2" Grid.Column="0" Text="{Binding Employee1Name.FullName}"
                                    VerticalOptions="Center" TextColor="Black" />-->
-                            <Picker Grid.Row="3" Grid.Column="0" 
+                            <Picker
+                                Grid.Row="3" Grid.Column="0" 
                                     ItemsSource="{Binding SelectableCrewList}"
                                     SelectedItem="{Binding Employee1Name,Mode=TwoWay}"
-                                    ItemDisplayBinding="{Binding FullName}"
+                                    ItemDisplayBinding="{Binding CrewNameAndClockIn}"
                                     Title="Employee" FontSize="Small" TextColor="Black">
                             </Picker>
 
@@ -202,7 +422,7 @@
                             <Picker Grid.Row="5" Grid.Column="0" Title="Select Employee" 
                                    ItemsSource="{Binding SelectableCrewList}"
                                    SelectedItem="{Binding Employee2Name,Mode=TwoWay}"
-                                   ItemDisplayBinding="{Binding FullName}"
+                                   ItemDisplayBinding="{Binding CrewNameAndClockIn}"
                                     
                                     FontSize="Small" TextColor="Black"/>
 
@@ -213,7 +433,7 @@
                                     <x:String>Driver</x:String>
                                 </Picker.Items>
                             </Picker>
-                            <Entry x:Name="entryCrew2"  Grid.Row="5" Grid.Column="2" MaxLength="5"  Text="{Binding StartTimeEmp2,Mode=TwoWay}" />
+                            <Entry Grid.Row="5" Grid.Column="2" MaxLength="5"  Text="{Binding StartTimeEmp2,Mode=TwoWay}" />
                             <Label Grid.Row="6" Grid.Column="2" FontSize="10" VerticalOptions="Center" IsVisible="{Binding IsTimeEmp2Invalid}"
                                          Text="Invalid HH:MM" TextColor="Red"  />
                             <!--IsVisible="{Binding Source={x:Reference entryCrew1}, Path=Text,
@@ -234,7 +454,7 @@
                             <Picker Grid.Row="7" Grid.Column="0" 
                                    ItemsSource="{Binding SelectableCrewList}"
                                    SelectedItem="{Binding Employee3Name,Mode=TwoWay}"
-                                   ItemDisplayBinding="{Binding FullName}"
+                                   ItemDisplayBinding="{Binding CrewNameAndClockIn}"
                                     Title="Select Employee" FontSize="Small" TextColor="Black" />
                             <Picker Grid.Row="7" Grid.Column="1"  SelectedIndex ="{Binding Employee3IsDriver,Mode=TwoWay}" 
                                     Title="Passenger" TextColor="Black" >
@@ -243,11 +463,11 @@
                                     <x:String>Driver</x:String>
                                 </Picker.Items>
                             </Picker>
-                            <Entry x:Name="entryCrew3"  Grid.Row="7" Grid.Column="2" MaxLength="5"  Text="{Binding StartTimeEmp3,Mode=TwoWay}" />
+                            <Entry   Grid.Row="7" Grid.Column="2" MaxLength="5"  Text="{Binding StartTimeEmp3,Mode=TwoWay}" />
                             <Label   Grid.Row="8" Grid.Column="2" FontSize="10" VerticalOptions="Center" Text="Invalid HH:MM" TextColor="Red"
                                  IsVisible="{Binding IsTimeEmp3Invalid}" />
                             <!--IsVisible="{Binding Source={x:Reference entryCrew3}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}"   -->
+                                        Converter={StaticResource IsTimeNotValid}}"   -->
                             <Picker  Grid.Row="7" Grid.Column="3"  SelectedIndex="{Binding PerDiemEmp3,Mode=TwoWay}"
                                      Title="per diem" TextColor="Black"  >
                                 <Picker.Items>
@@ -263,7 +483,7 @@
                             <Picker Grid.Row="9" Grid.Column="0" 
                                    ItemsSource="{Binding SelectableCrewList}"
                                    SelectedItem="{Binding Employee4Name,Mode=TwoWay}"
-                                   ItemDisplayBinding="{Binding FullName}"
+                                   ItemDisplayBinding="{Binding CrewNameAndClockIn}"
                                     Title="Select Employee" FontSize="Small" TextColor="Black" />
                             <Picker Grid.Row="9" Grid.Column="1"  SelectedIndex ="{Binding Employee4IsDriver,Mode=TwoWay}" 
                                     Title="Passenger" TextColor="Black"  >
@@ -276,7 +496,7 @@
                             <Label   Grid.Row="10" Grid.Column="2" FontSize="10" VerticalOptions="Center" Text="Invalid HH:MM" TextColor="Red" 
                                  IsVisible="{Binding IsTimeEmp4Invalid}" />
                         <!--IsVisible="{Binding Source={x:Reference entryCrew4}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}"  />-->
+                                        Converter={StaticResource IsTimeNotValid}}"  />-->
                             <Picker  Grid.Row="9" Grid.Column="3"  SelectedIndex="{Binding PerDiemEmp4,Mode=TwoWay}"
                                      Title="per diem" TextColor="Black"  >
                                 <Picker.Items>
@@ -295,7 +515,7 @@
                             <Picker Grid.Row="11" Grid.Column="0" 
                                    ItemsSource="{Binding SelectableCrewList}"
                                    SelectedItem="{Binding Employee5Name,Mode=TwoWay}"
-                                   ItemDisplayBinding="{Binding FullName}"
+                                   ItemDisplayBinding="{Binding CrewNameAndClockIn}"
                                     
                                     Title="Select Employee" FontSize="Small" TextColor="Black" />
                             <Picker Grid.Row="11" Grid.Column="1"  SelectedIndex ="{Binding Employee5IsDriver,Mode=TwoWay}"
@@ -309,7 +529,7 @@
                             <Label   Grid.Row="12" Grid.Column="2" FontSize="10" VerticalOptions="Center" Text="Invalid HH:MM" TextColor="Red" 
                                      IsVisible="{Binding IsTimeEmp5Invalid}" />
                             <!--IsVisible="{Binding Source={x:Reference entryCrew5}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}"  />-->
+                                        Converter={StaticResource IsTimeNotValid}}"  />-->
                             <Picker  Grid.Row="11" Grid.Column="3"  
                                      SelectedIndex="{Binding PerDiemEmp5,Mode=TwoWay}"
                                      Title="per diem" TextColor="Black"  >
@@ -327,7 +547,7 @@
                             <Picker Grid.Row="13" Grid.Column="0" 
                                    ItemsSource="{Binding SelectableCrewList}"
                                    SelectedItem="{Binding Employee6Name,Mode=TwoWay}"
-                                   ItemDisplayBinding="{Binding FullName}"
+                                   ItemDisplayBinding="{Binding CrewNameAndClockIn}"
                                     
                                     Title="Select Employee" FontSize="Small" TextColor="Black" />
                             <Picker Grid.Row="13" Grid.Column="1"  SelectedIndex ="{Binding Employee6IsDriver,Mode=TwoWay}"

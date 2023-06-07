@@ -75,7 +75,7 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        string version = "0510.1"; // change here for release
+        string version = "0605.1"; // change here for release
 
         string apkVersion;
         public string ApkVersion
@@ -485,6 +485,7 @@ namespace FTCollectorApp.ViewModel
                 LoadingText = "Download done! Populating SQLite...";
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
+
                     conn.CreateTable<User>();
                     conn.DeleteAll<User>();
                     conn.InsertAll(contentUser);
@@ -739,7 +740,12 @@ namespace FTCollectorApp.ViewModel
 
                     conn.CreateTable<CrewInfoDetail>();
                     conn.DeleteAll<CrewInfoDetail>();
+
+                    conn.CreateTable<CrewChangeInfoDetail>();
+                    conn.DeleteAll<CrewChangeInfoDetail>();
                     conn.InsertAll(getEvent18StartTime);
+
+
                 }
                 LoadingText = "Populating Local SQLite done!";
             }

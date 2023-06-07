@@ -113,6 +113,9 @@
     <EmbeddedResource Update="View\CablePages\PullCablePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="View\CrewCRUDPopUp.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="View\FiberInstallTabPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -278,6 +281,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="View\CrewSelectPopUp.xaml.cs">
+      <DependentUpon>CrewSelectPopUp.xaml</DependentUpon>
+    </Compile>
     <Compile Update="View\SitesPage\BdSiteNew.xaml.cs">
       <DependentUpon>BdSiteNew.xaml</DependentUpon>
     </Compile>

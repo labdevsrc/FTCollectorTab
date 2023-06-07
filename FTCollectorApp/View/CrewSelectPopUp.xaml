@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage Title="Select Crew"  xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:fa ="clr-namespace:FontAwesome"
+              xmlns:local="clr-namespace:FTCollectorApp.Utils" 
+              x:Class="FTCollectorApp.View.CrewSelectPopUp">
+    <StackLayout WidthRequest="400"
+                 HeightRequest="400"
+                    Margin="20"
+                    Padding="20"
+                    BackgroundColor="White"
+                    HorizontalOptions="Center"
+                    VerticalOptions="CenterAndExpand">
+        <Label Text="Select Crew" FontSize="Large" HorizontalOptions="Center"/>
+        <ListView 
+            RefreshCommand="{Binding RefreshListCommand}"
+            ItemsSource="{Binding SelectableCrewMember}" SelectedItem="{Binding SelectedCrewMember, Mode=TwoWay}" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal" VerticalOptions="Center" >
+                            <Label Text="{Binding FullName}"   HorizontalOptions="Start" FontSize="Medium" />
+                            <Label Text="{Binding StartTime}"  HorizontalOptions="EndAndExpand" FontSize="Medium"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="End">
+            <Button Text="Save" Command="{Binding SaveCommand}"/>
+            <Button Text="Back" Command="{Binding BackCommand}"/>
+        </StackLayout>
+    </StackLayout>
+</pages:PopupPage>

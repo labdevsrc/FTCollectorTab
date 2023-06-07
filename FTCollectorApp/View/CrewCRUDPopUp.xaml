@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage Title="Enter Miles"  xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:fa ="clr-namespace:FontAwesome"
+              xmlns:local="clr-namespace:FTCollectorApp.Utils" 
+              x:Class="FTCollectorApp.View.CrewCRUDPopUp">
+    <StackLayout WidthRequest="300"
+                    Margin="20"
+                    Padding="20"
+                    BackgroundColor="White"
+                    HorizontalOptions="Center"
+                    VerticalOptions="CenterAndExpand">
+        <Label Text="Title" />
+        <ListView  ItemsSource="{Binding ObsEvent18}" SelectedItem="{Binding SelectedCrewMember, Mode=TwoWay}" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout >
+                            <StackLayout Orientation="Vertical" HorizontalOptions="Start">
+                                <Label Text="{Binding FullName}"  FontSize="Medium" />
+                                <Label Text="{Binding StartTime}" FontSize="Small"/>
+                            </StackLayout>
+                            <Button HorizontalOptions="End"  
+                            Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                                            FontFamily="FontAwesome6Solid" Command="{Binding RemoveCommand}" />
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <StackLayout Orientation="Vertical" HorizontalOptions="End">
+            <Button Text="Save Crew Update" Command="{Binding BackCommand}"/>
+            <Button Text="Back" Command="{Binding SaveCommand}"/>
+        </StackLayout>
+    </StackLayout>
+</pages:PopupPage>

@@ -837,8 +837,8 @@ namespace FTCollectorApp.Service
             }
         }
 
-        public static Task<IEnumerable<CrewInfoDetail>> GetEvent18Time() =>
-            GetDropDownParamsAsync<IEnumerable<CrewInfoDetail>>("event18_start_time");
+        public static Task<IEnumerable<CrewChangeInfoDetail>> GetEvent18Time() =>
+            GetDropDownParamsAsync<IEnumerable<CrewChangeInfoDetail>>("event18_start_time");
         public static Task<IEnumerable<Manufacturer>> GetManufacturerTable() =>
             GetDropDownParamsAsync<IEnumerable<Manufacturer>>("manufacturer_list");
         public static Task<IEnumerable<JobSubmittal>> GetJobSubmittalTable() =>
