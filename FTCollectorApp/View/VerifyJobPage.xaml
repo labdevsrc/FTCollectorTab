@@ -20,7 +20,7 @@
         <ToolbarItem  Command="{Binding CrewChangeCommand}" Text="Change Crew" Order="Primary" Priority="1" />
         <ToolbarItem  Command="{Binding SetCrewAsDefaultCommand}" Text="Set As default crew" Order="Secondary" Priority="1" />
         <ToolbarItem  Command="{Binding LoadCrewDefaultCommand}" Text="Load default crew" Order="Secondary" Priority="2" />
-        <ToolbarItem  Command="{Binding ClearAllCommand}" Text="Clear All" Order="Secondary" Priority="3" />        
+        <ToolbarItem  Command="{Binding CrewDefaultClearAllCommand}" Text="Clear All" Order="Secondary" Priority="3" />        
         
 
         <ToolbarItem  Command="{Binding LogOutCommand}" Text="LOGOUT" Order="Secondary" Priority="2" />
@@ -186,8 +186,7 @@
                                 <x:String>Half day</x:String>
                             </Picker.Items>
                         </Picker>
-                        <Button Grid.Row="3" Grid.Column="5"
-                                IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                        <Button Grid.Row="3" Grid.Column="5" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
                                                FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew1}" />
 
 
@@ -217,8 +216,7 @@
                                 <x:String>Half day</x:String>
                             </Picker.Items>
                         </Picker>
-                        <Button Grid.Row="5" Grid.Column="5"
-                                IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                        <Button Grid.Row="5" Grid.Column="5" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
                                                FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew2}" />
 
                         <!-- #3 Crew Membe -->
@@ -244,8 +242,7 @@
                                 <x:String>Half day</x:String>
                             </Picker.Items>
                         </Picker>
-                        <Button Grid.Row="7" Grid.Column="5"
-                                IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                        <Button Grid.Row="7" Grid.Column="5" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
                                                FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew3}" />
 
 
@@ -274,8 +271,7 @@
                                 <x:String>Half day</x:String>
                             </Picker.Items>
                         </Picker>
-                        <Button Grid.Row="9" Grid.Column="5"
-                                IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                        <Button Grid.Row="9" Grid.Column="5" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
                                                FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew4}" />
 
                         <!-- #5 Crew Membe -->
@@ -303,8 +299,7 @@
                                 <x:String>Half day</x:String>
                             </Picker.Items>
                         </Picker>
-                        <Button Grid.Row="11" Grid.Column="5"
-                                IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                        <Button Grid.Row="11" Grid.Column="5" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
                                                FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew5}" />
 
 
@@ -333,8 +328,7 @@
                                 <x:String>Half day</x:String>
                             </Picker.Items>
                         </Picker>
-                        <Button Grid.Row="13" Grid.Column="5"
-                                IsVisible="{Binding IsUpdatingCrewList}" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
+                        <Button Grid.Row="13" Grid.Column="5" Text="{x:Static fa:FontAwesomeIcons.Trash}" FontSize="Small"
                                                FontFamily="FontAwesome6Solid" Command="{Binding RemoveCrew6}" />
 
 
@@ -983,7 +977,7 @@
                         </Picker>
                         <Button Grid.Row="9" Grid.Column="3" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheet4Command}" />
 
-                        <!-- row 5 - employee 5 -->
+                        <!-- row 6 - employee 5 -->
                         <Label  Grid.Row="11"  x:Name="EODemp5"  Text="{Binding Employee5Name.FullName}"  VerticalOptions="Center"  />
                         <Entry  Grid.Row="11" Grid.Column="1" Text="{Binding Emp5ClockOutTime, Mode=TwoWay}" MaxLength="5" VerticalOptions="Center"  />
                         <Label  Grid.Row="12" Grid.Column="1" Grid.ColumnSpan="2" IsVisible="{Binding IsCO5TimeInvalid}" Text="{Binding ErrorMessageEmp5}" TextColor="Red"  FontSize="Small"/>
@@ -998,26 +992,29 @@
                         </Picker>
                         <Button Grid.Row="11" Grid.Column="3" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheet5Command}" />
 
+                        <!-- row 7 - employee 6 -->
+                        <Label  Grid.Row="12"  x:Name="EODemp6"  Text="{Binding Employee6Name.FullName}"  VerticalOptions="Center"  />
+                        <Entry  Grid.Row="12" Grid.Column="1" Text="{Binding Emp6ClockOutTime, Mode=TwoWay}" MaxLength="5" VerticalOptions="Center"  />
+                        <Label  Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="2" IsVisible="{Binding IsCO6TimeInvalid}" Text="{Binding ErrorMessageEmp6}" TextColor="Red"  FontSize="Small"/>
+
+                        <Picker  Grid.Row="12" Grid.Column="2"  SelectedIndex="{Binding Emp6ClockOutPerDiem, Mode=TwoWay}" VerticalOptions="Center" 
+                                 >
+                            <Picker.Items>
+                                <x:String>No</x:String>
+                                <x:String>Full day</x:String>
+                                <x:String>Half day</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Button Grid.Row="12" Grid.Column="3" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheet6Command}" />
 
                     </Grid>
-                    <!--<ListView  ItemsSource ="{Binding FinishDayList}" 
-                              SelectedItem="{Binding SelectedCrewForEndOfDay, Mode=TwoWay}"
-                                   HeightRequest="100"
-                                   >
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <TextCell Text="{Binding FullName}" Height="40">
-                                    </TextCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>-->
+
                 </StackLayout>
 
                 <!-- End of Day -->
                 <StackLayout  Margin="5"  IsVisible="{Binding IsDisplayEndOfDayForm}" >
 
-                    <Label Text="By signing this daily time report, I verify that my individual hours are correctly reported,and I also acknowledge that I have not been involved in a vehicle accident, incident or work related injury
-                               during this work period. 
+                    <Label Text="By signing this daily time report, I verify that my individual hours are correctly reported,and I also acknowledge that I have not been involved in a vehicle accident, incident or work related injury during this work period. 
                                I understand that falsification of any information or making false statements will be considered grounds for dismissal." 
                             VerticalOptions="CenterAndExpand" 
                             HorizontalOptions="CenterAndExpand" />

@@ -17,17 +17,16 @@ namespace FTCollectorApp
     {
         public Dictionary<string, Type> Routes { get; private set; } = new Dictionary<string, Type>();
         public ICommand HelpCommand => new Command<string>(async (url) => await Launcher.OpenAsync(url));
-
+        public static TabBar mytabbar;
         public AppShell()
         {
             InitializeComponent();
             RegisterRoutes();
             BindingContext = this;
-
-            //if (Shell.Current. == nameof(CabinetSitePageView))
-            //    return;
+            mytabbar = AllTab;
 
         }
+
 
         void RegisterRoutes()
         {

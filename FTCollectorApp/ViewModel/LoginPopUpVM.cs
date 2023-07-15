@@ -75,7 +75,7 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        string version = "0605.1"; // change here for release
+        string version = "0713.1"; // change here for release
 
         string apkVersion;
         public string ApkVersion

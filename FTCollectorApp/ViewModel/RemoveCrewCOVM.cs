@@ -74,7 +74,7 @@ namespace FTCollectorApp.ViewModel
                         MessagingCenter.Send<RemoveCrewCOVM, string>(this, "Crew#"+CrewNumber+"RemoveTime", ClockOutCrewMember);
                         Console.WriteLine("ClockOutCrewMember : " + ClockOutCrewMember);
                         Session.event_type = "18";  // employee removed from job 
-                        await CloudDBService.PostJobEvent(0, Session.curphase, "", CrewId);
+                        await CloudDBService.PostJobEvent(0, Session.curphase, "", CrewId, Session.event_type);
                         
                         Session.event_type = "16";  // Timesheet Clockout 
                         await CloudDBService.PostTimeSheet(CrewId, ClockOutCrewMember, Session.curphase, 0);

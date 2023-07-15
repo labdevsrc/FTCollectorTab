@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FontAwesome;
 using FTCollectorApp.Model;
 using FTCollectorApp.Model.Reference;
 using FTCollectorApp.Service;
@@ -301,7 +302,6 @@ namespace FTCollectorApp.ViewModel
 
         [ObservableProperty] bool isDisplayOldCrewList = false;
 
-        [ObservableProperty] bool isUpdatingCrewList = false;
         [ObservableProperty] bool isDisplayJobEntries = false;
         [ObservableProperty] bool isStartNewJobIsEnable = false;
         [ObservableProperty] bool isCrewChangeIsEnabled = false;
@@ -384,19 +384,8 @@ namespace FTCollectorApp.ViewModel
                     IsCurrentEmpBlank = false;
                     if (Employee1Name == null)
                         IsCurrentEmpBlank = true;
-                    (CrewSaveCommand as Command).ChangeCanExecute(); // update button Save status : disable or enable
+                    RefreshCrewPageMenuButton();
 
-                    /*if (Session.event_type == "15") // event=15 , when crew assembly
-                    {
-                        if (!IsTimeEmp1Invalid)
-                        {
-                            Employee1Name.StartTime = StartTimeEmp1;
-                            //var idx = CrewInfoDetailList.FindIndex(a => a.FullName == Employee1Name?.FullName);
-                            //CrewInfoDetailList[idx].StartTime = value;
-                            //Console.WriteLine("idx 1 : "+ idx);
-                            //Console.WriteLine("CrewInfoDetailList[idx].StartTime 1 : " + CrewInfoDetailList[idx].StartTime);
-                        }
-                    }*/
                 }
             }
 
@@ -415,18 +404,7 @@ namespace FTCollectorApp.ViewModel
                     IsCurrentEmpBlank = false;
                     if (Employee2Name == null)
                         IsCurrentEmpBlank = true;
-                    (CrewSaveCommand as Command).ChangeCanExecute();
-                    /*if (Session.event_type == "15")// || Session.event_type == "18") // event=3 , when crew assembly
-                    {
-                        if (!IsTimeEmp2Invalid)
-                        {
-                            Employee1Name.StartTime = StartTimeEmp1;
-                            //var idx = CrewInfoDetailList.FindIndex(a => a.FullName == Employee2Name?.FullName);
-                            //CrewInfoDetailList[idx].StartTime = value;
-                            //Console.WriteLine("idx 2 : " + idx);
-                            //Console.WriteLine("CrewInfoDetailList["+ idx+"].StartTime 2 : " + CrewInfoDetailList[idx].StartTime);
-                        }
-                    }*/
+                    RefreshCrewPageMenuButton();
                 }
             }
 
@@ -445,14 +423,7 @@ namespace FTCollectorApp.ViewModel
                     IsCurrentEmpBlank = false;
                     if (Employee3Name == null)
                         IsCurrentEmpBlank = true;
-                    (CrewSaveCommand as Command).ChangeCanExecute();
-                    /*if (Session.event_type == "15") // event=3 , when crew assembly
-                    {
-                        var idx = CrewInfoDetailList.FindIndex(a => a.FullName == Employee3Name?.FullName);
-                        CrewInfoDetailList[idx].StartTime = value;
-                        Console.WriteLine("idx 3 : "+ idx);
-                        Console.WriteLine("CrewInfoDetailList["+ idx+"]. StartTime 3 : " + CrewInfoDetailList[idx].StartTime);
-                    }*/
+                    RefreshCrewPageMenuButton();
                 }
             }
 
@@ -469,14 +440,7 @@ namespace FTCollectorApp.ViewModel
                 {
                     IsTimeEmp4Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
                     IsCurrentEmpBlank = Employee4Name == null ? true : false;
-                    (CrewSaveCommand as Command).ChangeCanExecute();
-                    /*if (Session.event_type == "15") // event=3 , when crew assembly
-                    {
-                        var idx = CrewInfoDetailList.FindIndex(a => a.FullName == Employee4Name?.FullName);
-                        CrewInfoDetailList[idx].StartTime = value;
-                        Console.WriteLine("idx 4 : " + idx);
-                        Console.WriteLine("CrewInfoDetailList["+ idx+"].StartTime 4 : " + CrewInfoDetailList[idx].StartTime);
-                    }*/
+                    RefreshCrewPageMenuButton();
                 }
             }
 
@@ -493,15 +457,7 @@ namespace FTCollectorApp.ViewModel
                 {
                     IsTimeEmp5Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
                     IsCurrentEmpBlank = Employee5Name == null ? true : false;
-                    (CrewSaveCommand as Command).ChangeCanExecute();
-
-                    /*if (Session.event_type == "15") // event=3 , when crew assembly
-                    {
-                        var idx = CrewInfoDetailList.FindIndex(a => a.FullName == Employee5Name?.FullName);
-                        CrewInfoDetailList[idx].StartTime = value;
-                        Console.WriteLine("idx 5 : " + idx);
-                        Console.WriteLine("CrewInfoDetailList["+ idx+"].StartTime 5 : " + CrewInfoDetailList[idx].StartTime);
-                    }*/
+                    RefreshCrewPageMenuButton();
                 }
             }
 
@@ -519,24 +475,7 @@ namespace FTCollectorApp.ViewModel
 
                     IsTimeEmp6Invalid = !Regex.IsMatch(value.ToString(), pattern, RegexOptions.CultureInvariant);
                     IsCurrentEmpBlank = Employee6Name == null ? true : false;
-                    (CrewSaveCommand as Command).ChangeCanExecute();
-
-                    /*if (Session.event_type == "15") // event=3 , when crew assembly
-                    {
-                        if (!IsTimeEmp6Invalid)
-                        {
-                            CrewInfoDetailList[CrewInfoDetailList.IndexOf(Employee6Name)].StartTime = value;
-                            Console.WriteLine();
-
-                            OnPropertyChanged(nameof(SelectableCrewList));
-                            Console.WriteLine("StartTimeEmp6 : " + CrewInfoDetailList.IndexOf(Employee6Name));
-
-                            foreach (var col in CrewInfoDetailList)
-                            {
-                                Console.WriteLine("crew id : " + col.TeamUserKey + ", ClockIn : " + col.StartTime + ", Crew Name : " + col.CrewNameAndClockIn);
-                            }
-                        }
-                    }*/
+                    RefreshCrewPageMenuButton();
                 }
             }
 
@@ -900,6 +839,7 @@ namespace FTCollectorApp.ViewModel
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
             {
                 conn.CreateTable<CrewChangeInfoDetail>();
+                conn.DeleteAll<CrewChangeInfoDetail>();
                 conn.InsertAll(event18);
                 var table = conn.Table<CrewChangeInfoDetail>();
                 //Console.WriteLine(table.ToList());
@@ -979,6 +919,103 @@ namespace FTCollectorApp.ViewModel
             IsBusy = false;
         }
 
+
+        void MoveUpRow2toRow1()
+        {
+
+            // when Employee1 removed, rows below move up 1 by 1
+            if (Employee2Name?.FullName.Length > 1) // but Employee2 existed, move Employee2 to Employee1
+            {
+                // move 1 line up
+                StartTimeEmp1 = StartTimeEmp2;
+                StartTimeEmp2 = string.Empty;
+                var swap = Employee2Name;
+                Employee2Name = new CrewInfoDetail();
+                Employee1Name = swap;
+                PerDiemEmp1 = PerDiemEmp2;
+                PerDiemEmp2 = 0;
+                IsTimeEmp2Invalid = false;
+                //IsTimeEmp1Invalid = IsTimeEmp2Invalid;
+            }
+        }
+        void MoveUpRow3toRow2()
+        { 
+            if (Employee3Name?.FullName.Length > 1) // but Employee2 existed, move Employee2 to Employee1
+            {
+                // move 1 line up
+                StartTimeEmp2 = StartTimeEmp3;
+                StartTimeEmp3 = string.Empty;
+                var swap = Employee3Name;
+                Employee3Name = new CrewInfoDetail();
+                Employee2Name = swap;
+                PerDiemEmp2 = PerDiemEmp3;
+                PerDiemEmp3 = 0;
+                IsTimeEmp3Invalid = false;
+                //IsTimeEmp2Invalid = IsTimeEmp3Invalid;
+            }
+        }
+        void MoveUpRow4toRow3()
+        {
+            if (Employee4Name?.FullName.Length > 1) // but Employee2 existed, move Employee2 to Employee1
+            {
+                // move 1 line up
+                StartTimeEmp3 = StartTimeEmp4;
+                StartTimeEmp4 = string.Empty;
+                var swap = Employee4Name;
+                Employee4Name = new CrewInfoDetail();
+                Employee3Name = swap;
+                PerDiemEmp3 = PerDiemEmp4;
+                PerDiemEmp4 = 0;
+                //IsTimeEmp3Invalid = IsTimeEmp4Invalid;
+                IsTimeEmp4Invalid = false;
+            }
+        }
+
+        void MoveUpRow5toRow4()
+        {
+            if (Employee5Name?.FullName.Length > 1) // but Employee2 existed, move Employee2 to Employee1
+            {
+                // move 1 line up
+                StartTimeEmp4 = StartTimeEmp5;
+                StartTimeEmp5 = string.Empty;
+                var swap = Employee5Name;
+                Employee5Name = new CrewInfoDetail();
+                Employee4Name = swap;
+                PerDiemEmp4 = PerDiemEmp5;
+                PerDiemEmp5 = 0;
+                IsTimeEmp5Invalid = false;
+                //IsTimeEmp4Invalid = IsTimeEmp5Invalid;
+            }
+        }
+
+        void MoveUpRow6toRow5()
+        {
+            if (Employee6Name?.FullName.Length > 1) // but Employee2 existed, move Employee2 to Employee1
+            {
+                // move 1 line up
+                StartTimeEmp5 = StartTimeEmp6;
+                StartTimeEmp6 = string.Empty;
+                var swap = Employee6Name;
+                Employee6Name = new CrewInfoDetail();
+                Employee5Name = swap;
+                PerDiemEmp5 = PerDiemEmp6;
+                PerDiemEmp6 = 0;
+                IsTimeEmp6Invalid = false;
+                //IsTimeEmp5Invalid = IsTimeEmp6Invalid;
+            }
+        }
+
+        void RefreshRemoveButton()
+        {
+            (RemoveCrew1 as Command).ChangeCanExecute();
+            (RemoveCrew2 as Command).ChangeCanExecute();
+            (RemoveCrew3 as Command).ChangeCanExecute();
+            (RemoveCrew4 as Command).ChangeCanExecute();
+            (RemoveCrew5 as Command).ChangeCanExecute();
+            (RemoveCrew6 as Command).ChangeCanExecute();
+        }
+
+
         public VerifyJobViewModel()
         {
             bool SomethingWrong = false;
@@ -1005,48 +1042,45 @@ namespace FTCollectorApp.ViewModel
             });
 
 
-            int incomingMsgcnt = 0;
             MessagingCenter.Subscribe<CrewSelectVM, string>(this, "CrewMemberSelected", async (senders, value) =>
             {
                 string[] CrewProperties = value.Split('#');
 
                 Console.WriteLine(value);
-                var PageOrder = CrewProperties[0];
+                var CrewOrder = CrewProperties[0]; // "1" to "6" , most left column crewmember
                 var CrewId = CrewProperties[1];
                 var CrewFullName = CrewProperties[2];
                 var ClockIn = string.Empty;
-                if (Session.event_type == "17" || Session.event_type == "18")
+
+                if (Session.event_type == "18") // make sure that current 
+                   Session.event_type = "17";
+
+                if (Session.event_type == "17")
                     ClockIn = CrewProperties[3];
                 
-                incomingMsgcnt++;
-                Console.Write("incomingMsgcnt " + incomingMsgcnt);
-                switch (PageOrder) // crew number
+
+                switch (CrewOrder) // crew number
                 {
                     case "1":
                         if (Session.event_type == "15") ClockIn = StartTimeEmp1;
                         Employee1Name = new CrewInfoDetail { TeamUserKey = int.Parse(CrewId), StartTime = ClockIn, FullName = CrewFullName };
-                        (RemoveCrew1 as Command).ChangeCanExecute(); // Update Crew Member 1 entries
                         break;
                     case "2":
                         if (Session.event_type == "15") ClockIn = StartTimeEmp2;
                         Employee2Name = new CrewInfoDetail { TeamUserKey = int.Parse(CrewId), StartTime = ClockIn, FullName = CrewFullName };
-                        (RemoveCrew2 as Command).ChangeCanExecute(); // Update Crew Member 2 entries
                         break;
                     case "3":
                         if (Session.event_type == "15") ClockIn = StartTimeEmp3;
                         Employee3Name = new CrewInfoDetail { TeamUserKey = int.Parse(CrewId), StartTime = ClockIn, FullName = CrewFullName };
-                        (RemoveCrew3 as Command).ChangeCanExecute(); // Update Crew Member 3 entries
                         break;
                     case "4":
                         if (Session.event_type == "15") ClockIn = StartTimeEmp4;
                         Employee4Name = new CrewInfoDetail { TeamUserKey = int.Parse(CrewId), StartTime = ClockIn, FullName = CrewFullName };
-                        (RemoveCrew4 as Command).ChangeCanExecute(); // Update Crew Member 4 entries
                         break;
                     case "5":
                         if (Session.event_type == "15") ClockIn = StartTimeEmp5;
                         Employee5Name = new CrewInfoDetail { TeamUserKey = int.Parse(CrewId), StartTime = ClockIn, FullName = CrewFullName };
                         StartTimeEmp5 = ClockIn;
-                        (RemoveCrew5 as Command).ChangeCanExecute(); // Update Crew Member 5 entries
                         break;
                     case "6":
                         if (Session.event_type == "15") ClockIn = StartTimeEmp6;
@@ -1055,6 +1089,10 @@ namespace FTCollectorApp.ViewModel
                     default:
                         break;
                 }
+
+                RefreshRemoveButton();
+
+                (CrewDefaultClearAllCommand as Command).ChangeCanExecute(); // update menu button Clear All
 
             });
 
@@ -1137,8 +1175,11 @@ namespace FTCollectorApp.ViewModel
                     }
 
                     // Enable button menu Update  crew
-                    IsCrewChangeIsEnabled = true;
-                    (CrewChangeCommand as Command).ChangeCanExecute();
+                    EnableCrewUpdateMenuButton();
+
+                    // PUT HERE : Create SITE as Tab Page
+                    MessagingCenter.Send<VerifyJobViewModel>(this, "OpenSitePage");
+
                 }
 
                 if (Session.event_type == "8") // Left Job
@@ -1316,7 +1357,7 @@ namespace FTCollectorApp.ViewModel
 
                     Session.event_type = "16";
 
-                    SaveAndDisplayTimeSheetForm(LunchInTime4, LunchOutTime5, Emp5ClockOutTime, StartTimeEmp5, Emp5ClockOutTime, Employee5Name.FullName,
+                    SaveAndDisplayTimeSheetForm(LunchInTime5, LunchOutTime5, Emp5ClockOutTime, StartTimeEmp5, Emp5ClockOutTime, Employee5Name.FullName,
                     Emp5ClockOutPerDiem, SelectedCrewInfoDetails[5]?.TeamUserKey.ToString());
 
                 },
@@ -1332,6 +1373,9 @@ namespace FTCollectorApp.ViewModel
                     IsDisplayEndOfDay = true;
 
                     Session.event_type = "16";
+
+                    SaveAndDisplayTimeSheetForm(LunchInTime6, LunchOutTime6, Emp6ClockOutTime, StartTimeEmp6, Emp6ClockOutTime, Employee6Name.FullName,
+                    Emp6ClockOutPerDiem, SelectedCrewInfoDetails[6]?.TeamUserKey.ToString());
                 },
                 canExecute: () =>
                 {
@@ -1575,23 +1619,24 @@ namespace FTCollectorApp.ViewModel
                         OnPropertyChanged(nameof(FinishDayList));
 
 
-
-                        Session.event_type = "3";  //crew assembled
-                        await CloudDBService.PostJobEvent(SelectedPhase.PhaseNumber);
-                        //await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString());
-                        await CloudDBService.SaveCrewdata(Session.ownerCD, SelectedPhase.PhaseNumber,
-                            Employee1Name?.TeamUserKey.ToString(),
-                            Employee2Name?.TeamUserKey.ToString(),
-                            Employee3Name?.TeamUserKey.ToString(), Employee4Name?.TeamUserKey.ToString(),
-                            Employee5Name?.TeamUserKey.ToString(), Employee6Name?.TeamUserKey.ToString(),
-                            PerDiemL.ToString(),
-                            PerDiemEmp1.ToString(), PerDiemEmp2.ToString(), PerDiemEmp3.ToString(),
-                            PerDiemEmp4.ToString(), PerDiemEmp5.ToString(), PerDiemEmp6.ToString(),
-                            Employee1IsDriver.ToString(), Employee2IsDriver.ToString(),
-                            Employee3IsDriver.ToString(), Employee4IsDriver.ToString(),
-                            Employee5IsDriver.ToString(), Employee6IsDriver.ToString()
-                            );
-
+                        if (Session.event_type == "3")
+                        {
+                            Session.event_type = "3";  //crew assembled
+                            await CloudDBService.PostJobEvent(SelectedPhase.PhaseNumber);
+                            //await CloudDBService.PostJobEvent(DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString());
+                            await CloudDBService.SaveCrewdata(Session.ownerCD, SelectedPhase.PhaseNumber,
+                                Employee1Name?.TeamUserKey.ToString(),
+                                Employee2Name?.TeamUserKey.ToString(),
+                                Employee3Name?.TeamUserKey.ToString(), Employee4Name?.TeamUserKey.ToString(),
+                                Employee5Name?.TeamUserKey.ToString(), Employee6Name?.TeamUserKey.ToString(),
+                                PerDiemL.ToString(),
+                                PerDiemEmp1.ToString(), PerDiemEmp2.ToString(), PerDiemEmp3.ToString(),
+                                PerDiemEmp4.ToString(), PerDiemEmp5.ToString(), PerDiemEmp6.ToString(),
+                                Employee1IsDriver.ToString(), Employee2IsDriver.ToString(),
+                                Employee3IsDriver.ToString(), Employee4IsDriver.ToString(),
+                                Employee5IsDriver.ToString(), Employee6IsDriver.ToString()
+                                );
+                        }
                         await Application.Current.MainPage.DisplayAlert("Updated", "Crew member updated", "OK");
 
 
@@ -1603,13 +1648,8 @@ namespace FTCollectorApp.ViewModel
                                 DisplayLunchOutFAButton();
                             else if (IsLeftJobBtnEnabled) // if previous crew change is Arrivd sute button, display ArrivdFAB button
                                 DisplayLeftJobFAButton();
+                            RefreshRemoveButton();
 
-                            (RemoveCrew1 as Command).ChangeCanExecute();
-                            (RemoveCrew2 as Command).ChangeCanExecute();
-                            (RemoveCrew3 as Command).ChangeCanExecute();
-                            (RemoveCrew4 as Command).ChangeCanExecute();
-                            (RemoveCrew5 as Command).ChangeCanExecute();
-                            (RemoveCrew6 as Command).ChangeCanExecute();
                         }
                         else
                         {
@@ -1628,12 +1668,7 @@ namespace FTCollectorApp.ViewModel
                             (SaveLunchInCommand as Command).ChangeCanExecute();
                             (SaveLunchOutCommand as Command).ChangeCanExecute();
 
-                            (RemoveCrew1 as Command).ChangeCanExecute();
-                            (RemoveCrew2 as Command).ChangeCanExecute();
-                            (RemoveCrew3 as Command).ChangeCanExecute();
-                            (RemoveCrew4 as Command).ChangeCanExecute();
-                            (RemoveCrew5 as Command).ChangeCanExecute();
-                            (RemoveCrew6 as Command).ChangeCanExecute();
+                            RefreshRemoveButton();
                         }
 
                     }
@@ -1832,7 +1867,7 @@ namespace FTCollectorApp.ViewModel
 
                     EnableCrewUpdateMenuButton(); // IsCrewChangeIsEnabled = true; (CrewChangeCommand as Command).ChangeCanExecute();
                     EnableStartNewJobMenuButton();
-
+                    RefreshCrewDefaultButton();
                     ClearAllPage();
                 },
                 canExecute: () =>
@@ -1997,8 +2032,7 @@ namespace FTCollectorApp.ViewModel
                     Emp4ClockOutPerDiem = 2; //PerDiemEmp4;
                     Emp5ClockOutPerDiem = PerDiemEmp5;
 
-                    IsCrewChangeIsEnabled = false;
-                    (CrewChangeCommand as Command).ChangeCanExecute();
+                    DisableCrewUpdateMenuButton();
 
                 },
                 canExecute: () =>
@@ -2034,51 +2068,66 @@ namespace FTCollectorApp.ViewModel
                         {
                             crewName = Application.Current.Properties["CrewMember1"] as string;
                             crewId = (int)Application.Current.Properties["CrewId1"];
-                            Console.WriteLine();
+                        
+                            if(crewName.Length > 1)
+                                Employee1Name = new CrewInfoDetail { FullName = crewName, TeamUserKey = crewId };
                         }
-                        Employee1Name = new CrewInfoDetail { FullName = crewName, TeamUserKey = crewId };
+
 
                         // restore default crew #2
                         if (Application.Current.Properties.ContainsKey("CrewMember2"))
                         {
                             crewName = Application.Current.Properties["CrewMember2"] as string;
                             crewId = (int)Application.Current.Properties["CrewId2"]; Console.WriteLine();
+                            if (crewName.Length > 1)
+                                Employee2Name = new CrewInfoDetail { FullName = crewName, TeamUserKey = crewId };
                         }
 
-                        Employee2Name = new CrewInfoDetail{FullName = crewName, TeamUserKey = crewId };
+
 
                         // restore default crew #3
                         if (Application.Current.Properties.ContainsKey("CrewMember3"))
                         {
                             crewName = Application.Current.Properties["CrewMember3"] as string;
                             crewId = (int)Application.Current.Properties["CrewId3"]; Console.WriteLine();
+                            if (crewName.Length > 1)
+                                Employee3Name = new CrewInfoDetail { FullName = crewName, TeamUserKey = crewId };
                         }
-                        Employee3Name = new CrewInfoDetail { FullName = crewName, TeamUserKey = crewId };
+                        //Employee3Name = new CrewInfoDetail { FullName = crewName, TeamUserKey = crewId };
 
                         // restore default crew #4
                         if (Application.Current.Properties.ContainsKey("CrewMember4"))
                         {
                             crewName = Application.Current.Properties["CrewMember4"] as string;
                             crewId = (int)Application.Current.Properties["CrewId4"]; Console.WriteLine();
+                            if (crewName.Length > 1)
+                                Employee4Name = new CrewInfoDetail { FullName = crewName, TeamUserKey = crewId };
+
                         }
-                        Employee4Name = new CrewInfoDetail { FullName = crewName, TeamUserKey = crewId };
+                        //Employee4Name = new CrewInfoDetail { FullName = crewName, TeamUserKey = crewId };
 
                         // restore default crew #5
                         if (Application.Current.Properties.ContainsKey("CrewMember5"))
                         {
                             crewName = Application.Current.Properties["CrewMember5"] as string;
                             crewId = (int)Application.Current.Properties["CrewId5"]; Console.WriteLine();
+                            if (crewName.Length > 1)
+                                Employee5Name = new CrewInfoDetail { FullName = crewName, TeamUserKey = crewId };
                         }
-                        Employee5Name = new CrewInfoDetail { FullName = crewName, TeamUserKey = crewId };
+                        //Employee5Name = new CrewInfoDetail { FullName = crewName, TeamUserKey = crewId };
 
                         // restore default crew #6
                         if (Application.Current.Properties.ContainsKey("CrewMember6"))
                         {
                             crewName = Application.Current.Properties["CrewMember6"] as string;
                             crewId = (int)Application.Current.Properties["CrewId6"]; Console.WriteLine();
-                        }
-                        Employee6Name = new CrewInfoDetail { FullName = crewName, TeamUserKey = crewId };
+                            if (crewName.Length > 1)
+                                Employee6Name = new CrewInfoDetail { FullName = crewName, TeamUserKey = crewId };
 
+                        }
+                        //Employee6Name = new CrewInfoDetail { FullName = crewName, TeamUserKey = crewId };
+
+                        (CrewDefaultClearAllCommand as Command).ChangeCanExecute();
 
                     }
                     catch(Exception e)
@@ -2320,7 +2369,7 @@ namespace FTCollectorApp.ViewModel
                     IsEqCheckOutDisplayed = false;
 
                     Session.event_type = "4"; // Equipment out
-                    await CloudDBService.PostJobEvent(0, SelectedPhase.PhaseNumber, MilesHour1, Session.uid.ToString());
+                    await CloudDBService.PostJobEvent(0, SelectedPhase.PhaseNumber, MilesHour1, Session.uid.ToString(), Session.event_type);
 
                     IsDisplayOdoStart = false;
                     IsDisplayOdoEnd = false;
@@ -2504,7 +2553,7 @@ namespace FTCollectorApp.ViewModel
                         {
                             //IsStartNewJobIsEnable = false; (StartNewJobCommand as Command).ChangeCanExecute();
                             DisableStartNewJobMenuButton();
-                            // ClockIn , event Type 15
+                            // Crew ClockIn , event Type 15
                             Session.event_type = "15";
                             ToggleCrewListCommand?.Execute(null); // obsolete - CrewList Button removed - Mar 18th
                             (LoadCrewDefaultCommand as Command).ChangeCanExecute();
@@ -2548,8 +2597,10 @@ namespace FTCollectorApp.ViewModel
                     //await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new EnterMiles(LeftForJobMilesHour));
 
                     EnableStartNewJobMenuButton(); //IsStartNewJobIsEnable = true; (StartNewJobCommand as Command).ChangeCanExecute();
+                    RefreshCrewDefaultButton();
 
 
+                    //Children TabbedSitePage 
 
                 },
                 canExecute: () =>
@@ -2601,9 +2652,16 @@ namespace FTCollectorApp.ViewModel
                     Session.event_type = "12"; //left for job site
                     await CloudDBService.PostJobEvent(SelectedPhase.PhaseNumber);
 
-                    bool answer = await Application.Current.MainPage.DisplayAlert("Logout", "Ready to Logout ?", "Yes", "No");
+                    bool answer = await Application.Current.MainPage.DisplayAlert("Logout", "Are you sure want to Logout ?", "Yes", "No");
+
                     if (answer)
-                        System.Diagnostics.Process.GetCurrentProcess().Kill();
+                    {
+                        
+                        ClearAllPage();
+                        LoginPopUpCall();
+                    }
+                    //if (answer)
+                        //System.Diagnostics.Process.GetCurrentProcess().Kill();
                 }
             );
 
@@ -2631,24 +2689,16 @@ namespace FTCollectorApp.ViewModel
                 }
             );
 
-            bool TempStatus1 = false;
-            bool TempStatus2 = false;
-
 
             CrewChangeCommand = new Command(
                 execute: async () =>
                 {
                     Session.event_type = "17"; //crew changed
-                    TempStatus1 = IsLunchOut;
-                    TempStatus2 = IsArrivedAtSiteBtnEnabled;
 
                     ClearAllPage();
 
-                    TempStatus1 = IsLunchIn;
-                    TempStatus2 = IsLunchOut;
 
                     IsDisplayCrewList = true;
-                    IsUpdatingCrewList = true; // display trash icon for removing crew
 
                     RefreshFAButton();
                     DisableStartNewJobMenuButton();// IsStartNewJobIsEnable = false; (StartNewJobCommand as Command).ChangeCanExecute();
@@ -2669,55 +2719,58 @@ namespace FTCollectorApp.ViewModel
                 }
             );
 
-            ClearAllCommand = new Command(
+            CrewDefaultClearAllCommand = new Command(
                 execute: async () =>
                 {
-                    //string stringToSend = "1#" + Employee1Name?.FullName + "#" + Employee1Name?.TeamUserKey;
-                    //await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new RemoveCrewClockOut(stringToSend));
+
                     bool answer = await Application.Current.MainPage.DisplayAlert("Remove Selected Crew", "Are you sure want to remove ALL ?", "YES", "NO");
                     if (answer)
                     {
-                        // if a crew existed at Employee1Name, 
-                        // clear Employee1Name, StartTimeEmp
-                        // Then with from SelectedCrewDetails
-                        if (Employee1Name?.FullName.Length > 1)
+
+                        //if (Employee1Name?.FullName.Length > 1) // if crew member class (Employee1Name) existed do below
                         {
                             StartTimeEmp1 = string.Empty;
                             Employee1Name = new CrewInfoDetail();
                             PerDiemEmp1 = 0;
+                            IsTimeEmp1Invalid = false;
                         }
-                        if (Employee2Name?.FullName.Length > 1)
+                        //if (Employee2Name?.FullName.Length > 1) // if crew member class (Employee1Name) existed do below
                         {
                             StartTimeEmp2 = string.Empty;
                             Employee2Name = new CrewInfoDetail();
                             PerDiemEmp2 = 0;
+                            IsTimeEmp2Invalid = false;
                         }
-                        if (Employee3Name?.FullName.Length > 1)
+                        //if (Employee3Name?.FullName.Length > 1) // if crew member class (Employee1Name) existed do below
                         {
                             StartTimeEmp3 = string.Empty;
                             Employee3Name = new CrewInfoDetail();
                             PerDiemEmp3 = 0;
+                            IsTimeEmp3Invalid = false;
                         }
-                        if (Employee4Name?.FullName.Length > 1)
+                        //if (Employee4Name?.FullName.Length > 1)
                         {
                             StartTimeEmp4 = string.Empty;
                             Employee4Name = new CrewInfoDetail();
                             PerDiemEmp4 = 0;
+                            IsTimeEmp4Invalid = false;
                         }
-                        if (Employee5Name?.FullName.Length > 1)
+                        //if (Employee5Name?.FullName.Length > 1)
                         {
                             StartTimeEmp5 = string.Empty;
                             Employee5Name = new CrewInfoDetail();
                             PerDiemEmp5 = 0;
+                            IsTimeEmp5Invalid = false;
                         }
-                        if (Employee6Name?.FullName.Length > 1)
+                        //if (Employee6Name?.FullName.Length > 1)
                         {
                             StartTimeEmp6 = string.Empty;
                             Employee6Name = new CrewInfoDetail();
                             PerDiemEmp6 = 0;
+                            IsTimeEmp6Invalid = false;
                         }
 
-                        (ClearAllCommand as Command).ChangeCanExecute();
+                        (CrewDefaultClearAllCommand as Command).ChangeCanExecute();
 
                         Console.WriteLine();
                     }
@@ -2734,29 +2787,52 @@ namespace FTCollectorApp.ViewModel
                 {
                     //string stringToSend = "1#" + Employee1Name?.FullName + "#" + Employee1Name?.TeamUserKey;
                     //await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new RemoveCrewClockOut(stringToSend));
-                    bool answer = await Application.Current.MainPage.DisplayAlert("Confirm Remove", "Are you sure want to remove" + Employee1Name?.FullName + " ? ", "YES", "NO");
+                    bool answer = false;
+                    if (Session.event_type == "15") // crew assembly
+                        answer = await Application.Current.MainPage.DisplayAlert("Confirm Remove", "Are you sure your want to remove" + Employee1Name?.FullName, "YES", "NO");
+                    else 
+                        answer = await Application.Current.MainPage.DisplayAlert("Confirm Left Job", "Select action after Left Job for " + Employee1Name?.FullName , "Transfer crew", "Finish the day");
                     if (answer)
                     {
-                        // if a crew existed at Employee1Name, 
-                        // clear Employee1Name, StartTimeEmp
-                        // Then with from SelectedCrewDetails
-                        if (Employee1Name?.FullName.Length > 1)
+
+                        if (Session.event_type == "17") // if in update crew page
+                            await CloudDBService.PostJobEvent(0, Session.curphase, "", Employee1Name.TeamUserKey.ToString(), "18");  // Send Employee Left Job event
+                        if (Employee2Name?.FullName.Length > 1) // when Employee1 removed, but Employee2 existed, move Employee2 to Employee1
                         {
-                            // update job_event table
-                            Session.event_type = "18";
-                            await CloudDBService.PostJobEvent(0, Session.curphase, "", Employee1Name.TeamUserKey.ToString());
-
-
+                            MoveUpRow2toRow1();
+                            MoveUpRow3toRow2();
+                            MoveUpRow4toRow3();
+                            MoveUpRow5toRow4();
+                            MoveUpRow6toRow5();
+                        }
+                        else
+                        {
                             // clear crew name, start time
                             StartTimeEmp1 = string.Empty;
-                            //Employee1Name.FullName = string.Empty; // mengosongkan Employee1Name tidak mentrigger SelectableCrewList saat di event_type3
                             Employee1Name = new CrewInfoDetail();
                             PerDiemEmp1 = 0;
-                        }
-                        (RemoveCrew1 as Command).ChangeCanExecute();
+                            IsTimeEmp1Invalid = false;
 
-                        Console.WriteLine();
+                        }
+                        RefreshRemoveButton();
+
+                        //await Application.Current.MainPage.DisplayAlert("Information", Employee1Name?.FullName + " ready for other crew" , "OK");
                     }
+                    else if (Session.event_type != "15")
+                    {
+                        ClearAllPage();
+                        IsDisplayEndOfDay = true;
+
+                        Session.event_type = "16";
+
+                        SaveAndDisplayTimeSheetForm(LunchInTime1, LunchOutTime1, Emp1ClockOutTime, StartTimeEmp1, Emp1ClockOutTime, Employee1Name.FullName,
+                        Emp1ClockOutPerDiem, Employee1Name.TeamUserKey.ToString());
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.Navigation.PopAsync();
+                    }
+                    
                 },
                 canExecute: () =>
                 {
@@ -2767,26 +2843,48 @@ namespace FTCollectorApp.ViewModel
             RemoveCrew2 = new Command(
                 execute: async () =>
                 {
-                    //string stringToSend = "2#" + Employee2Name?.FullName + "#" + Employee2Name?.TeamUserKey;
-                    //await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new RemoveCrewClockOut(stringToSend));
-                    bool answer = await Application.Current.MainPage.DisplayAlert("Confirm Remove", "Are you sure want to remove " + Employee2Name?.FullName + " ? ", "YES", "NO");
+                    bool answer = false;
+                    if (Session.event_type == "15") // crew assembly
+                        answer = await Application.Current.MainPage.DisplayAlert("Confirm Remove", "Are you sure your want to remove" + Employee2Name?.FullName, "YES", "NO");
+                    else
+                        answer = await Application.Current.MainPage.DisplayAlert("Confirm Left Job", "Select action after Left Job for " + Employee2Name?.FullName, "Change crew", "Finish the day");
                     if (answer)
                     {
-
-                        if (Employee2Name?.FullName.Length > 1)
+                        // Send Employee Left Job event
+                        await CloudDBService.PostJobEvent(0, Session.curphase, "", Employee2Name.TeamUserKey.ToString(), "18");
+                        if (Employee3Name?.FullName.Length > 1) // when Employee1 removed, but Employee2 existed, move Employee2 to Employee1
                         {
-                            // update job_event table
-                            Session.event_type = "18";
-                            await CloudDBService.PostJobEvent(0, Session.curphase, "", Employee2Name.TeamUserKey.ToString());
+                            MoveUpRow3toRow2();
+                            MoveUpRow4toRow3();
+                            MoveUpRow5toRow4();
+                            MoveUpRow6toRow5();
+                        }
+                        else
+                        {
                             // clear crew name, start time
                             StartTimeEmp2 = string.Empty;
                             Employee2Name = new CrewInfoDetail();
-                            //Employee2Name.FullName = string.Empty;
                             PerDiemEmp2 = 0;
+                            IsTimeEmp2Invalid = false;
+
                         }
-                        (RemoveCrew2 as Command).ChangeCanExecute();
-                        //OnPropertyChanged(nameof(SelectableCrewList));
-                        Console.WriteLine();
+                        RefreshRemoveButton();
+
+                        //await Application.Current.MainPage.DisplayAlert("Information", Employee2Name?.FullName + " ready for other crew", "OK");
+                    }
+                    else if (Session.event_type != "15")
+                    {
+                        ClearAllPage();
+                        IsDisplayEndOfDay = true;
+
+                        Session.event_type = "16";
+
+                        SaveAndDisplayTimeSheetForm(LunchInTime2, LunchOutTime2, Emp2ClockOutTime, StartTimeEmp2, Emp2ClockOutTime, Employee2Name.FullName,
+                        Emp2ClockOutPerDiem, Employee2Name.TeamUserKey.ToString());
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.Navigation.PopAsync();
                     }
                 },
                 canExecute: () =>
@@ -2798,24 +2896,47 @@ namespace FTCollectorApp.ViewModel
             RemoveCrew3 = new Command(
                 execute: async () =>
                 {
-                    //string stringToSend = "3#" + Employee3Name?.FullName + "#" + Employee3Name?.TeamUserKey;
-                    //await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new RemoveCrewClockOut(stringToSend));
-                    bool answer = await Application.Current.MainPage.DisplayAlert("Confirm Remove", "Are you sure want to remove " + Employee3Name?.FullName + " ? ", "YES", "NO");
+                    bool answer = false;
+                    if (Session.event_type == "15") // crew assembly
+                        answer = await Application.Current.MainPage.DisplayAlert("Confirm Remove", "Are you sure your want to remove " + Employee3Name?.FullName, "YES", "NO");
+                    else
+                        answer = await Application.Current.MainPage.DisplayAlert("Confirm Left Job", "Select action after Left Job for " + Employee3Name?.FullName, "Change crew", "Finish the day");
                     if (answer)
                     {
-                        if (Employee3Name?.FullName.Length > 1)
+                        // Send Employee Left Job event
+                        await CloudDBService.PostJobEvent(0, Session.curphase, "", Employee3Name.TeamUserKey.ToString(), "18");
+                        if (Employee4Name?.FullName.Length > 1) // when Employee1 removed, but Employee2 existed, move Employee2 to Employee1
                         {
-                            // update job_event table
-                            Session.event_type = "18";
-                            await CloudDBService.PostJobEvent(0, Session.curphase, "", Employee3Name.TeamUserKey.ToString());
+                            MoveUpRow4toRow3();
+                            MoveUpRow5toRow4();
+                            MoveUpRow6toRow5();
+                        }
+                        else
+                        {
                             // clear crew name, start time
                             StartTimeEmp3 = string.Empty;
-                            //Employee3Name.FullName = string.Empty;
                             Employee3Name = new CrewInfoDetail();
                             PerDiemEmp3 = 0;
+                            IsTimeEmp3Invalid = false;
+
                         }
-                        (RemoveCrew3 as Command).ChangeCanExecute();
-                        //OnPropertyChanged(nameof(SelectableCrewList));
+                        RefreshRemoveButton();
+
+                        //await Application.Current.MainPage.DisplayAlert(FontAwesomeIcons.CircleInfo + "Info", Employee3Name?.FullName + " ready for other crew", "OK");
+                    }
+                    else if (Session.event_type != "15")
+                    {
+                        ClearAllPage();
+                        IsDisplayEndOfDay = true;
+
+                        Session.event_type = "16";
+
+                        SaveAndDisplayTimeSheetForm(LunchInTime3, LunchOutTime3, Emp2ClockOutTime, StartTimeEmp3, Emp3ClockOutTime, Employee3Name.FullName,
+                        Emp3ClockOutPerDiem, Employee3Name.TeamUserKey.ToString());
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.Navigation.PopAsync();
                     }
 
                 },
@@ -2829,22 +2950,48 @@ namespace FTCollectorApp.ViewModel
                 {
                     //string stringToSend = "4#" + Employee4Name?.FullName + "#" + Employee4Name?.TeamUserKey;
                     //await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new RemoveCrewClockOut(stringToSend));
-                    bool answer = await Application.Current.MainPage.DisplayAlert("Confirm Remove", "Are you sure want to remove " + Employee4Name?.FullName + "?", "YES", "NO");
+                    //bool answer = await Application.Current.MainPage.DisplayAlert("Confirm Remove", "Are you sure want to remove " + Employee4Name?.FullName + "?", "YES", "NO");
+                    bool answer = false;
+                    if (Session.event_type == "15") // crew assembly
+                        answer = await Application.Current.MainPage.DisplayAlert("Confirm Remove", "Are you sure your want to remove" + Employee4Name?.FullName, "YES", "NO");
+                    else
+                        answer = await Application.Current.MainPage.DisplayAlert("Confirm Left Job", "Select action after Left Job for " + Employee4Name?.FullName, "Change crew", "Finish the day");
                     if (answer)
                     {
-                        if (Employee4Name?.FullName.Length > 1)
+                        // Send Employee Left Job event
+                        await CloudDBService.PostJobEvent(0, Session.curphase, "", Employee4Name.TeamUserKey.ToString(), "18");
+                        if (Employee5Name?.FullName.Length > 1) // when Employee1 removed, but Employee2 existed, move Employee2 to Employee1
                         {
-                            // update job_event table
-                            Session.event_type = "18";
-                            await CloudDBService.PostJobEvent(0, Session.curphase, "", Employee4Name.TeamUserKey.ToString());
-                            // clear crew name, start time
-                            StartTimeEmp4 = " ";
-                            Employee1Name = new CrewInfoDetail();
-                            //Employee4Name.FullName = " "; ;
-                            PerDiemEmp4 = 0;
+
+                            MoveUpRow5toRow4();
+                            MoveUpRow6toRow5();
                         }
-                        (RemoveCrew4 as Command).ChangeCanExecute();
-                        //OnPropertyChanged(nameof(SelectableCrewList));
+                        else
+                        {
+                            // clear crew name, start time
+                            StartTimeEmp4 = string.Empty;
+                            Employee4Name = new CrewInfoDetail();
+                            PerDiemEmp4 = 0;
+                            IsTimeEmp4Invalid = false;
+
+                        }
+                        RefreshRemoveButton();
+
+                        //await Application.Current.MainPage.DisplayAlert("Information", Employee4Name?.FullName + " ready for other crew", "OK");
+                    }
+                    else if (Session.event_type != "15")
+                    {
+                        ClearAllPage();
+                        IsDisplayEndOfDay = true;
+
+                        Session.event_type = "16";
+
+                        SaveAndDisplayTimeSheetForm(LunchInTime4, LunchOutTime4, Emp4ClockOutTime, StartTimeEmp4, Emp4ClockOutTime, Employee4Name.FullName,
+                        Emp4ClockOutPerDiem, Employee4Name.TeamUserKey.ToString());
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.Navigation.PopAsync();
                     }
                 },
                 canExecute: () =>
@@ -2855,25 +3002,43 @@ namespace FTCollectorApp.ViewModel
             RemoveCrew5 = new Command(
                 execute: async () =>
                 {
-                    //string stringToSend = "5#" + Employee5Name?.FullName + "#" + Employee5Name?.TeamUserKey;
-                    //await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new RemoveCrewClockOut(stringToSend));
-                    bool answer = await Application.Current.MainPage.DisplayAlert("Confirm Remove Crew#5", "Are you sure want to remove " + Employee5Name?.FullName + " ? ", "YES", "NO");
+                    bool answer = false;
+                    if (Session.event_type == "15") // crew assembly
+                        answer = await Application.Current.MainPage.DisplayAlert("Confirm Remove", "Are you sure your want to remove" + Employee5Name?.FullName, "YES", "NO");
+                    else
+                        answer = await Application.Current.MainPage.DisplayAlert("Confirm Left Job", "Select action after Left Job for " + Employee5Name?.FullName, "Change crew", "Finish the day");
+
+
                     if (answer)
                     {
-                        if (Employee5Name?.FullName.Length > 1)
+                        await CloudDBService.PostJobEvent(0, Session.curphase, "", Employee5Name.TeamUserKey.ToString(), "18");
+                        if (Employee6Name?.FullName.Length > 1) // when Employee1 removed, but Employee2 existed, move Employee2 to Employee1
                         {
-                            // update job_event table
-                            Session.event_type = "18";
-                            await CloudDBService.PostJobEvent(0, Session.curphase, "", Employee5Name.TeamUserKey.ToString());
-                            // clear crew name, start time
-                            StartTimeEmp5 = " ";
-                            Employee1Name = new CrewInfoDetail();
-                            //Employee5Name.FullName = " "; ;
-                            PerDiemEmp5 = 0;
+                            MoveUpRow6toRow5();
                         }
-                        (RemoveCrew5 as Command).ChangeCanExecute();
-                        //OnPropertyChanged(nameof(SelectableCrewList));
+                        else
+                        {
+                            // clear crew name, start time
+                            StartTimeEmp5 = string.Empty;
+                            Employee5Name = new CrewInfoDetail();
+                            PerDiemEmp5 = 0;
+                            IsTimeEmp5Invalid = false;
+                        }
+                        RefreshRemoveButton(); 
+                    }
+                    else if (Session.event_type != "15")
+                    {
+                        ClearAllPage();
+                        IsDisplayEndOfDay = true;
 
+                        Session.event_type = "16";
+
+                        SaveAndDisplayTimeSheetForm(LunchInTime5, LunchOutTime5, Emp5ClockOutTime, StartTimeEmp5, Emp5ClockOutTime, Employee5Name.FullName,
+                        Emp5ClockOutPerDiem, Employee5Name.TeamUserKey.ToString());
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.Navigation.PopAsync();
                     }
                 },
                 canExecute: () =>
@@ -2884,25 +3049,35 @@ namespace FTCollectorApp.ViewModel
             RemoveCrew6 = new Command(
                 execute: async () =>
                 {
-                    //string stringToSend = "5#" + Employee5Name?.FullName + "#" + Employee5Name?.TeamUserKey;
-                    //await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new RemoveCrewClockOut(stringToSend));
-                    bool answer = await Application.Current.MainPage.DisplayAlert("Confirm Remove Crew#6" + Employee6Name?.FullName, "Are you sure ?", "YES", "NO");
+                    bool answer = false;
+                    if (Session.event_type == "15") // crew assembly
+                        answer = await Application.Current.MainPage.DisplayAlert("Confirm Remove", "Are you sure your want to remove" + Employee6Name?.FullName, "YES", "NO");
+                    else
+                        answer = await Application.Current.MainPage.DisplayAlert("Confirm Left Job", "Select action after Left Job for " + Employee6Name?.FullName, "Change crew", "Finish the day");
+
                     if (answer)
                     {
-                        if (Employee6Name?.FullName.Length > 1)
-                        {
-                            // update job_event table
-                            Session.event_type = "18";
-                            await CloudDBService.PostJobEvent(0, Session.curphase, "", Employee6Name.TeamUserKey.ToString());
-                            // clear crew name, start time
-                            StartTimeEmp6 = " ";
-                            Employee6Name.FullName = " ";
-                            PerDiemEmp6 = 0;
-                        }
-                        (RemoveCrew6 as Command).ChangeCanExecute();
-                        //OnPropertyChanged(nameof(SelectableCrewList));
-                        //Console.WriteLine();
-                        //GetEvent18Prop2();
+                        await CloudDBService.PostJobEvent(0, Session.curphase, "", Employee6Name.TeamUserKey.ToString(), "18");
+
+                        StartTimeEmp6 = string.Empty;
+                        Employee6Name = new CrewInfoDetail();
+                        PerDiemEmp6 = 0;
+                        IsTimeEmp6Invalid = false;
+                        RefreshRemoveButton();
+                    }
+                    else if (Session.event_type != "15")
+                    {
+                        ClearAllPage();
+                        IsDisplayEndOfDay = true;
+
+                        Session.event_type = "16";
+
+                        SaveAndDisplayTimeSheetForm(LunchInTime6, LunchOutTime6, Emp6ClockOutTime, StartTimeEmp6, Emp6ClockOutTime, Employee6Name.FullName,
+                        Emp6ClockOutPerDiem, Employee6Name.TeamUserKey.ToString());
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.Navigation.PopAsync();
                     }
                 },
                 canExecute: () =>
@@ -2959,10 +3134,17 @@ namespace FTCollectorApp.ViewModel
 
         void RefreshCrewDefaultButton()
         {
-            (CrewSaveCommand as Command).ChangeCanExecute();
-            // disable Start new job button
+            (CrewSaveCommand as Command).ChangeCanExecute(); // refresh button Save status : disable or enable
+            (CrewDefaultClearAllCommand as Command).ChangeCanExecute(); // refresh button Save status : disable or enable
             (SetCrewAsDefaultCommand as Command).ChangeCanExecute();
             (LoadCrewDefaultCommand as Command).ChangeCanExecute();
+        }
+
+        void RefreshCrewPageMenuButton()
+        {
+            (CrewSaveCommand as Command).ChangeCanExecute(); // refresh button Save status : disable or enable
+            (CrewDefaultClearAllCommand as Command).ChangeCanExecute(); // refresh button Save status : disable or enable
+
         }
 
         void DisableStartNewJobMenuButton()
@@ -2982,6 +3164,15 @@ namespace FTCollectorApp.ViewModel
             // disable Start new job button
             IsStartNewJobIsEnable = true;(StartNewJobCommand as Command).ChangeCanExecute();
         }
+
+        void RefreshCrewDefaultBtnMenu()
+        {
+            // disable Start new job button
+            (SetCrewAsDefaultCommand as Command).ChangeCanExecute();
+            (CrewDefaultClearAllCommand as Command).ChangeCanExecute();
+            (LoadCrewDefaultCommand as Command).ChangeCanExecute();
+        }
+
 
         void EnableCrewUpdateMenuButton()
         {
@@ -3008,7 +3199,7 @@ namespace FTCollectorApp.ViewModel
             try
             {
                 await CloudDBService.PostTimeSheet(CrewKey, ClockOutTime, SelectedPhase.PhaseNumber, PerDiemTemp);
-                await CloudDBService.PostJobEvent(PerDiemTemp, SelectedPhase.PhaseNumber, "0", CrewKey);
+                await CloudDBService.PostJobEvent(PerDiemTemp, SelectedPhase.PhaseNumber, "0", CrewKey, Session.event_type);
 
 
                 TimeSpan totaltime = DateTime.Parse(LunchOutTime).Subtract(DateTime.Parse(ClockIntime)) + DateTime.Parse(ClockOutTime).Subtract(DateTime.Parse(LunchInTime));
@@ -3075,7 +3266,7 @@ namespace FTCollectorApp.ViewModel
         public ICommand RemoveCrew4 { get; set; }
         public ICommand RemoveCrew5 { get; set; }
         public ICommand RemoveCrew6 { get; set; }
-        public ICommand ClearAllCommand { get; set; }
+        public ICommand CrewDefaultClearAllCommand { get; set; }
 
         public ICommand LeftJobCommand { get; set; }
         public ICommand ArriveAtYardCommand { get; set; }
@@ -3195,13 +3386,26 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+        string? emp6ClockOutTime;
+        public string Emp6ClockOutTime
+        {
+            get => emp6ClockOutTime;
+            set
+            {
+                SetProperty(ref emp6ClockOutTime, value);
+                ErrorMessageEmp6 = INVALID_TIME_ERR_MESSAGE;
+                (IsCO6TimeInvalid, ErrorMessageEmp6) = IsTimeGapNegativeNew(ArrivedAtYardTime, value, Employee6Name?.FullName);
+                (SaveTimeSheet6Command as Command).ChangeCanExecute();
+            }
+        }
+
         [ObservableProperty] int lClockOutPerDiem = 0;
         [ObservableProperty] int emp1ClockOutPerDiem = 0;
         [ObservableProperty] int emp2ClockOutPerDiem = 0;
         [ObservableProperty] int emp3ClockOutPerDiem = 0;
         [ObservableProperty] int emp4ClockOutPerDiem = 0;
         [ObservableProperty] int emp5ClockOutPerDiem = 0;
-
+        [ObservableProperty] int emp6ClockOutPerDiem = 0;
 
 
         [ObservableProperty] string clockOutTimeForm = string.Empty;
@@ -3248,7 +3452,12 @@ namespace FTCollectorApp.ViewModel
             if (crewInstance.TeamUserKey == -1) // new instance
                 return false;
 
-            if (crewInstance.TeamUserKey == Employee1Name?.TeamUserKey) {
+            if (crewInstance.TeamUserKey == 0)
+            {
+                return true;
+            }
+            else if (crewInstance.TeamUserKey == Employee1Name?.TeamUserKey)
+            {
                 Console.WriteLine("Selected Crew already existed in Employee1");
             }
             else if (crewInstance.TeamUserKey == Employee2Name?.TeamUserKey)
@@ -3287,9 +3496,9 @@ namespace FTCollectorApp.ViewModel
             get => employee1Name;
             set
             {
-                if (employee1Name == value)
+                if (employee1Name == value) // work arround for Employee1Name assigned 2x
                     return;
-                if(SelectedCrewDuplicated(value))
+                if(SelectedCrewDuplicated(value)) // prevent 
                 {
                     DisplayAllertCrewExisted();
                     return;

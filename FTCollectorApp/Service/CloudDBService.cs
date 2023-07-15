@@ -78,13 +78,14 @@ namespace FTCollectorApp.Service
         }
 
 
-        public static async Task PostJobEvent(string job_phase, string crewid) => await PostJobEvent(0, job_phase, "", crewid);
-        public static async Task PostJobEvent(string job_phase) => await PostJobEvent(0, job_phase,"", Session.uid.ToString());
-        public static async Task PostJobEvent() => await PostJobEvent(0, "", "", Session.uid.ToString());
+        public static async Task PostJobEvent(string job_phase, string crewid) => await PostJobEvent(0, job_phase, "", crewid, Session.event_type);
+        public static async Task PostJobEvent(string job_phase) => await PostJobEvent(0, job_phase,"", Session.uid.ToString(), Session.event_type);
+        public static async Task PostJobEvent() => await PostJobEvent(0, "", "", Session.uid.ToString(), Session.event_type);
+        public static async Task PostJobEvent(string job_phase, string crewid, string evt) => await PostJobEvent(0, "", "", crewid, evt);
         //public static async Task PostJobEvent() => await PostJobEvent("", "", 0, "","","");
         //public static async Task PostJobEvent(string miles_hours) => await PostJobEvent("", "", 0, "", miles_hours,"");
         //public static async Task PostJobEvent(string param1, string param2, int perDiem, string job_phase, string miles_hours, string crewid)
-        public static async Task PostJobEvent(int perDiem, string job_phase, string miles_hours, string crewid)
+        public static async Task PostJobEvent(int perDiem, string job_phase, string miles_hours, string crewid, string event_t)
         {
 
             var keyValues = new List<KeyValuePair<string, string>>{
@@ -106,7 +107,7 @@ namespace FTCollectorApp.Service
                 // xSaveJobEvents.php Line 74 : $latitude =$_POST['lattitude2'];
                 new KeyValuePair<string, string>("lattitude2", Session.live_lattitude),
                 new KeyValuePair<string, string>("longitude2", Session.live_longitude),
-                new KeyValuePair<string, string>("evtype", Session.event_type),
+                new KeyValuePair<string, string>("evtype", event_t),
                 new KeyValuePair<string, string>("miles_hours", miles_hours), // only for sending odometer 
                 
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
@@ -837,6 +838,9 @@ namespace FTCollectorApp.Service
             }
         }
 
+
+        public static Task<IEnumerable<CrewInfoDetail>> GetOccupiedMember() =>
+            GetDropDownParamsAsync<IEnumerable<CrewInfoDetail>>("occupied_crew_member");
         public static Task<IEnumerable<CrewChangeInfoDetail>> GetEvent18Time() =>
             GetDropDownParamsAsync<IEnumerable<CrewChangeInfoDetail>>("event18_start_time");
         public static Task<IEnumerable<Manufacturer>> GetManufacturerTable() =>

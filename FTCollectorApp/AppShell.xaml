@@ -80,8 +80,89 @@
         <controls:FlyoutFooter />
     </Shell.FlyoutFooter>
 
-    <TabBar>
+    <TabBar  x:Name="AllTab" >
+        <Tab Title="JOB AND CREW" x:Name="tabJobCrew2" 
+             Route="VerifyJobPage">
+            <Tab.Icon>
+                <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.User}"/>
+            </Tab.Icon>
 
+            <ShellContent Route="VerifyJobPage"
+                          Style="{StaticResource DomesticShell}"
+                          Title="JOB AND CREW"
+                          ContentTemplate="{DataTemplate views:VerifyJobPage}" >
+                <ShellContent.Icon>
+                    <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.UserVisor}"/>
+                </ShellContent.Icon>
+            </ShellContent>
+
+        </Tab>
+        <Tab Title="TAB-SITE" 
+             Route="TabbedSitePage">
+            <Tab.Icon>
+                <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.Wifi}"/>
+            </Tab.Icon>
+
+            <ShellContent Route="TabbedSitePage"
+                          Style="{StaticResource DomesticShell}"
+                          Title="SITE"
+                          ContentTemplate="{DataTemplate viewsite:TabbedSitePage}" >
+                <ShellContent.Icon>
+                    <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.Building}"/>
+                </ShellContent.Icon>
+            </ShellContent>
+
+        </Tab>
+
+        <Tab Title="SITEX" 
+             Route="MainSitePageX">
+            <Tab.Icon>
+                <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.Map}"/>
+            </Tab.Icon>
+
+            <ShellContent Route="Common Site"
+                          Style="{StaticResource DomesticShell}"
+                          Title="COMMON SITE"
+                          ContentTemplate="{DataTemplate viewsite:MainSitePageX}" >
+                <ShellContent.Icon>
+                    <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.Building}"/>
+                </ShellContent.Icon>
+            </ShellContent>
+
+        </Tab>
+
+        <Tab Title="SITE-OLD" 
+             Route="MainSitePage">
+            <Tab.Icon>
+                <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.Wifi}"/>
+            </Tab.Icon>
+
+            <ShellContent Route="BufferSitePage"
+                          Style="{StaticResource DomesticShell}"
+                          Title="BUILDING SITE"
+                          ContentTemplate="{DataTemplate viewsite:MainSitePage}" >
+                <ShellContent.Icon>
+                    <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.Building}"/>
+                </ShellContent.Icon>
+            </ShellContent>
+
+        </Tab>
     </TabBar>
 
     <FlyoutItem Title="+"
@@ -125,7 +206,28 @@
         <!-- disable for test - end -->
 
         <!-- obsolete from here -->
-        <!--<Tab Title="SITE" 
+        <Tab Title="TAB-SITE" 
+             Route="TabbedSitePage">
+            <Tab.Icon>
+                <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.Wifi}"/>
+            </Tab.Icon>
+
+            <ShellContent Route="TabbedSitePage"
+                          Style="{StaticResource DomesticShell}"
+                          Title="SITE"
+                          ContentTemplate="{DataTemplate viewsite:TabbedSitePage}" >
+                <ShellContent.Icon>
+                    <FontImageSource FontFamily="FontAwesome6Solid"
+                     Color="Black"                                
+                     Glyph="{x:Static fa:FontAwesomeIcons.Building}"/>
+                </ShellContent.Icon>
+            </ShellContent>
+
+        </Tab>        
+        
+        <Tab Title="SITEX" 
              Route="MainSitePageX">
             <Tab.Icon>
                 <FontImageSource FontFamily="FontAwesome6Solid"
@@ -165,11 +267,11 @@
                 </ShellContent.Icon>
             </ShellContent>
 
-        </Tab>-->
+        </Tab>
         <!-- obsolete untill here -->
         
-        
-        <Tab Title="Site" 
+        <!-- hide for test purpose - start -->
+        <!--<Tab Title="Site" 
              Route="TabbedSitePage">
             <Tab.Icon>
                 <FontImageSource FontFamily="FontAwesome6Solid"
@@ -210,7 +312,33 @@
             </ShellContent>
 
         </Tab>
-
+        <ShellContent Route="DuctPage"
+                      Style="{StaticResource MonkeysShell}"
+                      Title="DUCT"
+                      Icon="duct.png"
+                      ContentTemplate="{DataTemplate viewsite:DuctPage}" />
+        <ShellContent Route="ActiveDevicePage"
+                      Style="{StaticResource BearsShell}"
+                      Title="ACTIVE DEVICE"
+                      Icon="bear.png"
+                      ContentTemplate="{DataTemplate viewsite:ActiveDevicePage}" />
+        <ShellContent Route="RacksPage"
+                      Style="{StaticResource ElephantsShell}"
+                      Title="RACK"
+                      Icon="rack3.png"
+                      ContentTemplate="{DataTemplate viewsite:RacksPage}" />
+        <ShellContent Route="PortPage"
+                      Style="{StaticResource ElephantsShell}"
+                      Title="PORT"
+                      Icon="port.png"
+                      ContentTemplate="{DataTemplate viewsite:PortPage}" />-->        
+        
+        
+        
+        
+        <!-- hide for test purpose - end -->
+        
+        
         <!--<Tab Title="New Cable" 
              Route="FiberOpticCablePage">
             <Tab.Icon>
@@ -266,124 +394,9 @@
         -->
         
         
-        <ShellContent Route="DuctPage"
-                      Style="{StaticResource MonkeysShell}"
-                      Title="DUCT"
-                      Icon="duct.png"
-                      ContentTemplate="{DataTemplate viewsite:DuctPage}" />
-        <ShellContent Route="ActiveDevicePage"
-                      Style="{StaticResource BearsShell}"
-                      Title="ACTIVE DEVICE"
-                      Icon="bear.png"
-                      ContentTemplate="{DataTemplate viewsite:ActiveDevicePage}" />
-        <ShellContent Route="RacksPage"
-                      Style="{StaticResource ElephantsShell}"
-                      Title="RACK"
-                      Icon="rack3.png"
-                      ContentTemplate="{DataTemplate viewsite:RacksPage}" />
-        <ShellContent Route="PortPage"
-                      Style="{StaticResource ElephantsShell}"
-                      Title="PORT"
-                      Icon="port.png"
-                      ContentTemplate="{DataTemplate viewsite:PortPage}" />
 
-        <!-- Template for FlyoutHeader -->
-        <!-- Not required, as the FlyoutHeader is set above -->
-        <!--    <Shell.FlyoutHeaderTemplate>
-        <DataTemplate>
-            <Grid BackgroundColor="Black"
-                  HeightRequest="200">
-                <Image Aspect="AspectFill" 
-                       Source="xamarinstore.jpg" 
-                       Opacity="0.6" />
-                <Label Text="Animals" 
-                       TextColor="White" 
-                       FontAttributes="Bold" 
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center" />
-            </Grid>            
-        </DataTemplate>
-    </Shell.FlyoutHeaderTemplate>-->
 
-        <!-- Template for FlyoutFooter -->
-        <!-- Not required, as the FlyoutFooter is set above -->
-        <!--<Shell.FlyoutFooterTemplate>
-        <DataTemplate>
-            <StackLayout>
-                <Label Text="Xaminals"
-                       TextColor="GhostWhite"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center" />
-                <Label Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
-                       TextColor="GhostWhite"
-                       HorizontalOptions="Center" />
-            </StackLayout>
-        </DataTemplate>
-    </Shell.FlyoutFooterTemplate>-->
 
-        <!-- FlyoutContent -->
-        <!-- Not required, just an example -->
-        <!--<Shell.FlyoutContent>
-        <CollectionView BindingContext="{x:Reference shell}"
-                        IsGrouped="True"
-                        ItemsSource="{Binding FlyoutItems}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Label Text="{Binding Title}"
-                           TextColor="White"
-                           FontSize="Large" />
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </Shell.FlyoutContent>-->
-
-        <!-- Template for FlyoutContent -->
-        <!-- Not required, just an example -->
-        <!--<Shell.FlyoutContentTemplate>
-        <DataTemplate>
-            <CollectionView BindingContext="{x:Reference shell}"
-                            IsGrouped="True"
-                            ItemsSource="{Binding FlyoutItems}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Label Text="{Binding Title}"
-                               TextColor="White"
-                               FontSize="Large" />
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </DataTemplate>
-    </Shell.FlyoutContentTemplate>-->
-
-        <!-- Template each FlyoutItem -->
-        <!--    <Shell.ItemTemplate>
-        <DataTemplate>
-            <Grid ColumnDefinitions="0.2*,0.8*">
-                <Image Source="{Binding Icon}"
-                       Margin="5"
-                       HeightRequest="45" />
-                <Label Grid.Column="1"
-                       Text="{Binding Title}"
-                       FontAttributes="Italic"
-                       VerticalTextAlignment="Center" /> 
-            </Grid>
-        </DataTemplate>
-    </Shell.ItemTemplate>-->
-
-        <!-- Template each MenuItem -->
-        <!--    <Shell.MenuItemTemplate>
-        <DataTemplate>
-            <Grid ColumnDefinitions="0.2*,0.8*">
-                <Image Source="{Binding Icon}"
-                       Margin="5"
-                       HeightRequest="45" />
-                <Label Grid.Column="1"
-                       Text="{Binding Text}"
-                       FontAttributes="Italic"
-                       VerticalTextAlignment="Center" /> 
-            </Grid>
-        </DataTemplate>
-    </Shell.MenuItemTemplate>-->
     </FlyoutItem>
 
 

@@ -17,59 +17,17 @@
     <ContentPage.Content>
         <StackLayout>
 
-            <Label FontSize="Medium" VerticalOptions="Start" >
+            <Label Margin="20" 
+                HorizontalOptions="Center" FontSize="Large" VerticalOptions="Start" >
                 <MultiBinding StringFormat="{} Site : {0} - {1}">
                     <Binding Path="SelectedMajorType" />
                     <Binding Path="SelectedMinorType" />
                 </MultiBinding>
             </Label>
 
-            <!-- obsolete 
             <StackLayout Orientation="Horizontal" Padding="20">
-                <StackLayout Orientation="Vertical">
-                    <Button Text="{x:Static fa:FontAwesomeIcons.Building}" FontSize="60"
-                            HeightRequest="120" WidthRequest="120" BackgroundColor="{Binding BckgdBtnColorB}"
-                        FontFamily="FontAwesome6Solid"   Command ="{Binding SiteClickedCmd}"
-                            CommandParameter="Building" />
-                    <Label Text="Building" HorizontalOptions="Center"/>
-                </StackLayout>
-                <StackLayout Orientation="Vertical">
-                    <Button Text="{x:Static fa:FontAwesomeIcons.Building}" FontSize="60"
-                            HeightRequest="120" WidthRequest="120" BackgroundColor="{Binding BckgdBtnColorC}"
-                        FontFamily="FontAwesome6Solid" Command="{Binding SiteClickedCmd}" 
-                            CommandParameter="Cabinet" 
-                            />
-                    <Label Text="Cabinet" HorizontalOptions="Center"/>
-                </StackLayout>
-
-                <StackLayout Orientation="Vertical">
-                    <Button Text="{x:Static fa:FontAwesomeIcons.AddressBook}" FontSize="60"
-                            HeightRequest="120" WidthRequest="120" BackgroundColor="{Binding BckgdBtnColorPb}"
-                            FontFamily="FontAwesome6Regular" Command="{Binding SiteClickedCmd}"
-                            CommandParameter="PullBox" 
-                            />
-                    <Label Text="PullBox" HorizontalOptions="Center"/>
-                </StackLayout>
-
-                <StackLayout Orientation="Vertical">
-                    <Button Text="{x:Static fa:FontAwesomeIcons.BuildingFlag}" FontSize="60"
-                            HeightRequest="120" WidthRequest="120" BackgroundColor="{Binding BckgdBtnColorS}"
-                            FontFamily="FontAwesome6Solid" Command="{Binding SiteClickedCmd}"
-                            CommandParameter="Structure" 
-                            />
-                    <Label Text="Structure" HorizontalOptions="Center" />
-                </StackLayout>
-                <StackLayout Orientation="Vertical" Padding="10" HorizontalOptions="FillAndExpand">
-                    <Label Text="Detail Site Type*" HorizontalOptions="Start" FontSize="Medium"/>
-                    <Picker SelectedItem="{Binding SelectedMinorType, Mode=TwoWay}" Title="{Binding SelectedMajorType, StringFormat='Select Detail Site : {0} here'}"
-                            ItemsSource="{Binding MinorSiteList}" FontSize="Medium" />
-                </StackLayout>
-
-            </StackLayout>
-            -->
-            <StackLayout Orientation="Horizontal" Padding="20">
-                <StackLayout Orientation="Vertical" Padding="10" HorizontalOptions="FillAndExpand">
-                    <Label Text="Site Type" HorizontalOptions="Start" FontSize="Medium"/>
+                <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                    <Label Text="Major Site Type" HorizontalOptions="Start" FontSize="Medium"/>
                     <Picker SelectedItem="{Binding SelectedMajorType, Mode=TwoWay}" Title="{Binding SelectedMajorType, StringFormat='Select Detail Site : {0} here'}" FontSize="Medium">
                         <Picker.Items>
                             <x:String>Building</x:String>
@@ -81,14 +39,14 @@
                     </Picker>
                 </StackLayout>
 
-                <StackLayout Orientation="Vertical" Padding="10" HorizontalOptions="FillAndExpand">
-                <Label Text="Detail Site Type*" HorizontalOptions="Start" FontSize="Medium"/>
+                <StackLayout Orientation="Vertical"  HorizontalOptions="FillAndExpand">
+                <Label Text="Minor Site Type*" HorizontalOptions="Start" FontSize="Medium"/>
                 <Picker SelectedItem="{Binding SelectedMinorType, Mode=TwoWay}" Title="{Binding SelectedMajorType, StringFormat='Select Detail Site : {0} here'}"
                             ItemsSource="{Binding MinorSiteList}" FontSize="Medium" />
             </StackLayout>
             </StackLayout>
 
-            <Grid Padding="20,10,20,10" ColumnDefinitions="*,*,*,*" HeightRequest="350" >
+            <Grid Padding="20,10,20,10" ColumnDefinitions="*,*,*,*" HeightRequest="450" >
                 <Label Text="Enter PC tag" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Medium"/>
                 <Entry Grid.Column="1" Placeholder="Number " 
                        VerticalOptions="Center" 
