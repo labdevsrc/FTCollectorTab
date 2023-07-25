@@ -8,7 +8,7 @@ using SQLite;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Xamarin.Forms;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using FTCollectorApp.Model.AWS;
 using FTCollectorApp.Model;
 using System.Web;

@@ -11,7 +11,7 @@ using FTCollectorApp.View.SitesPage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FTCollectorApp.Model;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using Newtonsoft.Json;
 using FTCollectorApp.View;
 using FTCollectorApp.Model.SiteSession;

@@ -2,7 +2,7 @@
 using Amazon.S3;
 using Amazon.S3.Transfer;
 using FTCollectorApp.Model;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using FTCollectorApp.View.SitesPage;
 using System;
 using System.Collections.Generic;

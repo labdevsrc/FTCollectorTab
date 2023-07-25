@@ -13,7 +13,7 @@ using FTCollectorApp.View;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 
 namespace FTCollectorApp.ViewModel
 {

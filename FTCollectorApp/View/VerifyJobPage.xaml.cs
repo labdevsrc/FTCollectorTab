@@ -17,7 +17,7 @@ using Plugin.Connectivity;
 using FTCollectorApp.View;
 using FTCollectorApp.View.SitesPage;
 
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using Rg.Plugins.Popup.Services;
 using FTCollectorApp.Utils;
 using FTCollectorApp.ViewModel;
@@ -48,7 +48,7 @@ namespace FTCollectorApp.View
 
                 Console.WriteLine();
 
-                /*ShellSection shell_section = new ShellSection
+                ShellSection shell_section = new ShellSection
                 {
                     Title = "SITE",
                     Icon = "building.png"
@@ -56,10 +56,10 @@ namespace FTCollectorApp.View
 
                 shell_section.Items.Add(new ShellContent() {
                     //Content = new MainSitePageX(),
-                    Content = new CommonsiteVM(),
+                    Content = new CreateSitewQuestion1(),
 
                 });
-                AppShell.mytabbar.Items.Add(shell_section);*/
+                AppShell.mytabbar.Items.Add(shell_section);
 
 
                 Console.WriteLine();

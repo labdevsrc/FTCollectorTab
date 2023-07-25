@@ -1,6 +1,6 @@
 ﻿using FTCollectorApp.Model;
 using FTCollectorApp.Model.Reference;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using FTCollectorApp.ViewModel;
 using SQLite;
 using System;

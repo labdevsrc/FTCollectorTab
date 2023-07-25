@@ -10,7 +10,7 @@ using System.Web;
 using FTCollectorApp.Model;
 using System.Linq;
 using System.Windows.Input;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using Xamarin.Forms;
 using System.Threading.Tasks;
 using FTCollectorApp.View;

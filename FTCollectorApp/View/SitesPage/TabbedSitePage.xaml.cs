@@ -8,7 +8,7 @@ using Amazon;
 using Amazon.S3;
 using Amazon.S3.Transfer;
 using Amazon.S3.Model;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using FTCollectorApp.Model;

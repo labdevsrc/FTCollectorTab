@@ -11,7 +11,7 @@ using System.Web;
 using FTCollectorApp.Model;
 using Xamarin.Forms;
 using System.Windows.Input;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using Newtonsoft.Json;
 using FTCollectorApp.View;
 using FTCollectorApp.Model.AWS;

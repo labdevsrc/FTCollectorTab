@@ -182,6 +182,9 @@
     <EmbeddedResource Update="View\SitesPage\CreateSite.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="View\SitesPage\CreateSitewQuestion1.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="View\SitesPage\DuctColorCodePopUp.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -286,6 +289,12 @@
     </Compile>
     <Compile Update="View\SitesPage\BdSiteNew.xaml.cs">
       <DependentUpon>BdSiteNew.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="View\SitesPage\CabinetQuestions2.xaml.cs">
+      <DependentUpon>CabinetQuestions2.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="View\SitesPage\BuildingQuestions2.xaml.cs">
+      <DependentUpon>BuildingQuestions2.xaml</DependentUpon>
     </Compile>
     <Compile Update="View\SitesPage\MainSitePageX.xaml.cs">
       <DependentUpon>MainSitePageX.xaml</DependentUpon>

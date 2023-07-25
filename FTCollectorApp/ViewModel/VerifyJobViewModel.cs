@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using FontAwesome;
 using FTCollectorApp.Model;
 using FTCollectorApp.Model.Reference;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using FTCollectorApp.Utils;
 using FTCollectorApp.View;
 using FTCollectorApp.View.BeginWork;
@@ -1016,6 +1016,11 @@ namespace FTCollectorApp.ViewModel
         }
 
 
+        async void  InvokeSitePage()
+        {
+            await Shell.Current.GoToAsync("CreateSitewQuestion1");
+        }
+
         public VerifyJobViewModel()
         {
             bool SomethingWrong = false;
@@ -1039,6 +1044,30 @@ namespace FTCollectorApp.ViewModel
                 OnPropertyChanged(nameof(JobPhaseDetailList));
                 CrewLeader = Session.crew_leader;
                 Console.WriteLine();
+
+                //MessagingCenter.Subscribe<VerifyJobViewModel>(this, "OpenSite", (sender) =>
+                //{
+
+                    Console.WriteLine();
+
+                    ShellSection shell_section = new ShellSection
+                    {
+                        Title = "SITE",
+                        Icon = "building.png"
+                    };
+
+                    shell_section.Items.Add(new ShellContent()
+                    {
+                        //Content = new MainSitePageX(),
+                        Content = new CreateSitewQuestion1(),
+
+                    });
+                    AppShell.mytabbar.Items.Add(shell_section);
+
+
+                    Console.WriteLine();
+                //});
+
             });
 
 
@@ -1178,7 +1207,10 @@ namespace FTCollectorApp.ViewModel
                     EnableCrewUpdateMenuButton();
 
                     // PUT HERE : Create SITE as Tab Page
-                    MessagingCenter.Send<VerifyJobViewModel>(this, "OpenSitePage");
+                    //MessagingCenter.Send<VerifyJobViewModel>(this, "OpenCreateSiteQuestions1");
+                    //MessagingCenter.Send<VerifyJobViewModel>(this, "OpenCreateSiteQuestions1");
+                    InvokeSitePage();
+
 
                 }
 

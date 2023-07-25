@@ -6,7 +6,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FTCollectorApp.Model;
 using FTCollectorApp.Model.Reference;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using FTCollectorApp.View;
 using Newtonsoft.Json;
 using SQLite;

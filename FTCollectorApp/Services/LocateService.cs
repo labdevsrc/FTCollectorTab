@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 
-namespace FTCollectorApp.Service
+namespace FTCollectorApp.Services
 {
     public static class LocateService
     {

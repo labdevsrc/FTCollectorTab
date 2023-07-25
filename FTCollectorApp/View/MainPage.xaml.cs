@@ -1,5 +1,5 @@
 ﻿/////////
-/// WARNING !  This code-behind MainAge.xaml.cs is obsolete
+/// WARNING !  This code-behind MainPage.xaml.cs is obsolete
 /// Already replace with LoginViewModel.cs
 ///////////////////////
 
@@ -18,7 +18,7 @@ using System.Collections.ObjectModel;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Plugin.Connectivity;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using Rg.Plugins.Popup.Services;
 using FTCollectorApp.View.TraceFiberPages;
 using FTCollectorApp.View.SitesPage;

@@ -17,6 +17,8 @@ namespace FTCollectorApp
         
 
         public static string BaseUrl = TestingDB;
+        public const string InsertSiteQuestions1 = "SaveQuestion1.php";
+        public const string UpdateSiteQuestionPage2 = "SaveQuestion2.php";
         public const string GetStartTimeEvent18 = "event18_getStartTime.php";
         public const string InsertTimeSheetUrl = "InsertTimeSheet.php";
         public const string InsertJobEquipmentUrl = "xPostJobEquipment.php";

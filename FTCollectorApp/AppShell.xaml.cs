@@ -50,6 +50,10 @@ namespace FTCollectorApp
                 Routes.Add(nameof(FiberInstallTabPage), typeof(FiberInstallTabPage));
                 Routes.Add(nameof(TabbedSitePage), typeof(TabbedSitePage));
 
+
+                Routes.Add(nameof(CreateSitewQuestion1), typeof(CreateSitewQuestion1));
+                Routes.Add(nameof(BuildingQuestions2), typeof(BuildingQuestions2));
+
                 Routes.Add(nameof(MainPageP), typeof(MainPageP)); //Portrait of SplashDownloadPage, Tab name : MainPAge
                 //Routes.Add(nameof(MainSitePageX), typeof(MainSitePageX)); obsolete - nolonger use
 

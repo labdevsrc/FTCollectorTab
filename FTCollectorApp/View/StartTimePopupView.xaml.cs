@@ -8,7 +8,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using FTCollectorApp.Model;
 using System.Net.Http;
 using Xamarin.Essentials;

@@ -1,4 +1,4 @@
-﻿using FTCollectorApp.Service;
+﻿using FTCollectorApp.Services;
 using Rg.Plugins.Popup.Services;
 using System;
 using Xamarin.Forms.Xaml;

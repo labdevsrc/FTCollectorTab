@@ -15,7 +15,7 @@ using Xamarin.Forms;
 using FTCollectorApp.Model;
 using FTCollectorApp.Model.Reference;
 using FTCollectorApp.View.SitesPage;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using FTCollectorApp.View.Utils;
 using FTCollectorApp.View.SitesPage.Fiber;
 

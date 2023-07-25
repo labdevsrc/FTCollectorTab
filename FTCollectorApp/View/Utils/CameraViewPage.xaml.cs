@@ -16,7 +16,7 @@ using FTCollectorApp.Utils;
 using PCLStorage;
 using Amazon.S3.Model;
 using Amazon.S3;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 
 namespace FTCollectorApp.View.Utils
 {

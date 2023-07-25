@@ -107,6 +107,7 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ForegroundService.cs" />
     <Compile Include="Services\LongRunningTaskService.cs" />
     <Compile Include="SettingsServiceAndroid.cs" />
     <Compile Include="TextToSpeechImplementation.cs" />
@@ -115,12 +116,6 @@
     <AndroidAsset Include="Assets\FontAwesome5Brands.otf" />
     <AndroidAsset Include="Assets\FontAwesome5Solid.otf" />
     <AndroidAsset Include="Assets\FontAwesome5Regular.otf" />
-    <None Include="..\..\KULIAH\VULNERABILITY\Mobile_App_Security_Checklist_en.xlsx">
-      <Link>Mobile_App_Security_Checklist_en.xlsx</Link>
-    </None>
-    <None Include="..\..\KULIAH\VULNERABILITY\Report Test Vulnerability_MSAVS_Vicky.pptx">
-      <Link>Report Test Vulnerability_MSAVS_Vicky.pptx</Link>
-    </None>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="Properties\AndroidManifest.xml" />
@@ -201,7 +196,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties XamarinHotReloadWrongLinkerErrorInfoBarFTCollectorAppAndroidHideInfoBar="True" XamarinHotReloadDebuggerTimeoutExceptionFTCollectorAppAndroidHideInfoBar="True" />
+      <UserProperties XamarinHotReloadDebuggerTimeoutExceptionFTCollectorAppAndroidHideInfoBar="True" XamarinHotReloadWrongLinkerErrorInfoBarFTCollectorAppAndroidHideInfoBar="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -11,7 +11,7 @@ using System.Web;
 using System.Linq;
 using System.Windows.Input;
 using Xamarin.Forms;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using FTCollectorApp.View.SitesPage;
 using Newtonsoft.Json;
 using Rg.Plugins.Popup.Services;

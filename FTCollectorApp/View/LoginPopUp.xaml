@@ -41,9 +41,9 @@
                         <Button BackgroundColor="Green" Text="LOGOUT" Command="{Binding LogoutCommand}"  IsVisible="{Binding IsLogoutBtnVisible}"
                                 HorizontalOptions="Center" />
 
-                        <Button Text="DB Download"   Command="{Binding DownloadTablesCommand}" 
+            <Button Text="RETRY Download DB"  Command="{Binding DownloadTablesCommand}" 
                                 IsVisible="{Binding IsDownloadBtnVisible, Mode=TwoWay}"  HorizontalOptions="Center" BackgroundColor="Green" />
-                        <Label VerticalOptions="End" HorizontalOptions="Center" Text="{Binding ApkVersion}"/>
+            <Label VerticalOptions="End" HorizontalOptions="Center" Text="{Binding ApkVersion}"/>
 
 
                     </StackLayout>

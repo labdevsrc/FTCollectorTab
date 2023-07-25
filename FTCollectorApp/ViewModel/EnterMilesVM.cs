@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FTCollectorApp.Model;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;

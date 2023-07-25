@@ -11,5 +11,6 @@ namespace FTCollectorApp.Model.Reference
         public string? d { get; set; }
         string? actnumber { get; set; }
         string? postion { get; set; }
+        public int? max_id { get; set; }
     }
 }

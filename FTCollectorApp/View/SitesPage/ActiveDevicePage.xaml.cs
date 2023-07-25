@@ -13,7 +13,7 @@ using Xamarin.Forms.Xaml;
 using SQLite;
 using FTCollectorApp.View.Utils;
 using System.Web;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using System.Net;
 using CommunityToolkit.Mvvm.ComponentModel;
 

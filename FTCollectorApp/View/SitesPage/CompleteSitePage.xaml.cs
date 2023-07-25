@@ -14,7 +14,7 @@ using FTCollectorApp.Model;
 using PCLStorage;
 using Xamarin.CommunityToolkit.UI.Views;
 using Amazon.S3.Model;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 
 namespace FTCollectorApp.View.SitesPage
 {

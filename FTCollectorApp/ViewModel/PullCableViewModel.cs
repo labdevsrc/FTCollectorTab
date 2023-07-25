@@ -11,7 +11,7 @@ using FTCollectorApp.Model;
 using System.Linq;
 using System.Windows.Input;
 using Xamarin.Forms;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 
 namespace FTCollectorApp.ViewModel
 {

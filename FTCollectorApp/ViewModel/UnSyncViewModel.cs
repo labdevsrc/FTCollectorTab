@@ -7,7 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FTCollectorApp.Model.AWS;
 using FTCollectorApp.Model.Reference;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using SQLite;
 using Xamarin.Forms;
 

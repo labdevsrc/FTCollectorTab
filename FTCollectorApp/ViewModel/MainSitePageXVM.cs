@@ -12,7 +12,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using FTCollectorApp.Model;
 using FTCollectorApp.View.Utils;
 using SQLite;

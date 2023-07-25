@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using FTCollectorApp.View.SitesPage;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using FTCollectorApp.View;
 using System.Linq;
 

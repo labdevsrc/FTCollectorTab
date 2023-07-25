@@ -1,4 +1,4 @@
-﻿using FTCollectorApp.Service;
+﻿using FTCollectorApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

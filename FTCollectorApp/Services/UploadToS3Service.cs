@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FTCollectorApp.Service
+namespace FTCollectorApp.Services
 {
     class UploadToS3Service
     {

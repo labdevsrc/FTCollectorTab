@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FTCollectorApp.Model;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using FTCollectorApp.View;
 using FTCollectorApp.View.SitesPage;
 using FTCollectorApp.View.Utils;

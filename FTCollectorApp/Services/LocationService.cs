@@ -12,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 
-namespace FTCollectorApp.Service
+namespace FTCollectorApp.Services
 {
     public static class LocationService
     {

@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using FTCollectorApp.Model;
 using FTCollectorApp.Model.AWS;
 using FTCollectorApp.Model.Reference;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using FTCollectorApp.View;
 using FTCollectorApp.View.SyncPages;
 using FTCollectorApp.View.TraceFiberPages;

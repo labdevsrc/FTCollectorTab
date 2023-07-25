@@ -7,7 +7,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FTCollectorApp.Model;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using FTCollectorApp.ViewModel;
 using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;

@@ -10,7 +10,7 @@ using Xamarin.Forms.Xaml;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Input;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using FTCollectorApp.Model;
 using FTCollectorApp.ViewModel;
 

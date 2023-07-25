@@ -1,5 +1,5 @@
 ﻿using FTCollectorApp.Model;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using Newtonsoft.Json;
 using Plugin.Connectivity;
 using SQLite;

@@ -6,7 +6,7 @@ using System.Text;
 using SQLite;
 using System.Web;
 using FTCollectorApp.Model;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using System.Windows.Input;
 using Xamarin.Forms;
 using System.Threading.Tasks;

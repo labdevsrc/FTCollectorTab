@@ -9,7 +9,7 @@ using Xamarin.Forms;
 using System.Windows.Input;
 using FTCollectorApp.Model;
 using FTCollectorApp.Model.Reference;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using SQLite;
 using System.Collections.ObjectModel;
 

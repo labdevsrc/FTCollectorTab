@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:fa="clr-namespace:FontAwesome"               
+             xmlns:local="clr-namespace:FTCollectorApp.Utils"         
+                xmlns:xct="http://xamarin.com/schemas/2020/toolkit"              
+             x:Class="FTCollectorApp.View.SitesPage.CreateSitewQuestion1">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem  Command="{Binding CaptureCommand}" IconImageSource="cam_white.png" 
+                 Order="Primary"
+                 Priority="0" />
+        <ToolbarItem  Text="COMPLETE" Command="{Binding CompleteSiteCommand}" />
+        <ToolbarItem  Text="CREATE" Command="{Binding CreteSiteCommand}" />                
+    </ContentPage.ToolbarItems>    
+    <ContentPage.Content>
+
+        <StackLayout Margin="20">
+            <StackLayout HeightRequest="600">
+                <Label HorizontalOptions="Center" FontSize="Large" VerticalOptions="Start" Text="Create Site" />
+                <Grid Padding="5" ColumnDefinitions="2*,1.5*,0.5*,*,*,*" >
+                    <Label Text="Major Site Type" HorizontalOptions="Start" FontSize="Medium" VerticalOptions="Center"/>
+                    <Picker Grid.Column="1" SelectedItem="{Binding SelectedMajorType, Mode=TwoWay}" FontSize="Medium">
+                        <Picker.Items>
+                            <x:String>Building</x:String>
+                            <x:String>Cabinet</x:String>
+                            <x:String>PullBox</x:String>
+                            <x:String>Structure</x:String>
+                            <x:String>Building</x:String>
+                        </Picker.Items>
+                    </Picker>
+
+                    <Label Grid.Row="1" Text="Enter PC tag" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Medium"/>
+                    <Entry Grid.Row="1" Grid.Column="1" Placeholder="Number " 
+                       VerticalOptions="Center" 
+                       Text="{Binding TagNumber, Mode=TwoWay}"  FontSize="Medium"/>
+                    <Label Grid.Row="2"  Text="Retype PC tag" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Medium"/>
+                    <Entry Grid.Row="2" Grid.Column="1" Placeholder="Re-Enter TagNumber" 
+                       VerticalOptions="Center"
+                       Text="{Binding ReEnterTagNumber, Mode=TwoWay}" FontSize="Medium" />
+                    <!--<Label Grid.Column="3" Text="{Binding ReEnterStatus}" HorizontalOptions="End" FontSize="Medium"/>-->
+                    <Button Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3" Text="Record GPS" Command="{Binding RecordGPSCommand}" />
+                    <Button Grid.Row="1" Grid.Column="2"  Text="{x:Static fa:FontAwesomeIcons.X}" 
+                                        FontFamily="FontAwesome6Solid" Command="{Binding ResetSiteCommand}" />
+                    <Label Grid.Row="3" Text="Site Type" HorizontalOptions="Start" FontSize="Medium" VerticalOptions="Center"/>
+                    <Picker Grid.Row="3" Grid.Column="1" SelectedItem="{Binding SelectedMinorType, Mode=TwoWay}" 
+                    ItemsSource="{Binding MinorSiteList}" FontSize="Medium" />
+                </Grid>
+            </StackLayout>
+            <ScrollView>
+                <StackLayout IsEnabled="{Binding IsDisplayQuestionList}" HeightRequest="1500">
+
+                <BoxView Color="Gray" HeightRequest="3" HorizontalOptions="Fill" />
+
+                <Label HorizontalOptions="Center" FontSize="Large" VerticalOptions="Start" >
+                    <MultiBinding StringFormat="{} {0} - {1}">
+                        <Binding Path="SelectedMajorType" />
+                        <Binding Path="SelectedMinorType" />
+                    </MultiBinding>
+                </Label>
+          
+                <Label Text="Enter owners tag number" HorizontalOptions="Start"/>
+                <local:BorderEntry Text="{Binding OwnerTagNumber, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
+                <Label Text="Enter site name" HorizontalOptions="Start"/>
+                <local:BorderEntry Text="{Binding SiteName, Mode=TwoWay}"  HorizontalOptions="FillAndExpand" />
+                <Label Text="Enter Location" HorizontalOptions="Start"/>
+                <local:BorderEntry Text="{Binding LocationName, Mode=TwoWay}"  HorizontalOptions="FillAndExpand" />                
+                <Grid Padding="0,5,10,5" RowDefinitions="*,*,*,*" ColumnDefinitions="*,*,*">
+                    <Label Text="Lane closure required" VerticalOptions="Center"  />
+                    <Switch Grid.Column="1"  IsToggled="{Binding IsLaneClosure, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" />
+                    <Label Text="In a clear Zone?" Grid.Row="1" VerticalOptions="Center" />
+                    <Switch Grid.Column="1" Grid.Row="1" IsToggled="{Binding IsSiteClearZone, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start"  />
+
+                    <Label Text="Bucket Truck" Grid.Row="2"  VerticalOptions="Center" />
+                    <Switch Grid.Column="1" Grid.Row="2"  IsToggled="{Binding IsBucketTruck, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" />
+
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*">
+                    <Label Text="Choose a roadway"/>
+                    <local:BorderEntry Grid.Row="1" Text="{Binding SearchRoadway, Mode=TwoWay}" Placeholder="search roadway" PlaceholderColor="Gray"/>
+                    <Label Grid.Column="1" Text="Choose an intersection" />
+                    <Picker Grid.Column="1" Grid.Row="1" Title="Select Intersection" ItemsSource="{Binding IntersectionList}" 
+                            ItemDisplayBinding="{Binding IntersectionName}" SelectedItem="{Binding SelectedIntersection, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+                </Grid>
+
+                <StackLayout HeightRequest="150"  IsVisible="{Binding IsSearchingRoadway}" >
+                    <ListView  ItemsSource="{Binding RoadwayList}" SelectedItem="{Binding SelectedRoadway, Mode=TwoWay}"                     
+                        BackgroundColor="LightGray" >
+                    <ListView.Behaviors>
+                        <xct:EventToCommandBehavior EventName="ItemSelected" Command="{Binding RoadwayItemSelectedCommand}" />
+                    </ListView.Behaviors>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextCell Text="{Binding RoadwayName}"  />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    </ListView>
+                </StackLayout>
+                
+                <Grid ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*">
+                    <Label Text="Major roadway"/>
+                    <local:BorderEntry Grid.Row="1" Text="{Binding SearchMajorRoadway, Mode=TwoWay}" Placeholder="search roadway" PlaceholderColor="Gray"/>
+                    <Label Grid.Column="1" Text="Minor roadway" />
+                    <local:BorderEntry Grid.Row="1" Grid.Column="1" Text="{Binding SearchMinorRoadway, Mode=TwoWay}" Placeholder="search roadway" PlaceholderColor="Gray"/>
+                </Grid>
+
+                <StackLayout HeightRequest="150"  IsVisible="{Binding IsSearchingMajorRoadway}" >
+                    <ListView WidthRequest="50" HeightRequest="50" ItemsSource="{Binding RoadwayList}" SelectedItem="{Binding SelectedMajorRoadway, Mode=TwoWay}"                     
+                    BackgroundColor="LightGray" >
+                        <ListView.Behaviors>
+                            <xct:EventToCommandBehavior EventName="ItemSelected" Command="{Binding MajorRoadwayItemSelectedCommand}" />
+                        </ListView.Behaviors>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextCell Text="{Binding RoadwayName}"  />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackLayout>
+
+                <StackLayout HeightRequest="150"  IsVisible="{Binding IsSearchingMinorRoadway}" >
+                    <ListView WidthRequest="50" HeightRequest="50" ItemsSource="{Binding RoadwayList}" SelectedItem="{Binding SelectedMinorRoadway, Mode=TwoWay}"                     
+                    BackgroundColor="LightGray" IsVisible="{Binding IsSearchingMinorRoadway}" >
+                        <ListView.Behaviors>
+                            <xct:EventToCommandBehavior EventName="ItemSelected" Command="{Binding MinorRoadwayItemSelectedCommand}" />
+                        </ListView.Behaviors>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextCell Text="{Binding RoadwayName}"  />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackLayout>
+
+
+                <Label Text="Enter distance to Tra-lane"/>
+                <local:BorderEntry Text="{Binding DistanceEOTL, Mode=TwoWay}"/>                        
+
+
+                <Grid ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*,0.1*,0.2*,0.1*,0.2*">
+                    <Label Text="Direction of Travel"/>
+                        <Picker Grid.Row="1"   ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}" 
+                        SelectedItem="{Binding SelectedTravelDirection, Mode=TwoWay}"   HorizontalOptions="FillAndExpand"/>
+                    <Label Grid.Column="1" Text="Orientation"/>
+                        <Picker Grid.Row="1" Grid.Column="1" ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}"
+                        SelectedItem="{Binding SelectedOrientation, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
+                    <Label Grid.Row="2" Text="Material"/>
+                        <Picker Grid.Row="3"  ItemsSource="{Binding MaterialCodeList}" ItemDisplayBinding="{Binding CodeDescription}"
+                            SelectedItem="{Binding SelectedMatCode,Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
+                    <Label Grid.Row="2" Grid.Column="1" Text="Mounting"/>
+                    <Picker Grid.Row="3" Grid.Column="1" ItemsSource="{Binding MountingTypeList}" 
+                        ItemDisplayBinding="{Binding MountingType}" 
+                        SelectedItem="{Binding SelectedMounting, Mode=TwoWay}"
+                        HorizontalOptions="FillAndExpand"/>
+
+                    <Label Grid.Row="4"  Text="Manufacturer"/>
+                    <local:BorderEntry Grid.Row="5" Text="{Binding SearchManufacturer, Mode=TwoWay}" Placeholder="type manufacturer" PlaceholderColor="Gray"/>
+
+                    <Label Grid.Row="4" Grid.Column="1" Text="Model"/>
+                    <Picker Grid.Column="1" Grid.Row="5" Title="Select model" ItemsSource="{Binding ModelDetailList}" 
+                        ItemDisplayBinding="{Binding ModelNumber}"
+                                SelectedItem="{Binding SelectedModelDetail, Mode=TwoWay}"
+                            HorizontalOptions="FillAndExpand" />
+                </Grid>
+                <StackLayout IsVisible="{Binding IsSearching}" HeightRequest="150">
+                    <ListView  ItemsSource="{Binding ManufacturerList}" SelectedItem="{Binding SelectedManuf, Mode=TwoWay}"                     
+                    BackgroundColor="LightGray" >
+                        <ListView.Behaviors>
+                            <xct:EventToCommandBehavior EventName="ItemSelected" Command="{Binding ManufacturerItemSelectedCommand}" />
+                        </ListView.Behaviors>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextCell Text="{Binding ManufName}"  />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackLayout>
+                
+                    <local:BorderColorEntry Text="{Binding SelectedModelDetail.ModelDescription}"/>
+                <Grid Padding="0,5,10,5" RowDefinitions="0.5*,*" ColumnDefinitions="*,*,*">
+                    <Label Grid.Row="0" Grid.Column="0"  Text="Height"/>
+                    <Label Grid.Row="0" Grid.Column="1" Text="Depth"/>
+                    <Label Grid.Row="0" Grid.Column="2" Text="Width"/>
+                    <local:BorderEntry Grid.Row="1" Grid.Column="0" Text="{Binding SelectedModelDetail.height}" IsEnabled="False"/>
+                    <local:BorderEntry Grid.Row="1" Grid.Column="1" Text="{Binding SelectedModelDetail.depth}" IsEnabled="False"/>
+                    <local:BorderEntry Grid.Row="1" Grid.Column="2" Text="{Binding SelectedModelDetail.width}" IsEnabled="False"/>
+                </Grid>
+                    <!-- Height, Dept, Width-->
+                <!--<Grid Padding="0,5,10,5" RowDefinitions="0.5*,*" ColumnDefinitions="*,*,*">
+                    <Label Grid.Row="0" Grid.Column="0"  Text="Height" IsVisible="{Binding IsheightVisible}"/>
+                    <Label Grid.Row="0" Grid.Column="1" Text="Depth" />
+                    <Label Grid.Row="0" Grid.Column="2" Text="Width"/>
+                    <local:BorderEntry Grid.Row="1" Grid.Column="0" Text="{Binding Height, Mode=TwoWay}" IsVisible="{Binding IsheightVisible}"/>
+                    <local:BorderEntry Grid.Row="1" Grid.Column="1" Text="{Binding Depth, Mode=TwoWay}"/>
+                    <local:BorderEntry Grid.Row="1" Grid.Column="2" Text="{Binding Width, Mode=TwoWay}"/>
+                </Grid>-->
+
+                <Label Text="Notes and comment"/>
+                <local:BorderEntry Text="{Binding Notes, Mode=TwoWay}" HeightRequest="200" Placeholder="Notes"/>
+
+
+                <Button Text="Save and Continue #2 " HorizontalOptions="FillAndExpand"  Command="{Binding SaveContinueCommand}"/>
+
+                </StackLayout>
+            </ScrollView>
+
+        </StackLayout>
+
+    </ContentPage.Content>
+</ContentPage>

@@ -12,7 +12,7 @@ using System.Collections.ObjectModel;
 using FTCollectorApp.Model.Reference;
 using FTCollectorApp.View.Utils;
 using FTCollectorApp.Model;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using Rg.Plugins.Popup.Services;
 using System.Windows.Input;
 

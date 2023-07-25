@@ -101,7 +101,7 @@
             </ShellContent>
 
         </Tab>
-        <Tab Title="TAB-SITE" 
+        <!--<Tab Title="TAB-SITE" 
              Route="TabbedSitePage">
             <Tab.Icon>
                 <FontImageSource FontFamily="FontAwesome6Solid"
@@ -143,18 +143,18 @@
 
         </Tab>
 
-        <Tab Title="SITE-OLD" 
-             Route="MainSitePage">
+        <Tab Title="SITE-NEW" 
+             Route="CreateSitewQuestion1">
             <Tab.Icon>
                 <FontImageSource FontFamily="FontAwesome6Solid"
                      Color="Black"                                
                      Glyph="{x:Static fa:FontAwesomeIcons.Wifi}"/>
             </Tab.Icon>
 
-            <ShellContent Route="BufferSitePage"
+            <ShellContent Route="CreateSitewQuestion1"
                           Style="{StaticResource DomesticShell}"
                           Title="BUILDING SITE"
-                          ContentTemplate="{DataTemplate viewsite:MainSitePage}" >
+                          ContentTemplate="{DataTemplate viewsite:CreateSitewQuestion1}" >
                 <ShellContent.Icon>
                     <FontImageSource FontFamily="FontAwesome6Solid"
                      Color="Black"                                
@@ -162,7 +162,7 @@
                 </ShellContent.Icon>
             </ShellContent>
 
-        </Tab>
+        </Tab>-->
     </TabBar>
 
     <FlyoutItem Title="+"

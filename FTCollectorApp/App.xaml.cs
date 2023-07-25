@@ -1,5 +1,5 @@
 ﻿using FTCollectorApp.Model;
-using FTCollectorApp.Service;
+using FTCollectorApp.Services;
 using FTCollectorApp.View;
 using System;
 using System.Collections;
