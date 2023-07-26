@@ -200,7 +200,14 @@
 
 
                 <Button Text="Save and Continue #2 " HorizontalOptions="FillAndExpand"  Command="{Binding SaveContinueCommand}"/>
-
+                <Button Text="Record Duct" HorizontalOptions="FillAndExpand" Command="{Binding ShowDuctPageCommand}"/>
+                <Button Text="Fiber"  x:Name ="btnFiberBtn" HorizontalOptions="FillAndExpand" Command="{Binding FiberBtnCommand}" />
+                <Button Text="Connect Devices" IsEnabled="False" HorizontalOptions="FillAndExpand" />
+                <Button Text="Record Racks"  x:Name ="btnRecordRack" HorizontalOptions="FillAndExpand" Command="{Binding ShowRackPageCommand}" />
+                <Button Text="Active Device" x:Name ="btnActiveDevice"  HorizontalOptions="FillAndExpand" Command="{Binding ShowActiveDevicePageCommand}"/>
+                <Button Text="Return to Main Menu" HorizontalOptions="FillAndExpand"  Command="{Binding ReturnToMainCommand}"/>
+                    
+                    
                 </StackLayout>
             </ScrollView>
 

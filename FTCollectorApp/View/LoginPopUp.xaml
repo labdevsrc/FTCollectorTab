@@ -18,32 +18,32 @@
                          AbsoluteLayout.LayoutFlags="PositionProportional"
                          AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
                             <ActivityIndicator IsRunning="{Binding IsBusy, Mode=TwoWay}"  Color="Orange" />
-                            <Label x:Name="txtLoading" Text="{Binding LoadingText}" HorizontalOptions="Center" TextColor="Black"/>
-                        </StackLayout>
+                    </StackLayout>
+                    <Label Text="{Binding LoadingText}" HorizontalOptions="Center" TextColor="Black"/>
 
-                        <StackLayout IsVisible="{Binding IsLoginVisible}" WidthRequest="400"  HorizontalOptions="CenterAndExpand" >
-                            <Entry Placeholder="Email or Username" Keyboard="Email" Text="{Binding EmailText, Mode=TwoWay}"
-                                FontSize="Large"/>
-                            <Entry Placeholder="Password" 
-                                    Text="{Binding PasswordText, Mode=TwoWay}"
-                                    IsPassword="true" FontSize="Large"/>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                </Grid.ColumnDefinitions>
-                                <local:BorderColorEntry Margin="0,0,5,0" Grid.Column="0" Text="{Binding FirstName, Mode=TwoWay}" IsEnabled="False"/>
-                                <local:BorderColorEntry Margin="5,0,0,0" Grid.Column="1" Text="{Binding LastName, Mode=TwoWay}" IsEnabled="False" />
-                            </Grid>
-                            <Button BackgroundColor="Blue" Text="LOGIN" Command="{Binding LoginCommand}"  
-                                HorizontalOptions="Center" />
-                        </StackLayout>
-                        <Button BackgroundColor="Green" Text="LOGOUT" Command="{Binding LogoutCommand}"  IsVisible="{Binding IsLogoutBtnVisible}"
-                                HorizontalOptions="Center" />
+                    <StackLayout IsVisible="{Binding IsLoginVisible}" WidthRequest="400"  HorizontalOptions="CenterAndExpand" >
+                        <Entry Placeholder="Email or Username" Keyboard="Email" Text="{Binding EmailText, Mode=TwoWay}"
+                            FontSize="Large"/>
+                        <Entry Placeholder="Password" 
+                                Text="{Binding PasswordText, Mode=TwoWay}"
+                                IsPassword="true" FontSize="Large"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <local:BorderColorEntry Margin="0,0,5,0" Grid.Column="0" Text="{Binding FirstName, Mode=TwoWay}" IsEnabled="False"/>
+                            <local:BorderColorEntry Margin="5,0,0,0" Grid.Column="1" Text="{Binding LastName, Mode=TwoWay}" IsEnabled="False" />
+                        </Grid>
+                        <Button BackgroundColor="Blue" Text="LOGIN" Command="{Binding LoginCommand}"  
+                            HorizontalOptions="Center" />
+                    </StackLayout>
+                    <Button BackgroundColor="Green" Text="LOGOUT" Command="{Binding LogoutCommand}"  IsVisible="{Binding IsLogoutBtnVisible}"
+                            HorizontalOptions="Center" />
 
-            <Button Text="RETRY Download DB"  Command="{Binding DownloadTablesCommand}" 
-                                IsVisible="{Binding IsDownloadBtnVisible, Mode=TwoWay}"  HorizontalOptions="Center" BackgroundColor="Green" />
-            <Label VerticalOptions="End" HorizontalOptions="Center" Text="{Binding ApkVersion}"/>
+                    <Button Text="RETRY Download DB"  Command="{Binding DownloadTablesCommand}" 
+                                        IsVisible="{Binding IsDownloadBtnVisible, Mode=TwoWay}"  HorizontalOptions="Center" BackgroundColor="Green" />
+                    <Label VerticalOptions="End" HorizontalOptions="Center" Text="{Binding ApkVersion}"/>
 
 
                     </StackLayout>

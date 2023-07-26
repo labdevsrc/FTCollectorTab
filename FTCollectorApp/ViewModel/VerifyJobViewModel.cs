@@ -1021,6 +1021,33 @@ namespace FTCollectorApp.ViewModel
             await Shell.Current.GoToAsync("CreateSitewQuestion1");
         }
 
+
+        void RefreshVerifyPageEntries()
+        {
+            OnPropertyChanged(nameof(OwnerList));
+            OnPropertyChanged(nameof(JobNumbers));
+            OnPropertyChanged(nameof(JobPhaseDetailList));
+        }
+
+        void AddShellTabSitePage1()
+        {
+            Console.WriteLine();
+
+            ShellSection shell_section = new ShellSection
+            {
+                Title = "SITE",
+                Icon = "building.png"
+            };
+
+            shell_section.Items.Add(new ShellContent()
+            {
+                Content = new CreateSitewQuestion1(),
+
+            });
+            AppShell.mytabbar.Items.Add(shell_section);
+
+            Console.WriteLine(); 
+        }
         public VerifyJobViewModel()
         {
             bool SomethingWrong = false;
@@ -1028,49 +1055,20 @@ namespace FTCollectorApp.ViewModel
             LoginPopUpCall();
 
 
+            // TODO after LOGIN button clicked
             MessagingCenter.Subscribe<LoginPopUpVM>(this, "LoginToVerifyJobCh", (sender) =>
             {
 
                 ClearAllPage();
                 IsDisplayJobEntries = true;
 
-                IsCrewChangeIsEnabled = false;
-                (CrewChangeCommand as Command).ChangeCanExecute();
-
-
-
-                OnPropertyChanged(nameof(OwnerList));
-                OnPropertyChanged(nameof(JobNumbers));
-                OnPropertyChanged(nameof(JobPhaseDetailList));
+                DisableCrewUpdateMenuButton();
+                RefreshVerifyPageEntries();
                 CrewLeader = Session.crew_leader;
-                Console.WriteLine();
-
-                //MessagingCenter.Subscribe<VerifyJobViewModel>(this, "OpenSite", (sender) =>
-                //{
-
-                    Console.WriteLine();
-
-                    ShellSection shell_section = new ShellSection
-                    {
-                        Title = "SITE",
-                        Icon = "building.png"
-                    };
-
-                    shell_section.Items.Add(new ShellContent()
-                    {
-                        //Content = new MainSitePageX(),
-                        Content = new CreateSitewQuestion1(),
-
-                    });
-                    AppShell.mytabbar.Items.Add(shell_section);
-
-
-                    Console.WriteLine();
-                //});
-
+                //AddShellTabSitePage1();
             });
 
-
+            // TODO after CREW Member page clicked
             MessagingCenter.Subscribe<CrewSelectVM, string>(this, "CrewMemberSelected", async (senders, value) =>
             {
                 string[] CrewProperties = value.Split('#');
@@ -2590,6 +2588,9 @@ namespace FTCollectorApp.ViewModel
                             ToggleCrewListCommand?.Execute(null); // obsolete - CrewList Button removed - Mar 18th
                             (LoadCrewDefaultCommand as Command).ChangeCanExecute();
                         }
+
+
+                        AddShellTabSitePage1();
                     }
                     catch (Exception e)
                     {

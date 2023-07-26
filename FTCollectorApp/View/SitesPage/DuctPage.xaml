@@ -23,10 +23,10 @@
                                         ItemsSource="{Binding DuctKeyList}" />
 
                             <Button Grid.Column="1" Text="{x:Static fa:FontAwesomeIcons.Recycle}"
-                                   FontFamily="{StaticResource FontAwesomeSolid}" Command="{Binding RefreshDuctKeyListCommand}"
+                                   FontFamily="FontAwesome6Solid" Command="{Binding RefreshDuctKeyListCommand}"
                                     />
                             <Button Grid.Column="2" Text="{x:Static fa:FontAwesomeIcons.Trash}"
-                                   FontFamily="{StaticResource FontAwesomeSolid}" Command="{Binding RemoveDuctItemCommand}"
+                                   FontFamily="FontAwesome6Solid" Command="{Binding RemoveDuctItemCommand}"
                                     />                            
                         </Grid>
                     <Label Text="Host Tag Number "  />

@@ -96,13 +96,79 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+
+        async void AddShellTabPage(string title) {
+            ShellSection shell_section = new ShellSection
+            {
+                Title = title
+            };
+
+            switch (title)
+
+            {
+                case "DUCT":
+                    shell_section.Icon = "duct.png";
+                    shell_section.Items.Add(new ShellContent()
+                    {
+                        Content = new DuctPage(),
+
+                    });
+                    break;
+                case "RACK":
+                    shell_section.Icon = "rack2.png";
+                    shell_section.Items.Add(new ShellContent()
+                    {
+                        Content = new RacksPage(),
+                    });
+                    break;
+                case "SLOT_BLADE":
+                    shell_section.Icon = "fa-link.png";
+                    shell_section.Items.Add(new ShellContent()
+                    {
+                        Content = new SlotBladePage(),
+                    });
+
+                    break;
+                case "ACTIVE_DEVICE":
+                    shell_section.Icon = "fa-link.png";
+                    shell_section.Items.Add(new ShellContent()
+                    {
+                        Content = new ActiveDevicePage(),
+                    });
+                case "PORT":
+                    shell_section.Icon = "fa-link.png";
+                    shell_section.Items.Add(new ShellContent()
+                    {
+                        Content = new PortPage(),
+
+                    });
+                    break;
+                default:
+                    await Application.Current.MainPage.DisplayAlert("Unknown", "Unknown Page","OK");
+                    break;
+
+            }
+
+
+            AppShell.mytabbar.Items.Add(shell_section);
+
+            Console.WriteLine();
+
+        }
+
+
         public ICommand CheckTagNumberCommand { get; set; }
         public ICommand RecordGPSCommand { get; set; }
 
         public ICommand ResetSiteCommand { get; set; }
 
+        public ICommand ShowFiberPageCommand { get; set; }
+        public ICommand ShowActiveDevicePageCommand { get; set; }
 
+        public ICommand ShowRackPageCommand { get; set; }
         public ICommand ShowDuctPageCommand { get; set; }
+
+        public ICommand CaptureCommand { get; set; }
 
         /* Create Site, Enter PC Tag - end */
 
@@ -166,11 +232,18 @@ namespace FTCollectorApp.ViewModel
 
             );
 
+            CaptureCommand = new Command(
+                execute : async() =>
+                {
+                    await Application.Current.MainPage.Navigation.PushAsync(new CameraViewPage());
+                }
+            );
+
             ShowDuctPageCommand = new Command(
                 execute: async () => {
-
+                    AddShellTabPage("DUCT");
                     //await Application.Current.MainPage.Navigation.PushAsync(new DuctPage());
-                    await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new DuctPopup());
+                    //await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new DuctPopup());
                 },
 
                 canExecute: () =>
@@ -179,6 +252,74 @@ namespace FTCollectorApp.ViewModel
                     return Session.SiteCreateCnt > 1;
                 }
               );
+
+            ShowPortPageCommand = new Command(
+                execute: async () => {
+                    AddShellTabPage("PORT");
+                },
+
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return Session.DuctSaveCount >= 1;
+                }
+              );
+
+            ShowActiveDevicePageCommand = new Command(
+                execute: async () => {
+                    AddShellTabPage("SLOT_BLADE");
+                },
+
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return Session.DuctSaveCount >= 1;
+                }
+              );
+
+            ShowFiberPageCommand = new Command(
+                execute: async () => {
+                    AddShellTabPage("FIBER");
+                },
+
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return Session.DuctSaveCount >= 1;
+                }
+              );
+
+
+            ShowActiveDevicePageCommand = new Command(
+                execute: async () => {
+                    AddShellTabPage("ACTIVE_DEVICE");
+                },
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return Session.RackCount >= 1;
+                }
+              );
+
+
+
+
+
+
+            ShowRackPageCommand = new Command(
+                execute: async () => {
+                    AddShellTabPage("RACK");
+                    //await Application.Current.MainPage.Navigation.PushAsync(new DuctPage());
+                    //await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new DuctPopup());
+                },
+
+                canExecute: () =>
+                {
+                    Console.WriteLine();
+                    return Session.SiteCreateCnt > 1;
+                }
+
+                );
 
             RecordGPSCommand = new Command(
 
