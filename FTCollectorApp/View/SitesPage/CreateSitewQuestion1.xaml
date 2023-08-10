@@ -10,7 +10,6 @@
                  Order="Primary"
                  Priority="0" />
         <ToolbarItem  Text="COMPLETE" Command="{Binding CompleteSiteCommand}" />
-        <ToolbarItem  Text="CREATE" Command="{Binding CreteSiteCommand}" />                
     </ContentPage.ToolbarItems>    
     <ContentPage.Content>
 
@@ -28,28 +27,32 @@
                             <x:String>Building</x:String>
                         </Picker.Items>
                     </Picker>
+                    <Label Grid.Row="1" Text="Site Type" HorizontalOptions="Start" FontSize="Medium" VerticalOptions="Center"/>
+                    <Picker Grid.Row="1" Grid.Column="1" SelectedItem="{Binding SelectedMinorType, Mode=TwoWay}" 
+                    ItemsSource="{Binding MinorSiteList}" FontSize="Medium" />
 
-                    <Label Grid.Row="1" Text="Enter PC tag" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Medium"/>
-                    <Entry Grid.Row="1" Grid.Column="1" Placeholder="Number " 
+                    <Label Grid.Row="2" Text="Enter PC tag" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Medium"/>
+                    <Entry Grid.Row="2" Grid.Column="1" Placeholder="Tag Number " 
                        VerticalOptions="Center" 
                        Text="{Binding TagNumber, Mode=TwoWay}"  FontSize="Medium"/>
-                    <Label Grid.Row="2"  Text="Retype PC tag" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Medium"/>
-                    <Entry Grid.Row="2" Grid.Column="1" Placeholder="Re-Enter TagNumber" 
+                    <Label Grid.Row="3"  Text="Retype PC tag" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Medium"/>
+                    <Entry Grid.Row="3" Grid.Column="1" Placeholder="Tag Number" 
                        VerticalOptions="Center"
                        Text="{Binding ReEnterTagNumber, Mode=TwoWay}" FontSize="Medium" />
-                    <!--<Label Grid.Column="3" Text="{Binding ReEnterStatus}" HorizontalOptions="End" FontSize="Medium"/>-->
+                    <Label Grid.Column="3" Text="{Binding ReEnterStatus}" HorizontalOptions="End" FontSize="Medium"/>
                     <Button Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3" Text="Record GPS" Command="{Binding RecordGPSCommand}" />
-                    <Button Grid.Row="1" Grid.Column="2"  Text="{x:Static fa:FontAwesomeIcons.X}" 
+                    <Button Grid.Row="2" Grid.Column="2"  Text="{x:Static fa:FontAwesomeIcons.X}" 
                                         FontFamily="FontAwesome6Solid" Command="{Binding ResetSiteCommand}" />
-                    <Label Grid.Row="3" Text="Site Type" HorizontalOptions="Start" FontSize="Medium" VerticalOptions="Center"/>
-                    <Picker Grid.Row="3" Grid.Column="1" SelectedItem="{Binding SelectedMinorType, Mode=TwoWay}" 
-                    ItemsSource="{Binding MinorSiteList}" FontSize="Medium" />
+
                 </Grid>
+                <Label Text="{Binding ScrollVal}" />
             </StackLayout>
-            <ScrollView>
+            <BoxView Color="Gray" HeightRequest="3" HorizontalOptions="Fill" />
+            <ScrollView >
+
                 <StackLayout IsEnabled="{Binding IsDisplayQuestionList}" HeightRequest="1500">
 
-                <BoxView Color="Gray" HeightRequest="3" HorizontalOptions="Fill" />
+
 
                 <Label HorizontalOptions="Center" FontSize="Large" VerticalOptions="Start" >
                     <MultiBinding StringFormat="{} {0} - {1}">
@@ -75,7 +78,7 @@
 
                 </Grid>
 
-                <Grid ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*">
+                <Grid ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*" HeightRequest="110">
                     <Label Text="Choose a roadway"/>
                     <local:BorderEntry Grid.Row="1" Text="{Binding SearchRoadway, Mode=TwoWay}" Placeholder="search roadway" PlaceholderColor="Gray"/>
                     <Label Grid.Column="1" Text="Choose an intersection" />
@@ -96,8 +99,8 @@
                     </ListView.ItemTemplate>
                     </ListView>
                 </StackLayout>
-                
-                <Grid ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*">
+
+                <Grid ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*" HeightRequest="110">
                     <Label Text="Major roadway"/>
                     <local:BorderEntry Grid.Row="1" Text="{Binding SearchMajorRoadway, Mode=TwoWay}" Placeholder="search roadway" PlaceholderColor="Gray"/>
                     <Label Grid.Column="1" Text="Minor roadway" />
@@ -134,10 +137,10 @@
 
 
                 <Label Text="Enter distance to Tra-lane"/>
-                <local:BorderEntry Text="{Binding DistanceEOTL, Mode=TwoWay}"/>                        
+                <local:BorderEntry Text="{Binding DistanceEOTL, Mode=TwoWay}"/>
 
 
-                <Grid ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*,0.1*,0.2*,0.1*,0.2*">
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*,0.1*,0.2*,0.1*,0.2*" HeightRequest="400">
                     <Label Text="Direction of Travel"/>
                         <Picker Grid.Row="1"   ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}" 
                         SelectedItem="{Binding SelectedTravelDirection, Mode=TwoWay}"   HorizontalOptions="FillAndExpand"/>
@@ -177,7 +180,7 @@
                 </StackLayout>
                 
                     <local:BorderColorEntry Text="{Binding SelectedModelDetail.ModelDescription}"/>
-                <Grid Padding="0,5,10,5" RowDefinitions="0.5*,*" ColumnDefinitions="*,*,*">
+                <Grid Padding="0,5,10,5" RowDefinitions="0.5*,*" ColumnDefinitions="*,*,*" HeightRequest="100">
                     <Label Grid.Row="0" Grid.Column="0"  Text="Height"/>
                     <Label Grid.Row="0" Grid.Column="1" Text="Depth"/>
                     <Label Grid.Row="0" Grid.Column="2" Text="Width"/>
@@ -199,13 +202,13 @@
                 <local:BorderEntry Text="{Binding Notes, Mode=TwoWay}" HeightRequest="200" Placeholder="Notes"/>
 
 
-                <Button Text="Save and Continue #2 " HorizontalOptions="FillAndExpand"  Command="{Binding SaveContinueCommand}"/>
+                <Button Text="Save and Continue #2 " HorizontalOptions="FillAndExpand"  Command="{Binding SaveContinueCommand}" BackgroundColor="DeepSkyBlue" TextColor="Black"/>
                 <Button Text="Record Duct" HorizontalOptions="FillAndExpand" Command="{Binding ShowDuctPageCommand}"/>
                 <Button Text="Fiber"  x:Name ="btnFiberBtn" HorizontalOptions="FillAndExpand" Command="{Binding FiberBtnCommand}" />
                 <Button Text="Connect Devices" IsEnabled="False" HorizontalOptions="FillAndExpand" />
                 <Button Text="Record Racks"  x:Name ="btnRecordRack" HorizontalOptions="FillAndExpand" Command="{Binding ShowRackPageCommand}" />
                 <Button Text="Active Device" x:Name ="btnActiveDevice"  HorizontalOptions="FillAndExpand" Command="{Binding ShowActiveDevicePageCommand}"/>
-                <Button Text="Return to Main Menu" HorizontalOptions="FillAndExpand"  Command="{Binding ReturnToMainCommand}"/>
+                <!--<Button Text="Return to Main Menu" HorizontalOptions="FillAndExpand"  Command="{Binding ReturnToMainCommand}"/>-->
                     
                     
                 </StackLayout>

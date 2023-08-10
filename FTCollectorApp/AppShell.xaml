@@ -80,7 +80,7 @@
         <controls:FlyoutFooter />
     </Shell.FlyoutFooter>
 
-    <TabBar  x:Name="AllTab" >
+    <TabBar  x:Name="AllTab" Route="root" >
         <Tab Title="JOB AND CREW" x:Name="tabJobCrew2" 
              Route="VerifyJobPage">
             <Tab.Icon>

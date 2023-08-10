@@ -10,6 +10,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <conv:CheckTimeFormatValidity x:Key="isTimeNotValid" />
+            <conv:IntToBoolConverter x:Key="intToBool" />            
             <conv:FalseJikaNol x:Key="FalseJikaNol" />
             <xct:IntToBoolConverter x:Key="IntToBoolConverter" />            
         </ResourceDictionary>
@@ -32,45 +33,13 @@
             <StackLayout Padding="20,10,20,5" Orientation="Vertical" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
                 <!--<StackLayout Padding="20,10,20,5" >-->
                     <Grid ColumnDefinitions="*,*,*,*">
-                        <!-- Remove icons 
-                        <StackLayout Orientation="Vertical" HeightRequest="110">
-                            <Button Text="{x:Static fa:FontAwesomeIcons.User}" 
-                                        FontFamily="FontAwesome6Solid" 
-                        FontSize="40" HeightRequest="90" WidthRequest="90" 
-                                    Command="{Binding ToggleJobEntriesCommand}" />
 
-                            <Label HorizontalOptions="Center" Text="Verify Job"/>
-                        </StackLayout>
-                        <StackLayout Grid.Column="1" Orientation="Vertical" HeightRequest="110">                        
-                            <Button Text="{x:Static fa:FontAwesomeIcons.Users}" FontSize="40"
-                                           FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" Command="{Binding ToggleCrewListCommand}" />
-
-                            <Label HorizontalOptions="Center" Text="Enter Crew"/>
-                        </StackLayout>
-
-                        <StackLayout Grid.Column="2" Orientation="Vertical" HeightRequest="110">
-                            <Button Text="{x:Static fa:FontAwesomeIcons.UserGear}" FontSize="40"
-                                       FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" Command="{Binding DisplayEquipmentCheckOutCommand}" />
-                            <Label HorizontalOptions="Center" Text="Eq. Checkout"/>
-                        </StackLayout>
-                        <StackLayout Grid.Column="3" Orientation="Vertical" HeightRequest="110">
-                            <Button Text="{x:Static fa:FontAwesomeIcons.Gears}" FontSize="40"
-                                       FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" Command="{Binding DisplayEquipmentCheckInCommand}" />                        
-                            <Label HorizontalOptions="Center" Text="Eq. Checkin"/>
-                        </StackLayout>
-                        <StackLayout Grid.Column="4" Orientation="Vertical" HeightRequest="110">
-
-                            <Button Text="{x:Static fa:FontAwesomeIcons.GaugeHigh}" FontSize="40"
-                                       FontFamily="FontAwesome6Solid" HeightRequest="90" WidthRequest="90" Command="{Binding ODOPopupCommand}" />
-                            <Label HorizontalOptions="Center" Text="Odometer In"/>
-                        </StackLayout> -->                        
-                        
-                        <!-- 2nd row -->
                         <StackLayout  Grid.Column="0" IsVisible="{Binding IsStartODOEntered}" 
                                         Orientation="Vertical" HeightRequest="100">
                             <Button Text="Lunch Out" FontSize="Small" HeightRequest="90" WidthRequest="90" 
                                         Command="{Binding LunchOutCommand}" />
                         </StackLayout>
+
                         <StackLayout Grid.Column="1" IsVisible="{Binding IsStartODOEntered}" 
                                      Orientation="Vertical" HeightRequest="100">
                             <Button Text="Lunch In" FontSize="Small" IsEnabled="False"
@@ -89,17 +58,7 @@
                         </StackLayout>
 
 
-                    <!--<StackLayout Grid.Column="4" Orientation="Vertical" IsVisible="{Binding IsStartODOEntered}"
-                                     HeightRequest="110">
-                            <Button Text="Leave Site" FontSize="Small" IsEnabled="False"
-                                HeightRequest="90" WidthRequest="120"  />
-                        </StackLayout>
 
-                        <StackLayout Grid.Column="5" Orientation="Vertical" IsVisible="{Binding IsStartODOEntered}"
-                                     HeightRequest="110">
-                            <Button Text="Arrive From Site" FontSize="Small" IsEnabled="False"
-                                HeightRequest="90" WidthRequest="120"  />
-                        </StackLayout>-->
 
                     </Grid>
                     
@@ -375,7 +334,7 @@
 
 
 
-                        <!-- start employee 1 row -->
+                            <!-- start employee 1 row -->
                             <!--<Label Grid.Row="2" Grid.Column="0" Text="{Binding Employee1Name.FullName}"
                                    VerticalOptions="Center" TextColor="Black" />-->
                             <Picker
@@ -733,9 +692,70 @@
                         <Frame CornerRadius="5" HasShadow="True" VerticalOptions="Fill">
                             <Label Text="Lunch Out Time" HorizontalOptions="Center" FontSize="Medium"/>
                         </Frame>
-                        <Frame CornerRadius="5" HasShadow="True" VerticalOptions="Fill">
+                    <Label Text="After Fill in all crews with the correct HH:MM format , SAVE button will be enabled"
+                           TextColor="Red" FontSize="Small"/>
+
+                    <Frame CornerRadius="5" HasShadow="True" VerticalOptions="Fill">
                             <StackLayout>
-                                <Grid ColumnDefinitions="*,*,*" RowDefinitions="*,*,*,*,*,*,*,*" >
+                            <Grid ColumnDefinitions="*,*,*" RowDefinitions="*,*" >
+                                <Label Text="Employee Name" />
+                                <Label Grid.Column="1" Text="Lunch Out Time"  />
+                                <Label Grid.Row="1" Grid.Column="0" Text="{Binding CrewLeader}" VerticalOptions="Center" />
+                                <Entry Grid.Row="1" x:Name="entryLeaderLO1" Grid.Column="1" MaxLength="5"  Text="{Binding LunchOutTimeLeader, Mode=TwoWay}" VerticalOptions="Center"/>
+                                <Label Grid.Row="1" Grid.Column="2"  FontSize="10" VerticalOptions="Center" 
+                                        IsVisible="{Binding IsLOLeaderInvalid}" Text="{Binding ErrorMessageL}" TextColor="Red"  />
+                            </Grid>
+                            <Grid ColumnDefinitions="*,*,*" IsVisible="{Binding Source={x:Reference emp1} ,Path= Text.Length,
+                                            Converter={StaticResource intToBool}}">
+                                <Label Grid.Column="0"  x:Name="emp1" Text="{Binding Employee1Name.FullName}" VerticalOptions="Center" />
+                                <Entry x:Name="entryLO1" Grid.Column="1" MaxLength="5"  Text="{Binding LunchOutTime1, Mode=TwoWay}" VerticalOptions="Center"/>
+                                <Label Grid.Column="2" FontSize="10" VerticalOptions="Center" 
+                                            IsVisible="{Binding IsLOEmp1Invalid}" Text="{Binding ErrorMessageEmp1}" TextColor="Red"  />
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*,*,*" IsVisible="{Binding Source={x:Reference emp2} ,Path= Text.Length,
+                                            Converter={StaticResource intToBool}}">
+                                <Label Grid.Column="0" x:Name="emp2" Text="{Binding Employee2Name.FullName}" VerticalOptions="Center" />
+                                <Entry Grid.Column="1" x:Name="entryLO2" MaxLength="5"   Text="{Binding LunchOutTime2, Mode=TwoWay}" VerticalOptions="Center"/>
+                                <Label Grid.Column="2" FontSize="10" VerticalOptions="Center" 
+                                            IsVisible="{Binding IsLOEmp2Invalid}" Text="{Binding ErrorMessageEmp2}" TextColor="Red"  />
+                            </Grid>
+
+
+                            <Grid ColumnDefinitions="*,*,*" IsVisible="{Binding Source={x:Reference emp3} ,Path= Text.Length,
+                                            Converter={StaticResource intToBool}}">
+                                <Label Grid.Column="0"  x:Name="emp3" Text="{Binding Employee3Name.FullName}" VerticalOptions="Center"/>
+                                <Entry Grid.Column="1"  x:Name="entryLO3"  MaxLength="5" Text="{Binding LunchOutTime3, Mode=TwoWay}" VerticalOptions="Center"/>
+                                <Label Grid.Column="2"  FontSize="10" VerticalOptions="Center" 
+                                            IsVisible="{Binding IsLOEmp3Invalid}" Text="{Binding ErrorMessageEmp3}" TextColor="Red"  />
+                            </Grid>
+
+
+                            <Grid ColumnDefinitions="*,*,*" IsVisible="{Binding Source={x:Reference emp4} ,Path= Text.Length,
+                                            Converter={StaticResource intToBool}}">
+                                <Label Grid.Column="0"  x:Name="emp4" Text="{Binding Employee4Name.FullName}" VerticalOptions="Center"/>
+                                <Entry Grid.Column="1"  x:Name="entryLO4"  MaxLength="5" Text="{Binding LunchOutTime4, Mode=TwoWay}" VerticalOptions="Center"/>
+                                <Label Grid.Column="2"  FontSize="10" VerticalOptions="Center" 
+                                            IsVisible="{Binding IsLOEmp4Invalid}" Text="{Binding ErrorMessageEmp4}" TextColor="Red"  />
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*,*,*" IsVisible="{Binding Source={x:Reference emp5} ,Path= Text.Length,
+                                            Converter={StaticResource intToBool}}">
+                                <Label Grid.Column="0"  x:Name="emp5" Text="{Binding Employee5Name.FullName}" VerticalOptions="Center"/>
+                                <Entry Grid.Column="1"  x:Name="entryLO5"  MaxLength="5" Text="{Binding LunchOutTime5, Mode=TwoWay}" VerticalOptions="Center"/>
+                                <Label Grid.Column="2"  FontSize="10" VerticalOptions="Center" 
+                                            IsVisible="{Binding IsLOEmp5Invalid}" Text="{Binding ErrorMessageEmp5}" TextColor="Red"  />
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*,*,*" IsVisible="{Binding Source={x:Reference emp6} ,Path= Text.Length,
+                                            Converter={StaticResource intToBool}}">
+                                <Label Grid.Column="0"  x:Name="emp6" Text="{Binding Employee6Name.FullName}" VerticalOptions="Center"/>
+                                <Entry Grid.Column="1"  x:Name="entryLO6"  MaxLength="5" Text="{Binding LunchOutTime6, Mode=TwoWay}" VerticalOptions="Center"/>
+                                <Label Grid.Column="2"  FontSize="10" VerticalOptions="Center" 
+                                            IsVisible="{Binding IsLOEmp6Invalid}" Text="{Binding ErrorMessageEmp6}" TextColor="Red"  />
+                            </Grid>
+
+                            <!--<Grid ColumnDefinitions="*,*,*" RowDefinitions="*,*,*,*,*,*,*,*" >
                                     <Label Text="Employee Name" />
                                     <Label Grid.Column="1" Text="Lunch Out Time"  />
                                     <Label Grid.Column="0" Grid.Row="1" Text="{Binding CrewLeader}" VerticalOptions="Center" />
@@ -743,66 +763,62 @@
                                     <Label Grid.Column="2" Grid.Row="1"  FontSize="10" VerticalOptions="Center" 
                                         IsVisible="{Binding IsLOLeaderInvalid}" Text="{Binding ErrorMessageL}" TextColor="Red"  />
 
+                                    <StackLayout IsVisible="{Binding Source={x:Reference emp1} ,Path= Text.Length,
+                                            Converter={StaticResource intToBool}}" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                                        <Label Grid.Column="0" Grid.Row="2" x:Name="emp1" Text="{Binding Employee1Name.FullName}" VerticalOptions="Center" />
+                                        <Entry x:Name="entryLO2" Grid.Column="1" Grid.Row="2" MaxLength="5"  Text="{Binding LunchOutTime1, Mode=TwoWay}" VerticalOptions="Center"/>
+                                        <Label Grid.Column="2" Grid.Row="2"  FontSize="10" VerticalOptions="Center" 
+                                            IsVisible="{Binding IsLOEmp1Invalid}" Text="{Binding ErrorMessageEmp1}" TextColor="Red"  />
+                                    </StackLayout>
 
-                                    <Label Grid.Column="0" Grid.Row="2" Text="{Binding Employee1Name.FullName}" VerticalOptions="Center" />
-                                    <Entry x:Name="entryLO2" Grid.Column="1" Grid.Row="2" MaxLength="5"  Text="{Binding LunchOutTime1, Mode=TwoWay}" VerticalOptions="Center"/>
-                                    <Label Grid.Column="2" Grid.Row="2"  FontSize="10" VerticalOptions="Center" 
-                                        IsVisible="{Binding IsLOEmp1Invalid}" Text="{Binding ErrorMessageEmp1}" TextColor="Red"  />
+                                    <StackLayout IsVisible="{Binding Source={x:Reference emp2} ,Path= Text.Length,
+                                        Converter={StaticResource intToBool}}" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                                        <Label Grid.Column="0" Grid.Row="3" x:Name="emp2" Text="{Binding Employee2Name.FullName}" VerticalOptions="Center" />
+                                        <Entry Grid.Column="1" Grid.Row="3" x:Name="entryLO3" MaxLength="5"   Text="{Binding LunchOutTime2, Mode=TwoWay}" VerticalOptions="Center"/>
+                                        <Label Grid.Column="2" Grid.Row="3"  FontSize="10" VerticalOptions="Center" 
+                                            IsVisible="{Binding IsLOEmp2Invalid}" Text="{Binding ErrorMessageEmp2}" TextColor="Red"  />
+                                    </StackLayout>
 
-                                    <Label Grid.Column="0" Grid.Row="3" Text="{Binding Employee2Name.FullName}" VerticalOptions="Center" />
-                                    <Entry Grid.Column="1" Grid.Row="3" x:Name="entryLO3" MaxLength="5"   Text="{Binding LunchOutTime2, Mode=TwoWay}" VerticalOptions="Center"/>
-                                    <Label Grid.Column="2" Grid.Row="3"  FontSize="10" VerticalOptions="Center" 
-                                        IsVisible="{Binding IsLOEmp2Invalid}" Text="{Binding ErrorMessageEmp2}" TextColor="Red"  />
-
-                                    <Label Grid.Column="0" Grid.Row="4" Text="{Binding Employee3Name.FullName}" VerticalOptions="Center"/>
-                                    <Entry Grid.Column="1" Grid.Row="4" x:Name="entryLO4"  MaxLength="5" Text="{Binding LunchOutTime3, Mode=TwoWay}" VerticalOptions="Center"/>
-                                    <Label Grid.Column="2" Grid.Row="4"  FontSize="10" VerticalOptions="Center" 
-                                        IsVisible="{Binding IsLOEmp3Invalid}" Text="{Binding ErrorMessageEmp3}" TextColor="Red"  />
-
-                                    <Label Grid.Column="0" Grid.Row="5" Text="{Binding Employee4Name.FullName}" VerticalOptions="Center"/>
-                                    <Entry Grid.Column="1" Grid.Row="5" x:Name="entryLO5" MaxLength="5"  Text="{Binding LunchOutTime4, Mode=TwoWay}" VerticalOptions="Center"/>
-                                    <Label Grid.Column="2" Grid.Row="5"  FontSize="10" VerticalOptions="Center" 
-                                        IsVisible="{Binding IsLOEmp4Invalid}" Text="{Binding ErrorMessageEmp4}" TextColor="Red"  />
-
-                                   <Label Grid.Column="0" Grid.Row="6" x:Name="emp5Name" Text="{Binding Employee5Name.FullName}" VerticalOptions="Center"/>
-                                    <Entry Grid.Column="1" Grid.Row="6" x:Name="entryLO6" MaxLength="5"  Text="{Binding LunchOutTime5, Mode=TwoWay}" 
-                                           IsVisible="{Binding Source={x:Reference emp5Name}, Path=Text.Length, Converter={StaticResource FalseJikaNol}}" VerticalOptions="Center"/>
-                                    <Label Grid.Column="2" Grid.Row="6"  FontSize="10" VerticalOptions="Center" 
-                                        IsVisible="{Binding IsLOEmp5Invalid}" Text="{Binding ErrorMessageEmp5}" TextColor="Red"  />
-
-                                    <Label Grid.Column="0" Grid.Row="7" x:Name="emp6Name" Text="{Binding Employee6Name.FullName}" VerticalOptions="Center"/>
-                                    <Entry Grid.Column="1" Grid.Row="7" x:Name="entryLO7" MaxLength="5"  Text="{Binding LunchOutTime6, Mode=TwoWay}" VerticalOptions="Center"
-                                           IsVisible="{Binding Source={x:Reference emp6Name}, Path=Text.Length,
-                                        Converter={StaticResource FalseJikaNol}}"
-                                           
-                                           />
-                                    <Label Grid.Column="2" Grid.Row="7"  FontSize="10" VerticalOptions="Center" 
-                                        IsVisible="{Binding IsLOEmp6Invalid}" Text="{Binding ErrorMessageEmp6}" TextColor="Red"  />
-
-                                    <Button Grid.Column="3" Grid.Row="7" Text="Save" Command="{Binding SaveLunchOutCommand}" />
-                                </Grid>  
                                 
-                                <!--<Grid ColumnDefinitions="*,*" HeightRequest="50">
-                                    <Label Text="Employee Name" />
-                                    <Label Grid.Column="1" Text="Lunch Out Time" />
-                                </Grid>
-                                <ListView HeightRequest="200"
-                                    ItemsSource="{Binding FinishDayList}" SelectedItem="{Binding SelectedForLunchOut}">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <ViewCell>
-                                                <StackLayout>
-                                                    <Grid ColumnDefinitions="*,*,*" HeightRequest="50">
-                                                            <Label Grid.Column="0" Text="{Binding FullName}"  VerticalOptions="Center" />
-                                                            <Entry Grid.Column="1" Text="{Binding LunchOutTime, Mode=TwoWay}"  VerticalOptions="Center" />
-                                                    </Grid>
-                                                </StackLayout>
-                                            </ViewCell>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>-->
-                                
-                            </StackLayout>
+                                    <StackLayout IsVisible="{Binding Source={x:Reference emp3} ,Path= Text.Length,
+                                        Converter={StaticResource intToBool}}" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                                        <Label Grid.Column="0" Grid.Row="4"  x:Name="emp3" Text="{Binding Employee3Name.FullName}" VerticalOptions="Center"/>
+                                        <Entry Grid.Column="1" Grid.Row="4" x:Name="entryLO4"  MaxLength="5" Text="{Binding LunchOutTime3, Mode=TwoWay}" VerticalOptions="Center"/>
+                                        <Label Grid.Column="2" Grid.Row="4"  FontSize="10" VerticalOptions="Center" 
+                                            IsVisible="{Binding IsLOEmp3Invalid}" Text="{Binding ErrorMessageEmp3}" TextColor="Red"  />
+                                    </StackLayout>
+
+                                    <StackLayout IsVisible="{Binding Source={x:Reference emp4} ,Path= Text.Length,
+                                        Converter={StaticResource intToBool}}" Orientation="Horizontal">
+                                        <Label Grid.Column="0" Grid.Row="5" x:Name="emp4" Text="{Binding Employee4Name.FullName}" VerticalOptions="Center"/>
+                                        <Entry Grid.Column="1" Grid.Row="5" x:Name="entryLO5" MaxLength="5"  Text="{Binding LunchOutTime4, Mode=TwoWay}" VerticalOptions="Center"/>
+                                        <Label Grid.Column="2" Grid.Row="5"  FontSize="10" VerticalOptions="Center" 
+                                            IsVisible="{Binding IsLOEmp4Invalid}" Text="{Binding ErrorMessageEmp4}" TextColor="Red"  />
+                                    </StackLayout>
+
+
+                                    <StackLayout IsVisible="{Binding Source={x:Reference emp5} ,Path= Text.Length,
+                                        Converter={StaticResource intToBool}}" Orientation="Horizontal">
+                                        <Label Grid.Column="0" Grid.Row="6" x:Name="emp5" Text="{Binding Employee5Name.FullName}" VerticalOptions="Center"/>
+                                        <Entry Grid.Column="1" Grid.Row="6" x:Name="entryLO6" MaxLength="5"  Text="{Binding LunchOutTime5, Mode=TwoWay}" VerticalOptions="Center"/>
+                                        <Label Grid.Column="2" Grid.Row="6"  FontSize="10" VerticalOptions="Center" 
+                                            IsVisible="{Binding IsLOEmp5Invalid}" Text="{Binding ErrorMessageEmp5}" TextColor="Red"  />
+                                    </StackLayout>
+
+
+                                    <StackLayout IsVisible="{Binding Source={x:Reference emp6} ,Path= Text.Length,
+                                            Converter={StaticResource intToBool}}" Orientation="Horizontal">
+                                        <Label Grid.Column="0" Grid.Row="7" x:Name="emp6" Text="{Binding Employee6Name.FullName}" VerticalOptions="Center"/>
+                                        <Entry Grid.Column="1" Grid.Row="7" x:Name="entryLO7" MaxLength="5"  Text="{Binding LunchOutTime6, Mode=TwoWay}" VerticalOptions="Center" />
+                                        <Label Grid.Column="2" Grid.Row="7"  FontSize="10" VerticalOptions="Center" 
+                                                IsVisible="{Binding IsLOEmp6Invalid}" Text="{Binding ErrorMessageEmp6}" TextColor="Red"  />
+
+                                    </StackLayout>
+
+                            </Grid>-->
+                            <Button Grid.Column="3" Grid.Row="7" Text="Save" Command="{Binding SaveLunchOutCommand}" />
+
+                        </StackLayout>
                         </Frame>
                     </StackLayout>
 
@@ -812,59 +828,66 @@
                             <Frame>
                                 <Label HorizontalOptions="Center" Text="Lunch In Time" FontSize="Large" />
                             </Frame>
-                            <Grid ColumnDefinitions="*,*,*" RowDefinitions="0.5*,0.5*,0.5*,0.5*,0.5*,0.5*,0.5*,0.5*" >
-                                    <Label Text="Employee Name" />
-                                    <Label Grid.Column="1" Text="Lunch In Time" />
-                                    <Label Grid.Column="0" Grid.Row="1" Text="{Binding CrewLeader}" VerticalOptions="Center" />
-                                    <Entry x:Name="entryLI1" MaxLength="5" Grid.Column="1" Grid.Row="1"  Text="{Binding LunchInTimeLeader, Mode=TwoWay}" VerticalOptions="Center"/>
-                                    <Label Grid.Column="2" Grid.Row="1"  FontSize="10" VerticalOptions="Center" 
+                            <Label Text="After Fill in all crews with the correct HH:MM format , SAVE button will be enabled"
+                                TextColor="Red" FontSize="Small"/>
+
+                            <Grid ColumnDefinitions="*,*,*" RowDefinitions="*,*" >
+                                <Label Text="Employee Name" />
+                                <Label Grid.Column="1" Text="Lunch In Time" />
+
+                                <Label x:Name="empLI1" Grid.Column="0" Grid.Row="1" Text="{Binding CrewLeader}" VerticalOptions="Center" />
+                                <Entry x:Name="entryLI1" MaxLength="5" Grid.Column="1" Grid.Row="1"  Text="{Binding LunchInTimeLeader, Mode=TwoWay}" VerticalOptions="Center"/>
+                                <Label Grid.Column="2" Grid.Row="1"  FontSize="10" VerticalOptions="Center" 
                                            IsVisible="{Binding IsLILeaderInvalid}" Text="{Binding ErrorMessageL}" TextColor="Red"  />
-                                
-                                    <!--IsVisible="{Binding Source={x:Reference entryLI1}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}" -->
-                                    
-                                    <Label Grid.Column="0" Grid.Row="2" Text="{Binding Employee1Name.FullName}" VerticalOptions="Center"/>
-                                    <Entry x:Name="entryLI2" MaxLength="5" Grid.Column="1" Grid.Row="2"  Text="{Binding LunchInTime1, Mode=TwoWay}" VerticalOptions="Center"/>
-                                    <Label Grid.Column="2" Grid.Row="2"  FontSize="10" VerticalOptions="Center" 
-                                           IsVisible="{Binding IsLIEmp1Invalid}" Text="{Binding ErrorMessageEmp1}" TextColor="Red" />
-                                    <!--IsVisible="{Binding Source={x:Reference entryLI2}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}"  />-->
+                            </Grid>
 
-                                    <Label Grid.Column="0" Grid.Row="3" Text="{Binding Employee2Name.FullName}" VerticalOptions="Center"/>
-                                    <Entry x:Name="entryLI3" MaxLength="5" Grid.Column="1" Grid.Row="3"  Text="{Binding LunchInTime2, Mode=TwoWay}" VerticalOptions="Center"/>
-                                    <Label Grid.Column="2" Grid.Row="3"  FontSize="10" VerticalOptions="Center" 
-                                       IsVisible="{Binding IsLIEmp2Invalid}"  Text="{Binding ErrorMessageEmp2}" TextColor="Red"  />
-                                    <!--IsVisible="{Binding Source={x:Reference entryLI3}, Path=Text,
-                                        Converter={StaticResource isTimeNotValid}}" />-->
-
-
-                                    <Label Grid.Column="0" Grid.Row="4" Text="{Binding Employee3Name.FullName}" VerticalOptions="Center"/>
-                                    <Entry x:Name="entryLI4" MaxLength="5" Grid.Column="1" Grid.Row="4"  Text="{Binding LunchInTime3, Mode=TwoWay}" VerticalOptions="Center"/>
-                                    <Label Grid.Column="2" Grid.Row="4"  FontSize="10" VerticalOptions="Center" 
+                            <Grid ColumnDefinitions="*,*,*"  IsVisible="{Binding Source={x:Reference empLI2} ,Path= Text.Length,
+                                        Converter={StaticResource intToBool}}" >
+                                <Label x:Name="empLI2" Grid.Column="0" Text="{Binding Employee1Name.FullName}" VerticalOptions="Center"/>
+                                <Entry x:Name="entryLI2" MaxLength="5" Grid.Column="1"   Text="{Binding LunchInTime1, Mode=TwoWay}" VerticalOptions="Center"/>
+                                <Label Grid.Column="2"  FontSize="10" VerticalOptions="Center" 
+                                        IsVisible="{Binding IsLIEmp1Invalid}" Text="{Binding ErrorMessageEmp1}" TextColor="Red" />
+                            </Grid>
+                            <Grid ColumnDefinitions="*,*,*" IsVisible="{Binding Source={x:Reference empLI3} ,Path= Text.Length,
+                                        Converter={StaticResource intToBool}}" >
+                                <Label x:Name="empLI3" Grid.Column="0" Text="{Binding Employee2Name.FullName}" VerticalOptions="Center"/>
+                                <Entry x:Name="entryLI3" MaxLength="5" Grid.Column="1"  Text="{Binding LunchInTime2, Mode=TwoWay}" VerticalOptions="Center"/>
+                                <Label Grid.Column="2"  FontSize="10" VerticalOptions="Center" 
+                                    IsVisible="{Binding IsLIEmp2Invalid}"  Text="{Binding ErrorMessageEmp2}" TextColor="Red"  />
+                            </Grid>
+                            <Grid ColumnDefinitions="*,*,*" IsVisible="{Binding Source={x:Reference empLI4} ,Path= Text.Length,
+                                        Converter={StaticResource intToBool}}" >
+                                    <Label x:Name="empLI4" Grid.Column="0" Text="{Binding Employee3Name.FullName}" VerticalOptions="Center"/>
+                                    <Entry x:Name="entryLI4" MaxLength="5" Grid.Column="1"   Text="{Binding LunchInTime3, Mode=TwoWay}" VerticalOptions="Center"/>
+                                    <Label Grid.Column="2"  FontSize="10" VerticalOptions="Center" 
                                         IsVisible="{Binding IsLIEmp3Invalid}" Text="{Binding ErrorMessageEmp3}" TextColor="Red"  />
-
-                                    <Label x:Name="emp4" Grid.Column="0" Grid.Row="5" Text="{Binding Employee4Name.FullName}" VerticalOptions="Center" />
-                                    <!--IsEnabled="{Binding Source={x:Reference emp4} , Path=Text.Length }"/>-->
-                                    <Entry x:Name="entryLI5" MaxLength="5" Grid.Column="1" Grid.Row="5"  Text="{Binding LunchInTime4, Mode=TwoWay}" />
-                                    <Label Grid.Column="2" Grid.Row="5"  FontSize="10" VerticalOptions="Center" 
+                                </Grid>
+                            <Grid ColumnDefinitions="*,*,*" IsVisible="{Binding Source={x:Reference empLI5} ,Path= Text.Length,
+                                        Converter={StaticResource intToBool}}" >
+                                <Label x:Name="empLI5" Grid.Column="0" Text="{Binding Employee4Name.FullName}" VerticalOptions="Center" />
+                                    <Entry x:Name="entryLI5" MaxLength="5" Grid.Column="1" Text="{Binding LunchInTime4, Mode=TwoWay}" />
+                                    <Label Grid.Column="2" FontSize="10" VerticalOptions="Center" 
                                        IsVisible="{Binding IsLIEmp4Invalid}" Text="{Binding ErrorMessageEmp4}" TextColor="Red" />
-
-                                    <Label x:Name="emp5" Grid.Column="0" Grid.Row="6" Text="{Binding Employee5Name.FullName}" VerticalOptions="Center"/>
-                                    <Entry x:Name="entryLI6" MaxLength="5"  Grid.Column="1" Grid.Row="6"  Text="{Binding LunchInTime5, Mode=TwoWay}" />
-                                    <Label Grid.Column="2" Grid.Row="6"  FontSize="10" VerticalOptions="Center" 
-                                       IsVisible="{Binding IsLIEmp5Invalid}" Text="{Binding ErrorMessageEmp5}" TextColor="Red"  />
- 
-
-                                    <Label Grid.Column="0" Grid.Row="7" Text="{Binding Employee6Name.FullName}" />
-                                    <Entry x:Name="entryLI7" MaxLength="5" Grid.Column="1" Grid.Row="7"  Text="{Binding LunchInTime6, Mode=TwoWay}" />
-                                    <Label Grid.Column="2" Grid.Row="7"  FontSize="10" VerticalOptions="Center" 
-                                       IsVisible="{Binding IsLIEmp6Invalid}" Text="{Binding ErrorMessageEmp6}" TextColor="Red"  />
-
-                                    <Button Grid.Column="2" Grid.Row="7" Text="Save" Command="{Binding SaveLunchInCommand}" />
-
                                 </Grid>
 
-                                <!--<ListView HeightRequest="200"
+                            <Grid ColumnDefinitions="*,*,*" IsVisible="{Binding Source={x:Reference empLI6} ,Path= Text.Length,
+                                        Converter={StaticResource intToBool}}" >
+                                <Label x:Name="empLI6" Grid.Column="0"  Text="{Binding Employee5Name.FullName}" VerticalOptions="Center"/>
+                                    <Entry x:Name="entryLI6" MaxLength="5"  Grid.Column="1"  Text="{Binding LunchInTime5, Mode=TwoWay}" />
+                                    <Label Grid.Column="2" FontSize="10" VerticalOptions="Center" 
+                                       IsVisible="{Binding IsLIEmp5Invalid}" Text="{Binding ErrorMessageEmp5}" TextColor="Red"  />
+                                </Grid>
+                            <Grid ColumnDefinitions="*,*,*" IsVisible="{Binding Source={x:Reference empLI7} ,Path= Text.Length,
+                                        Converter={StaticResource intToBool}}" >
+                                    <Label x:Name="empLI7" Grid.Column="0" Text="{Binding Employee6Name.FullName}" VerticalOptions="Center"/>
+                                    <Entry x:Name="entryLI7" MaxLength="5" Grid.Column="1" Text="{Binding LunchInTime6, Mode=TwoWay}" VerticalOptions="Center" />
+                                    <Label Grid.Column="2"  FontSize="10" VerticalOptions="Center" 
+                                       IsVisible="{Binding IsLIEmp6Invalid}" Text="{Binding ErrorMessageEmp6}" TextColor="Red"  />
+                                </Grid>
+
+                            <Button Text="Save" Command="{Binding SaveLunchInCommand}" />
+
+                            <!--<ListView HeightRequest="200"
                                     ItemsSource="{Binding FinishDayList}" SelectedItem="{Binding SelectedForLunchOut}">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
@@ -888,7 +911,7 @@
                 <Button Text="Odometer Input" Command="{Binding ODOPopupCommand}"/>-->
 
                 <StackLayout IsVisible="{Binding IsDisplayEndOfDay}"  >
-                    <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="*,*,0.4*,*,0.4*,*,0.4*,*,0.4*,*,0.4*,*,0.4*" >
+                    <Grid ColumnDefinitions="*,*,0.5*,*" RowDefinitions="0.4*,0.5*,0.2*,0.5*,0.2*,0.5*,0.2*,0.5*,0.2*,0.5*,0.2*,0.5*,0.2*,0.5*,0.2*" >
                         
                         <!-- table header -->
                         <Label  Text="Employee" FontSize="Medium" />
@@ -909,7 +932,7 @@
                                 <x:String>Half day</x:String>
                             </Picker.Items>
                         </Picker>
-                        <Button Grid.Row="1" Grid.Column="3"  HeightRequest="60" Text="Save TimeSheet" FontSize="Small" Command="{Binding SaveTimeSheetLCommand}" 
+                        <Button Grid.Row="1" Grid.Column="3" Grid.RowSpan="2" Text="Save TimeSheet" FontSize="Small" Command="{Binding SaveTimeSheetLCommand}" 
                                 CommandParameter="Leader"/>
 
                         <!-- row 2 - employee 1 -->
@@ -923,7 +946,7 @@
                                 <x:String>Half day</x:String>
                             </Picker.Items>
                         </Picker>
-                        <Button Grid.Row="3" Grid.Column="3" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheet1Command}" 
+                        <Button Grid.Row="3" Grid.Column="3" Grid.RowSpan="2"  Text="Save TimeSheet"  Command="{Binding SaveTimeSheet1Command}" 
                                 CommandParameter="Emp1"/>
 
                         <!-- row 3 - employee 2 -->
@@ -940,8 +963,9 @@
                                 <x:String>Half day</x:String>
                             </Picker.Items>
                         </Picker>
-                        <Button Grid.Row="5" Grid.Column="3" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheet2Command}"  CommandParameter="Emp2"
+                        <Button Grid.Row="5" Grid.Column="3" Grid.RowSpan="2" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheet2Command}"  CommandParameter="Emp2"
                                 IsVisible="{Binding Source={x:Reference EODemp2}, Path=Text.Length, Converter={StaticResource FalseJikaNol}}"/>
+
                         <!-- row 4 - employee 3 -->
                         <Label  Grid.Row="7" x:Name="EODemp3" Text="{Binding Employee3Name.FullName}"  VerticalOptions="Center" />
                         <Entry  Grid.Row="7" Grid.Column="1" Text="{Binding Emp3ClockOutTime, Mode=TwoWay}" MaxLength="5" 
@@ -949,7 +973,7 @@
 
                         <Label  Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" IsVisible="{Binding IsCO3TimeInvalid}" Text="{Binding ErrorMessageEmp3}" TextColor="Red"  FontSize="Small"/>
 
-                        <Picker  Grid.Row="7" Grid.Column="2"  SelectedIndex="{Binding Emp3ClockOutPerDiem, Mode=TwoWay}" 
+                        <Picker  Grid.Row="7" Grid.Column="2"   SelectedIndex="{Binding Emp3ClockOutPerDiem, Mode=TwoWay}" 
                                 IsVisible="{Binding Source={x:Reference EODemp3}, Path=Text.Length, Converter={StaticResource FalseJikaNol}}"  VerticalOptions="Center" >
                         <Picker.Items>
                                 <x:String>No</x:String>
@@ -957,7 +981,7 @@
                                 <x:String>Half day</x:String>
                             </Picker.Items>
                         </Picker>
-                        <Button Grid.Row="7" Grid.Column="3" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheet3Command}" 
+                        <Button Grid.Row="7" Grid.Column="3" Grid.RowSpan="2" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheet3Command}" 
                                IsVisible="{Binding Source={x:Reference EODemp3}, Path=Text.Length, Converter={StaticResource FalseJikaNol}}"  CommandParameter="Emp3"/>
 
                         <!-- row 5 - employee 4 -->
@@ -975,7 +999,7 @@
                                 <x:String>Half day</x:String>
                             </Picker.Items>
                         </Picker>
-                        <Button Grid.Row="9" Grid.Column="3" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheet4Command}" />
+                        <Button Grid.Row="9" Grid.Column="3" Grid.RowSpan="2" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheet4Command}" />
 
                         <!-- row 6 - employee 5 -->
                         <Label  Grid.Row="11"  x:Name="EODemp5"  Text="{Binding Employee5Name.FullName}"  VerticalOptions="Center"  />
@@ -990,14 +1014,14 @@
                                 <x:String>Half day</x:String>
                             </Picker.Items>
                         </Picker>
-                        <Button Grid.Row="11" Grid.Column="3" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheet5Command}" />
+                        <Button Grid.Row="11" Grid.Column="3" Grid.RowSpan="2" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheet5Command}" />
 
                         <!-- row 7 - employee 6 -->
-                        <Label  Grid.Row="12"  x:Name="EODemp6"  Text="{Binding Employee6Name.FullName}"  VerticalOptions="Center"  />
-                        <Entry  Grid.Row="12" Grid.Column="1" Text="{Binding Emp6ClockOutTime, Mode=TwoWay}" MaxLength="5" VerticalOptions="Center"  />
-                        <Label  Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="2" IsVisible="{Binding IsCO6TimeInvalid}" Text="{Binding ErrorMessageEmp6}" TextColor="Red"  FontSize="Small"/>
+                        <Label  Grid.Row="13"  x:Name="EODemp6"  Text="{Binding Employee6Name.FullName}"  VerticalOptions="Center"  />
+                        <Entry  Grid.Row="13" Grid.Column="1" Text="{Binding Emp6ClockOutTime, Mode=TwoWay}" MaxLength="5" VerticalOptions="Center"  />
+                        <Label  Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="2" IsVisible="{Binding IsCO6TimeInvalid}" Text="{Binding ErrorMessageEmp6}" TextColor="Red"  FontSize="Small"/>
 
-                        <Picker  Grid.Row="12" Grid.Column="2"  SelectedIndex="{Binding Emp6ClockOutPerDiem, Mode=TwoWay}" VerticalOptions="Center" 
+                        <Picker  Grid.Row="13" Grid.Column="2"  SelectedIndex="{Binding Emp6ClockOutPerDiem, Mode=TwoWay}" VerticalOptions="Center" 
                                  >
                             <Picker.Items>
                                 <x:String>No</x:String>
@@ -1005,7 +1029,7 @@
                                 <x:String>Half day</x:String>
                             </Picker.Items>
                         </Picker>
-                        <Button Grid.Row="12" Grid.Column="3" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheet6Command}" />
+                        <Button Grid.Row="13" Grid.Column="3" Grid.RowSpan="2" HeightRequest="60" Text="Save TimeSheet"  Command="{Binding SaveTimeSheet6Command}" />
 
                     </Grid>
 

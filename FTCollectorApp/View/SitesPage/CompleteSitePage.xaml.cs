@@ -16,6 +16,7 @@ using Xamarin.CommunityToolkit.UI.Views;
 using Amazon.S3.Model;
 using FTCollectorApp.Services;
 
+
 namespace FTCollectorApp.View.SitesPage
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -62,8 +63,7 @@ namespace FTCollectorApp.View.SitesPage
 
         }
 
-
-        private async void SaveBtn_Clicked(object sender, EventArgs e)
+                private async void SaveBtn_Clicked(object sender, EventArgs e)
         {
 
             ///////////////////////// S3 Bucket  Upload ////////////////////////////

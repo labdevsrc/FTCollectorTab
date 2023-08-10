@@ -456,11 +456,6 @@ namespace FTCollectorApp.ViewModel
 
         }
 
-        [ICommand]
-        async void CompleteSite()
-        {
-            await Application.Current.MainPage.Navigation.PushAsync(new CompleteSitePage());
-        }
 
         [ICommand]
         async void Capture()

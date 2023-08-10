@@ -462,7 +462,7 @@ namespace FTCollectorApp.ViewModel
                 var suspList = await CloudDBService.GetSuspendedTrace(); //gps_point
                 var excludeSiteEntry = await CloudDBService.GetExcludeSite(); //exclude_site
                 var getEvent18StartTime = await CloudDBService.GetEvent18Time(); //exclude_site
-
+                var getCabinetType = await CloudDBService.GetCabinetType();
                 //Thread.Sleep(5000);
                 LoadingText = "Download done! Populating SQLite...";
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
@@ -706,6 +706,11 @@ namespace FTCollectorApp.ViewModel
                     conn.CreateTable<ExcludeSite>();
                     conn.DeleteAll<ExcludeSite>();
                     conn.InsertAll(excludeSiteEntry);
+
+
+                    conn.CreateTable<CabinetType>();
+                    conn.DeleteAll<CabinetType>();
+                    conn.InsertAll(getCabinetType);
 
                 }
                 LoadingText = "Populating Local SQLite done!";

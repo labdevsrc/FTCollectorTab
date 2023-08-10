@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:fa="clr-namespace:FontAwesome"
+             xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.SitesPage.PortPage">
+    <ContentPage.Content>
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <ScrollView>
+
+                    <StackLayout Padding="20">
+                        <Label Text="Port" FontSize="Large" HorizontalOptions="Center" Padding="30" />
+                        
+                        <Label Text="Ports" />
+                        <local:Dropdown ItemsSource="{Binding PortKeyList}" 
+                                        SelectedItem="{Binding SelectedPortKey}"/>
+                        <Label Text="Rack" />
+                        <local:Dropdown ItemsSource="{Binding RackRailShelfs}" 
+                                                ItemDisplayBinding="{Binding Racknumber}" 
+                                                SelectedItem="{Binding SelectedRackNumber, Mode=TwoWay}" />
+                        <Label Text="Chassis" />
+                        <local:Dropdown ItemsSource="{Binding ChassisList}" 
+                                                ItemDisplayBinding="{Binding Model}" 
+                                                SelectedItem="{Binding  SelectedChassisKey, Mode=TwoWay}"/>
+                        <Label Text="{Binding ChassisList.ChassisNum}" />
+                        <Label Text="Blade" />
+                        <Grid ColumnDefinitions="0.7*,0.1*" >
+                            <local:Dropdown ItemsSource="{Binding BladeList}" 
+                                                ItemDisplayBinding="{Binding key}" 
+                                                SelectedItem="{Binding SelectedBladSlotTray, Mode=TwoWay}"/>
+                            <Button Grid.Column="1" Text="{x:Static fa:FontAwesomeIcons.List}"
+                                FontFamily="{StaticResource FontAwesomeSolid}" Command="{Binding RefreshBladeListCommand}"
+                                />
+                        </Grid>
+                        <Label Text="{Binding SlotBladeTray.slot_or_blade_number}" />
+                        <Label Text="Transmit / Receive" />
+                        <local:Dropdown SelectedItem="{Binding SelectedTXRXOption, Mode=TwoWay}">
+                            <Picker.Items>
+                                <x:String>Transmit</x:String>
+                                <x:String>Receive</x:String>
+                                <x:String>Full Duplex</x:String>
+                                <x:String>Unknown</x:String>
+                            </Picker.Items>
+                        </local:Dropdown>
+                        <Label Text="Port Number" />
+                        <local:Dropdown SelectedItem="{Binding SelectedPortNumber, Mode=TwoWay}">
+                            <Picker.Items>
+                                <x:String>1</x:String>
+                                <x:String>2</x:String>
+                                <x:String>3</x:String>
+                                <x:String>4</x:String>
+                                <x:String>5</x:String>
+                                <x:String>6</x:String>
+                                <x:String>7</x:String>
+                                <x:String>8</x:String>
+                                <x:String>9</x:String>
+                                <x:String>10</x:String>
+                                <x:String>11</x:String>
+                                <x:String>12</x:String>
+                                <x:String>13</x:String>
+                                <x:String>14</x:String>
+                                <x:String>15</x:String>
+                                <x:String>16</x:String>
+                                <x:String>17</x:String>
+                                <x:String>18</x:String>
+                                <x:String>19</x:String>
+                                <x:String>20</x:String>
+                            </Picker.Items>
+                        </local:Dropdown>
+
+                        <Label Text="Label" />
+                        <local:BorderEntry Text="{Binding PortLabel,Mode=TwoWay}" />
+                         
+                        <Label Text="Port type" />
+                        <local:Dropdown ItemsSource="{Binding PortTypeList}"
+                                        SelectedItem="{Binding SelectedPortType, Mode=TwoWay}"
+                                        ItemDisplayBinding="{Binding TextType}"
+                                        />
+                        <Button Text="Save and Continue" Command="{Binding SaveCommand}" />
+                        <Button Text="Finished with Blades" Command="{Binding FinishCommand}" />
+                        
+                    </StackLayout>
+
+                </ScrollView>
+            </StackLayout>
+            <!--<StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" Color ="{StaticResource blueColor}"/>
+
+                <Label Text="Loading..." HorizontalOptions="Center" TextColor="White"/>
+
+            </StackLayout>-->
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

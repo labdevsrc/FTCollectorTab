@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"                  
+            xmlns:forms="clr-namespace:SignaturePad.Forms;assembly=SignaturePad.Forms"
+            xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="FTCollectorApp.View.SitesPage.Popup.CompleteSitePopUp">
+    <StackLayout WidthRequest="500"
+                    Margin="20"
+                    Padding="20"
+                    BackgroundColor="White"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout Padding="20" HorizontalOptions="FillAndExpand">
+            <Label Padding="20"  FontSize="Large" x:Name="crewleader" HorizontalOptions="Center"/>            
+            <Label Padding="20,5,20,20"  FontSize="Large" Text="Signature" HorizontalOptions="Center"/>
+            <forms:SignaturePadView 
+                
+                StrokeCompletedCommand="{Binding EnableSaveButtonCommand}"                
+                x:Name="signaturePad"  BackgroundImage="sign_bg.png"
+      BackgroundColor="LightGray"  
+      StrokeColor="Black"  
+      StrokeWidth="3" />
+
+                <Grid ColumnDefinitions="*,*,*" >
+                    <Button Grid.Column="0" Padding="5"  Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand" Text="Save and Continue"/>
+                    <Button Grid.Column="1" Text="Clear Signature" Command="{Binding ClearSignatureCommand}"/>
+                    <Button Grid.Column="2" Text="Close"  Command="{Binding CloseCommand}"/>                    
+                </Grid>
+            </StackLayout>
+            <StackLayout IsVisible="{Binding IsBusy}" 
+                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" Color ="{StaticResource blueColor}"/>
+
+                <Label Text="Uploading..." HorizontalOptions="Center" TextColor="White"/>
+
+            </StackLayout>
+        </AbsoluteLayout>
+
+     </StackLayout>
+</pages:PopupPage>

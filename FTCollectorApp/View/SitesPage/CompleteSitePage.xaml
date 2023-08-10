@@ -8,12 +8,12 @@
             <StackLayout Padding="20" HorizontalOptions="FillAndExpand">
             <Label Padding="20"  FontSize="Large" x:Name="crewleader" HorizontalOptions="Center"/>            
             <Label Padding="20,5,20,20"  FontSize="Large" Text="Signature" HorizontalOptions="Center"/>
-            <forms:SignaturePadView x:Name="signaturePad"  BackgroundImage="sign_bg.png"
+                <forms:SignaturePadView x:Name="signaturePad"  BackgroundImage="sign_bg.png" StrokeCompletedCommand="{Binding EnableSaveButtonCommand }"
       BackgroundColor="LightGray"  
       StrokeColor="Black"  
       StrokeWidth="3" />
             <Button x:Name="SaveBtn"  IsEnabled="{Binding IsEnableBtn}" HorizontalOptions="FillAndExpand"
-                  Text="Save and Continue"   
+                  Text="Save and Continue"   Command="{Binding SaveCommandExecute}"
                   Clicked="SaveBtn_Clicked"/>
             <Button x:Name="ClearBtn"  
                   Text="Reset"  

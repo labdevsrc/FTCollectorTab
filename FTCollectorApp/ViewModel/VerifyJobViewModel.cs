@@ -1016,9 +1016,23 @@ namespace FTCollectorApp.ViewModel
         }
 
 
+        void DisableAllTopButton()
+        {
+            IsStartODOEntered = false;
+            RefreshAllTopButton();
+        }
+
+        void RefreshAllTopButton()
+        {
+            (LunchInCommand as Command).ChangeCanExecute();
+            (LunchOutCommand as Command).ChangeCanExecute();
+            (ToggleEndofDayCommand as Command).ChangeCanExecute();
+
+        }
         async void  InvokeSitePage()
         {
-            await Shell.Current.GoToAsync("CreateSitewQuestion1");
+            await Shell.Current.GoToAsync($"//createsitewquestion1", true);
+            //await Shell.Current.GoToAsync("CreateSitewQuestion1");
         }
 
 
@@ -1029,7 +1043,30 @@ namespace FTCollectorApp.ViewModel
             OnPropertyChanged(nameof(JobPhaseDetailList));
         }
 
-        void AddShellTabSitePage1()
+
+        async void RemoveSitePage1Tab()
+        {
+            ShellSection shell_section = new ShellSection
+            {
+                Title = "SITE",
+                Icon = "building.png"
+            };
+
+
+            shell_section.Items.Add(new ShellContent()
+            {
+                Content = new CreateSitewQuestion1(),
+                Route = "createsitewquestion1"
+
+            });
+
+            AppShell.mytabbar.Items.Remove(shell_section);
+
+        }
+
+
+
+        async void CreateAndOpenSitePage1Tab()
         {
             Console.WriteLine();
 
@@ -1039,15 +1076,23 @@ namespace FTCollectorApp.ViewModel
                 Icon = "building.png"
             };
 
+ 
             shell_section.Items.Add(new ShellContent()
             {
                 Content = new CreateSitewQuestion1(),
+                Route= "createsitewquestion1"
 
             });
+
+
             AppShell.mytabbar.Items.Add(shell_section);
 
+            await Shell.Current.GoToAsync($"//createsitewquestion1", true);
             Console.WriteLine(); 
         }
+        // Backup flag for preserve previous page when Change crew in lunchout or 
+        bool BackUpFlag_LeftJob = false;
+        bool BackUpFlag_IsLunchOut = false;
         public VerifyJobViewModel()
         {
             bool SomethingWrong = false;
@@ -1123,6 +1168,7 @@ namespace FTCollectorApp.ViewModel
 
             });
 
+            // When Button Left For Job entered
             MessagingCenter.Subscribe<EnterMilesVM, string>(this, "FinishJob", (senders, value) =>
             {
                 ClearAllPage();
@@ -1207,7 +1253,7 @@ namespace FTCollectorApp.ViewModel
                     // PUT HERE : Create SITE as Tab Page
                     //MessagingCenter.Send<VerifyJobViewModel>(this, "OpenCreateSiteQuestions1");
                     //MessagingCenter.Send<VerifyJobViewModel>(this, "OpenCreateSiteQuestions1");
-                    InvokeSitePage();
+                    //InvokeSitePage();
 
 
                 }
@@ -1228,11 +1274,13 @@ namespace FTCollectorApp.ViewModel
                 if (Session.event_type == "9") // Arrived at Yard
                 {
                     LattestMileHour = value;
-                    IsStartODOEntered = true;
+                    IsStartODOEntered = false;
                     Console.WriteLine(); // check Lunchin, LunchOut , Equipment Checkin
                     ArrivedAtYardTime = DateTime.Now.ToString("HH:mm");
                     (ToggleEndofDayCommand as Command).ChangeCanExecute();
                     RefreshFAButton(); // clean up
+                    IsEqCheckInDisplayed = true; // display end equipment checkin
+
                 }
 
             });
@@ -1529,6 +1577,21 @@ namespace FTCollectorApp.ViewModel
                                 Console.WriteLine();
                             }
                         }
+                        else
+                        {
+                            try
+                            {
+                                Employee1Name = new CrewInfoDetail
+                                {
+                                    FullName = ""
+                                };
+                                Console.WriteLine("Employee1Name?.FullName.Length : " + Employee1Name?.FullName.Length);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("1559 " + e.ToString());
+                            }
+                        }
 
                         if (Employee2Name?.FullName.Length > 1 && StartTimeEmp2.Length >= 3)
                         {
@@ -1553,6 +1616,21 @@ namespace FTCollectorApp.ViewModel
                                 StartTimeEmp2, SelectedPhase.PhaseNumber, PerDiemEmp2);
 
                         }
+                        else
+                        {
+                            try
+                            {
+                                Employee2Name = new CrewInfoDetail
+                                {
+                                    FullName = ""
+                                };
+                                Console.WriteLine("Employee2Name?.FullName.Length : " + Employee2Name?.FullName.Length);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("1596 " + e.ToString());
+                            }
+                        }
 
                         if (Employee3Name?.FullName.Length > 1 && StartTimeEmp3.Length >= 3)
                         {
@@ -1576,6 +1654,21 @@ namespace FTCollectorApp.ViewModel
                                 StartTimeEmp3, SelectedPhase.PhaseNumber, PerDiemEmp3);
 
                         }
+                        else
+                        {
+                            try
+                            {
+                                Employee3Name = new CrewInfoDetail
+                                {
+                                    FullName = ""
+                                };
+                                Console.WriteLine("Employee3Name?.FullName.Length : " + Employee3Name?.FullName.Length);
+                            }
+                            catch(Exception e)
+                            {
+                                Console.WriteLine("1631 "+ e.ToString());
+                            }
+                        }
 
                         if (Employee4Name?.FullName.Length > 1 && StartTimeEmp4.Length >= 3)
                         {
@@ -1597,7 +1690,21 @@ namespace FTCollectorApp.ViewModel
                             }
                             await CloudDBService.PostTimeSheet(Employee4Name?.TeamUserKey.ToString(), StartTimeEmp4, SelectedPhase.PhaseNumber, PerDiemEmp4);
                         }
-
+                        else
+                        {
+                            Employee4Name = new CrewInfoDetail
+                            {
+                                FullName = ""
+                            };
+                            try
+                            {
+                                Console.WriteLine("Employee4Name?.FullName.Length : " + Employee4Name?.FullName.Length);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("1664 " + e.ToString());
+                            }
+                        }
 
                         if (Employee5Name?.FullName.Length > 1 && StartTimeEmp5.Length >= 3)
                         {
@@ -1618,6 +1725,21 @@ namespace FTCollectorApp.ViewModel
                                 await CloudDBService.PostJobEvent(SelectedPhase.PhaseNumber, Employee5Name?.TeamUserKey.ToString());
                             }
                             await CloudDBService.PostTimeSheet(Employee5Name?.TeamUserKey.ToString(), StartTimeEmp5, SelectedPhase.PhaseNumber, PerDiemEmp5);
+                        }
+                        else
+                        {
+                            try
+                            {
+                                Employee5Name = new CrewInfoDetail
+                                {
+                                    FullName = ""
+                                };
+                                Console.WriteLine("Employee5Name?.FullName.Length : " + Employee5Name?.FullName.Length);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("1697 " + e.ToString());
+                            }
                         }
 
                         if (Employee6Name?.FullName.Length > 1 && StartTimeEmp6.Length >= 3)
@@ -1642,6 +1764,21 @@ namespace FTCollectorApp.ViewModel
                             }
                             await CloudDBService.PostTimeSheet(Employee6Name?.TeamUserKey.ToString(),
                                 StartTimeEmp6, SelectedPhase.PhaseNumber, PerDiemEmp6);
+                        }
+                        else
+                        {
+                            try
+                            {
+                                Employee6Name = new CrewInfoDetail
+                                {
+                                    FullName = ""
+                                };
+                                Console.WriteLine("Employee6Name?.FullName.Length : " + Employee6Name?.FullName.Length);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("1733" + e.ToString());
+                            }
                         }
 
 
@@ -1669,20 +1806,41 @@ namespace FTCollectorApp.ViewModel
                         }
                         await Application.Current.MainPage.DisplayAlert("Updated", "Crew member updated", "OK");
 
-
+                        // Add or remove crews
                         if (Session.event_type == "17" || Session.event_type == "18")
                         {
                             IsDisplayCrewList = false;
+                            //return back vars
+                            IsLeftJobBtnEnabled = BackUpFlag_LeftJob; 
+                            IsLunchOut = BackUpFlag_IsLunchOut;
 
+                            Console.WriteLine();
                             if (IsLunchOut) // if previous crew change is Lunchout button, display lunch out FAB button
-                                DisplayLunchOutFAButton();
+                            {
+                                EnableLunchOutTopButton();
+                                Console.WriteLine();
+                                IsStartODOEntered = true;
+                            }
                             else if (IsLeftJobBtnEnabled) // if previous crew change is Arrivd sute button, display ArrivdFAB button
-                                DisplayLeftJobFAButton();
+                            {
+                                Console.WriteLine();
+                                IsStartODOEntered = false;
+                                //refresh Left Job enable status here
+                                (LeftForJobCommand as Command).ChangeCanExecute();
+                                EnableCrewUpdateMenuButton();
+                                EnableStartNewJobMenuButton();
+                            }
+
+
                             RefreshRemoveButton();
 
                         }
+                        // crew assembled
                         else
                         {
+                            Console.WriteLine();
+
+
                             DisplayEquipmentCheckInCommand?.Execute(null); // show Equipment 
                             IsDisplayCrewList = false;
 
@@ -1773,76 +1931,7 @@ namespace FTCollectorApp.ViewModel
                 },
                 canExecute: () =>
                 {
-                    var retval = false;
-                    if (LunchOutTimeLeader.Length > 3)
-                    {
-                        if (IsLOLeaderInvalid) { Console.WriteLine("Leader true"); return false; }
-                        else retval = true;
-                    }
-
-                    if (Employee1Name?.FullName.Length > 1)
-                    {
-                        if (LunchOutTime1.Length > 3)
-                        {
-                            if (IsLOEmp1Invalid) { Console.WriteLine("IsLOEmp1Invalid true"); return false; }
-                            else retval = true;
-                        }
-                        else retval = false;
-                    }
-
-
-                    if (Employee2Name?.FullName.Length > 1)
-                    {
-                        if (LunchOutTime2.Length > 3)
-                        {
-                            if (IsLOEmp2Invalid) { Console.WriteLine("IsLOEmp2Invalid true"); return false; }
-                            else retval = true;
-                        }
-                        else retval = false;
-                    }
-
-
-
-                    if (Employee3Name?.FullName.Length > 1)
-                    {
-                        if (LunchOutTime3.Length > 3)
-                        {
-                            if (IsLOEmp3Invalid) { Console.WriteLine("IsLOEmp3Invalid true"); return false; }
-                            else retval = true;
-                        }
-                        else retval = false;
-                    }
-
-                    if (Employee4Name?.FullName.Length > 1)
-                    {
-                        if (LunchOutTime4.Length > 3)
-                        {
-                            if (IsLOEmp4Invalid) { Console.WriteLine("IsLOEmp4Invalid true"); return false; }
-                            else retval = true;
-                        }
-                        else retval = false;
-                    }
-
-                    if (Employee5Name?.FullName.Length > 1)
-                    {
-                        if (LunchOutTime5.Length > 3)
-                        {
-                            if (IsLOEmp5Invalid) { Console.WriteLine("IsLOEmp5Invalid true"); return false; }
-                            else retval = true;
-                        }
-                        else retval = false;
-                    }
-
-                    if (Employee6Name?.FullName.Length > 1)
-                    {
-                        if (LunchOutTime6.Length > 3)
-                        {
-                            if (IsLOEmp6Invalid) { Console.WriteLine("IsLOEmp6Invalid true"); return false; }
-                            else retval = true;
-                        }
-                        else retval = false;
-                    }
-                    return retval;
+                    return IsLunchOutTimeEntriesValid();
                 }
             );
 
@@ -1892,8 +1981,11 @@ namespace FTCollectorApp.ViewModel
 
 
                     // after lunchin, display Left Job button
+
                     IsLeftJobBtnEnabled = true;
                     (LeftJobCommand as Command).ChangeCanExecute();
+
+                    IsStartODOEntered = false; // disable 4 button at top : Lunch out, Lunch in, Equip chckin , enf of day
 
                     EnableCrewUpdateMenuButton(); // IsCrewChangeIsEnabled = true; (CrewChangeCommand as Command).ChangeCanExecute();
                     EnableStartNewJobMenuButton();
@@ -1991,7 +2083,7 @@ namespace FTCollectorApp.ViewModel
                             //IsLunchIn = true; // when lunchout button clicked, it will enable Lunchin button
                             //(LunchInCommand as Command).ChangeCanExecute();
                             //(LunchOutCommand as Command).ChangeCanExecute();
-                            DisplayLunchInFAButton();
+                            EnableLunchInTopButton();
                             (DisplayEquipmentCheckInCommand as Command).ChangeCanExecute();
                             (ToggleEndofDayCommand as Command).ChangeCanExecute();
 
@@ -2023,6 +2115,13 @@ namespace FTCollectorApp.ViewModel
             LunchInCommand = new Command(
                 execute: async () =>
                 {
+
+                    if (!IsLunchOutTimeEntriesValid())
+                    {
+                        Console.WriteLine();
+                        await Application.Current.MainPage.DisplayAlert("Warning", "Time must not empty", "Back");
+                        return;
+                    }
                     ClearAllPage();
                     IsLunchInDisplay = true;
 
@@ -2047,21 +2146,9 @@ namespace FTCollectorApp.ViewModel
                 {
                     ClearAllPage();
                     IsDisplayEndOfDay = true;
-
-                    (ToggleCrewListCommand as Command).ChangeCanExecute();
-                    (DisplayEquipmentCheckOutCommand as Command).ChangeCanExecute();
-                    //calculate from Clock in to Lunch out
-
-                    //check if clockintime > lunchout
-                    Console.WriteLine();
-                    //set initial value of perdiem to crew list perdiem;
-                    LClockOutPerDiem = 1;// PerDiemL;
-                    Emp1ClockOutPerDiem = 1; // PerDiemEmp1;
-                    Emp2ClockOutPerDiem = 1; // PerDiemEmp2;
-                    Emp3ClockOutPerDiem = 1; //PerDiemEmp3;
-                    Emp4ClockOutPerDiem = 2; //PerDiemEmp4;
-                    Emp5ClockOutPerDiem = PerDiemEmp5;
-
+                    IsStartODOEntered = false;
+                    DisableCrewUpdateMenuButton();
+                   
                     DisableCrewUpdateMenuButton();
 
                 },
@@ -2178,7 +2265,7 @@ namespace FTCollectorApp.ViewModel
             );
 
             SetCrewAsDefaultCommand = new Command(
-                execute: () =>
+                execute: async () =>
                 {
                     try
                     {
@@ -2255,7 +2342,8 @@ namespace FTCollectorApp.ViewModel
                             Application.Current.Properties.Add("CrewId6", Employee6Name?.TeamUserKey);
                         }
 
-                        Application.Current.SavePropertiesAsync();
+                        await Application.Current.SavePropertiesAsync();
+                        await Application.Current.MainPage.DisplayAlert("Info","Current Crew member preserved successfully", "Back");
 
                     } catch (Exception e)
                     {
@@ -2317,7 +2405,7 @@ namespace FTCollectorApp.ViewModel
                 canExecute: () =>
                 {
                     Console.WriteLine();
-                    return !IsLunchIn && !IsLunchOut;
+                    return !IsLunchIn && !IsLunchOut && !IsLeftJobBtnEnabled && !IsDisplayEndOfDay;
                 }
             );
 
@@ -2364,6 +2452,7 @@ namespace FTCollectorApp.ViewModel
                         bool answer = await Application.Current.MainPage.DisplayAlert("Upload Done", "Job Equipment table uploaded", "Finish The Day", "Back");
                         if (answer)
                         {
+                            IsStartODOEntered = false; // hide 4 button
                             ClearAllPage();
                             IsDisplayEndOfDay = true;
                         }
@@ -2589,8 +2678,8 @@ namespace FTCollectorApp.ViewModel
                             (LoadCrewDefaultCommand as Command).ChangeCanExecute();
                         }
 
-
-                        AddShellTabSitePage1();
+                        CreateAndOpenSitePage1Tab();
+                        //InvokeSitePage();
                     }
                     catch (Exception e)
                     {
@@ -2670,7 +2759,7 @@ namespace FTCollectorApp.ViewModel
                     //await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new EnterMiles(LeftJobMilesHour));
                     RefreshFAButton(); // pull all Is FAB button state to false, then invoke all ChangeExecute
                     DisableStartNewJobMenuButton();  //IsStartNewJobIsEnable = false; (StartNewJobCommand as Command).ChangeCanExecute();
-
+                    DisableCrewUpdateMenuButton();
                 },
                 canExecute: () =>
                 {
@@ -2689,9 +2778,14 @@ namespace FTCollectorApp.ViewModel
 
                     if (answer)
                     {
-                        
+
                         ClearAllPage();
+                        IsStartODOEntered = false; // Hide LunchOut, Lunchin , EquipChecking button
                         LoginPopUpCall();
+
+
+                        AppShell.mytabbar.Items.Clear();
+
                     }
                     //if (answer)
                         //System.Diagnostics.Process.GetCurrentProcess().Kill();
@@ -2732,11 +2826,15 @@ namespace FTCollectorApp.ViewModel
 
 
                     IsDisplayCrewList = true;
+                     
+                    BackUpFlag_LeftJob = IsLeftJobBtnEnabled; // Before refreshed to show Crew input page
+                    BackUpFlag_IsLunchOut = IsLunchIn; // Before refreshed to show Crew input page
 
                     RefreshFAButton();
                     DisableStartNewJobMenuButton();// IsStartNewJobIsEnable = false; (StartNewJobCommand as Command).ChangeCanExecute();
                     DisableCrewUpdateMenuButton(); // IsCrewChangeIsEnabled = false; (CrewChangeCommand as Command).ChangeCanExecute();
 
+                    DisableAllTopButton();
 
 
                     GetEvent18Prop2(); // get crew member with event_18 and dump to SQLite table
@@ -2804,6 +2902,7 @@ namespace FTCollectorApp.ViewModel
                         }
 
                         (CrewDefaultClearAllCommand as Command).ChangeCanExecute();
+                        await Application.Current.MainPage.DisplayAlert("Info","Cleared all successfully", "Back");
 
                         Console.WriteLine();
                     }
@@ -3119,8 +3218,84 @@ namespace FTCollectorApp.ViewModel
                 }
             );
         }
+
+        bool IsLunchOutTimeEntriesValid()
+        {
+            var retval = false;
+            if (LunchOutTimeLeader.Length > 3)
+            {
+                if (IsLOLeaderInvalid) { Console.WriteLine("Leader true"); return false; }
+                else retval = true;
+            }
+
+            if (Employee1Name?.FullName.Length > 1)
+            {
+                if (LunchOutTime1.Length > 3)
+                {
+                    if (IsLOEmp1Invalid) { Console.WriteLine("IsLOEmp1Invalid true"); return false; }
+                    else retval = true;
+                }
+                else retval = false;
+            }
+
+
+            if (Employee2Name?.FullName.Length > 1)
+            {
+                if (LunchOutTime2.Length > 3)
+                {
+                    if (IsLOEmp2Invalid) { Console.WriteLine("IsLOEmp2Invalid true"); return false; }
+                    else retval = true;
+                }
+                else retval = false;
+            }
+
+
+
+            if (Employee3Name?.FullName.Length > 1)
+            {
+                if (LunchOutTime3.Length > 3)
+                {
+                    if (IsLOEmp3Invalid) { Console.WriteLine("IsLOEmp3Invalid true"); return false; }
+                    else retval = true;
+                }
+                else retval = false;
+            }
+
+            if (Employee4Name?.FullName.Length > 1)
+            {
+                if (LunchOutTime4.Length > 3)
+                {
+                    if (IsLOEmp4Invalid) { Console.WriteLine("IsLOEmp4Invalid true"); return false; }
+                    else retval = true;
+                }
+                else retval = false;
+            }
+
+            if (Employee5Name?.FullName.Length > 1)
+            {
+                if (LunchOutTime5.Length > 3)
+                {
+                    if (IsLOEmp5Invalid) { Console.WriteLine("IsLOEmp5Invalid true"); return false; }
+                    else retval = true;
+                }
+                else retval = false;
+            }
+
+            if (Employee6Name?.FullName.Length > 1)
+            {
+                if (LunchOutTime6.Length > 3)
+                {
+                    if (IsLOEmp6Invalid) { Console.WriteLine("IsLOEmp6Invalid true"); return false; }
+                    else retval = true;
+                }
+                else retval = false;
+            }
+            return retval;
+        }
+
+
         // Enable Disable Command Buttons, FAButtons
-        void DisplayLunchOutFAButton()
+        void EnableLunchOutTopButton()
         {
             IsLunchOut = true;
             IsLunchIn = false; // when lunchout button clicked, it will enable Lunchin button
@@ -3128,22 +3303,13 @@ namespace FTCollectorApp.ViewModel
             (LunchOutCommand as Command).ChangeCanExecute();
         }
 
-        void DisplayLeftJobFAButton()
+        void DisableLunchInTopButton()
         {
             IsLunchIn = false; // when lunchout button clicked, it will enable Lunchin button
             (LunchInCommand as Command).ChangeCanExecute();
         }
 
-
-        void HideLunchOutFAButton()
-        {
-
-            IsLunchOut = false; // when lunchout button clicked, it will enable Lunchin button
-            (LunchInCommand as Command).ChangeCanExecute();
-        }
-
-
-        void DisplayLunchInFAButton()
+        void EnableLunchInTopButton()
         {
             IsLunchOut = false;
             IsLunchIn = true; // when lunchout button clicked, it will enable Lunchin button
@@ -3531,6 +3697,9 @@ namespace FTCollectorApp.ViewModel
             {
                 if (employee1Name == value) // work arround for Employee1Name assigned 2x
                     return;
+
+
+
                 if(SelectedCrewDuplicated(value)) // prevent 
                 {
                     DisplayAllertCrewExisted();
@@ -3538,6 +3707,8 @@ namespace FTCollectorApp.ViewModel
                 }
 
                 SetProperty(ref employee1Name, value);
+                if (string.IsNullOrEmpty(employee1Name.FullName)) // work arround for remove blank crew in Lunchin lunchout
+                    return;
                 if (string.IsNullOrEmpty(StartTimeEmp1))
                 {
                     Console.WriteLine();
@@ -3563,6 +3734,8 @@ namespace FTCollectorApp.ViewModel
                 if (employee2Name == value)
                     return;
 
+
+
                 if (SelectedCrewDuplicated(value))
                 {
                     DisplayAllertCrewExisted();
@@ -3570,6 +3743,8 @@ namespace FTCollectorApp.ViewModel
                 }
 
                 SetProperty(ref employee2Name, value);
+                if (string.IsNullOrEmpty(employee2Name.FullName)) // work arround for remove blank crew in Lunchin lunchout
+                    return;
                 if (string.IsNullOrEmpty(StartTimeEmp2)) { 
                     Console.WriteLine();
                     IsTimeEmp2Invalid = true;
@@ -3589,6 +3764,7 @@ namespace FTCollectorApp.ViewModel
                 if (employee3Name == value)
                     return;
 
+
                 if (SelectedCrewDuplicated(value))
                 {
                     DisplayAllertCrewExisted();
@@ -3596,6 +3772,9 @@ namespace FTCollectorApp.ViewModel
                 }
 
                 SetProperty(ref employee3Name, value);
+                if (string.IsNullOrEmpty(employee3Name.FullName)) // work arround for remove blank crew in Lunchin lunchout
+                    return;
+
                 if (string.IsNullOrEmpty(StartTimeEmp3))
                 {
                     Console.WriteLine();
@@ -3615,13 +3794,17 @@ namespace FTCollectorApp.ViewModel
                 if (employee4Name == value)
                     return;
 
-                if(SelectedCrewDuplicated(value))
+
+
+                if (SelectedCrewDuplicated(value))
                 {
                     DisplayAllertCrewExisted();
                     return;
                 }
 
                 SetProperty(ref employee4Name, value);
+                if (string.IsNullOrEmpty(employee4Name.FullName)) // work arround for remove blank crew in Lunchin lunchout
+                    return;
                 if (string.IsNullOrEmpty(StartTimeEmp4))
                     IsTimeEmp4Invalid = true;
                 RefreshCrewDefaultButton();
@@ -3637,6 +3820,8 @@ namespace FTCollectorApp.ViewModel
                 if (employee5Name == value)
                     return;
 
+
+
                 if (SelectedCrewDuplicated(value))
                 {
                     DisplayAllertCrewExisted();
@@ -3644,6 +3829,8 @@ namespace FTCollectorApp.ViewModel
                 }
 
                 SetProperty(ref employee5Name, value);
+                if (string.IsNullOrEmpty(employee5Name.FullName)) // work arround for remove blank crew in Lunchin lunchout
+                    return;
                 if (string.IsNullOrEmpty(StartTimeEmp5))
                     IsTimeEmp5Invalid = true;
                 RefreshCrewDefaultButton();
@@ -3661,6 +3848,7 @@ namespace FTCollectorApp.ViewModel
                     return;
 
 
+
                 if (SelectedCrewDuplicated(value))
                 {
                     DisplayAllertCrewExisted();
@@ -3668,6 +3856,8 @@ namespace FTCollectorApp.ViewModel
                 }
 
                 SetProperty(ref employee6Name, value);
+                if (string.IsNullOrEmpty(employee6Name.FullName)) // work arround for remove blank crew in Lunchin lunchout
+                    return;
                 if (string.IsNullOrEmpty(StartTimeEmp6))
                     IsTimeEmp6Invalid = true;
                 RefreshCrewDefaultButton();

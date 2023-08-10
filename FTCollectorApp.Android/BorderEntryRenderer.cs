@@ -37,8 +37,8 @@ namespace FTCollectorApp.Droid.UI.Renderers
                 //gradientDrawable.SetColor(Android.Graphics.Color.LightGray);
                 Control.SetBackground(gradientDrawable);
 
-                Control.SetPadding(5, Control.PaddingTop, Control.PaddingRight,
-                    Control.PaddingBottom);
+                //Control.SetPadding(10, Control.PaddingTop, Control.PaddingRight, Control.PaddingBottom);
+                Control.SetPadding(10, 2, Control.PaddingRight,2);
             }
         }
     }

@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             xmlns:fa="clr-namespace:FontAwesome"
+             x:Class="FTCollectorApp.View.SitesPage.DuctPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem  Clicked="btnCamera" IconImageSource="cam_white.png" 
+                 Order="Primary"
+                 Priority="0" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <ScrollView>
+                    <StackLayout Padding="20" VerticalOptions="CenterAndExpand">
+                     <Label Text="Duct"  HorizontalOptions="Center" FontSize="Large" />
+
+                    <Label Text="Duct "  />
+                        <Grid ColumnDefinitions="0.7*,0.1*,0.1*" >
+                            <local:Dropdown SelectedItem="{Binding SelectedDuctKey, Mode=TwoWay}"
+                                        ItemDisplayBinding="{Binding ConduitKey}" 
+                                        ItemsSource="{Binding DuctKeyList}" />
+
+                            <Button Grid.Column="1" Text="{x:Static fa:FontAwesomeIcons.Recycle}"
+                                   FontFamily="FontAwesome6Solid" Command="{Binding RefreshDuctKeyListCommand}"
+                                    />
+                            <Button Grid.Column="2" Text="{x:Static fa:FontAwesomeIcons.Trash}"
+                                   FontFamily="FontAwesome6Solid" Command="{Binding RemoveDuctItemCommand}"
+                                    />                            
+                        </Grid>
+                    <Label Text="Host Tag Number "  />
+                    <local:BorderColorEntry x:Name="txtHostTagNumber" Text="{Binding DefaultHostTagNumber}" IsEnabled="False"/>
+
+                    <Label Text="Direction" />
+                        <Picker  ItemsSource="{Binding TravelDirectionList}" 
+                                     ItemDisplayBinding="{Binding CompassDirDesc}" 
+                                     SelectedItem="{Binding SelectedDirection, Mode=TwoWay}"
+                             Title="{Binding SelectedDuctKey.Direction}" HorizontalOptions="FillAndExpand" />
+                        
+                    <Label Text="Direction Count" />
+                        <Picker Title="{Binding SelectedDuctKey.DirCnt}" HorizontalOptions="FillAndExpand" 
+                                     SelectedItem="{Binding SelectedDirectionCnt}">
+                            <Picker.Items>
+                                <x:String>1</x:String>
+                                <x:String>2</x:String>
+                                <x:String>3</x:String>
+                                <x:String>4</x:String>
+                                <x:String>5</x:String>
+                                <x:String>6</x:String>
+                                <x:String>7</x:String>
+                                <x:String>8</x:String>
+                                <x:String>9</x:String>
+                                <x:String>10</x:String>
+                            </Picker.Items>
+                    </Picker>
+
+                    <Label Text="Conduit Diameter" />
+                    <Picker  ItemsSource="{Binding DuctSizeList}" ItemDisplayBinding="{Binding Ductsize}" 
+                                    SelectedItem="{Binding SelectedDuctSize, Mode=TwoWay}"
+                            Title="{Binding SelectedDuctKey.DuctSize}" HorizontalOptions="FillAndExpand"/>
+
+                    <Label Text="Color :" />
+                    <Button x:Name="btnSelectColor" Command="{Binding ShowPopupCommand}" 
+                            BackgroundColor="{Binding SelectedColor.ColorHex}"
+                            Text="{Binding SelectedColor.ColorName}" TextColor="Black"/>                        
+                    <!--<Picker ItemsSource="{Binding DuctColorCode}" TextColor="{Binding ColorHex}"
+                           ItemDisplayBinding ="{Binding ColorName}" x:Name="pDuctColor" />-->
+
+
+                    <Label Text="Duct Material :" />
+                    <Picker Title="Select Duct Material"  ItemsSource="{Binding DuctMaterialList}" ItemDisplayBinding="{Binding DucTypeDesc}" 
+                                     SelectedItem="{Binding SelectedDuctType, Mode=TwoWay}"
+                             HorizontalOptions="FillAndExpand"/>
+
+                    <Label Text="Duct Used :" />
+                    <Picker Title="Select Duct Usage"  ItemsSource="{Binding DuctUsageList}" ItemDisplayBinding="{Binding DuctUsage}" 
+                                    SelectedItem="{Binding SelectedDuctUsage, Mode=TwoWay}"
+                             HorizontalOptions="FillAndExpand"/>
+
+                    <Label Text="Install Method :" />
+                    <Picker Title="Select Install Method" ItemsSource="{Binding DuctInstallList}" ItemDisplayBinding="{Binding DuctInstallDesc}" 
+                             SelectedItem="{Binding SelectedDuctInstallType,Mode=TwoWay}"
+                             HorizontalOptions="FillAndExpand"/>
+
+
+                    <Grid RowDefinitions="0.3*,0.5*,0.3*,0.5*" ColumnDefinitions="*,*,*">
+                        <Label Text="Duct Plug" VerticalOptions="Center"  />
+                        <Switch IsToggled="{Binding IsPlugged, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1"/>
+                            <!--<local:Dropdown x:Name="isPlugged" Grid.Row="1" SelectedItem="{Binding IsPlugged, Mode=TwoWay }">
+                                <Picker.Items>
+                                    <x:String>Y</x:String>
+                                    <x:String>N</x:String>
+                                </Picker.Items>
+                            </local:Dropdown>-->
+
+                        <Label Text="IsOpen or filled" Grid.Row="1" VerticalOptions="Center" />
+                            <Switch IsToggled="{Binding IsOpen, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="1"/>
+                            <!--<local:Dropdown x:Name="isOpen" Grid.Row="1" Grid.Column="1" SelectedItem="{Binding IsOpen, Mode=TwoWay}">
+                            <Picker.Items>
+                                <x:String>Y</x:String>
+                                <x:String>N</x:String>
+                            </Picker.Items>                                
+                        </local:Dropdown>-->
+
+                        <Label Text="HasPullTape" Grid.Column="2"/>
+                            <Picker x:Name="hasPullTape" Grid.Row="1" Grid.Column="2"  SelectedIndex="{Binding HasPullTape, Mode=TwoWay}">
+                            <Picker.Items>
+                                <x:String>None</x:String>
+                                <x:String>Jet Line</x:String>
+                                <x:String>String</x:String>
+                                <x:String>Mule tape</x:String>
+                            </Picker.Items>
+                        </Picker>
+
+                        <Label Text="Has Inner Duct" Grid.Row="3"  VerticalOptions="Center" />
+                        <Switch IsToggled="{Binding HasInnerDuct, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="3"/>
+
+                        <!--<local:Dropdown x:Name="hasInnerDuct" Grid.Row="3" Grid.Column="1" SelectedItem="{Binding HasInnerDuct, Mode=TwoWay}">
+                            <Picker.Items>
+                            <x:String>Y</x:String>
+                            <x:String>N</x:String>
+                        </Picker.Items>
+                        </local:Dropdown>-->
+
+                        <Label Text="Has Trace Wire" Grid.Row="2"  VerticalOptions="Center"/>
+                        <Switch IsToggled="{Binding HasTraceWire, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="2"/>
+
+                            <!--<local:Dropdown x:Name="hasTraceWire" Grid.Row="3"  Grid.Column="1" SelectedItem="{Binding HasTraceWire, Mode=TwoWay}">
+                            <Picker.Items>
+                                <x:String>Y</x:String>
+                                <x:String>N</x:String>
+                            </Picker.Items>
+                        </local:Dropdown>-->
+
+                        <Label Text="% Open" Grid.Row="2"   Grid.Column="2" />
+                            <local:BorderEntry Text="{Binding PercentOpen, Mode=TwoWay}" Grid.Row="3"   Grid.Column="2" />
+
+                        </Grid>
+
+                        <Button Text="Record Inner Duct" Command="{Binding RecordInnerCommand}"/>
+
+                        <Button Text="Save and Continue" Command="{Binding SaveCommand}"/>
+
+                        <Button Text="Finished Duct Recording" Command="{Binding SaveBackCommand}"/>
+                        <Button Text="Return to Main Menu" HorizontalOptions="FillAndExpand"  Command="{Binding ReturnToMainCommand}"/>
+
+                    </StackLayout>
+
+                </ScrollView>
+                    
+        </StackLayout>
+            <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" Color ="{StaticResource blueColor}"/>
+
+                <Label Text="Loading..." HorizontalOptions="Center" TextColor="White"/>
+            </StackLayout>
+        </AbsoluteLayout>            
+    </ContentPage.Content>
+</ContentPage>

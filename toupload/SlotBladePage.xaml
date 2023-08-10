@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             xmlns:fa="clr-namespace:FontAwesome"
+             x:Class="FTCollectorApp.View.SitesPage.SlotBladePage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:HVConverter x:Key="HVConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1"
+                         Padding="20">
+                <Label Text="Slot Blade Tray Panel"  FontSize="Large"
+                    VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="CenterAndExpand" />
+                <Label Text="Blades" />
+                <Grid ColumnDefinitions="0.7*,0.1*" >
+                    <local:Dropdown ItemsSource="{Binding SlotBladeTrayTables}" 
+                                                ItemDisplayBinding="{Binding key}" 
+                                                SelectedItem="{Binding SlotBladeTrayTables.key, Mode=TwoWay}"
+                                                />
+                    <Button Grid.Column="1" Text="{x:Static fa:FontAwesomeIcons.List}"
+                                       FontFamily="{StaticResource FontAwesomeSolid}" Command="{Binding RefreshBladeKeyListCommand}"
+                                        />
+                </Grid>
+                <Grid RowDefinitions="0.1*,0.2*" ColumnDefinitions="*,*,*">
+                    <Label Text="Rack*" />
+                    <local:Dropdown ItemsSource="{Binding RackRailShelfs}" 
+                                                ItemDisplayBinding="{Binding Racknumber}" 
+                                                SelectedItem="{Binding SelectedRackNumber, Mode=TwoWay}"
+                                                Grid.Row="1"/>
+
+                    <Label Text="Chassis*" Grid.Column="1" />
+                    <local:Dropdown ItemsSource="{Binding ChassisList}" 
+                                                ItemDisplayBinding="{Binding Model}" 
+                                                SelectedItem="{Binding  SelectedChassisKey, Mode=TwoWay}"
+                                                Grid.Column="1" Grid.Row="1"/>
+
+                    <Label Text="Blade" Grid.Column="2" />
+                    <local:Dropdown Grid.Row="1" Grid.Column="2" SelectedItem="{Binding SelectedBladeNum, Mode=TwoWay}">
+                        <Picker.Items>
+                            <x:String>1</x:String>
+                            <x:String>2</x:String>
+                            <x:String>3</x:String>
+                            <x:String>4</x:String>
+                            <x:String>5</x:String>
+                            <x:String>6</x:String>
+                            <x:String>7</x:String>
+                            <x:String>8</x:String>
+                            <x:String>9</x:String>
+                            <x:String>10</x:String>
+                            <x:String>11</x:String>
+                            <x:String>12</x:String>
+                            <x:String>13</x:String>
+                            <x:String>14</x:String>
+                            <x:String>15</x:String>
+                            <x:String>16</x:String>
+                            <x:String>17</x:String>
+                            <x:String>18</x:String>
+                            <x:String>19</x:String>
+                            <x:String>20</x:String>                        
+                        </Picker.Items>
+                    </local:Dropdown>
+                </Grid>
+                <Label Text="Manufacturer" />
+                <local:Dropdown   ItemsSource="{Binding ManufacturerList}" ItemDisplayBinding="{Binding ManufName}" x:Name="pManufacturer"
+                                     HorizontalOptions="FillAndExpand" 
+                                     SelectedItem="{Binding SelectedManufacturer, Mode=TwoWay}"
+                             />
+
+                <Label Text="Model" />
+                <local:Dropdown ItemsSource="{Binding ModelDetailList}" ItemDisplayBinding="{Binding ModelNumber}"
+                            x:Name="pModel" HorizontalOptions="FillAndExpand" SelectedItem="{Binding SelectedModelDetail, Mode=TwoWay}"
+                               />
+
+
+                <Label Text="Text Field" />
+                <local:BorderEntry Text="{Binding TextField, Mode=TwoWay}" />
+                <Grid RowDefinitions="0.1*,0.2*" ColumnDefinitions="*,*">
+                    <Label Text="Orientation"  />
+                    <local:Dropdown  x:Name="pOrientation" HorizontalOptions="FillAndExpand" 
+                                 SelectedItem="{Binding SelectedOrientation, Mode=TwoWay, Converter={StaticResource HVConverter}}" Grid.Row="1">
+                        <Picker.Items>
+                            <x:String>Horizontal</x:String>
+                            <x:String>Vertical</x:String>
+                        </Picker.Items>
+                    </local:Dropdown>
+                
+
+                    <Label Text="#of ports/blade/tray" Grid.Column="1" />
+                    <local:Dropdown SelectedItem="{Binding SelectedPorts, Mode=TwoWay}"
+                                                Grid.Row="1" Grid.Column="1">
+                        <Picker.Items>
+                            <x:String>1</x:String>
+                            <x:String>2</x:String>
+                            <x:String>3</x:String>
+                            <x:String>4</x:String>
+                            <x:String>5</x:String>
+                            <x:String>6</x:String>
+                            <x:String>7</x:String>
+                            <x:String>8</x:String>
+                            <x:String>9</x:String>
+                            <x:String>10</x:String>
+                            <x:String>11</x:String>
+                            <x:String>12</x:String>
+                            <x:String>13</x:String>
+                            <x:String>14</x:String>
+                            <x:String>15</x:String>
+                            <x:String>16</x:String>
+                            <x:String>17</x:String>
+                            <x:String>18</x:String>
+                            <x:String>19</x:String>
+                            <x:String>20</x:String>
+                        </Picker.Items>
+                    </local:Dropdown>
+                </Grid>
+                <Button Text="Save and Continue" Command="{Binding SaveCommand}" />
+                <Button Text="Finished with Blades" Command="{Binding FinishSaveCommand}" />
+                <Button Text="Ports"  Command="{Binding ShowPortPageCommand}"/>
+                <Button Text="Port Connection" Command="{Binding ShowPortConnPageCommand}"/>
+            </StackLayout>
+            <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" Color ="{StaticResource blueColor}"/>
+
+                <Label Text="Loading..." HorizontalOptions="Center" TextColor="White"/>
+            </StackLayout>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

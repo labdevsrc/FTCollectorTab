@@ -101,6 +101,7 @@ namespace FTCollectorApp.Droid.Services
         public override void OnDestroy()
         {
             base.OnDestroy();
+            Console.WriteLine();
             isForegroundServiceRunning = false;
         }
 
@@ -259,7 +260,7 @@ namespace FTCollectorApp.Droid.Services
 
                 //Thread.Sleep(5000);
                 LoadingText = "Download done! Populating SQLite...";
-
+                var getCabinetType = await CloudDBService.GetCabinetType();
 
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
@@ -522,6 +523,10 @@ namespace FTCollectorApp.Droid.Services
                     conn.CreateTable<CrewChangeInfoDetail>();
                     conn.DeleteAll<CrewChangeInfoDetail>();
                     conn.InsertAll(getEvent18StartTime);
+
+                    conn.CreateTable<CabinetType>();
+                    conn.DeleteAll<CabinetType>();
+                    conn.InsertAll(getCabinetType);
 
 
                 }

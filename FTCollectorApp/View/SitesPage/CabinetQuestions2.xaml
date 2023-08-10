@@ -16,18 +16,18 @@
             <ScrollView>
                 <StackLayout Padding="20" VerticalOptions="CenterAndExpand">
                     <Label Text="Cabinet #2" FontSize="Large" HorizontalOptions="Center"/>
-                    <Label Text="Enter Property Id" HorizontalOptions="Start"/>
-                    <local:BorderEntry Text="{Binding PropertyId, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Cabinet Type" HorizontalOptions="Start"/>
+                    <Picker  ItemsSource="{Binding CabinetTypeList}" ItemDisplayBinding="{Binding TYPE_DESC}" 
+                                SelectedItem="{Binding SelectedCabinetType, Mode=TwoWay}"   HorizontalOptions="FillAndExpand"/>
+                    
                     <Label Text="Enter Street Address" HorizontalOptions="Start"/>
                     <local:BorderEntry Text="{Binding StreetAddress, Mode=TwoWay}"  HorizontalOptions="FillAndExpand" IsVisible="{Binding Issite_street_addressVisible}"/>
                     <Label Text="Enter Postal Code" HorizontalOptions="Start"/>
                     <local:BorderEntry Text="{Binding PostalCode, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
 
                     <Grid Padding="0,5,10,5" RowDefinitions="0.1*,0.2*,0.1*,0.2*" ColumnDefinitions="*,*,*">
-                        <Label Grid.Row="0" Grid.Column="0" Text="Enter the dot disctrict"/>
-                        <Label Grid.Row="0" Grid.Column="1" Text="Has Power disconnect"/>
-                        <local:BorderEntry  Grid.Row="1" Grid.Column="0"  Text="{Binding DotDistrict, Mode=TwoWay}" />
-                        <Switch Grid.Row="1" Grid.Column="1" IsToggled="{Binding IsHasPowerDisconnect, Mode=TwoWay}"/>
+                        <Label Grid.Row="0" Grid.Column="0" Text="Has Power disconnect"/>
+                        <Switch Grid.Row="0" Grid.Column="1" IsToggled="{Binding IsHasPowerDisconnect, Mode=TwoWay}"/>
                         <Label Grid.Row="0" Grid.Column="2" Text="3rd party comms"/>
                         <Switch Grid.Row="1" Grid.Column="2" IsToggled="{Binding is3rdComms, Mode=TwoWay}"/>
 
@@ -37,29 +37,22 @@
                         <local:BorderEntry Grid.Row="3" Grid.Column="2"  Text="{Binding UDSOwner, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
                         <Label Grid.Row="2" Grid.Column="2" Text="key code"/>
                         <local:BorderEntry Grid.Row="3" Grid.Column="1" Text="{Binding KeyCode, Mode=TwoWay}"/>
-
                     </Grid>
 
-                    <Grid Padding="0,5,10,5" RowDefinitions="0.5*,*,0.5*,*" ColumnDefinitions="*,*,*">
-                        <Label Grid.Row="0" Grid.Column="0" Text="Have a sun shield"/>
-                        <Label Grid.Row="0" Grid.Column="1" Text="Has Ground Rod"/>
-                        <Label Grid.Row="0" Grid.Column="2" Text="Has Key"/>
-                        <Switch Grid.Row="1" Grid.Column="0" IsToggled="{Binding IsHaveSunShield}"/>
-                        <Switch Grid.Row="1" Grid.Column="1" IsToggled="{Binding IsHasGround}"/>
-                        <Switch Grid.Row="1" Grid.Column="2" IsToggled="{Binding IsHasKey}"/>
-                        <Label Grid.Row="2" Grid.Column="0" Text="Key Type" IsVisible="{Binding IsKeyTypeDisplay}" />
-                        <local:Dropdown Grid.Row="3" Grid.Column="0" 
+                    <Grid Padding="0,5,10,5" RowDefinitions="*,*,*,*,*,*,*" ColumnDefinitions="*,*">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Key Type" IsVisible="{Binding IsKeyTypeDisplay}" />
+                        <local:Dropdown Grid.Row="0" Grid.Column="1" 
                                             IsVisible="{Binding IsKeyTypeDisplay}" 
                                             ItemsSource="{Binding DotDistrict}" SelectedItem="{Binding SelectedKeyType}" />
-                        <Label Grid.Row="4" Grid.Column="0" Text="Direction of Travel"/>
-                        <Label Grid.Row="4" Grid.Column="1" Text="Is site in a clear Zone?"/>
-                        <Label Grid.Row="4" Grid.Column="2" Text="Bucket Truck"/>
-                        <Picker  Grid.Row="5" Grid.Column="0"
-                                ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}" 
-                                SelectedItem="{Binding SelectedTravelDirection2, Mode=TwoWay}"   HorizontalOptions="FillAndExpand"/>
+                        <Label Grid.Row="1" Grid.Column="0" Text="Has Power disconnect"/>
+                        <Label Grid.Row="2" Grid.Column="0" Text="Have a sun shield"/>
+                        <Label Grid.Row="3" Grid.Column="0" Text="Has Ground Rod"/>
+                        <Label Grid.Row="4" Grid.Column="0" Text="Has Key"/>
+                        <Switch Grid.Row="1" Grid.Column="1" IsToggled="{Binding IsHasPowerDisconnect, Mode=TwoWay}"/>
+                        <Switch Grid.Row="2" Grid.Column="1" IsToggled="{Binding IsHaveSunShield}"/>
+                        <Switch Grid.Row="3" Grid.Column="1" IsToggled="{Binding IsHasGround}"/>
+                        <Switch Grid.Row="4" Grid.Column="1" IsToggled="{Binding IsHasKey}"/>
 
-                        <local:Dropdown Grid.Row="5" Grid.Column="1" x:Name="pIsSiteClearZone" ItemsSource="{Binding YesNo}" SelectedItem="{Binding IsSiteClearZone}"/>
-                        <local:Dropdown Grid.Row="5" Grid.Column="2" x:Name="pBucketTruck" ItemsSource="{Binding YesNo}" SelectedItem="{Binding IsBucketTruck}"/>
                     </Grid>
                     
 

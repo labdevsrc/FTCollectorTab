@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:forms="clr-namespace:SignaturePad.Forms;assembly=SignaturePad.Forms" 
+             x:Class="FTCollectorApp.View.SitesPage.CompleteSitePage">
+    <ContentPage.Content>
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout Padding="20" HorizontalOptions="FillAndExpand">
+            <Label Padding="20"  FontSize="Large" x:Name="crewleader" HorizontalOptions="Center"/>            
+            <Label Padding="20,5,20,20"  FontSize="Large" Text="Signature" HorizontalOptions="Center"/>
+                <forms:SignaturePadView x:Name="signaturePad"  BackgroundImage="sign_bg.png" StrokeCompletedCommand="{Binding EnableSaveButtonCommand }"
+      BackgroundColor="LightGray"  
+      StrokeColor="Black"  
+      StrokeWidth="3" />
+            <Button x:Name="SaveBtn"  IsEnabled="{Binding IsEnableBtn}" HorizontalOptions="FillAndExpand"
+                  Text="Save and Continue"   Command="{Binding SaveCommandExecute}"
+                  Clicked="SaveBtn_Clicked"/>
+            <Button x:Name="ClearBtn"  
+                  Text="Reset"  
+                  Clicked="ClearBtn_Clicked"/>
+            </StackLayout>
+            <StackLayout IsVisible="{Binding IsBusy}" 
+                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" Color ="{StaticResource blueColor}"/>
+
+                <Label Text="Uploading..." HorizontalOptions="Center" TextColor="White"/>
+
+            </StackLayout>
+        </AbsoluteLayout>
+        
+    </ContentPage.Content>
+</ContentPage>

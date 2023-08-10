@@ -224,6 +224,9 @@
     <EmbeddedResource Update="View\SitesPage\PortPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="View\SitesPage\PullBoxQuestions2.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="View\SitesPage\PullBoxSitePageView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -301,6 +304,9 @@
     </Compile>
     <Compile Update="View\SitesPage\DuctColorCodePopUp.xaml.cs">
       <DependentUpon>DuctColorCodePopUp.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="View\SitesPage\Popup\CompleteSitePopUp.xaml.cs">
+      <DependentUpon>CompleteSitePopUp.xaml</DependentUpon>
     </Compile>
     <Compile Update="View\SitesPage\StructureSitePageView.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>

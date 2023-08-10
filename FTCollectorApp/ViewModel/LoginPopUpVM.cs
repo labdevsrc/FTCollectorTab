@@ -37,42 +37,55 @@ namespace FTCollectorApp.ViewModel
 
         async Task LaunchDBDownloadBackgroundService()
         {
+            Console.WriteLine();
             if (DependencyService.Resolve<IForegroundService>().IsForeGroundServiceRunning())
             {
+                Console.WriteLine();
                 await Application.Current.MainPage.DisplayAlert("Warning", "Background Download already started", "OK");
-
+                Console.WriteLine();
             }
             else
             {
-
+                Console.WriteLine();
 
                 if (Application.Current.Properties.ContainsKey("DownloadCount"))
                 {
-                    int cnt = (int) Application.Current.Properties["DownloadCount"];
-                    Console.WriteLine();
-                    if (cnt >= 1)
+
+                    try
                     {
-                        var redownload = await Application.Current.MainPage.DisplayAlert("Info", "DB already downloaded " + cnt+ " times before.Redownload ?", "Yes", "No");
-                        if (!redownload)
+                        var sCount = Application.Current.Properties["DownloadCount"] as string; // application properties cannot directly convert to integer
+                        int cnt = int.Parse(sCount);
+                        Console.WriteLine();
+                        if (cnt >= 1)
                         {
-                            IsLoginVisible = true; // display username and password
-                            EnableLoginButton();
-                            Console.WriteLine();
-                            return;
+                            var redownload = await Application.Current.MainPage.DisplayAlert("Info", "DB already downloaded " + cnt + " times before.Redownload ?", "Yes", "No");
+                            if (!redownload)
+                            {
+                                IsLoginVisible = true; // display username and password
+                                EnableLoginButton();
+                                Console.WriteLine();
+                                return;
+                            }
                         }
+                        cnt++;
+                        Application.Current.Properties["DownloadCount"] = cnt.ToString();
+                        Application.Current.Properties["DBVersion"] = "1.0";
+                        Console.WriteLine();
                     }
-                    cnt++;
-                    Application.Current.Properties["DownloadCount"] = cnt;
-                    Application.Current.Properties["DBVersion"]  = "1.0";
-                    Console.WriteLine();
+                    catch(Exception e)
+                    {
+                        Application.Current.Properties["DownloadCount"] = "1";
+                        Console.WriteLine(e.ToString());
+                    }
                 }
                 else
                 {
                     Application.Current.Properties.Add("DownloadCount", "1");
                     Application.Current.Properties.Add("DBVersion", "1.0");
+                    Application.Current.SavePropertiesAsync();
                     Console.WriteLine();
                 }
-
+                Console.WriteLine();
                 DisableLoginButton();
                 LoadingText = "Downloading DB ... ";
                 IsDownloadBtnVisible = false;
@@ -172,7 +185,7 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
-        string version = "0725.1"; // change here for release
+        string version = "0804-1"; // change here for release
 
         string apkVersion;
         public string ApkVersion

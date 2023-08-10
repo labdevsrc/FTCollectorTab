@@ -28,12 +28,25 @@ namespace FTCollectorApp.ViewModel
 
     public partial class CabinetQuestions2VM : ObservableObject
     {
+        public ObservableCollection<CabinetType> CabinetTypeList { 
+            get {
 
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<CabinetType>();
+                    var table = conn.Table<CabinetType>().ToList();
+                    Console.WriteLine();
+                    return new ObservableCollection<CabinetType>(table);
+                }
+            } 
+        
+        }
 
 
         [ObservableProperty] string tagNumber;
         [ObservableProperty] string siteType;
         [ObservableProperty] bool isHasKey = false;
+        [ObservableProperty] string selectedCabinetType;
 
         bool isKeyTypeDisplay = false;
         public bool IsKeyTypeDisplay
@@ -411,7 +424,9 @@ namespace FTCollectorApp.ViewModel
         [ICommand]
         async void CompleteSite()
         {
-            await Application.Current.MainPage.Navigation.PushAsync(new CompleteSitePage());
+            //await Application.Current.MainPage.Navigation.PushAsync(new CompleteSitePage());
+
+            await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new CompleteSitePopUp());
         }
 
         [ICommand]

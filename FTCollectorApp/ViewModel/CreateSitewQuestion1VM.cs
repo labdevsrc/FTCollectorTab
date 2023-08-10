@@ -96,6 +96,38 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+        [ObservableProperty] string scrollVal;
+
+
+
+        async void CreateAndOpenSitePage1Tab()
+        {
+            Console.WriteLine();
+
+            ShellSection shell_section = new ShellSection
+            {
+                Title = "SITE",
+                Icon = "building.png"
+            };
+
+
+            shell_section.Items.Add(new ShellContent()
+            {
+                Content = new CreateSitewQuestion1(),
+                Route = "createsitewquestion1"
+
+            });
+
+
+
+
+            if (Shell.Current.CurrentItem.Route.Equals("createsitewquestion1"))
+                return;
+            AppShell.mytabbar.Items.Add(shell_section);
+
+            await Shell.Current.GoToAsync($"//createsitewquestion1", true);
+            Console.WriteLine();
+        }
 
         async void AddShellTabPage(string title) {
             ShellSection shell_section = new ShellSection
@@ -107,41 +139,71 @@ namespace FTCollectorApp.ViewModel
 
             {
                 case "DUCT":
+                    if (Session.DuctPageCreated) break;
+                    Session.DuctPageCreated = true;
+                    shell_section.Title = "DUCT";
                     shell_section.Icon = "duct.png";
                     shell_section.Items.Add(new ShellContent()
                     {
                         Content = new DuctPage(),
+                        Route = title
 
                     });
+                    AppShell.mytabbar.Items.Add(shell_section);
+                    await Shell.Current.GoToAsync($"//"+title, true);
+
                     break;
                 case "RACK":
+                    if (Session.RackPageCreated) break;
+                    Session.RackPageCreated = true;
+                    shell_section.Title = "RACK";
                     shell_section.Icon = "rack2.png";
                     shell_section.Items.Add(new ShellContent()
                     {
                         Content = new RacksPage(),
+                        Route = title
+
                     });
+                    await Shell.Current.GoToAsync($"//"+ title, true);
                     break;
                 case "SLOT_BLADE":
+                    if (Session.SlotBladePageCreated) break;
+                    Session.SlotBladePageCreated = true;
+                    shell_section.Title = "SLOT";
                     shell_section.Icon = "fa-link.png";
                     shell_section.Items.Add(new ShellContent()
                     {
                         Content = new SlotBladePage(),
-                    });
+                        Route = "slot_blade"
 
+                    });
+                    await Shell.Current.GoToAsync($"//slot_blade", true);
                     break;
                 case "ACTIVE_DEVICE":
+                    if (Session.ActiveDevicePageCreated) break;
+                    Session.ActiveDevicePageCreated = true;
+                    shell_section.Title = "ACTIVE_DEVICE";
                     shell_section.Icon = "fa-link.png";
                     shell_section.Items.Add(new ShellContent()
                     {
                         Content = new ActiveDevicePage(),
+                        Route = "active_device"
+
                     });
+                    await Shell.Current.GoToAsync($"//active_device", true);
+                    break;
                 case "PORT":
+                    if (Session.PortPageCreated) break;
+                    Session.PortPageCreated = true;
+                    shell_section.Title = "PORT";
                     shell_section.Icon = "fa-link.png";
                     shell_section.Items.Add(new ShellContent()
                     {
                         Content = new PortPage(),
+                        Route = "port"
 
                     });
+                    await Shell.Current.GoToAsync($"//port",true);
                     break;
                 default:
                     await Application.Current.MainPage.DisplayAlert("Unknown", "Unknown Page","OK");
@@ -167,9 +229,10 @@ namespace FTCollectorApp.ViewModel
 
         public ICommand ShowRackPageCommand { get; set; }
         public ICommand ShowDuctPageCommand { get; set; }
-
+        public ICommand ShowPortPageCommand { get; set; }
         public ICommand CaptureCommand { get; set; }
 
+        public ICommand CompleteSiteCommand { get; set; }
         /* Create Site, Enter PC Tag - end */
 
         public CreateSitewQuestion1VM()
@@ -302,10 +365,6 @@ namespace FTCollectorApp.ViewModel
               );
 
 
-
-
-
-
             ShowRackPageCommand = new Command(
                 execute: async () => {
                     AddShellTabPage("RACK");
@@ -399,11 +458,24 @@ namespace FTCollectorApp.ViewModel
                 }
             );
 
+            CompleteSiteCommand = new Command(
+                execute: async () =>
+                {
+                    await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new CompleteSitePopUp());
+                },
+                canExecute : () =>
+                {
+                    return Session.SiteCreateCnt > 0;
+                }
+            );
+
+
+
 
             if (timer == null)
             {
                 timer = new ReadGPSTimer(TimeSpan.FromSeconds(5), OnGPSTimerStart);
-                timer.Start();
+                //timer.Start();
             }
 
             Console.WriteLine();
@@ -910,6 +982,7 @@ namespace FTCollectorApp.ViewModel
                         await Application.Current.MainPage.DisplayAlert("Success", "Uploading Data Done", "OK");
                         Session.SiteCreateCnt++;
                         (ShowDuctPageCommand as Command).ChangeCanExecute();
+                        (CompleteSiteCommand as Command).ChangeCanExecute();
                     }
 
                     else
@@ -961,6 +1034,7 @@ namespace FTCollectorApp.ViewModel
         {
             IsSearchingMinorRoadway = false;
         }
+
 
     }
 

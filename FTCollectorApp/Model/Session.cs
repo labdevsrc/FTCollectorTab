@@ -87,6 +87,16 @@ namespace FTCollectorApp.Model
         public static List<UnSyncTaskList?> TaskPendingList { get; set; }
 
         public static int MAX_DIR_CNT { get; set; } = 0;
+
+
+        public static bool DuctPageCreated = false;
+        public static bool RackPageCreated = false;
+        public static bool SlotBladePageCreated = false;
+        public static bool ActiveDevicePageCreated = false;
+        public static bool PortPageCreated = false;
+
+
+
         // 1: site input
         // 2 : Building/Cabinet/Pole/ input
         // 3

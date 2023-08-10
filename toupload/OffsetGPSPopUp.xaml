@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage Title="{Binding CrewName}" xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:local="clr-namespace:FTCollectorApp.Utils"
+                 x:Class="FTCollectorApp.View.SitesPage.OffsetGPSPopUp">
+    <ContentPage.Content>
+        <StackLayout 
+        Margin="12"
+        Padding="24"
+        BackgroundColor="White"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"     
+            >
+            <Label Text="Bearing:"/>
+            <local:BorderEntry Text="{Binding Bearing,Mode=TwoWay}"
+                   />
+            <Label Text="Distance:"/>
+            <local:BorderEntry   Text="{Binding Distance,Mode=TwoWay}" />
+            <Grid ColumnDefinitions="*,*,*,*">
+                <Button  Grid.Column="2" Text="Save"  Command="{Binding SaveCommand}"/>
+                <Button  Grid.Column="3" Text="Close"  Command="{Binding CloseCommand}"/>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</pages:PopupPage>
