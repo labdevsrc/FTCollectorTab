@@ -80,6 +80,10 @@ namespace FTCollectorApp.Model
         public static int RackCount { get; set; } = 0;
         public static int ActiveDeviceCount { get; set; } = 0;
         public static int SiteCreateCnt { get; set; } = 0;
+        public static int BuildingPage2CreateCnt { get; set; } = 0;
+        public static int CabinetPage2CreateCnt { get; set; } = 0;
+        public static int PullBoxPage2CreateCnt { get; set; } = 0;
+        public static int StructurePage2CreateCnt { get; set; } = 0;
         public static int DuctSaveCount { get; set; } = 0;
 
         public static bool IsVerified { get; set; } = false;

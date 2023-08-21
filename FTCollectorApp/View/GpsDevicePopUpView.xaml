@@ -27,7 +27,7 @@
                 Clicked="btnSave_Clicked">
 
         </Button>
-        <ActivityIndicator VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" IsVisible="{Binding isBusy}" IsRunning="{Binding isBusy}"/>
+        <ActivityIndicator VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
 
 
     </StackLayout>

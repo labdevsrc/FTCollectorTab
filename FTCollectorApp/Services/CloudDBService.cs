@@ -999,8 +999,8 @@ namespace FTCollectorApp.Services
         public static Task<IEnumerable<JobPhaseDetail>> GetJobPhasesDetail() =>
            GetDropDownParamsAsync<IEnumerable<JobPhaseDetail>>("job_phases_detail");
 
-        public static Task<IEnumerable<CableType>> GetCabinetType() =>
-            GetDropDownParamsAsync<IEnumerable<CableType>>("cabinet_type");
+        public static Task<IEnumerable<CabinetType>> GetCabinetType() =>
+            GetDropDownParamsAsync<IEnumerable<CabinetType>>("cabinet_type");
         async static Task<T> GetDropDownParamsAsync<T>(string type)
         {
             var keyValues = new List<KeyValuePair<string, string>>{

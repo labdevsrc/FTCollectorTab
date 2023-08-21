@@ -41,12 +41,12 @@ namespace FTCollectorApp.ViewModel
             } 
         
         }
-
+        [ObservableProperty] CabinetType selectedCabinetType;
 
         [ObservableProperty] string tagNumber;
         [ObservableProperty] string siteType;
         [ObservableProperty] bool isHasKey = false;
-        [ObservableProperty] string selectedCabinetType;
+
 
         bool isKeyTypeDisplay = false;
         public bool IsKeyTypeDisplay
@@ -74,77 +74,9 @@ namespace FTCollectorApp.ViewModel
             //SiteType =  siteType;
             //TagNumber = Sess tagNumber;
             //OwnerName = Session.OwnerName;
-            Session.current_page = "building";
-
-            ShowDuctPageCommand = new Command(
-                execute: async () => {
-
-                    //await Application.Current.MainPage.Navigation.PushAsync(new DuctPage());
-                    await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new DuctPopup());
-                },
-
-                canExecute: () =>
-                {
-                    Console.WriteLine();
-                    return Session.SiteCreateCnt > 1;
-                }
-              );
+            Session.current_page = "cabinet";
 
 
-            FiberBtnCommand = new Command(
-                execute: async () => {
-
-                    await Application.Current.MainPage.Navigation.PushAsync(new FiberMainMenu());
-
-                },
-
-                canExecute: () =>
-                {
-                    Console.WriteLine();
-                    return Session.DuctSaveCount >= 1;
-                }
-              );
-
-
-
-            ShowRackPageCommand = new Command(
-                execute: async () => {
-                    await Application.Current.MainPage.Navigation.PushAsync(new RacksPage());
-                    //RefreshCanExecutes();
-                },
-                canExecute: () =>
-                {
-                    Console.WriteLine();
-                    return Session.DuctSaveCount >= 1;
-                }
-              );
-
-            ShowActiveDevicePageCommand = new Command(
-                execute: async () => {
-                    await Application.Current.MainPage.Navigation.PushAsync(new ActiveDevicePage());
-                    //RefreshCanExecutes();
-                },
-                canExecute: () =>
-                {
-                    Console.WriteLine();
-                    return Session.RackCount >= 1;
-                }
-              );
-
-            ToggleEntriesCommand = new Command(
-                execute: () => 
-                {
-                    //Islane_closure_requiredVisible = !Islane_closure_requiredVisible;
-                    //Islane_closure_requiredVisible = !Islane_closure_requiredVisible;
-                }
-            );
-        }
-
-        void RefreshCanExecutes()
-        {
-            (ShowDuctPageCommand as Command).ChangeCanExecute();
-            (ShowRackPageCommand as Command).ChangeCanExecute();
-            (ShowActiveDevicePageCommand as Command).ChangeCanExecute();
         }
 
         ////////////
@@ -191,76 +123,8 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        public ObservableCollection<BuildingType> BuildingTypeList
-        {
-            get
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<BuildingType>();
-                    var bdClassiTable = conn.Table<BuildingType>().ToList();
-                    return new ObservableCollection<BuildingType>(bdClassiTable);
-                }
-            }
-        }
 
-
-        /// start
-        [ObservableProperty]
-        FilterType selectedFilterType;
-
-        [ObservableProperty]
-        FilterSize selectedFilterSize;
-        public ObservableCollection<FilterType> FilterTypeList
-        {
-            get
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<FilterType>();
-                    var table = conn.Table<FilterType>().ToList();
-                    foreach (var col in table)
-                    {
-                        col.FilterTypeDesc = HttpUtility.HtmlDecode(col.FilterTypeDesc); // should use for escape char "
-                    }
-                    Console.WriteLine();
-                    return new ObservableCollection<FilterType>(table);
-                }
-            }
-        }
-
-        public ObservableCollection<FilterSize> FilterSizeList
-        {
-            get
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<FilterSize>();
-                    var table = conn.Table<FilterSize>().ToList();
-                    foreach (var col in table)
-                    {
-                        col.data = HttpUtility.HtmlDecode(col.data); // should use for escape char "
-                    }
-                    Console.WriteLine();
-                    return new ObservableCollection<FilterSize>(table);
-                }
-            }
-        }
         ///--end
-
-        public ObservableCollection<Orientation> OrientationList
-        {
-            get
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<Orientation>();
-                    var table = conn.Table<Orientation>().ToList();
-                    return new ObservableCollection<Orientation>(table);
-                }
-            }
-        }
-
 
 
         // Question 2
@@ -327,7 +191,6 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("pid", ""),
                 //new KeyValuePair<string, string>("loct", LocationName),
 
-                new KeyValuePair<string, string>("btype", SelectedBuilding?.BuildingTypeKey is null ? "":SelectedBuilding.BuildingTypeKey),
                 //new KeyValuePair<string, string>("orientation", SelectedOrientation?.CompasKey is null ? "" : SelectedOrientation.CompasKey),
                 //new KeyValuePair<string, string>("laneclosure", IsLaneClosure ? "1":"0"),
                 new KeyValuePair<string, string>("dotdis",  SelectedDistrict is null ? "" : SelectedDistrict),
@@ -337,7 +200,8 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("commprovider", CommsProvider),
                 new KeyValuePair<string, string>("sitaddr", StreetAddress), // site_street_addres
                 new KeyValuePair<string, string>("udsowner", UDSOwner),
-
+                new KeyValuePair<string, string>("btype", ""),
+                new KeyValuePair<string, string>("cabinet_type",SelectedCabinetType?.CabinetTypeKey is null ? "":SelectedCabinetType?.CabinetTypeKey),
                 new KeyValuePair<string, string>("rs2", "L"),
 
                 //new KeyValuePair<string, string>("height2", Height),
@@ -348,8 +212,10 @@ namespace FTCollectorApp.ViewModel
                 //new KeyValuePair<string, string>("intersect2", SelectedIntersection?.IntersectionKey is null ? "": SelectedIntersection.IntersectionKey),
                 //new KeyValuePair<string, string>("material2", SelectedMatCode?.MaterialKey is null ? "":SelectedMatCode.MaterialKey),
                 //new KeyValuePair<string, string>("mounting2", SelectedMounting?.MountingKey is null ? "":SelectedMounting.MountingKey),
-                new KeyValuePair<string, string>("offilter2", SelectedFilterType?.FilterTypeKey is null ? "": SelectedFilterType.FilterTypeKey ),//FilterTypeSelected),
-                new KeyValuePair<string, string>("fltrsize2", SelectedFilterSize?.FtSizeKey  is null ? "": SelectedFilterSize.FtSizeKey  ),//FilterSizeKeySelected),
+                //new KeyValuePair<string, string>("offilter2", SelectedFilterType?.FilterTypeKey is null ? "": SelectedFilterType.FilterTypeKey ),//FilterTypeSelected),
+                //new KeyValuePair<string, string>("fltrsize2", SelectedFilterSize?.FtSizeKey  is null ? "": SelectedFilterSize.FtSizeKey  ),//FilterSizeKeySelected),
+                new KeyValuePair<string, string>("filter_type", ""),
+                new KeyValuePair<string, string>("filter_size", ""),
                 new KeyValuePair<string, string>("sunshield2", IsHaveSunShield ? "1":"0"),
                 new KeyValuePair<string, string>("installed2", InstalledAt),
                 //new KeyValuePair<string, string>("comment2", Notes), // Notes, pr description
@@ -403,8 +269,7 @@ namespace FTCollectorApp.ViewModel
                 if (result.Equals("OK"))
                 {
                     await Application.Current.MainPage.DisplayAlert("Success", "Uploading Data Done", "OK");
-                    Session.SiteCreateCnt++;
-                    (ShowDuctPageCommand as Command).ChangeCanExecute();
+                    Session.CabinetPage2CreateCnt = 1;
                 }
 
                 else
@@ -437,13 +302,6 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        [ICommand]
-        async void ReturnToMain()
-        {
-            if(Session.stage.Equals("A"))
-                await Application.Current.MainPage.Navigation.PushAsync(new AsBuiltDocMenu());
-            if (Session.stage.Equals("I"))
-                await Application.Current.MainPage.Navigation.PushAsync(new MainMenuInstall());
-        }
+
     }
 }

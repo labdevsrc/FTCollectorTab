@@ -51,8 +51,11 @@ namespace FTCollectorApp
                 Routes.Add(nameof(TabbedSitePage), typeof(TabbedSitePage));
 
 
-                Routes.Add(nameof(CreateSitewQuestion1), typeof(CreateSitewQuestion1));
+                /*Routes.Add(nameof(CreateSitewQuestion1), typeof(CreateSitewQuestion1));
                 Routes.Add(nameof(BuildingQuestions2), typeof(BuildingQuestions2));
+                Routes.Add(nameof(CabinetQuestions2), typeof(CabinetQuestions2));
+                Routes.Add(nameof(PullBoxQuestions2), typeof(PullBoxQuestions2));
+                Routes.Add(nameof(StructureQuestions2), typeof(StructureQuestions2));*/
 
                 Routes.Add(nameof(MainPageP), typeof(MainPageP)); //Portrait of SplashDownloadPage, Tab name : MainPAge
                 //Routes.Add(nameof(MainSitePageX), typeof(MainSitePageX)); obsolete - nolonger use

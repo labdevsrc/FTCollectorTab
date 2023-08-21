@@ -1041,7 +1041,7 @@
                     <Label Text="By signing this daily time report, I verify that my individual hours are correctly reported,and I also acknowledge that I have not been involved in a vehicle accident, incident or work related injury during this work period. 
                                I understand that falsification of any information or making false statements will be considered grounds for dismissal." 
                             VerticalOptions="CenterAndExpand" 
-                            HorizontalOptions="CenterAndExpand" />
+                            HorizontalOptions="CenterAndExpand" FontSize="Medium"/>
                     <Grid ColumnDefinitions="*,*, *, *" RowDefinitions="*,*,*,*,*"  Padding="20">
                         <Label  Text="Clock in time" HorizontalOptions="Start" VerticalOptions="Center" />
                         <Entry Grid.Row="0" Grid.Column="1" Text="{Binding ClockIntime, Mode=TwoWay}" VerticalOptions="Center"  />

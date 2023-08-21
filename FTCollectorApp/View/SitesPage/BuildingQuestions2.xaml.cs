@@ -25,36 +25,9 @@ namespace FTCollectorApp.View.SitesPage
         {
             InitializeComponent();
             BindingContext = new BuildingQuestions2VM();
-
+            Session.BuildingPage2CreateCnt = 1;
         }
 
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-
-
-            //if duct created > 1, enable Rack button in Building Site Pagge
-            if (Session.DuctSaveCount >= 1)
-            {
-                btnRecordRack.IsEnabled = true;
-                btnFiberBtn.IsEnabled = true;
-            }
-            else if (Session.DuctSaveCount == 0)
-            {
-                btnRecordRack.IsEnabled = false;
-                btnFiberBtn.IsEnabled = false;
-            }
-
-
-            //if reacks created > 1, enable Active device  button in Building Site Pagge
-            if (Session.RackCount >= 1)
-                btnActiveDevice.IsEnabled = true;
-            else if (Session.RackCount == 0)
-                btnActiveDevice.IsEnabled = false;
-
-
-        }
 
 
     }

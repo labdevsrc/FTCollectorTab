@@ -87,7 +87,7 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref isVerified, value);
 
-                (DisplayEquipmentCheckInCommand as Command).ChangeCanExecute();
+                //(DisplayEquipmentCheckInCommand as Command).ChangeCanExecute();
                 (DisplayEquipmentCheckOutCommand as Command).ChangeCanExecute();
                 (ToggleCrewListCommand as Command).ChangeCanExecute();
                 (ToggleEndofDayCommand as Command).ChangeCanExecute();
@@ -1070,14 +1070,14 @@ namespace FTCollectorApp.ViewModel
         {
             Console.WriteLine();
 
-            ShellSection shell_section = new ShellSection
+            ShellSection shell_section_site = new ShellSection
             {
                 Title = "SITE",
                 Icon = "building.png"
             };
 
- 
-            shell_section.Items.Add(new ShellContent()
+
+            shell_section_site.Items.Add(new ShellContent()
             {
                 Content = new CreateSitewQuestion1(),
                 Route= "createsitewquestion1"
@@ -1085,7 +1085,7 @@ namespace FTCollectorApp.ViewModel
             });
 
 
-            AppShell.mytabbar.Items.Add(shell_section);
+            AppShell.mytabbar.Items.Add(shell_section_site);
 
             await Shell.Current.GoToAsync($"//createsitewquestion1", true);
             Console.WriteLine(); 
@@ -1251,11 +1251,7 @@ namespace FTCollectorApp.ViewModel
                     EnableCrewUpdateMenuButton();
 
                     // PUT HERE : Create SITE as Tab Page
-                    //MessagingCenter.Send<VerifyJobViewModel>(this, "OpenCreateSiteQuestions1");
-                    //MessagingCenter.Send<VerifyJobViewModel>(this, "OpenCreateSiteQuestions1");
-                    //InvokeSitePage();
-
-
+                    CreateAndOpenSitePage1Tab();
                 }
 
                 if (Session.event_type == "8") // Left Job
@@ -1279,6 +1275,10 @@ namespace FTCollectorApp.ViewModel
                     ArrivedAtYardTime = DateTime.Now.ToString("HH:mm");
                     (ToggleEndofDayCommand as Command).ChangeCanExecute();
                     RefreshFAButton(); // clean up
+
+                    // dump application properties to 
+                    DisplayEquipmentCheckInCommand?.Execute(null);
+                    
                     IsEqCheckInDisplayed = true; // display end equipment checkin
 
                 }
@@ -1826,11 +1826,11 @@ namespace FTCollectorApp.ViewModel
                                 Console.WriteLine();
                                 IsStartODOEntered = false;
                                 //refresh Left Job enable status here
-                                (LeftForJobCommand as Command).ChangeCanExecute();
-                                EnableCrewUpdateMenuButton();
-                                EnableStartNewJobMenuButton();
-                            }
+                                (LeftJobCommand as Command).ChangeCanExecute();
 
+                            }
+                            EnableCrewUpdateMenuButton();
+                            EnableStartNewJobMenuButton();
 
                             RefreshRemoveButton();
 
@@ -1841,7 +1841,7 @@ namespace FTCollectorApp.ViewModel
                             Console.WriteLine();
 
 
-                            DisplayEquipmentCheckInCommand?.Execute(null); // show Equipment 
+                            //DisplayEquipmentCheckInCommand?.Execute(null); // show Equipment 
                             IsDisplayCrewList = false;
 
                             (DisplayEquipmentCheckOutCommand as Command).ChangeCanExecute();
@@ -2370,6 +2370,8 @@ namespace FTCollectorApp.ViewModel
                         {
                             Eq1TypeTitle = Application.Current.Properties["Eq1Type"] as string;
                             Eq1DescTitle = Application.Current.Properties["Eq1Desc"] as string;
+
+                            Console.WriteLine();
                         }
                         if (Application.Current.Properties.ContainsKey("Eq2Type"))
                         {
@@ -2514,7 +2516,7 @@ namespace FTCollectorApp.ViewModel
                                 Application.Current.Properties.Add("Eq1Desc", SelectedEq1?.EqDesc);
                                 Application.Current.Properties.Add("COMiles1", MilesHour1);
                             }
-
+                            Console.WriteLine();
                             await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq1?.EqKey, "0", MilesHour1);
 
                         }
@@ -2627,10 +2629,14 @@ namespace FTCollectorApp.ViewModel
 
                             await CloudDBService.PostJobEquipment(SelectedPhase.PhaseNumber, SelectedEq7?.EqKey, "0", MilesHour7);
                         }
+
+                        await Application.Current.SavePropertiesAsync();
+                        await Application.Current.MainPage.DisplayAlert("Info", "Equipment was preserved successfully", "OK");
+
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
+                        Console.WriteLine("Equipment Checkout exception " + e.ToString());
                     }
 
                 }
@@ -2678,7 +2684,8 @@ namespace FTCollectorApp.ViewModel
                             (LoadCrewDefaultCommand as Command).ChangeCanExecute();
                         }
 
-                        CreateAndOpenSitePage1Tab();
+                        // move to after Arrived at Site
+                        // CreateAndOpenSitePage1Tab();
                         //InvokeSitePage();
                     }
                     catch (Exception e)
@@ -2722,7 +2729,6 @@ namespace FTCollectorApp.ViewModel
                     RefreshCrewDefaultButton();
 
 
-                    //Children TabbedSitePage 
 
                 },
                 canExecute: () =>
@@ -2783,8 +2789,8 @@ namespace FTCollectorApp.ViewModel
                         IsStartODOEntered = false; // Hide LunchOut, Lunchin , EquipChecking button
                         LoginPopUpCall();
 
-
-                        AppShell.mytabbar.Items.Clear();
+                        RemoveSitePage1Tab();
+                        //AppShell.mytabbar.Items.Clear();
 
                     }
                     //if (answer)
@@ -2828,7 +2834,7 @@ namespace FTCollectorApp.ViewModel
                     IsDisplayCrewList = true;
                      
                     BackUpFlag_LeftJob = IsLeftJobBtnEnabled; // Before refreshed to show Crew input page
-                    BackUpFlag_IsLunchOut = IsLunchIn; // Before refreshed to show Crew input page
+                    BackUpFlag_IsLunchOut = IsLunchOut; // Before refreshed to show Crew input page
 
                     RefreshFAButton();
                     DisableStartNewJobMenuButton();// IsStartNewJobIsEnable = false; (StartNewJobCommand as Command).ChangeCanExecute();
@@ -2957,8 +2963,12 @@ namespace FTCollectorApp.ViewModel
 
                         Session.event_type = "16";
 
-                        SaveAndDisplayTimeSheetForm(LunchInTime1, LunchOutTime1, Emp1ClockOutTime, StartTimeEmp1, Emp1ClockOutTime, Employee1Name.FullName,
-                        Emp1ClockOutPerDiem, Employee1Name.TeamUserKey.ToString());
+
+                        SaveAndDisplayTimeSheetForm(LunchInTimeLeader, LunchOutTimeLeader, LClockOutTime, StartTimeLeader, LClockOutTime, CrewLeader,
+LClockOutPerDiem, Session.uid.ToString());
+
+                        //SaveAndDisplayTimeSheetForm(LunchInTime1, LunchOutTime1, Emp1ClockOutTime, StartTimeEmp1, Emp1ClockOutTime, Employee1Name.FullName,
+                        //Emp1ClockOutPerDiem, Employee1Name.TeamUserKey.ToString());
                     }
                     else
                     {

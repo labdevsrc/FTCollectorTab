@@ -31,6 +31,9 @@ namespace FTCollectorApp.ViewModel
         static string STRUCTURE_SITE = "Structure";
 
 
+
+        public ICommand SaveContinueCommand { get; set; }
+
         [ObservableProperty] bool isBuildingSelected = false;
 
         [ObservableProperty] bool isCabinetSelected = false;
@@ -98,36 +101,6 @@ namespace FTCollectorApp.ViewModel
 
         [ObservableProperty] string scrollVal;
 
-
-
-        async void CreateAndOpenSitePage1Tab()
-        {
-            Console.WriteLine();
-
-            ShellSection shell_section = new ShellSection
-            {
-                Title = "SITE",
-                Icon = "building.png"
-            };
-
-
-            shell_section.Items.Add(new ShellContent()
-            {
-                Content = new CreateSitewQuestion1(),
-                Route = "createsitewquestion1"
-
-            });
-
-
-
-
-            if (Shell.Current.CurrentItem.Route.Equals("createsitewquestion1"))
-                return;
-            AppShell.mytabbar.Items.Add(shell_section);
-
-            await Shell.Current.GoToAsync($"//createsitewquestion1", true);
-            Console.WriteLine();
-        }
 
         async void AddShellTabPage(string title) {
             ShellSection shell_section = new ShellSection
@@ -261,6 +234,7 @@ namespace FTCollectorApp.ViewModel
             }
 
             Console.WriteLine();
+            SaveContinueCommand = new Command(async () => ExecuteSaveContinueCommand());
 
             CheckTagNumberCommand = new Command(
                 execute:async() =>
@@ -283,10 +257,43 @@ namespace FTCollectorApp.ViewModel
             ResetSiteCommand = new Command(
                 execute: async () =>
                 {
-                    TagNumber = string.Empty;
-                    ReEnterTagNumber = string.Empty;
-                    (RecordGPSCommand as Command).ChangeCanExecute();
-                    IsDisplayQuestionList = false;
+
+
+                    var res = await Application.Current.MainPage.DisplayAlert("Warning", "All entries will be cleared. \nAre you sure ?", "Yes", "Cancel");
+                    if (res)
+                    {
+                        TagNumber = string.Empty;
+                        ReEnterTagNumber = string.Empty;
+                        (RecordGPSCommand as Command).ChangeCanExecute();
+
+
+                        try
+                        {
+                            OwnerTagNumber = string.Empty;
+
+                            SiteName = string.Empty;
+                            LocationName = string.Empty;
+                            SearchRoadway = string.Empty;
+                            SearchMajorRoadway = string.Empty;
+                            SearchMinorRoadway = string.Empty;
+
+                            if(SelectedTravelDirection != null)
+                                SelectedTravelDirection.CompassDirDesc = string.Empty;
+                            if(SelectedOrientation.CompassDirDesc != null)
+                                SelectedOrientation.CompassDirDesc = string.Empty;
+                            if (SelectedMatCode.CodeDescription != null)
+                                SelectedMatCode.CodeDescription = string.Empty;
+                            if(SelectedManuf.ManufName != null)
+                                SelectedManuf.ManufName = string.Empty;
+                        }
+                        catch(Exception e)
+                        {
+                            Console.WriteLine("Exception : " + e.ToString());
+                        }
+
+                    }
+                        
+                        IsDisplayQuestionList = false;
                 },
                 canExecute: () =>
                 {
@@ -962,8 +969,8 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        [ICommand]
-        async void SaveContinue()
+
+        async void ExecuteSaveContinueCommand()
         {
             Console.WriteLine();
             try
@@ -993,20 +1000,94 @@ namespace FTCollectorApp.ViewModel
                 }
                 else
                 {
-
+                    var RoutePage = "buildingquestions2";
                     ShellSection shell_section = new ShellSection
                     {
-                        Title = "SITE#2",
-                        Icon = "building.png"
+                        Title = SelectedMajorType
                     };
 
-                    shell_section.Items.Add(new ShellContent()
+                    switch (SelectedMajorType)
                     {
-                        Content = new  BuildingQuestions2(),
+                        case "Building":
+                            if (Session.BuildingPage2CreateCnt == 1)
+                            {
+                                await Application.Current.MainPage.DisplayAlert("Info", $"{SelectedMajorType} Page 2 already existed", "BACK");
+                                return;
+                            }
 
-                    });
-                    AppShell.mytabbar.Items.Add(shell_section);
-                    await Shell.Current.GoToAsync($"BuildingQuestions2?tag_number={TagNumber}&&site_type={Session.site_type_key}");  
+                            shell_section.Icon = "building.png";
+                            shell_section.Items.Add(new ShellContent()
+                            {
+                                Content = new BuildingQuestions2(),
+                                Route = RoutePage
+                            });
+                            Console.WriteLine();
+                            AppShell.mytabbar.Items.Add(shell_section);
+                            // await Shell.Current.GoToAsync($"//{RoutePage}", true);
+                            break;
+
+                        case "Cabinet":
+                            if (Session.CabinetPage2CreateCnt == 1)
+                            {
+                                await Application.Current.MainPage.DisplayAlert("Info", $"{SelectedMajorType} Page 2 already existed",  "BACK");
+                                return;
+                            }
+
+                            RoutePage = "CabinetQuestions2";
+                            shell_section.Icon = "rack2.png";
+                            shell_section.Items.Add(new ShellContent()
+                            {
+                                Content = new CabinetQuestions2(),
+                                Route = RoutePage
+
+                            });
+                            AppShell.mytabbar.Items.Add(shell_section);
+                            // await Shell.Current.GoToAsync($"//{RoutePage}", true);
+                            Console.WriteLine();
+                            break;
+                        case "Pull Box":
+                            if (Session.PullBoxPage2CreateCnt == 1)
+                            {
+                                await Application.Current.MainPage.DisplayAlert("Info", $"{SelectedMajorType} Page 2 already existed", "BACK");
+                                return;
+                            }
+                            RoutePage = "PullBoxQuestions2";
+                            shell_section.Icon =  "rack3.png";
+                            shell_section.Items.Add(new ShellContent()
+                            {
+                                Content = new PullBoxQuestions2(),
+                                Route = RoutePage
+                            });
+                            AppShell.mytabbar.Items.Add(shell_section);
+                            // await Shell.Current.GoToAsync($"//{RoutePage}", true);
+                            Console.WriteLine();
+                            break;
+                        case "Structure":
+                            if (Session.StructurePage2CreateCnt == 1)
+                            {
+                                await Application.Current.MainPage.DisplayAlert("Info", $"{SelectedMajorType} Page 2 already existed", "BACK");
+                                return;
+                            }
+                            RoutePage = "StructureQuestions2";
+                            shell_section.Icon = "map2.png";
+                            shell_section.Items.Add(new ShellContent()
+                            {
+                                Content = new StructureQuestions2(),
+                                Route = RoutePage
+                            });
+                            AppShell.mytabbar.Items.Add(shell_section);
+                            // await Shell.Current.GoToAsync($"//{RoutePage}", true);
+                            Console.WriteLine();
+                            break;
+                        default :
+
+                            break;
+
+                    }
+
+                    //AppShell.mytabbar.Items.Add(shell_section);
+                    //await Shell.Current.GoToAsync($"//createsitewquestion1", true);
+                    await Shell.Current.GoToAsync($"//{RoutePage}?tag_number={TagNumber}&&site_type={Session.site_type_key}",true);  
                 }
             }
             catch (Exception e)

@@ -22,9 +22,8 @@
                         <Picker.Items>
                             <x:String>Building</x:String>
                             <x:String>Cabinet</x:String>
-                            <x:String>PullBox</x:String>
+                            <x:String>Pull Box</x:String>
                             <x:String>Structure</x:String>
-                            <x:String>Building</x:String>
                         </Picker.Items>
                     </Picker>
                     <Label Grid.Row="1" Text="Site Type" HorizontalOptions="Start" FontSize="Medium" VerticalOptions="Center"/>

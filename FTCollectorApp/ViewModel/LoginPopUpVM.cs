@@ -16,6 +16,7 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace FTCollectorApp.ViewModel
 {
@@ -103,7 +104,7 @@ namespace FTCollectorApp.ViewModel
             Console.WriteLine();
 
             CheckEntriesCommand = new Command(ExecuteCheckEntriesCommand);
-            GPSSettingCommand = new Command(() => DisplayGPSSettingCommand());            
+            GPSSettingCommand = new Command(() => DisplayGPSSettingCommand());
             UpdateUserLoggin();
             DownloadTablesCommand = new Command(
                 execute: async () => {
@@ -120,7 +121,7 @@ namespace FTCollectorApp.ViewModel
                 );
 
             LogoutCommand = new Command(
-                execute: async () => 
+                execute: async () =>
                 {
                     Console.WriteLine();
                     Session.uid = 0;
@@ -140,8 +141,6 @@ namespace FTCollectorApp.ViewModel
                 }
                 );
 
-            // auto start download
-            LaunchDBDownloadBackgroundService();
 
             MessagingCenter.Subscribe<IForegroundService>(this, "DOWNLOAD_ERROR", async (sender) =>
             {
@@ -167,7 +166,22 @@ namespace FTCollectorApp.ViewModel
                 UpdateUserLoggin();     // IPC User SQLite DB 
                 DependencyService.Resolve<IForegroundService>().StopMyForegroundService();
             });
-            
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                // auto start download
+                LaunchDBDownloadBackgroundService();
+            }
+            else
+            {
+                DisplayConnectionProblemWarning();
+
+            }
+        }
+
+        async void DisplayConnectionProblemWarning()
+        {
+            await Application.Current.MainPage.DisplayAlert("Warning", "No Internet connection", "BACK");
         }
 
         void UpdateUserLoggin()
@@ -185,7 +199,7 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
-        string version = "0804-1"; // change here for release
+        string version = "0815-1"; // change here for release
 
         string apkVersion;
         public string ApkVersion

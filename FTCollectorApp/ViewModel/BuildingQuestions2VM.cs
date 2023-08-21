@@ -239,13 +239,10 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+        [ObservableProperty] string filterCount;
+        [ObservableProperty] FilterType selectedFilterType;
+        [ObservableProperty] FilterSize selectedFilterSize;
 
-        /// start
-        [ObservableProperty]
-        FilterType selectedFilterType;
-
-        [ObservableProperty]
-        FilterSize selectedFilterSize;
         public ObservableCollection<FilterType> FilterTypeList
         {
             get
@@ -351,7 +348,7 @@ namespace FTCollectorApp.ViewModel
                 //new KeyValuePair<string, string>("sitname2", SiteName),
 
 
-                //new KeyValuePair<string, string>("manufactured_date", Manufactured),
+                new KeyValuePair<string, string>("manufactured_date", Manufactured),
                 //new KeyValuePair<string, string>("manufacturer", SelectedManuf?.ManufKey is null ? "" : SelectedManuf.ManufKey),  // manufacturer , for Cabinet, pull box
                 new KeyValuePair<string, string>("manufacturer_key", ""),  // manufacturer , for Cabinet, pull box
 
@@ -383,8 +380,9 @@ namespace FTCollectorApp.ViewModel
                 //new KeyValuePair<string, string>("intersect2", SelectedIntersection?.IntersectionKey is null ? "": SelectedIntersection.IntersectionKey),
                 //new KeyValuePair<string, string>("material2", SelectedMatCode?.MaterialKey is null ? "":SelectedMatCode.MaterialKey),
                 //new KeyValuePair<string, string>("mounting2", SelectedMounting?.MountingKey is null ? "":SelectedMounting.MountingKey),
-                new KeyValuePair<string, string>("offilter2", SelectedFilterType?.FilterTypeKey is null ? "": SelectedFilterType.FilterTypeKey ),//FilterTypeSelected),
-                new KeyValuePair<string, string>("fltrsize2", SelectedFilterSize?.FtSizeKey  is null ? "": SelectedFilterSize.FtSizeKey  ),//FilterSizeKeySelected),
+                new KeyValuePair<string, string>("filter_count", FilterCount ),//FilterTypeSelected),
+                new KeyValuePair<string, string>("filter_type", SelectedFilterType?.FilterTypeKey is null ? "": SelectedFilterType.FilterTypeKey ),//FilterTypeSelected),
+                new KeyValuePair<string, string>("filter_size", SelectedFilterSize?.FtSizeKey  is null ? "": SelectedFilterSize.FtSizeKey  ),//FilterSizeKeySelected),
                 new KeyValuePair<string, string>("sunshield2", IsHaveSunShield ? "1":"0"),
                 new KeyValuePair<string, string>("installed2", InstalledAt),
                 //new KeyValuePair<string, string>("comment2", Notes), // Notes, pr description

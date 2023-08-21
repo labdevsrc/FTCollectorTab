@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:FTCollectorApp.Utils"
-             x:Class="FTCollectorApp.View.SitesPage.CabinetQuestions2">
+             x:Class="FTCollectorApp.View.SitesPage.BuildingQuestions2">
     <ContentPage.ToolbarItems>
         <ToolbarItem  Command="{Binding CaptureCommand}" IconImageSource="cam_white.png" 
                  Order="Primary"
@@ -28,7 +28,7 @@
                         <local:BorderEntry  Grid.Row="1" Grid.Column="0"  Text="{Binding DotDistrict, Mode=TwoWay}" />
                         <Switch Grid.Row="1" Grid.Column="1" IsToggled="{Binding IsHasPowerDisconnect, Mode=TwoWay}"/>
                         <Label Grid.Row="0" Grid.Column="2" Text="3rd party comms"/>
-                        <Switch Grid.Row="1" Grid.Column="2" IsToggled="{Binding is3rdComms, Mode=TwoWay}"/>
+                        <Switch Grid.Row="1" Grid.Column="2" IsToggled="{Binding Is3rdComms, Mode=TwoWay}"/>
                         
                         <Label Grid.Row="2" Grid.Column="0" Text="Enter Comms provider"/>
                         <local:BorderEntry Grid.Row="3"  Grid.Column="0" Text="{Binding CommsProvider, Mode=TwoWay}" />
@@ -43,12 +43,14 @@
                     <Picker ItemsSource="{Binding BuildingTypeList}" ItemDisplayBinding="{Binding TYPE_DESC}" 
                                 SelectedItem="{Binding SelectedBuilding, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
 
+                    <Label Text="Filter Count" />
+                    <local:BorderEntry Text="{Binding FilterCount,Mode=TwoWay}" />
 
                     <Label Text="Filter Type"/>
                     <Picker ItemsSource="{Binding FilterTypeList}" ItemDisplayBinding="{Binding FilterTypeDesc}"
                             SelectedItem="{Binding SelectedFilterType, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
                     <Label Text="Filter Size"/>
-                    <Picker  ItemsSource="{Binding FilterSizeList}" ItemDisplayBinding="{Binding data}" IsVisible="{Binding IsFilterSizeVisible}"
+                    <Picker  ItemsSource="{Binding FilterSizeList}" ItemDisplayBinding="{Binding data}" 
                             SelectedItem="{Binding SelectedFilterSize, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
 
                     <Label Text="Enter manufactured" />

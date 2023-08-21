@@ -1,4 +1,5 @@
-﻿using FTCollectorApp.ViewModel;
+﻿using FTCollectorApp.Model;
+using FTCollectorApp.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace FTCollectorApp.View.SitesPage
 		{
 			InitializeComponent ();
 			BindingContext = new PullBoxQuestions2VM();
-		}
+            Session.PullBoxPage2CreateCnt = 1;
+        }
 	}
 }
