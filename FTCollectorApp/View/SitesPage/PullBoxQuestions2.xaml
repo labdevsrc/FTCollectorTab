@@ -3,46 +3,37 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:FTCollectorApp.Utils"             
              x:Class="FTCollectorApp.View.SitesPage.PullBoxQuestions2">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem  Command="{Binding CaptureCommand}" IconImageSource="cam_white.png" 
-                 Order="Primary"
-                 Priority="0" />
-        <ToolbarItem  Text="Complete" Command="{Binding CompleteSiteCommand}" />
-    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
             <ScrollView>
                 <StackLayout Padding="20" VerticalOptions="CenterAndExpand">
                     <Label Text="Pull Box #2" FontSize="Large" HorizontalOptions="Center"/>
-                    <Grid Padding="0,5,10,5" RowDefinitions="*,*,*,*,*,*,*,*" ColumnDefinitions="*,*,*">
+                    <BoxView HeightRequest="50" />
+                    <Grid Padding="0,5,10,5" RowDefinitions="*,*,*,*,*,*" ColumnDefinitions="*,*,*,*">
                         <Label Grid.Row="0" Grid.Column="0"  Text="Diameter " HorizontalOptions="Start"/>
-                        <local:BorderEntry Grid.Row="0" Grid.Column="0"  Text="{Binding Diameter, Mode=TwoWay}" />
+                        <local:BorderEntry Grid.Row="0" Grid.Column="1"  Text="{Binding Diameter, Mode=TwoWay}" />
 
-                        <Label Text="Enter lid pieces " HorizontalOptions="Start"/>
-                        <local:BorderEntry Text="{Binding LidPieces, Mode=TwoWay}" />
+                        <Label Grid.Row="1" Grid.Column="0" Text="Enter lid pieces " HorizontalOptions="Start"/>
+                        <local:BorderEntry Grid.Row="1" Grid.Column="1" Text="{Binding LidPieces, Mode=TwoWay}" />
 
-                        <Label Grid.Row="0" Grid.Column="0" Text="Is Splice Vault?"/>
-                        <Switch Grid.Row="0" Grid.Column="1" IsToggled="{Binding IsSpliceVault}"/>
 
-                        <Label Grid.Row="1" Grid.Column="0" Text="Has Ground Rod"/>
-                        <Switch Grid.Row="1" Grid.Column="1" IsToggled="{Binding IsHasGround}"/>
-
-                        <Label Grid.Row="2" Grid.Column="2" Text="Has Key"/>
-                        <Switch Grid.Row="2" Grid.Column="2" IsToggled="{Binding IsHasKey}"/>
-
-                        <Label Grid.Row="4" Grid.Column="1" Text="Enter lid pieces"/>
-                        <Label Grid.Row="4" Grid.Column="2" Text="Has Appron"/>
-                        <local:BorderEntry Grid.Row="5" Grid.Column="0" Text="{Binding Distance2Tralance, Mode=TwoWay}"/>
-                        <local:BorderEntry Grid.Row="5" Grid.Column="1" Text="{Binding LidPieces, Mode=TwoWay}"/>
-                        <local:Dropdown Grid.Row="5" Grid.Column="2" ItemsSource="{Binding YesNo}" SelectedItem="{Binding IsHasAppron}"/>
-
+                        <Label Grid.Row="2" Grid.Column="0" Text="Has Appron"/>
+                        <Switch Grid.Row="2" Grid.Column="1" IsToggled="{Binding IsHasAppron}"/>
+                        <Label Grid.Row="3" Grid.Column="0" Text="Is This a splice Vault?"/>
+                        <Switch Grid.Row="3" Grid.Column="1" IsToggled="{Binding IsSpliceVault}"/>
+                        <Label Grid.Row="4" Grid.Column="0" Text="Is Gravel Bottom"/>
+                        <Switch Grid.Row="4" Grid.Column="1" IsToggled="{Binding IsGravelBottom}"/>
+                        <Label Grid.Row="5" Grid.Column="0" Text="Has Key"/>
+                        <Switch x:Name="hasKey" Grid.Row="5" Grid.Column="1" IsToggled="{Binding IsHasKey}"/>
+                        <Grid Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="3" IsVisible="{Binding Source={x:Reference Name=hasKey}, Path=IsToggled }" ColumnDefinitions="*,*,*" >
+                            <Label Grid.Row="0"  Grid.Column="0"  Text="Key Type " HorizontalOptions="Start"/>
+                            <local:BorderEntry Grid.Row="0" Grid.Column="1"  Text="{Binding KeyType, Mode=TwoWay}" />
+                        </Grid>
                     </Grid>
-                    
-                    <Label Text="Mounting"/>
-                    <Picker ItemsSource="{Binding MountingTypeList}" 
-                            ItemDisplayBinding="{Binding MountingType}" 
-                            SelectedItem="{Binding SelectedMounting, Mode=TwoWay}"
-                            HorizontalOptions="FillAndExpand"/>
+
+
+                    <Button Text="Save" HorizontalOptions="FillAndExpand"  Command="{Binding SaveContinueCommand}"/>
+
                 </StackLayout>
             </ScrollView>
         </StackLayout>

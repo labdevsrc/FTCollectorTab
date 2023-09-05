@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage Title="GPS Source" xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:local="clr-namespace:FTCollectorApp.Utils;assembly=FTCollectorApp"
+             x:Class="FTCollectorApp.View.GpsSettingPopup">
+
+    <StackLayout WidthRequest="300"
+                    Margin="20"
+                    Padding="20"
+                    BackgroundColor="White"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+        
+        <Label Text="{Binding Accuracy}" FontSize="Medium"/>
+        <Label Text="{Binding Coords}" FontSize="Medium"/>
+
+        <RadioButton IsChecked="{Binding IsPhoneGPS}" Content="Phone's GPS" />
+        <RadioButton IsChecked="{Binding IsExternalGNSS}"  Content="Trimble" />
+        <RadioButton x:Name ="btnNoGPS" IsChecked="{Binding IsManualInput}" Content="Manual input" />
+        <Label IsVisible="{Binding Source={x:Reference Name=btnNoGPS},Path=IsChecked }" FontSize="Medium"
+                Text="Input Coords Manually below"/>
+        <local:BorderEntry Keyboard="Numeric" IsVisible="{Binding Source={x:Reference Name=btnNoGPS}, Path=IsChecked }" Placeholder="Lattitude" Text="{Binding EntryLatitude}"/>
+        <local:BorderEntry Keyboard="Numeric" IsVisible="{Binding Source={x:Reference Name=btnNoGPS}, Path=IsChecked }" Placeholder="Longitude" Text="{Binding EntryLongitude}"/>
+        <Button Text="Use this setting" BackgroundColor="{StaticResource blueColor}" 
+                Command="{Binding SaveGPSSettingCommand}">
+
+        </Button>
+        <ActivityIndicator VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
+
+
+    </StackLayout>
+
+</pages:PopupPage>

@@ -23,9 +23,9 @@
                     <local:BorderEntry Text="{Binding PostalCode, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
 
                     <Grid Padding="0,5,10,5" RowDefinitions="0.1*,0.2*,0.1*,0.2*" ColumnDefinitions="*,*,*">
-                        <Label Grid.Row="0" Grid.Column="0" Text="Enter the dot disctrict"/>
+                        <Label Grid.Row="0" Grid.Column="0" Text="DOT disctrict"/>
                         <Label Grid.Row="0" Grid.Column="1" Text="Has Power disconnect"/>
-                        <local:BorderEntry  Grid.Row="1" Grid.Column="0"  Text="{Binding DotDistrict, Mode=TwoWay}" />
+                        <local:BorderEntry  Grid.Row="1" Grid.Column="0"  IsEnabled="False" Text="{Binding DotDistrict, Mode=TwoWay}" />
                         <Switch Grid.Row="1" Grid.Column="1" IsToggled="{Binding IsHasPowerDisconnect, Mode=TwoWay}"/>
                         <Label Grid.Row="0" Grid.Column="2" Text="3rd party comms"/>
                         <Switch Grid.Row="1" Grid.Column="2" IsToggled="{Binding Is3rdComms, Mode=TwoWay}"/>
@@ -33,9 +33,9 @@
                         <Label Grid.Row="2" Grid.Column="0" Text="Enter Comms provider"/>
                         <local:BorderEntry Grid.Row="3"  Grid.Column="0" Text="{Binding CommsProvider, Mode=TwoWay}" />
                         <Label Grid.Row="2" Grid.Column="1" Text="Enter UDS owner"/>
-                        <local:BorderEntry Grid.Row="3" Grid.Column="2"  Text="{Binding UDSOwner, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+                        <local:BorderEntry Grid.Row="3" Grid.Column="1"  Text="{Binding UDSOwner, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
                         <Label Grid.Row="2" Grid.Column="2" Text="key code"/>
-                        <local:BorderEntry Grid.Row="3" Grid.Column="1" Text="{Binding KeyCode, Mode=TwoWay}"/>
+                        <local:BorderEntry Grid.Row="3" Grid.Column="2" Text="{Binding KeyCode, Mode=TwoWay}"/>
 
                     </Grid>
 
@@ -55,18 +55,8 @@
 
                     <Label Text="Enter manufactured" />
                     <DatePicker HorizontalOptions="FillAndExpand" Date="{Binding Manufactured, Mode=TwoWay}"/>
-
-
-
-                    <Button Text="Record Duct" HorizontalOptions="FillAndExpand" Command="{Binding ShowDuctPageCommand}"/>
-                    <Button Text="Fiber"  x:Name ="btnFiberBtn" HorizontalOptions="FillAndExpand" Command="{Binding FiberBtnCommand}" />
-                    <!--<Button Text="Tracer" IsEnabled="False" HorizontalOptions="FillAndExpand" />-->
-                    <Button Text="Connect Devices" IsEnabled="False" HorizontalOptions="FillAndExpand" />
-                    <!--<Button Text="Complete This Trace" IsEnabled="False" HorizontalOptions="FillAndExpand"  />-->
-                    <Button Text="Record Racks"  x:Name ="btnRecordRack" HorizontalOptions="FillAndExpand" Command="{Binding ShowRackPageCommand}" />
-                    <Button Text="Active Device" x:Name ="btnActiveDevice"  HorizontalOptions="FillAndExpand" Command="{Binding ShowActiveDevicePageCommand}"/>
                     <Button Text="Save and Continue" HorizontalOptions="FillAndExpand"  Command="{Binding SaveContinueCommand}"/>
-                    <Button Text="Return to Main Menu" HorizontalOptions="FillAndExpand"  Command="{Binding ReturnToMainCommand}"/>
+
                 </StackLayout>
 
             </ScrollView>

@@ -1,5 +1,6 @@
 ﻿using FTCollectorApp.Model;
 using FTCollectorApp.Services;
+using FTCollectorApp.View.Utils;
 using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
@@ -46,15 +47,15 @@ namespace FTCollectorApp.View
 
             if (Application.Current.Properties.ContainsKey(DeviceCheckedKey))
             {
-                deviceChecked.IsChecked = (bool) Application.Current.Properties[DeviceCheckedKey];
+                deviceChecked.IsChecked = (bool)Application.Current.Properties[DeviceCheckedKey];
             }
             if (Application.Current.Properties.ContainsKey(ExternalCheckedKey))
             {
-                externalChecked.IsChecked = (bool) Application.Current.Properties[ExternalCheckedKey];
+                externalChecked.IsChecked = (bool)Application.Current.Properties[ExternalCheckedKey];
             }
             if (Application.Current.Properties.ContainsKey(ManualCheckedKey))
             {
-                btnNoGPS.IsChecked = (bool) Application.Current.Properties[ManualCheckedKey];
+                btnNoGPS.IsChecked = (bool)Application.Current.Properties[ManualCheckedKey];
             }
 
             if (Application.Current.Properties.ContainsKey(ManualLattitudeKey))
@@ -66,31 +67,100 @@ namespace FTCollectorApp.View
                 entryLon.Text = Application.Current.Properties[ManualLongitudeKey].ToString();
             }
 
-            await LocationService.GetLocation();
-            if (LocationService.Coords != null)
-            {
-                _location = LocationService.Coords;
-                txtAccuracy.Text = $"Accuracy is {String.Format("{0:0.###} m", _location.Accuracy.ToString())}";
-                txtCoords.Text = $"Current Point is {String.Format("{0:0.#######}", _location.Latitude.ToString())} ,{String.Format("{0:0.#######}", _location.Longitude.ToString())} ";
-                Session.gps_sts = "1";
-                Session.lattitude2 = _location.Latitude.ToString();
-                Session.longitude2 = _location.Longitude.ToString();
-                Session.altitude = _location.Altitude.ToString();
-                Session.accuracy = _location.Accuracy.ToString();
-            }
-            else
-            {
-                txtAccuracy.Text = "Location Service disabled";
-                Session.gps_sts = "0";
-                Session.accuracy = "10000";
 
-            }
+            var timer = new ReadGPSTimer(TimeSpan.FromSeconds(10), OnGPSTimerStart);
+            timer.Start();
 
-            Console.WriteLine($"GpsPopupView [OnAppearing]");
+
+            /*Device.StartTimer(new TimeSpan(0, 0, 10), () => {
+                await LocationService.GetLocation();
+                Device.BeginInvokeOnMainThread(() =>
+                {
+
+                    if (LocationService.Coords != null)
+                    {
+                        _location = LocationService.Coords;
+
+
+
+                        txtAccuracy.Text = $"Accuracy is {String.Format("{0:0.###} m", _location.Accuracy.ToString())}";
+                        txtCoords.Text = $"Current Point is {String.Format("{0:0.#######}", _location.Latitude.ToString())} ,{String.Format("{0:0.#######}", _location.Longitude.ToString())} ";
+                        Session.gps_sts = "1";
+                        Session.lattitude2 = _location.Latitude.ToString();
+                        Session.longitude2 = _location.Longitude.ToString();
+                        Session.altitude = _location.Altitude.ToString();
+                        Session.accuracy = _location.Accuracy.ToString();
+                    }
+                    else
+                    {
+                        txtAccuracy.Text = "Location Service disabled";
+                        Session.gps_sts = "0";
+                        Session.accuracy = "10000";
+
+                    }
+                });
+                Console.WriteLine("10 sec timer ");
+                return true;
+            });*/
+
 
             IsBusy = false;
 
         }
+        async void OnGPSTimerStart()
+        {
+            Console.WriteLine("10 sec timer ");
+
+            try
+            {
+
+                var location = await Geolocation.GetLastKnownLocationAsync();
+                if (location == null)
+                {
+                    location = await Geolocation.GetLocationAsync(new GeolocationRequest
+                    {
+                        DesiredAccuracy = GeolocationAccuracy.Medium,
+                        Timeout = TimeSpan.FromSeconds(10)
+                    }
+                    );
+
+
+                }
+                else
+                {
+                    Console.WriteLine($"OnGPSTimerStart Latitude : {location.Latitude}, Longitude : {location.Longitude} ");
+
+                    if (LocationService.Coords != null)
+                    {
+                        _location = LocationService.Coords;
+
+
+
+                        txtAccuracy.Text = $"Accuracy is {String.Format("{0:0.###} m", _location.Accuracy.ToString())}";
+                        txtCoords.Text = $"Current Point is {String.Format("{0:0.#######}", _location.Latitude.ToString())} ,{String.Format("{0:0.#######}", _location.Longitude.ToString())} ";
+                        Session.gps_sts = "1";
+                        Session.lattitude2 = _location.Latitude.ToString();
+                        Session.longitude2 = _location.Longitude.ToString();
+                        Session.altitude = _location.Altitude.ToString();
+                        Session.accuracy = _location.Accuracy.ToString();
+                    }
+                    else
+                    {
+                        txtAccuracy.Text = "Location Service disabled";
+                        Session.gps_sts = "0";
+                        Session.accuracy = "10000";
+
+                    }
+
+
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception e " + e.ToString());
+            }
+        }
+
 
         private async void btnSave_Clicked(object sender, EventArgs e)
         {
@@ -152,51 +222,51 @@ namespace FTCollectorApp.View
                 txtAccuracy.Text = "Location Service disabled";
             }
 
-
         }
 
-        private async void ExternalChecked(object sender, CheckedChangedEventArgs e)
-        {
-            try
+            private async void ExternalChecked(object sender, CheckedChangedEventArgs e)
             {
-                _location = LocationService.Coords;
-                if (_location == null)
+                try
                 {
-                    await LocationService.GetLocation();
-                }
+                    _location = LocationService.Coords;
+                    if (_location == null)
+                    {
+                        await LocationService.GetLocation();
+                    }
 
-                if (_location != null)
+                    if (_location != null)
+                    {
+                        var accuracy = String.Format("{0:0.###} m", _location.Accuracy.ToString());
+                        var lattitude = String.Format("{0:0.#######}", _location.Latitude.ToString());
+                        var longitude = String.Format("{0:0.#######}", _location.Longitude.ToString());
+                        var altitude = String.Format("{0:0.#}", _location.Altitude.ToString());
+                        txtAccuracy.Text = $"Accuracy is {accuracy}";
+                        txtCoords.Text = $"Current Point is {lattitude} ,{longitude} ";
+                        Session.gps_sts = "1";
+                        Session.lattitude2 = lattitude;
+                        Session.longitude2 = longitude;
+                        Session.altitude = altitude;
+                        Session.accuracy = accuracy;
+                        Console.WriteLine($"[ExternalChecked] Coords {lattitude}, {longitude}");
+                    }
+                }
+                catch (Exception exp)
                 {
-                    var accuracy = String.Format("{0:0.###} m", _location.Accuracy.ToString());
-                    var lattitude = String.Format("{0:0.#######}", _location.Latitude.ToString());
-                    var longitude = String.Format("{0:0.#######}", _location.Longitude.ToString());
-                    var altitude = String.Format("{0:0.#}", _location.Altitude.ToString());
-                    txtAccuracy.Text = $"Accuracy is {accuracy}";
-                    txtCoords.Text = $"Current Point is {lattitude} ,{longitude} ";
-                    Session.gps_sts = "1";
-                    Session.lattitude2 = lattitude;
-                    Session.longitude2 = longitude;
-                    Session.altitude = altitude;
-                    Session.accuracy = accuracy;
-                    Console.WriteLine($"[ExternalChecked] Coords {lattitude}, {longitude}");
+                    Console.WriteLine($"[ExternalChecked] Exception {exp.ToString()}");
                 }
             }
-            catch (Exception exp)
+
+            private void NoGPSChecked(object sender, CheckedChangedEventArgs e)
             {
-                Console.WriteLine($"[ExternalChecked] Exception {exp.ToString()}");
+
+                Session.gps_sts = "0";
+                //if (string.IsNullOrEmpty(entryLat.Text) || string.IsNullOrEmpty(entryLon.Text))
+                //    return;
+
+                Session.manual_latti = String.Format("{0:0.#######}", entryLat.Text);
+                Session.manual_longi = String.Format("{0:0.#######}", entryLon.Text);
+
             }
-        }
-
-        private void NoGPSChecked(object sender, CheckedChangedEventArgs e)
-        {
-
-            Session.gps_sts = "0";
-            //if (string.IsNullOrEmpty(entryLat.Text) || string.IsNullOrEmpty(entryLon.Text))
-            //    return;
-
-            Session.manual_latti = String.Format("{0:0.#######}", entryLat.Text);
-            Session.manual_longi = String.Format("{0:0.#######}", entryLon.Text);
-
-        }
+        
     }
 }

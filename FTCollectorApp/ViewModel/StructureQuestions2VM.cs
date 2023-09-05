@@ -17,6 +17,7 @@ namespace FTCollectorApp.ViewModel
 
         [ObservableProperty] string streetAddress;
         [ObservableProperty] string postalCode;
+        [ObservableProperty] string locationSite;
 
         [ObservableProperty] string manufactured;
         [ObservableProperty] string installedAt;

@@ -621,7 +621,40 @@ namespace FTCollectorApp.Services
             }
             return "FAIL";
         }
+        public static async Task<string> CheckExistedTagNumber(string tagnum, string typecode)
+        {
 
+            var keyValues = new List<KeyValuePair<string, string>>{
+                //new KeyValuePair<string, string>("jobnum",Session.jobnum),
+                new KeyValuePair<string, string>("jno",Session.jobnum),
+                new KeyValuePair<string, string>("uid", Session.uid.ToString()),
+                new KeyValuePair<string, string>("tag",tagnum)
+            };
+
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                try
+                {
+                    response = await client.PostAsync(Constants.CheckExistedTagNumber, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[CloudService.CheckExistedTagNumber] Response from  OK = 200 , content :" + isi);
+                        return isi;
+                    }
+                }
+                catch (Exception e)
+                {
+                    return e.ToString();
+                }
+            }
+
+            return "No Internet Connection";
+        }
         public static async Task<string> PostCreateSiteAsync(string tagnum, string typecode)
         {
 
@@ -1227,9 +1260,11 @@ namespace FTCollectorApp.Services
                     if (response.IsSuccessStatusCode)
                     {
                         var isi = await response.Content.ReadAsStringAsync();
+                        var contentResponse = JsonConvert.DeserializeObject<ResponseRes>(isi);
+                        Console.WriteLine($"[UpdateSiteQuestionPage2] sts is {contentResponse?.sts}");
                         Console.WriteLine($"[UpdateSiteQuestionPage2] Response from  OK = 200 , content :" + isi);
 
-                        return "OK";
+                        return (contentResponse.sts.Equals("1")) ? "OK" : "FAIL";
 
                     }
                 }
@@ -1290,14 +1325,16 @@ namespace FTCollectorApp.Services
                     if (response.IsSuccessStatusCode)
                     {
                         var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine(isi);
                         var contentResponse = JsonConvert.DeserializeObject<ResponseRes>(isi);
-                        Console.WriteLine($"[InsertSiteQuestions1] d is {contentResponse?.d}");
-                        Console.WriteLine($"[InsertSiteQuestions1] max_id is {contentResponse?.max_id}");
-                        Console.WriteLine($"[InsertSiteQuestions1] Response from  OK = 200 , content :" + isi);
-
-
-                        return "OK";
-
+                        Console.WriteLine($"[InsertSiteQuestions1] sts is {contentResponse?.sts}");
+                        //Console.WriteLine($"[InsertSiteQuestions1] max_id is {contentResponse?.max_id}");
+                        //Console.WriteLine($"[InsertSiteQuestions1] Response from  OK = 200 , content :" + isi);
+                        //return $"{contentResponse?.max_id}";
+                        if (contentResponse.sts.Equals("0"))
+                            return "FAIL";
+                        else if (contentResponse.sts.Equals("1"))
+                            return "OK";
                     }
                 }
                 catch (Exception e)

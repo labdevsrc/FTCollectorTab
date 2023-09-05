@@ -21,8 +21,9 @@
         <ToolbarItem  Command="{Binding CrewChangeCommand}" Text="Change Crew" Order="Primary" Priority="1" />
         <ToolbarItem  Command="{Binding SetCrewAsDefaultCommand}" Text="Set As default crew" Order="Secondary" Priority="1" />
         <ToolbarItem  Command="{Binding LoadCrewDefaultCommand}" Text="Load default crew" Order="Secondary" Priority="2" />
-        <ToolbarItem  Command="{Binding CrewDefaultClearAllCommand}" Text="Clear All" Order="Secondary" Priority="3" />        
-        
+        <ToolbarItem  Command="{Binding CrewDefaultClearAllCommand}" Text="Clear All" Order="Secondary" Priority="3" />
+        <ToolbarItem  Command="{Binding GPSSettingCommand}" Text="GPS Setting" Order="Secondary" Priority="4" />
+
 
         <ToolbarItem  Command="{Binding LogOutCommand}" Text="LOGOUT" Order="Secondary" Priority="2" />
     </ContentPage.ToolbarItems>

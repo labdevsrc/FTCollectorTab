@@ -12,5 +12,7 @@ namespace FTCollectorApp.Model.Reference
         public string OwnerName { get; set; } = string.Empty;
         public string EndUserKey { get; set; }
         public string AltOwnerKey { get; set; }
+
+        public string DOTDistrict { get; set; }
     }
 }

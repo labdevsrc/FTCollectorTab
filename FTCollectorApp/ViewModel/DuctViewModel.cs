@@ -26,6 +26,9 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         bool isBusy;
 
+        ObservableCollection<DuctSession> DuctSessionList = new ObservableCollection<DuctSession>();
+
+        [ObservableProperty] string directionCounter = "1";
 
         public DuctViewModel()
         {
@@ -40,7 +43,7 @@ namespace FTCollectorApp.ViewModel
                 execute: async () =>
                 {
                     //Check direction_count
-                    if(int.Parse(SelectedDirectionCnt) <= Session.MAX_DIR_CNT)
+                    if(int.Parse(DirectionCounter) <= Session.MAX_DIR_CNT)
                     {
                         await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Direction Count already used", "Warning"));
                         return;
@@ -54,14 +57,27 @@ namespace FTCollectorApp.ViewModel
                         if (contentResponse.sts.Equals("0"))
                         {
                             Console.WriteLine();
-                            var num = int.Parse(SelectedDirectionCnt) + 1;
+                            var num = int.Parse(DirectionCounter) + 1;
                             Session.MAX_DIR_CNT += 1;
-                            SelectedDirectionCnt = num.ToString();
+                            DirectionCounter = num.ToString();
 
                             Session.DuctSaveCount++;
 
                             await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Update Success with key ="+ contentResponse.d.ToString(), "Success"));
                             //ResultPageCommand?.Execute();
+
+                            DuctSessionList.Add(
+                                new DuctSession
+                                {
+                                    ConduitKey = DirectionCounter,
+                                    HosTagNumber = DefaultHostTagNumber,
+                                    Direction = SelectedDirection.CompasKey,
+                                    DuctSize = SelectedDuctSize.Ductsize,
+                                    DuctColor = SelectedColor.ColorName,                                    
+                                }
+                                );
+
+
                         }
                         else if (contentResponse.sts.Equals("4"))
                         {
@@ -197,13 +213,13 @@ namespace FTCollectorApp.ViewModel
                     conn.CreateTable<DuctSession>();
                     var table = conn.Table<DuctSession>().Where(a=>(a.HosTagNumber == Session.tag_number)&&(a.OwnerKey ==  Session.ownerkey)).ToList();
                     var temp = 0;
-                    foreach (var col in table)
+                    /*foreach (var col in table)
                     {
                         int iTmp = int.Parse(col.DirCnt);
                         if (iTmp > temp)
                             temp = iTmp;                        
                     }
-                    Session.MAX_DIR_CNT = temp;
+                    Session.MAX_DIR_CNT = temp;*/
                     return new ObservableCollection<DuctSession>(table);
                 }
             }
@@ -273,8 +289,6 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
-        [ObservableProperty]
-        string selectedDirectionCnt = "1";
 
         [ObservableProperty]
         bool isPlugged = false;
@@ -317,7 +331,7 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),  // 1
                 new KeyValuePair<string, string>("host_tag_number", Session.tag_number),  // 2
                 new KeyValuePair<string, string>("direction", SelectedDirection?.CompasKey  == null ? "0": SelectedDirection.CompasKey),  // 3
-                new KeyValuePair<string, string>("direction_count", SelectedDirectionCnt ??= "0"),  // 4
+                new KeyValuePair<string, string>("direction_count", DirectionCounter ),  // 4
                 new KeyValuePair<string, string>("duct_size",  SelectedDuctSize?.DuctKey == null ? "0": SelectedDuctSize.DuctKey),  // 5
                 new KeyValuePair<string, string>("duct_color", SelectedColor?.ColorKey == null ? "0": SelectedColor.ColorKey),  // 6
                 new KeyValuePair<string, string>("duct_type",  selectedDuctType?.DucTypeKey == null ?"0" : SelectedDuctType.DucTypeKey),  // 7

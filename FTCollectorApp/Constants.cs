@@ -39,6 +39,8 @@ namespace FTCollectorApp
         public const string SaveActiveDevice = "ajaxSaveactivedevice.php";
         public const string SaveSlack = "ajaxSaveslack.php";
         public const string SaveSheathMark = "ajaxSaveSheathmark.php";
+
+        public const string CheckExistedTagNumber = "CheckExistedTagNumber.php";
         public const string ajaxSaveSlotBTray = "ajaxSaveblade.php";
 
         public const string ajaxSavePorts = "ajaxSavePorts.php";

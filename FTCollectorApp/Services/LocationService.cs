@@ -55,10 +55,19 @@ namespace FTCollectorApp.Services
             try
             {
                 Coords = await Geolocation.GetLastKnownLocationAsync();
+                if ( Coords == null )
+                {
+                    Coords = await Geolocation.GetLocationAsync(new GeolocationRequest
+                    {
+                        DesiredAccuracy = GeolocationAccuracy.Medium,
+                        Timeout = TimeSpan.FromSeconds(5)
+                    });
+                }
+
 
                 if (Coords != null)
                 {
-                    Console.WriteLine($"Latitude: {Coords.Latitude}, Longitude: {Coords.Longitude}, Altitude: {Coords.Altitude}");
+                    Console.WriteLine($"[LocationService] GetLocation Latitude: {Coords.Latitude}, Longitude: {Coords.Longitude}, Altitude: {Coords.Altitude}");
                 }
             }
             catch (FeatureNotSupportedException fnsEx)

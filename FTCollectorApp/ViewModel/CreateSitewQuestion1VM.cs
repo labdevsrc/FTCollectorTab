@@ -19,6 +19,8 @@ using FTCollectorApp.Model.Reference;
 using System.ComponentModel;
 using FTCollectorApp.View.SitesPage.Popup;
 using FTCollectorApp.View.SitesPage;
+using Xamarin.Essentials;
+using FTCollectorApp.View;
 
 namespace FTCollectorApp.ViewModel
 {
@@ -207,7 +209,34 @@ namespace FTCollectorApp.ViewModel
 
         public ICommand CompleteSiteCommand { get; set; }
         /* Create Site, Enter PC Tag - end */
-
+        ReadGPSTimer gpstimer;
+        async void OnGPSTimerStart()
+        {
+            Console.WriteLine("10 sec timer ");
+            try
+            {
+                await LocationService.GetLocation();
+                Console.WriteLine($"OnGPSTimerStart Latitude : {LocationService.Coords.Latitude}, Longitude : {LocationService.Coords.Longitude} ");
+                if (LocationService.Coords != null)
+                {
+                    Session.gps_sts = "1";
+                    Session.lattitude2 = LocationService.Coords.Latitude.ToString();
+                    Session.longitude2 = LocationService.Coords.Longitude.ToString();
+                    Session.altitude = LocationService.Coords.Altitude.ToString();
+                    Session.accuracy = LocationService.Coords.Accuracy.ToString();
+                }
+                else
+                {
+                    Accuracy = "Location Service disabled";
+                    Session.gps_sts = "0";
+                    Session.accuracy = "10000";
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception e " + e.ToString());
+            }
+        }
         public CreateSitewQuestion1VM()
         {
             Console.WriteLine();
@@ -232,6 +261,11 @@ namespace FTCollectorApp.ViewModel
                 }
                 Console.WriteLine();
             }
+
+            // start gps acqu
+            gpstimer = new ReadGPSTimer(TimeSpan.FromSeconds(10), OnGPSTimerStart);
+            gpstimer.Start();
+
 
             Console.WriteLine();
             SaveContinueCommand = new Command(async () => ExecuteSaveContinueCommand());
@@ -403,8 +437,10 @@ namespace FTCollectorApp.ViewModel
 
                     if (IsDisplayQuestionList) return;
 
-
-                    result = await CloudDBService.PostCreateSiteAsync(TagNumber, codekey);
+                    // create new site 
+                    // other than field site_type,  sitename, tag_number all empty
+                    // result = await CloudDBService.PostCreateSiteAsync(TagNumber, codekey);
+                    result = await CloudDBService.CheckExistedTagNumber(TagNumber, codekey);
                     if (result.Equals("DUPLICATED"))
                     {
                         Session.Result = "CreateSiteOK";
@@ -421,11 +457,11 @@ namespace FTCollectorApp.ViewModel
 
                     }
 
-                    if (result.Equals("CREATE_DONE") || result.Equals("UPDATE_DONE"))
+                    if (result.Equals("NEW_SITE") || result.Equals("UPDATE_DONE") )
                     {
                         // get answer from popup 
 
-                        if (result.Equals("CREATE_DONE"))
+                        if (result.Equals("NEW_SITE"))
                         {
                             Session.SiteCreateCnt = 0;
                             Session.DuctSaveCount = 0;
@@ -433,7 +469,7 @@ namespace FTCollectorApp.ViewModel
                             Session.ActiveDeviceCount = 0;
                         }
 
-                        var OkAnswer = await Application.Current.MainPage.DisplayAlert("DONE", result.Equals("CREATE_DONE") ? "Create Site Success" : "Update Site Success", "Enter " + SelectedMajorType, "Create Again");
+                        var OkAnswer = await Application.Current.MainPage.DisplayAlert("DONE", result.Equals("NEW_SITE") ? "Create Site Success" : "Update Site Success", "Enter " + SelectedMajorType, "Create Again");
                         if (OkAnswer)
                         {
                             IsDisplayQuestionList = true;
@@ -479,40 +515,13 @@ namespace FTCollectorApp.ViewModel
 
 
 
-            if (timer == null)
-            {
-                timer = new ReadGPSTimer(TimeSpan.FromSeconds(5), OnGPSTimerStart);
-                //timer.Start();
-            }
-
             Console.WriteLine();
         }
 
         // GPS Location Service - start
         [ObservableProperty]
         string accuracy;
-        async void OnGPSTimerStart()
-        {
-            try
-            {
-                await LocationService.GetLocation();
-                Accuracy = $"{LocationService.Coords.Accuracy}";
-                Session.accuracy = String.Format("{0:0.######}", LocationService.Coords.Accuracy);
-                //Session.longitude2 = String.Format("{0:0.######}", LocationService.Coords.Longitude);
-                //Session.lattitude2 = String.Format("{0:0.######}", LocationService.Coords.Latitude);
-                Session.live_longitude = String.Format("{0:0.######}", LocationService.Coords.Longitude);
-                Session.live_lattitude = String.Format("{0:0.######}", LocationService.Coords.Latitude);
-                Session.altitude = String.Format("{0:0.######}", LocationService.Coords.Altitude);
-                //{ String.Format("{0:0.#######}", _location.Latitude.ToString())}
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-                Accuracy = "No GPS";
-            }
 
-        }
-        // GPS Location Service - end
 
 
         // Questions #1
@@ -969,7 +978,6 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-
         async void ExecuteSaveContinueCommand()
         {
             Console.WriteLine();
@@ -984,17 +992,19 @@ namespace FTCollectorApp.ViewModel
                 {
                     var KVPair = keyvaluepair();
                     var result = await CloudDBService.InsertSiteQuestions1(KVPair);
+
                     if (result.Equals("OK"))
                     {
                         await Application.Current.MainPage.DisplayAlert("Success", "Uploading Data Done", "OK");
                         Session.SiteCreateCnt++;
                         (ShowDuctPageCommand as Command).ChangeCanExecute();
                         (CompleteSiteCommand as Command).ChangeCanExecute();
+
                     }
 
                     else
                     {
-                        await Application.Current.MainPage.DisplayAlert("Warning", result, "RETRY");
+                        await Application.Current.MainPage.DisplayAlert("Fail", result, "BACK");
 
                     }
                 }

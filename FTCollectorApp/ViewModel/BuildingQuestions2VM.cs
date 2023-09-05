@@ -25,63 +25,16 @@ namespace FTCollectorApp.ViewModel
 {
     [QueryProperty(nameof(SiteType), "site_type")]
     [QueryProperty(nameof(TagNumber), "tag_number")]
-
+    [QueryProperty(nameof(DBUpdateIndex), "siteindex")]
     public partial class BuildingQuestions2VM : ObservableObject
     {
 
-        /*[ObservableProperty]
-        string siteType;
-
-
-
-        [ObservableProperty]
-        string ownerName;
-
-        [ObservableProperty]
-        string ownerTagNumber;
-
-        [ObservableProperty]
-        string propertyId;
-
-        [ObservableProperty]
-        string siteName;
-
-
-        [ObservableProperty]
-        string streetAddress;
-
-        [ObservableProperty]
-        string postalCode;
-        [ObservableProperty]
-        string electSiteKeyCnt;
-
-        [ObservableProperty]
-        string commsProvider;
-
-        [ObservableProperty]
-        string serialNumber;
-
-        [ObservableProperty]
-        bool isHasPowerDisconnect = false;
-
-        [ObservableProperty]
-        bool is3rdComms = false;
-
-        // switch widget - start
-        [ObservableProperty]
-        bool isHaveSunShield = false;
-
-        [ObservableProperty]
-        bool isHasGroundRod = false;
-
-
-
-        [ObservableProperty]
-        string selectedRackCount;*/
 
         [ObservableProperty] string tagNumber;
         [ObservableProperty] string siteType;
+        [ObservableProperty] string dBUpdateIndex;
         [ObservableProperty] bool isHasKey = false;
+        [ObservableProperty] string dOTDistrict;
 
         bool isKeyTypeDisplay = false;
         public bool IsKeyTypeDisplay
@@ -110,6 +63,7 @@ namespace FTCollectorApp.ViewModel
             //TagNumber = Sess tagNumber;
             //OwnerName = Session.OwnerName;
             Session.current_page = "building";
+            DOTDistrict = Session.DOTdistrict;
 
             ShowDuctPageCommand = new Command(
                 execute: async () => {
@@ -299,6 +253,7 @@ namespace FTCollectorApp.ViewModel
         
         [ObservableProperty] string streetAddress;
         [ObservableProperty] string postalCode;
+        [ObservableProperty] string propertyId;
         [ObservableProperty] BuildingType selectedBuilding;
         [ObservableProperty] string manufactured;
         [ObservableProperty] string installedAt;
@@ -332,6 +287,7 @@ namespace FTCollectorApp.ViewModel
 
             Console.WriteLine();
             var keyValues = new List<KeyValuePair<string, string>>{
+                new KeyValuePair<string, string>("updateindex",DBUpdateIndex),
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),  // 2
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),  // 2
                 new KeyValuePair<string, string>("accuracy", Session.accuracy), //3
@@ -356,19 +312,22 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("pic2", ""),
                 new KeyValuePair<string, string>("otag", ""),
                 //new KeyValuePair<string, string>("roadway", SelectedRoadway?.RoadwayKey is null ? "" : SelectedRoadway.RoadwayKey),
-                new KeyValuePair<string, string>("pid", ""),
+                new KeyValuePair<string, string>("pid", PropertyId),
                 //new KeyValuePair<string, string>("loct", LocationName),
 
                 new KeyValuePair<string, string>("btype", SelectedBuilding?.BuildingTypeKey is null ? "":SelectedBuilding.BuildingTypeKey),
                 //new KeyValuePair<string, string>("orientation", SelectedOrientation?.CompasKey is null ? "" : SelectedOrientation.CompasKey),
                 //new KeyValuePair<string, string>("laneclosure", IsLaneClosure ? "1":"0"),
-                new KeyValuePair<string, string>("dotdis",  SelectedDistrict is null ? "" : SelectedDistrict),
+                new KeyValuePair<string, string>("dotdis", Session.DOTdistrict),
                 new KeyValuePair<string, string>("powr", IsHasPowerDisconnect ? "1":"0"),
-                new KeyValuePair<string, string>("elecsite", SelectedElectSiteKey),
+                new KeyValuePair<string, string>("elecsite", ""),
                 new KeyValuePair<string, string>("comm", Is3rdComms ? "1":"0"),
                 new KeyValuePair<string, string>("commprovider", CommsProvider),
                 new KeyValuePair<string, string>("sitaddr", StreetAddress), // site_street_addres
+                new KeyValuePair<string, string>("staddr", StreetAddress), // site_street_addres
+                new KeyValuePair<string, string>("pscode",PostalCode),
                 new KeyValuePair<string, string>("udsowner", UDSOwner),
+                new KeyValuePair<string, string>("cabinet_type",""),
 
                 new KeyValuePair<string, string>("rs2", "L"),
 
@@ -383,24 +342,25 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("filter_count", FilterCount ),//FilterTypeSelected),
                 new KeyValuePair<string, string>("filter_type", SelectedFilterType?.FilterTypeKey is null ? "": SelectedFilterType.FilterTypeKey ),//FilterTypeSelected),
                 new KeyValuePair<string, string>("filter_size", SelectedFilterSize?.FtSizeKey  is null ? "": SelectedFilterSize.FtSizeKey  ),//FilterSizeKeySelected),
-                new KeyValuePair<string, string>("sunshield2", IsHaveSunShield ? "1":"0"),
-                new KeyValuePair<string, string>("installed2", InstalledAt),
+                new KeyValuePair<string, string>("sunshield2", "0"),
+                new KeyValuePair<string, string>("installed2", ""),
                 //new KeyValuePair<string, string>("comment2", Notes), // Notes, pr description
 
-                new KeyValuePair<string, string>("gravel_bottom","" ),
+                new KeyValuePair<string, string>("gravel_bottom","0" ),
                 new KeyValuePair<string, string>("lid_pieces", ""),
-                new KeyValuePair<string, string>("has_apron", ""),
+                new KeyValuePair<string, string>("has_apron", "0"),
+                new KeyValuePair<string, string>("haskey", "0"),
                 //new KeyValuePair<string, string>("rack_count", SelectedRackCount is null ? "" : SelectedRackCount),
 
                 new KeyValuePair<string, string>("etc2", ""),
                 new KeyValuePair<string, string>("fosc2", ""),
                 new KeyValuePair<string, string>("vault2", ""),
-                //new KeyValuePair<string, string>("trlane2", DistanceEOTL),
+                new KeyValuePair<string, string>("trlane2", ""),
                 //new KeyValuePair<string, string>("bucket2", IsBucketTruck ? "1":"0"),
-                new KeyValuePair<string, string>("serialno", SerialNumber),
+                new KeyValuePair<string, string>("serialno", ""),
                 new KeyValuePair<string, string>("key", ""),
                 new KeyValuePair<string, string>("ktype", ""), //SelectedKeyType),
-                //new KeyValuePair<string, string>("ground", IsHasGroundRod ? "1":"0"),
+                new KeyValuePair<string, string>("ground", ""),
                 //new KeyValuePair<string, string>("traveldir", SelectedTravelDirection?.CompasKey is null ? "": SelectedTravelDirection.CompasKey),
                 //new KeyValuePair<string, string>("traveldir2", SelectedTravelDirection2?.CompasKey is null ? "": SelectedTravelDirection2.CompasKey),
                 new KeyValuePair<string, string>("owner_key", Session.ownerkey),

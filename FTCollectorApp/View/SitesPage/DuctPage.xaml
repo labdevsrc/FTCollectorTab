@@ -20,7 +20,7 @@
                         <Grid ColumnDefinitions="0.7*,0.1*,0.1*" >
                             <local:Dropdown SelectedItem="{Binding SelectedDuctKey, Mode=TwoWay}"
                                         ItemDisplayBinding="{Binding ConduitKey}" 
-                                        ItemsSource="{Binding DuctKeyList}" />
+                                        ItemsSource="{Binding DuctSessionList}" />
 
                             <Button Grid.Column="1" Text="{x:Static fa:FontAwesomeIcons.Recycle}"
                                    FontFamily="FontAwesome6Solid" Command="{Binding RefreshDuctKeyListCommand}"
@@ -39,7 +39,8 @@
                              Title="{Binding SelectedDuctKey.Direction}" HorizontalOptions="FillAndExpand" />
                         
                     <Label Text="Direction Count" />
-                        <Picker Title="{Binding SelectedDuctKey.DirCnt}" HorizontalOptions="FillAndExpand" 
+                        <local:BorderEntry Text="{Binding DirectionCounter, Mode=TwoWay}" />
+                        <!--<Picker Title="{Binding SelectedDuctKey.DirCnt}" HorizontalOptions="FillAndExpand" 
                                      SelectedItem="{Binding SelectedDirectionCnt}">
                             <Picker.Items>
                                 <x:String>1</x:String>
@@ -53,7 +54,7 @@
                                 <x:String>9</x:String>
                                 <x:String>10</x:String>
                             </Picker.Items>
-                    </Picker>
+                    </Picker>-->
 
                     <Label Text="Conduit Diameter" />
                     <Picker  ItemsSource="{Binding DuctSizeList}" ItemDisplayBinding="{Binding Ductsize}" 
@@ -142,8 +143,8 @@
 
                         <Button Text="Save and Continue" Command="{Binding SaveCommand}"/>
 
-                        <Button Text="Finished Duct Recording" Command="{Binding SaveBackCommand}"/>
-                        <Button Text="Return to Main Menu" HorizontalOptions="FillAndExpand"  Command="{Binding ReturnToMainCommand}"/>
+                        <!--<Button Text="Finished Duct Recording" Command="{Binding SaveBackCommand}"/>
+                        <Button Text="Return to Main Menu" HorizontalOptions="FillAndExpand"  Command="{Binding ReturnToMainCommand}"/>-->
 
                     </StackLayout>
 

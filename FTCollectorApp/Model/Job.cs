@@ -28,5 +28,7 @@ namespace FTCollectorApp.Model
 
         public string TimesheetStatus { get; set; }
         public string JobPhases { get; set; } = "1";
+
+        public string DOTdistrict { get; set; }
     }
 }

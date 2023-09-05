@@ -25,6 +25,7 @@ namespace FTCollectorApp.ViewModel
 {
     [QueryProperty(nameof(SiteType), "site_type")]
     [QueryProperty(nameof(TagNumber), "tag_number")]
+    [QueryProperty(nameof(DBUpdateIndex), "siteindex")]
 
     public partial class CabinetQuestions2VM : ObservableObject
     {
@@ -45,8 +46,48 @@ namespace FTCollectorApp.ViewModel
 
         [ObservableProperty] string tagNumber;
         [ObservableProperty] string siteType;
+        [ObservableProperty] string dBUpdateIndex;
         [ObservableProperty] bool isHasKey = false;
+        [ObservableProperty] bool isHasGroundRod = false;
+        [ObservableProperty] string filterCount = "0";
+        [ObservableProperty] FilterType selectedFilterType;
+        [ObservableProperty] FilterSize selectedFilterSize;
+        public ObservableCollection<FilterType> FilterTypeList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<FilterType>();
+                    var table = conn.Table<FilterType>().ToList();
+                    foreach (var col in table)
+                    {
+                        col.FilterTypeDesc = HttpUtility.HtmlDecode(col.FilterTypeDesc); // should use for escape char "
+                    }
+                    Console.WriteLine();
+                    return new ObservableCollection<FilterType>(table);
+                }
+            }
+        }
 
+        public ObservableCollection<FilterSize> FilterSizeList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<FilterSize>();
+                    var table = conn.Table<FilterSize>().ToList();
+                    foreach (var col in table)
+                    {
+                        col.data = HttpUtility.HtmlDecode(col.data); // should use for escape char "
+                    }
+                    Console.WriteLine();
+                    return new ObservableCollection<FilterSize>(table);
+                }
+            }
+        }
+        ///--end
 
         bool isKeyTypeDisplay = false;
         public bool IsKeyTypeDisplay
@@ -62,7 +103,7 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-
+        [ObservableProperty] string dotDistrict;
 
         //public BuildingSitePageViewModel(string siteType, string tagNumber)
         public CabinetQuestions2VM()
@@ -75,6 +116,7 @@ namespace FTCollectorApp.ViewModel
             //TagNumber = Sess tagNumber;
             //OwnerName = Session.OwnerName;
             Session.current_page = "cabinet";
+            DotDistrict = Session.DOTdistrict;
 
 
         }
@@ -147,6 +189,7 @@ namespace FTCollectorApp.ViewModel
 
         [ObservableProperty] bool isHaveSunShield = false;
         [ObservableProperty] string uDSOwner;
+        [ObservableProperty] string distanceEOTL;
 
 
         List<KeyValuePair<string, string>> keyvaluepair()
@@ -193,12 +236,14 @@ namespace FTCollectorApp.ViewModel
 
                 //new KeyValuePair<string, string>("orientation", SelectedOrientation?.CompasKey is null ? "" : SelectedOrientation.CompasKey),
                 //new KeyValuePair<string, string>("laneclosure", IsLaneClosure ? "1":"0"),
-                new KeyValuePair<string, string>("dotdis",  SelectedDistrict is null ? "" : SelectedDistrict),
+                new KeyValuePair<string, string>("dotdis",  Session.DOTdistrict),
                 new KeyValuePair<string, string>("powr", IsHasPowerDisconnect ? "1":"0"),
-                new KeyValuePair<string, string>("elecsite", SelectedElectSiteKey),
+                new KeyValuePair<string, string>("elecsite", ""),
                 new KeyValuePair<string, string>("comm", Is3rdComms ? "1":"0"),
                 new KeyValuePair<string, string>("commprovider", CommsProvider),
                 new KeyValuePair<string, string>("sitaddr", StreetAddress), // site_street_addres
+                new KeyValuePair<string, string>("staddr", StreetAddress), // site_street_addres
+                new KeyValuePair<string, string>("pscode",PostalCode),
                 new KeyValuePair<string, string>("udsowner", UDSOwner),
                 new KeyValuePair<string, string>("btype", ""),
                 new KeyValuePair<string, string>("cabinet_type",SelectedCabinetType?.CabinetTypeKey is null ? "":SelectedCabinetType?.CabinetTypeKey),
@@ -212,28 +257,27 @@ namespace FTCollectorApp.ViewModel
                 //new KeyValuePair<string, string>("intersect2", SelectedIntersection?.IntersectionKey is null ? "": SelectedIntersection.IntersectionKey),
                 //new KeyValuePair<string, string>("material2", SelectedMatCode?.MaterialKey is null ? "":SelectedMatCode.MaterialKey),
                 //new KeyValuePair<string, string>("mounting2", SelectedMounting?.MountingKey is null ? "":SelectedMounting.MountingKey),
-                //new KeyValuePair<string, string>("offilter2", SelectedFilterType?.FilterTypeKey is null ? "": SelectedFilterType.FilterTypeKey ),//FilterTypeSelected),
-                //new KeyValuePair<string, string>("fltrsize2", SelectedFilterSize?.FtSizeKey  is null ? "": SelectedFilterSize.FtSizeKey  ),//FilterSizeKeySelected),
-                new KeyValuePair<string, string>("filter_type", ""),
-                new KeyValuePair<string, string>("filter_size", ""),
+                new KeyValuePair<string, string>("filter_count", FilterCount ),
+                new KeyValuePair<string, string>("filter_type", SelectedFilterType?.FilterTypeKey is null ? "": SelectedFilterType.FilterTypeKey ),//FilterTypeSelected),
+                new KeyValuePair<string, string>("filter_size", SelectedFilterSize?.FtSizeKey  is null ? "": SelectedFilterSize.FtSizeKey  ),//FilterSizeKeySelected),
                 new KeyValuePair<string, string>("sunshield2", IsHaveSunShield ? "1":"0"),
                 new KeyValuePair<string, string>("installed2", InstalledAt),
                 //new KeyValuePair<string, string>("comment2", Notes), // Notes, pr description
 
-                new KeyValuePair<string, string>("gravel_bottom","" ),
+                new KeyValuePair<string, string>("gravel_bottom","0" ),
                 new KeyValuePair<string, string>("lid_pieces", ""),
-                new KeyValuePair<string, string>("has_apron", ""),
-                //new KeyValuePair<string, string>("rack_count", SelectedRackCount is null ? "" : SelectedRackCount),
+                new KeyValuePair<string, string>("has_apron", "0"),
+                new KeyValuePair<string, string>("haskey", IsHasKey ? "1":"0"),
 
                 new KeyValuePair<string, string>("etc2", ""),
                 new KeyValuePair<string, string>("fosc2", ""),
                 new KeyValuePair<string, string>("vault2", ""),
-                //new KeyValuePair<string, string>("trlane2", DistanceEOTL),
+                new KeyValuePair<string, string>("trlane2", DistanceEOTL),
                 //new KeyValuePair<string, string>("bucket2", IsBucketTruck ? "1":"0"),
                 new KeyValuePair<string, string>("serialno", SerialNumber),
                 new KeyValuePair<string, string>("key", ""),
                 new KeyValuePair<string, string>("ktype", ""), //SelectedKeyType),
-                //new KeyValuePair<string, string>("ground", IsHasGroundRod ? "1":"0"),
+                new KeyValuePair<string, string>("ground", IsHasGroundRod ? "1":"0"),
                 //new KeyValuePair<string, string>("traveldir", SelectedTravelDirection?.CompasKey is null ? "": SelectedTravelDirection.CompasKey),
                 //new KeyValuePair<string, string>("traveldir2", SelectedTravelDirection2?.CompasKey is null ? "": SelectedTravelDirection2.CompasKey),
                 new KeyValuePair<string, string>("owner_key", Session.ownerkey),

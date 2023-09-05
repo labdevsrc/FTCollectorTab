@@ -199,7 +199,7 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
-        string version = "0815-1"; // change here for release
+        string version = "0924-1"; // change here for release
 
         string apkVersion;
         public string ApkVersion
@@ -241,7 +241,8 @@ namespace FTCollectorApp.ViewModel
         public ICommand SettingCommand { get; set; }
         private async void DisplayGPSSettingCommand()
         {
-            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
+            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new GpsSettingPopup());
+            //await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
         }
 
 

@@ -39,6 +39,7 @@ namespace FTCollectorApp.Model
         public static string countycode { get; set; }
         public static string ownerkey { get; set; }
         public static string OwnerName { get; set; }
+        public static string DOTdistrict { get; set; }
         public static string ownerCD { get; set; }
         public static int crewCnt { get; set; }
 

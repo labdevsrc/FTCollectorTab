@@ -29,12 +29,12 @@
                         <Label Grid.Row="2" Grid.Column="0" Text="Enter Comms provider"/>
                         <local:BorderEntry Grid.Row="3"  Grid.Column="0" Text="{Binding CommsProvider, Mode=TwoWay}" />
                         <Label Grid.Row="2" Grid.Column="1" Text="Enter UDS owner"/>
-                        <local:BorderEntry Grid.Row="3" Grid.Column="2"  Text="{Binding UDSOwner, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
+                        <local:BorderEntry Grid.Row="3" Grid.Column="1"  Text="{Binding UDSOwner, Mode=TwoWay}" HorizontalOptions="FillAndExpand" />
                         <Label Grid.Row="2" Grid.Column="2" Text="key code"/>
-                        <local:BorderEntry Grid.Row="3" Grid.Column="1" Text="{Binding KeyCode, Mode=TwoWay}"/>
+                        <local:BorderEntry Grid.Row="3" Grid.Column="2" Text="{Binding KeyCode, Mode=TwoWay}"/>
                     </Grid>
 
-                    <Grid Padding="0,5,10,5" RowDefinitions="*,*,*,*,*,*,*" ColumnDefinitions="*,*">
+                    <Grid Padding="0,5,10,5" RowDefinitions="*,*,*,*,*" ColumnDefinitions="*,*">
                         <Label Grid.Row="0" Grid.Column="0" Text="Has Power disconnect"/>
                         <Label Grid.Row="1" Grid.Column="0" Text="Have a sun shield"/>
                         <Label Grid.Row="2" Grid.Column="0" Text="Has Ground Rod"/>
@@ -43,17 +43,24 @@
                         
                         <Switch Grid.Row="0" Grid.Column="1" IsToggled="{Binding IsHasPowerDisconnect, Mode=TwoWay}"/>
                         <Switch Grid.Row="1" Grid.Column="1" IsToggled="{Binding IsHaveSunShield, Mode=TwoWay}"/>
-                        <Switch Grid.Row="2" Grid.Column="1" IsToggled="{Binding IsHasGround, Mode=TwoWay}"/>
-                        <Switch Grid.Row="3" Grid.Column="1" IsToggled="{Binding IsHasKey, Mode=TwoWay}"/>
+                        <Switch Grid.Row="2" Grid.Column="1" IsToggled="{Binding IsHasGroundRod, Mode=TwoWay}"/>
+                        <Switch x:Name="iskey" Grid.Row="3" Grid.Column="1" IsToggled="{Binding IsHasKey, Mode=TwoWay}"/>
                         <Switch Grid.Row="4" Grid.Column="1" IsToggled="{Binding Is3rdComms, Mode=TwoWay}"/>
                         
                     </Grid>
-                    <Grid IsVisible="{Binding IsKeyTypeDisplay}">
-                        <Label Grid.Row="0" Grid.Column="0" Text="Key Type"  />
-                        <local:Dropdown Grid.Row="0" Grid.Column="1" ItemsSource="{Binding DotDistrict}" SelectedItem="{Binding SelectedKeyType}" />
+                    <Grid IsVisible="{Binding Source={x:Reference Name=iskey}, Path=IsToggled}" >
+                        <Label Text="Key Type"  />
+                        <local:BorderEntry  Grid.Column="1" Text="{Binding KeyType, Mode=TwoWay}" />
                     </Grid>
-
-
+                    <Grid Padding="0,5,10,5" RowDefinitions="*,*,*" ColumnDefinitions="0.5*,*,0.5*">
+                        <Label  Text="Distance to Travel Lane"  />
+                        <local:BorderEntry Grid.Row="1" Grid.Column="0" Text="{Binding DistanceEOTL, Mode=TwoWay}" />
+                        <Label  Grid.Row="0" Grid.Column="1" Text="Serial Number"  />
+                        <local:BorderEntry Grid.Row="1" Grid.Column="1" Text="{Binding SerialNumber, Mode=TwoWay}" />
+                        <Label  Grid.Row="0" Grid.Column="2" Text="Filter Count"  />
+                        <local:BorderEntry Grid.Row="1" Grid.Column="2" Text="{Binding FilterCount, Mode=TwoWay}" />                        
+                    </Grid>
+                    
                     <Label Text="Filter Type"/>
                     <Picker ItemsSource="{Binding FilterTypeList}" ItemDisplayBinding="{Binding FilterTypeDesc}"
                             SelectedItem="{Binding SelectedFilterType, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>

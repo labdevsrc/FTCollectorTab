@@ -147,6 +147,7 @@ namespace FTCollectorApp.ViewModel
                         Session.countycode = QueryOwnerJobNumber.Select(a => a.CountyCode).First();
                         Session.max_phases = QueryOwnerJobNumber.Select(a => a.JobPhases).First();
                         Session.JobShowAll = QueryOwnerJobNumber.Select(a => a.ShowAll).First();
+                        Session.DOTdistrict = QueryOwnerJobNumber.Select(a => a.DOTdistrict).First();
                         Session.jobnum = value.JobNumber;
                         Session.OwnerName = value.OwnerName;
 
@@ -2782,7 +2783,7 @@ namespace FTCollectorApp.ViewModel
 
                     bool answer = await Application.Current.MainPage.DisplayAlert("Logout", "Are you sure want to Logout ?", "Yes", "No");
 
-                    if (answer)
+                    /*if (answer)
                     {
 
                         ClearAllPage();
@@ -2792,9 +2793,10 @@ namespace FTCollectorApp.ViewModel
                         RemoveSitePage1Tab();
                         //AppShell.mytabbar.Items.Clear();
 
-                    }
-                    //if (answer)
-                        //System.Diagnostics.Process.GetCurrentProcess().Kill();
+                    }*/
+
+                    if (answer)
+                        System.Diagnostics.Process.GetCurrentProcess().Kill();
                 }
             );
 
@@ -3925,7 +3927,8 @@ LClockOutPerDiem, Session.uid.ToString());
 
         private async void DisplayGPSSettingCommand()
         {
-            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
+            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new GpsSettingPopup()); // for Rg.plugin popup
+            ///await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
         }
 
 
@@ -4341,6 +4344,5 @@ LClockOutPerDiem, Session.uid.ToString());
             }
         }
     }
-        ////////////////////
-        ///
-    }
+
+}
