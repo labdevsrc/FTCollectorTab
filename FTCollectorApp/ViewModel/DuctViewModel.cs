@@ -26,7 +26,70 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         bool isBusy;
 
-        ObservableCollection<DuctSession> DuctSessionList = new ObservableCollection<DuctSession>();
+        [ObservableProperty]
+        bool isDuctLists;
+
+
+
+        DuctSession selectedDuctSession;
+        public DuctSession SelectedDuctSession
+        {
+            get => selectedDuctSession;
+            set
+            {
+                SetProperty(ref selectedDuctSession, value);
+                if(DuctSessions?.Count > 0)
+                {
+                    try
+                    {
+                        var newDuctColor = new ColorCode { ColorName = value.ColorName, ColorHex = value.ColorHex };
+                        SelectedColor = newDuctColor;
+
+                        var newDuctSize = new DuctSize { DuctKey = value.DuctSizeKey, DUCTS_SIZE = value.DuctSizeDesc };
+                        SelectedDuctSize = newDuctSize;
+
+
+
+                        var newDuctMaterial = new DuctType { DucTypeKey = value.DuctTypeKey, DucTypeDesc = value.DuctTypeDesc };
+                        SelectedDuctType = newDuctMaterial;
+
+                        var newDirection = new CompassDirection { CompasKey = value.ColorName, CompassDirDesc = value.DirDesc };
+                        SelectedDirection = newDirection;
+
+                        IsPlugged = value.IsDuctPlug;
+                        IsOpen = value.IsOpen;
+                        HasTraceWire = value.HasTraceWire;
+                        PullTapeIdx = value.PullTapeKey;
+
+                        Console.WriteLine();
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                }
+                Console.WriteLine();
+                
+            }
+        }
+
+        public ObservableCollection<DuctSession> DuctSessionList {
+            get
+            {
+                Console.WriteLine();
+
+                if (DuctSessions != null)
+                {
+                    Console.WriteLine();
+                    return new ObservableCollection<DuctSession>(DuctSessions);
+                }
+                return new ObservableCollection<DuctSession>();
+
+
+            }
+        }
+
+        List<DuctSession> DuctSessions = new List<DuctSession>();
 
         [ObservableProperty] string directionCounter = "1";
 
@@ -36,16 +99,16 @@ namespace FTCollectorApp.ViewModel
             // from Duct Color Selection PopUp
 
             ColorSelectedCommand = new Command(ductcolor => ExecuteColorSelectedCommand(ductcolor as ColorCode));
-
             // from DuctPage
             ShowPopupCommand = new Command(async _ => await ExecuteShowPopupCommand());
             SaveCommand = new Command(
                 execute: async () =>
                 {
                     //Check direction_count
-                    if(int.Parse(DirectionCounter) <= Session.MAX_DIR_CNT)
+                    if(int.Parse(DirectionCounter) > Session.MAX_DIR_CNT)
                     {
-                        await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Direction Count already used", "Warning"));
+                        await Application.Current.MainPage.DisplayAlert("Warning", "Direction Counter Over than 9", "BACK");
+                        //await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Direction Count already used", "Warning"));
                         return;
                     }
                     var KVPair = keyvaluepair();
@@ -58,7 +121,7 @@ namespace FTCollectorApp.ViewModel
                         {
                             Console.WriteLine();
                             var num = int.Parse(DirectionCounter) + 1;
-                            Session.MAX_DIR_CNT += 1;
+                            //Session.MAX_DIR_CNT += 1;
                             DirectionCounter = num.ToString();
 
                             Session.DuctSaveCount++;
@@ -66,16 +129,30 @@ namespace FTCollectorApp.ViewModel
                             await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Update Success with key ="+ contentResponse.d.ToString(), "Success"));
                             //ResultPageCommand?.Execute();
 
-                            DuctSessionList.Add(
+                            DuctSessions.Add(
                                 new DuctSession
                                 {
                                     ConduitKey = DirectionCounter,
                                     HosTagNumber = DefaultHostTagNumber,
-                                    Direction = SelectedDirection.CompasKey,
-                                    DuctSize = SelectedDuctSize.Ductsize,
-                                    DuctColor = SelectedColor.ColorName,                                    
+                                    ColorKey = SelectedColor?.ColorKey,
+                                    ColorHex = SelectedColor?.ColorHex,
+                                    ColorName = SelectedColor?.ColorName,
+                                    DuctSizeKey = SelectedDuctSize?.DuctKey,
+                                    DuctSizeDesc = SelectedDuctSize?.DUCTS_SIZE,
+                                    CompasKey = SelectedDirection?.CompasKey,
+                                    DirDesc = SelectedDirection?.CompassDirDesc,
+
+                                    DuctTypeKey = SelectedDuctType.DucTypeKey,
+                                    DuctTypeDesc = SelectedDuctType.DucTypeDesc,
+                                    IsDuctPlug = IsPlugged,
+                                    IsOpen = IsOpen,
+                                    HasTraceWire = HasTraceWire,
+                                    PullTapeKey = PullTapeIdx,
+
+                                    Description =  $"{DirectionCounter} :  {SelectedDuctSize.DUCTS_SIZE} : {SelectedDuctType.DucTypeDesc}"
                                 }
                                 );
+                            OnPropertyChanged(nameof(DuctSessionList));
 
 
                         }
@@ -96,6 +173,7 @@ namespace FTCollectorApp.ViewModel
                     {
                         await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert(e.ToString(),"FAIL"));
                     }
+                    Console.WriteLine();
                 });
             SaveBackCommand = new Command(
                 execute: async () =>
@@ -129,7 +207,7 @@ namespace FTCollectorApp.ViewModel
                         }
 
                         Console.WriteLine();
-                        OnPropertyChanged(nameof(DuctKeyList)); // update CONDUIT_GROUPS dropdown list
+                        OnPropertyChanged(nameof(DuctSessionList)); // update CONDUIT_GROUPS dropdown list
                     }
                     IsBusy = false;
                     Console.WriteLine();
@@ -197,33 +275,6 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        /// get selected color from popup - end
-        /// 
-
-        // Duct Page - start
-        [ObservableProperty]
-        ConduitsGroup selectedDuctKey;
-
-        public ObservableCollection<DuctSession> DuctKeyList
-        {
-            get
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<DuctSession>();
-                    var table = conn.Table<DuctSession>().Where(a=>(a.HosTagNumber == Session.tag_number)&&(a.OwnerKey ==  Session.ownerkey)).ToList();
-                    var temp = 0;
-                    /*foreach (var col in table)
-                    {
-                        int iTmp = int.Parse(col.DirCnt);
-                        if (iTmp > temp)
-                            temp = iTmp;                        
-                    }
-                    Session.MAX_DIR_CNT = temp;*/
-                    return new ObservableCollection<DuctSession>(table);
-                }
-            }
-        }
         public ObservableCollection<DuctType> DuctMaterialList
         {
             get
@@ -297,7 +348,7 @@ namespace FTCollectorApp.ViewModel
         bool isOpen = false;
 
         [ObservableProperty]
-        int hasPullTape = 0;
+        int pullTapeIdx = 0;
 
         [ObservableProperty]
         bool hasInnerDuct = false;
@@ -347,7 +398,7 @@ namespace FTCollectorApp.ViewModel
 
                 new KeyValuePair<string, string>("openpercent", PercentOpen is null ? "" : PercentOpen),  // 11
                 new KeyValuePair<string, string>("has_trace_wire", HasTraceWire ?"1" : "0"),  // 12
-                new KeyValuePair<string, string>("has_pull_tape", HasPullTape.ToString()),  // 12
+                new KeyValuePair<string, string>("has_pull_tape", PullTapeIdx .ToString()),  // 12
             };
 
 

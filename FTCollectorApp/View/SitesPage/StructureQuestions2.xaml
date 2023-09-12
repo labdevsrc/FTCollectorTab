@@ -18,6 +18,15 @@
                     <local:BorderEntry Text="{Binding LocationSite, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
                     <Label Text="Enter Postal Code" HorizontalOptions="Start"/>
                     <local:BorderEntry Text="{Binding PostalCode, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
+                    <Grid ColumnDefinitions="*,*,*,*">
+                    <Label Text="Elect Circuit Name" HorizontalOptions="Start"/>
+                    <local:BorderEntry Text="{Binding ElectCircuitName, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
+                    <Label Grid.Row="1" Grid.Column="0" Text="Have a sun shield"/>
+                    <Switch Grid.Row="1" Grid.Column="1" IsToggled="{Binding IsHaveSunShield, Mode=TwoWay}"/>
+                    </Grid>
+                
+                    <Label Text="Installed at" />
+                    <DatePicker HorizontalOptions="FillAndExpand" Date="{Binding InstalledAt, Mode=TwoWay}"/>
                     <Label Text="Enter manufactured" />
                     <DatePicker HorizontalOptions="FillAndExpand" Date="{Binding Manufactured, Mode=TwoWay}"/>                    
                     <Button Text="Save and Continue" HorizontalOptions="FillAndExpand"  Command="{Binding SaveContinueCommand}"/>                    

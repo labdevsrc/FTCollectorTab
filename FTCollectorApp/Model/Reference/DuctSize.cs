@@ -10,6 +10,6 @@ namespace FTCollectorApp.Model.Reference
         [PrimaryKey, AutoIncrement]
         public int id { get; set; }
         public string DuctKey { get; set; }
-        public string Ductsize { get; set; }
+        public string DUCTS_SIZE { get; set; }
     }
 }

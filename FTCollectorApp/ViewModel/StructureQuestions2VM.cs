@@ -17,6 +17,8 @@ namespace FTCollectorApp.ViewModel
 
         [ObservableProperty] string streetAddress;
         [ObservableProperty] string postalCode;
+        [ObservableProperty] string propertyId;
+
         [ObservableProperty] string locationSite;
 
         [ObservableProperty] string manufactured;
@@ -26,6 +28,7 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty] string selectedKeyCode;
         [ObservableProperty] string selectedDistrict;
         [ObservableProperty] string selectedRackCount;
+        [ObservableProperty] string electCircuitName;
 
         [ObservableProperty] string commsProvider;
         [ObservableProperty] string serialNumber;
@@ -57,7 +60,7 @@ namespace FTCollectorApp.ViewModel
                 //new KeyValuePair<string, string>("sitname2", SiteName),
 
 
-                //new KeyValuePair<string, string>("manufactured_date", Manufactured),
+                new KeyValuePair<string, string>("manufactured_date", Manufactured),
                 //new KeyValuePair<string, string>("manufacturer", SelectedManuf?.ManufKey is null ? "" : SelectedManuf.ManufKey),  // manufacturer , for Cabinet, pull box
                 new KeyValuePair<string, string>("manufacturer_key", ""),  // manufacturer , for Cabinet, pull box
 
@@ -65,19 +68,19 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("pic2", ""),
                 new KeyValuePair<string, string>("otag", ""),
                 //new KeyValuePair<string, string>("roadway", SelectedRoadway?.RoadwayKey is null ? "" : SelectedRoadway.RoadwayKey),
-                new KeyValuePair<string, string>("pid", ""),
+                new KeyValuePair<string, string>("pid", PropertyId),
                 //new KeyValuePair<string, string>("loct", LocationName),
 
                 new KeyValuePair<string, string>("btype", ""),
                 //new KeyValuePair<string, string>("orientation", SelectedOrientation?.CompasKey is null ? "" : SelectedOrientation.CompasKey),
                 //new KeyValuePair<string, string>("laneclosure", IsLaneClosure ? "1":"0"),
-                new KeyValuePair<string, string>("dotdis",  SelectedDistrict is null ? "" : SelectedDistrict),
-                new KeyValuePair<string, string>("powr", IsHasPowerDisconnect ? "1":"0"),
-                new KeyValuePair<string, string>("elecsite", SelectedElectSiteKey),
-                new KeyValuePair<string, string>("comm", Is3rdComms ? "1":"0"),
-                new KeyValuePair<string, string>("commprovider", CommsProvider),
+                new KeyValuePair<string, string>("dotdis",  Session.DOTdistrict),
+                new KeyValuePair<string, string>("powr", ""),
+                new KeyValuePair<string, string>("electric_circuit_name", ElectCircuitName),
+                new KeyValuePair<string, string>("comm", ""),
+                new KeyValuePair<string, string>("commprovider", ""),
                 new KeyValuePair<string, string>("sitaddr", StreetAddress), // site_street_addres
-                new KeyValuePair<string, string>("udsowner", UDSOwner),
+                new KeyValuePair<string, string>("udsowner", ""),
 
                 new KeyValuePair<string, string>("rs2", "L"),
 

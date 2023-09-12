@@ -74,7 +74,7 @@ namespace FTCollectorApp.ViewModel
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine();
+                        Console.WriteLine(e);
                         return new ObservableCollection<AFiberCable>();
                     }
                 }

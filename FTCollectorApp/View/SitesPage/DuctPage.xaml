@@ -18,8 +18,9 @@
 
                     <Label Text="Duct "  />
                         <Grid ColumnDefinitions="0.7*,0.1*,0.1*" >
-                            <local:Dropdown SelectedItem="{Binding SelectedDuctKey, Mode=TwoWay}"
-                                        ItemDisplayBinding="{Binding ConduitKey}" 
+                            <local:Dropdown SelectedItem="{Binding SelectedDuctSession, Mode=TwoWay}"
+                                            BackgroundColor="{Binding SelectedColor.ColorHex}"
+                                        ItemDisplayBinding="{Binding Description}" 
                                         ItemsSource="{Binding DuctSessionList}" />
 
                             <Button Grid.Column="1" Text="{x:Static fa:FontAwesomeIcons.Recycle}"
@@ -36,7 +37,7 @@
                         <Picker  ItemsSource="{Binding TravelDirectionList}" 
                                      ItemDisplayBinding="{Binding CompassDirDesc}" 
                                      SelectedItem="{Binding SelectedDirection, Mode=TwoWay}"
-                             Title="{Binding SelectedDuctKey.Direction}" HorizontalOptions="FillAndExpand" />
+                             Title="{Binding SelectedDuctSession.Direction}" HorizontalOptions="FillAndExpand" />
                         
                     <Label Text="Direction Count" />
                         <local:BorderEntry Text="{Binding DirectionCounter, Mode=TwoWay}" />
@@ -57,9 +58,9 @@
                     </Picker>-->
 
                     <Label Text="Conduit Diameter" />
-                    <Picker  ItemsSource="{Binding DuctSizeList}" ItemDisplayBinding="{Binding Ductsize}" 
+                        <Picker  ItemsSource="{Binding DuctSizeList}" ItemDisplayBinding="{Binding DUCTS_SIZE}" 
                                     SelectedItem="{Binding SelectedDuctSize, Mode=TwoWay}"
-                            Title="{Binding SelectedDuctKey.DuctSize}" HorizontalOptions="FillAndExpand"/>
+                             HorizontalOptions="FillAndExpand"/>
 
                     <Label Text="Color :" />
                     <Button x:Name="btnSelectColor" Command="{Binding ShowPopupCommand}" 
@@ -75,8 +76,9 @@
                              HorizontalOptions="FillAndExpand"/>
 
                     <Label Text="Duct Used :" />
-                    <Picker Title="Select Duct Usage"  ItemsSource="{Binding DuctUsageList}" ItemDisplayBinding="{Binding DuctUsage}" 
+                        <Picker  ItemsSource="{Binding DuctUsageList}" ItemDisplayBinding="{Binding DuctUsage}" 
                                     SelectedItem="{Binding SelectedDuctUsage, Mode=TwoWay}"
+                            
                              HorizontalOptions="FillAndExpand"/>
 
                     <Label Text="Install Method :" />
@@ -88,24 +90,14 @@
                     <Grid RowDefinitions="0.3*,0.5*,0.3*,0.5*" ColumnDefinitions="*,*,*">
                         <Label Text="Duct Plug" VerticalOptions="Center"  />
                         <Switch IsToggled="{Binding IsPlugged, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1"/>
-                            <!--<local:Dropdown x:Name="isPlugged" Grid.Row="1" SelectedItem="{Binding IsPlugged, Mode=TwoWay }">
-                                <Picker.Items>
-                                    <x:String>Y</x:String>
-                                    <x:String>N</x:String>
-                                </Picker.Items>
-                            </local:Dropdown>-->
+
 
                         <Label Text="IsOpen or filled" Grid.Row="1" VerticalOptions="Center" />
-                            <Switch IsToggled="{Binding IsOpen, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="1"/>
-                            <!--<local:Dropdown x:Name="isOpen" Grid.Row="1" Grid.Column="1" SelectedItem="{Binding IsOpen, Mode=TwoWay}">
-                            <Picker.Items>
-                                <x:String>Y</x:String>
-                                <x:String>N</x:String>
-                            </Picker.Items>                                
-                        </local:Dropdown>-->
+                        <Switch IsToggled="{Binding IsOpen, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="1"/>
 
-                        <Label Text="HasPullTape" Grid.Column="2"/>
-                            <Picker x:Name="hasPullTape" Grid.Row="1" Grid.Column="2"  SelectedIndex="{Binding HasPullTape, Mode=TwoWay}">
+
+                        <Label Text="Pull Tape" Grid.Column="2"/>
+                            <Picker  Grid.Row="1" Grid.Column="2"  SelectedIndex="{Binding PullTapeIdx, Mode=TwoWay}">
                             <Picker.Items>
                                 <x:String>None</x:String>
                                 <x:String>Jet Line</x:String>
@@ -117,22 +109,9 @@
                         <Label Text="Has Inner Duct" Grid.Row="3"  VerticalOptions="Center" />
                         <Switch IsToggled="{Binding HasInnerDuct, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="3"/>
 
-                        <!--<local:Dropdown x:Name="hasInnerDuct" Grid.Row="3" Grid.Column="1" SelectedItem="{Binding HasInnerDuct, Mode=TwoWay}">
-                            <Picker.Items>
-                            <x:String>Y</x:String>
-                            <x:String>N</x:String>
-                        </Picker.Items>
-                        </local:Dropdown>-->
 
                         <Label Text="Has Trace Wire" Grid.Row="2"  VerticalOptions="Center"/>
                         <Switch IsToggled="{Binding HasTraceWire, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="2"/>
-
-                            <!--<local:Dropdown x:Name="hasTraceWire" Grid.Row="3"  Grid.Column="1" SelectedItem="{Binding HasTraceWire, Mode=TwoWay}">
-                            <Picker.Items>
-                                <x:String>Y</x:String>
-                                <x:String>N</x:String>
-                            </Picker.Items>
-                        </local:Dropdown>-->
 
                         <Label Text="% Open" Grid.Row="2"   Grid.Column="2" />
                             <local:BorderEntry Text="{Binding PercentOpen, Mode=TwoWay}" Grid.Row="3"   Grid.Column="2" />

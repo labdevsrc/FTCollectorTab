@@ -146,7 +146,7 @@ namespace FTCollectorApp.ViewModel
             //if (result.Equals("OK"))
             {
                 Console.WriteLine();
-                Application.Current.MainPage.Navigation.PopAsync();
+                await Application.Current.MainPage.Navigation.PopAsync();
             }
         }
 

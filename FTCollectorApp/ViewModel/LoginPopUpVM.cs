@@ -199,7 +199,7 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
-        string version = "0924-1"; // change here for release
+        string version = "0908-1"; // change here for release
 
         string apkVersion;
         public string ApkVersion

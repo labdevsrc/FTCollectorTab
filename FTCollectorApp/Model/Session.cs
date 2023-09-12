@@ -91,7 +91,7 @@ namespace FTCollectorApp.Model
 
         public static List<UnSyncTaskList?> TaskPendingList { get; set; }
 
-        public static int MAX_DIR_CNT { get; set; } = 0;
+        public static int MAX_DIR_CNT { get; set; } = 9;
 
 
         public static bool DuctPageCreated = false;
