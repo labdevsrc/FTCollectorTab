@@ -53,7 +53,7 @@ namespace FTCollectorApp.ViewModel
                         var newDuctMaterial = new DuctType { DucTypeKey = value.DuctTypeKey, DucTypeDesc = value.DuctTypeDesc };
                         SelectedDuctType = newDuctMaterial;
 
-                        var newDirection = new CompassDirection { CompasKey = value.ColorName, CompassDirDesc = value.DirDesc };
+                        var newDirection = new CompassDirection { CompasKey = value.CompasKey, CompassDirDesc = value.DirDesc };
                         SelectedDirection = newDirection;
 
                         IsPlugged = value.IsDuctPlug;
