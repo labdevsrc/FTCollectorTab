@@ -37,7 +37,8 @@
     <EnableLLVM>false</EnableLLVM>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <BundleAssemblies>false</BundleAssemblies>
-    <AndroidSupportedAbis>x86</AndroidSupportedAbis>
+    <AndroidSupportedAbis>
+    </AndroidSupportedAbis>
     <AndroidKeyStore>true</AndroidKeyStore>
     <AndroidSigningKeyStore>C:\Key\ftapps.keystore</AndroidSigningKeyStore>
     <AndroidSigningStorePass>ftapps123</AndroidSigningStorePass>
@@ -196,7 +197,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties XamarinHotReloadDebuggerTimeoutExceptionFTCollectorAppAndroidHideInfoBar="True" XamarinHotReloadWrongLinkerErrorInfoBarFTCollectorAppAndroidHideInfoBar="True" />
+      <UserProperties XamarinHotReloadWrongLinkerErrorInfoBarFTCollectorAppAndroidHideInfoBar="True" XamarinHotReloadDebuggerTimeoutExceptionFTCollectorAppAndroidHideInfoBar="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

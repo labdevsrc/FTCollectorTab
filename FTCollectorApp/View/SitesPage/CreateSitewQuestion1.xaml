@@ -18,7 +18,7 @@
                 <Label HorizontalOptions="Center" FontSize="Large" VerticalOptions="Start" Text="Create Site" />
                 <Grid Padding="5" ColumnDefinitions="2*,1.5*,0.5*,*,*,*" >
                     <Label Text="Major Site Type" HorizontalOptions="Start" FontSize="Medium" VerticalOptions="Center"/>
-                    <Picker Grid.Column="1" SelectedItem="{Binding SelectedMajorType, Mode=TwoWay}" FontSize="Medium">
+                    <Picker Grid.Column="1" SelectedItem="{Binding SelectedMajorType, Mode=TwoWay}" FontSize="20">
                         <Picker.Items>
                             <x:String>Building</x:String>
                             <x:String>Cabinet</x:String>
@@ -28,16 +28,16 @@
                     </Picker>
                     <Label Grid.Row="1" Text="Site Type" HorizontalOptions="Start" FontSize="Medium" VerticalOptions="Center"/>
                     <Picker Grid.Row="1" Grid.Column="1" SelectedItem="{Binding SelectedMinorType, Mode=TwoWay}" 
-                    ItemsSource="{Binding MinorSiteList}" FontSize="Medium" />
+                    ItemsSource="{Binding MinorSiteList}" FontSize="20" />
 
                     <Label Grid.Row="2" Text="Enter PC tag" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Medium"/>
                     <Entry Grid.Row="2" Grid.Column="1" Placeholder="Tag Number " 
                        VerticalOptions="Center" 
-                       Text="{Binding TagNumber, Mode=TwoWay}"  FontSize="Medium"/>
+                       Text="{Binding TagNumber, Mode=TwoWay}"  FontSize="20"/>
                     <Label Grid.Row="3"  Text="Retype PC tag" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Medium"/>
                     <Entry Grid.Row="3" Grid.Column="1" Placeholder="Tag Number" 
                        VerticalOptions="Center"
-                       Text="{Binding ReEnterTagNumber, Mode=TwoWay}" FontSize="Medium" />
+                       Text="{Binding ReEnterTagNumber, Mode=TwoWay}" FontSize="20" />
                     <Label Grid.Column="3" Text="{Binding ReEnterStatus}" HorizontalOptions="End" FontSize="Medium"/>
                     <Button Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3" Text="Record GPS" Command="{Binding RecordGPSCommand}" />
                     <Button Grid.Row="2" Grid.Column="2"  Text="{x:Static fa:FontAwesomeIcons.X}" 
@@ -66,7 +66,7 @@
                 <local:BorderEntry Text="{Binding SiteName, Mode=TwoWay}"  HorizontalOptions="FillAndExpand" />
                 <Label Text="Enter Location" HorizontalOptions="Start"/>
                 <local:BorderEntry Text="{Binding LocationName, Mode=TwoWay}"  HorizontalOptions="FillAndExpand" />                
-                <Grid Padding="0,5,10,5" RowDefinitions="*,*,*,*" ColumnDefinitions="*,*,*">
+                <Grid Padding="0,5,10,5" RowDefinitions="*,*,*" ColumnDefinitions="*,*,*">
                     <Label Text="Lane closure required" VerticalOptions="Center"  />
                     <Switch Grid.Column="1"  IsToggled="{Binding IsLaneClosure, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" />
                     <Label Text="In a clear Zone?" Grid.Row="1" VerticalOptions="Center" />
