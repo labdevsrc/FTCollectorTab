@@ -45,16 +45,21 @@ namespace FTCollectorApp.ViewModel
                         var newDuctColor = new ColorCode { ColorName = value.ColorName, ColorHex = value.ColorHex };
                         SelectedColor = newDuctColor;
 
-                        var newDuctSize = new DuctSize { DuctKey = value.DuctSizeKey, DUCTS_SIZE = value.DuctSizeDesc };
+                        var newDuctSize = new DuctSize { DuctKey = value.DuctSizeKey };
+                        SelectedDuctSizeItemIdx = value.DuctSizeItemIdx;
                         SelectedDuctSize = newDuctSize;
 
-
-
-                        var newDuctMaterial = new DuctType { DucTypeKey = value.DuctTypeKey, DucTypeDesc = value.DuctTypeDesc };
+                        var newDuctMaterial = new DuctType { DucTypeKey = value.DuctTypeKey };                        
                         SelectedDuctType = newDuctMaterial;
+                        SelectedMaterialIdx = value.DuctMaterialIdx;
 
-                        var newDirection = new CompassDirection { CompasKey = value.CompasKey, CompassDirDesc = value.DirDesc };
-                        SelectedDirection = newDirection;
+                        //var newDirection = new CompassDirection { CompasKey = value.CompasKey, CompassDirDesc = value.DirDesc };
+                        //SelectedDirection = newDirection;
+                        SelectedDirItemIdx = value.DuctMaterialIdx;
+
+                        DirectionCounter = value.SessionDirCounter;
+
+                        SelectedDuctInstallTypeIdx = value.DuctInstallIdx;
 
                         IsPlugged = value.IsDuctPlug;
                         IsOpen = value.IsOpen;
@@ -91,7 +96,6 @@ namespace FTCollectorApp.ViewModel
 
         List<DuctSession> DuctSessions = new List<DuctSession>();
 
-        [ObservableProperty] string directionCounter = "1";
 
         public DuctViewModel()
         {
@@ -105,24 +109,27 @@ namespace FTCollectorApp.ViewModel
                 execute: async () =>
                 {
                     //Check direction_count
-                    if(int.Parse(DirectionCounter) > Session.MAX_DIR_CNT)
+                    //if(int.Parse(DirectionCounter) > Session.MAX_DIR_CNT)
+                    if(DirectionCounter > Session.MAX_DIR_CNT)
+
                     {
                         await Application.Current.MainPage.DisplayAlert("Warning", "Direction Counter Over than 9", "BACK");
                         //await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Direction Count already used", "Warning"));
                         return;
                     }
-                    var KVPair = keyvaluepair();
-                    string result = await CloudDBService.PostDuctSave(KVPair); // async upload to AWS table
                     try
                     {
+                        var KVPair = keyvaluepair();
+                        string result = await CloudDBService.PostDuctSave(KVPair); // async upload to AWS table
+
                         var contentResponse = JsonConvert.DeserializeObject<ResponseRes>(result);
                         Console.WriteLine(contentResponse);
                         if (contentResponse.sts.Equals("0"))
                         {
                             Console.WriteLine();
-                            var num = int.Parse(DirectionCounter) + 1;
-                            //Session.MAX_DIR_CNT += 1;
-                            DirectionCounter = num.ToString();
+                            //var num = int.Parse(DirectionCounter) + 1;
+                            //DirectionCounter = num.ToString();
+                            DirectionCounter++;
 
                             Session.DuctSaveCount++;
 
@@ -132,24 +139,25 @@ namespace FTCollectorApp.ViewModel
                             DuctSessions.Add(
                                 new DuctSession
                                 {
-                                    ConduitKey = DirectionCounter,
                                     HosTagNumber = DefaultHostTagNumber,
                                     ColorKey = SelectedColor?.ColorKey,
                                     ColorHex = SelectedColor?.ColorHex,
                                     ColorName = SelectedColor?.ColorName,
                                     DuctSizeKey = SelectedDuctSize?.DuctKey,
-                                    DuctSizeDesc = SelectedDuctSize?.DUCTS_SIZE,
+                                    DuctSizeItemIdx = SelectedDuctSizeItemIdx,
                                     CompasKey = SelectedDirection?.CompasKey,
-                                    DirDesc = SelectedDirection?.CompassDirDesc,
+                                    DirectionItemIdx = SelectedDirItemIdx,
 
-                                    DuctTypeKey = SelectedDuctType.DucTypeKey,
-                                    DuctTypeDesc = SelectedDuctType.DucTypeDesc,
+                                    DuctTypeKey = SelectedDuctType?.DucTypeKey,
+                                    DuctMaterialIdx = SelectedMaterialIdx,
+                                    DuctInstallIdx = SelectedDuctInstallTypeIdx,
                                     IsDuctPlug = IsPlugged,
                                     IsOpen = IsOpen,
                                     HasTraceWire = HasTraceWire,
                                     PullTapeKey = PullTapeIdx,
+                                    SessionDirCounter = DirectionCounter,
 
-                                    Description =  $"{DirectionCounter} :  {SelectedDuctSize.DUCTS_SIZE} : {SelectedDuctType.DucTypeDesc}"
+                                    Description =  $"{DirectionCounter} :  {SelectedDuctSize?.DUCTS_SIZE} : {SelectedDuctType?.DucTypeDesc}"
                                 }
                                 );
                             OnPropertyChanged(nameof(DuctSessionList));
@@ -186,32 +194,25 @@ namespace FTCollectorApp.ViewModel
             RemoveDuctItemCommand = new Command(
                 execute: async () =>
                 {
-                    Console.WriteLine();
-                    //await Application.Current.MainPage.Navigation.PopAsync();
-
-                });
-            RefreshDuctKeyListCommand = new Command(
-                execute: async () =>
-                {
-
-                    Console.WriteLine();
-                    IsBusy = true;
-                    var contentConduit = await CloudDBService.GetConduits(); // async download from AWS table
-                    if (contentConduit.ToString().Length > 20)
+                    //Check direction_count
+                    //if (string.IsNullOrEmpty(DirectionCounter))
                     {
-                        using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                        {
-                            conn.CreateTable<ConduitsGroup>();
-                            conn.DeleteAll<ConduitsGroup>();
-                            conn.InsertAll(contentConduit);
-                        }
-
-                        Console.WriteLine();
-                        OnPropertyChanged(nameof(DuctSessionList)); // update CONDUIT_GROUPS dropdown list
+                    //    await Application.Current.MainPage.DisplayAlert("Warning", "Direction must not empty", "BACK");
+                    //s    return;
                     }
-                    IsBusy = false;
-                    Console.WriteLine();
+                    var KVPair = keyvaluepair();
+                    string result = await CloudDBService.RemoveDuctAt(KVPair); // async upload to AWS table
+                    
+                    var contentResponse = JsonConvert.DeserializeObject<ResponseRes>(result);
+                    Console.WriteLine(contentResponse);
+                    if (contentResponse.sts.Equals("0"))
+                    {
+                        Console.WriteLine();
+                        
+                    }
+
                 });
+
             DefaultHostTagNumber = Session.tag_number;
 
 
@@ -374,6 +375,12 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         CompassDirection selectedDirection;
 
+        [ObservableProperty] int selectedDuctSizeItemIdx;
+        [ObservableProperty] int directionCounter = 1;
+        [ObservableProperty] int selectedDirItemIdx;
+        [ObservableProperty] int selectedMaterialIdx;
+        [ObservableProperty] int selectedDuctInstallTypeIdx;
+
         List<KeyValuePair<string, string>> keyvaluepair()
         {
             var keyValues = new List<KeyValuePair<string, string>>{
@@ -382,10 +389,10 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),  // 1
                 new KeyValuePair<string, string>("host_tag_number", Session.tag_number),  // 2
                 new KeyValuePair<string, string>("direction", SelectedDirection?.CompasKey  == null ? "0": SelectedDirection.CompasKey),  // 3
-                new KeyValuePair<string, string>("direction_count", DirectionCounter ),  // 4
+                new KeyValuePair<string, string>("direction_count", DirectionCounter.ToString() ),  // 4
                 new KeyValuePair<string, string>("duct_size",  SelectedDuctSize?.DuctKey == null ? "0": SelectedDuctSize.DuctKey),  // 5
                 new KeyValuePair<string, string>("duct_color", SelectedColor?.ColorKey == null ? "0": SelectedColor.ColorKey),  // 6
-                new KeyValuePair<string, string>("duct_type",  selectedDuctType?.DucTypeKey == null ?"0" : SelectedDuctType.DucTypeKey),  // 7
+                new KeyValuePair<string, string>("duct_type",  SelectedDuctType?.DucTypeKey == null ?"0" : SelectedDuctType.DucTypeKey),  // 7
                 new KeyValuePair<string, string>("site_type_key", Session.site_type_key),  // 8
                 new KeyValuePair<string, string>("duct_usage", "0"),  // 9
                 new KeyValuePair<string, string>("duct_grouptype", "0"),  // 9

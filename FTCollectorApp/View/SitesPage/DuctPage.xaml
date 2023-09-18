@@ -37,6 +37,7 @@
                         <Picker  ItemsSource="{Binding TravelDirectionList}" 
                                      ItemDisplayBinding="{Binding CompassDirDesc}" 
                                      SelectedItem="{Binding SelectedDirection, Mode=TwoWay}"
+                                 SelectedIndex="{Binding SelectedDirItemIdx}"
                              Title="{Binding SelectedDuctSession.Direction}" HorizontalOptions="FillAndExpand" />
                         
                     <Label Text="Direction Count" />
@@ -60,6 +61,7 @@
                     <Label Text="Conduit Diameter" />
                         <Picker  ItemsSource="{Binding DuctSizeList}" ItemDisplayBinding="{Binding DUCTS_SIZE}" 
                                     SelectedItem="{Binding SelectedDuctSize, Mode=TwoWay}"
+                                 SelectedIndex="{Binding SelectedDuctSizeItemIdx}"
                              HorizontalOptions="FillAndExpand"/>
 
                     <Label Text="Color :" />
@@ -72,7 +74,8 @@
 
                     <Label Text="Duct Material :" />
                     <Picker Title="Select Duct Material"  ItemsSource="{Binding DuctMaterialList}" ItemDisplayBinding="{Binding DucTypeDesc}" 
-                                     SelectedItem="{Binding SelectedDuctType, Mode=TwoWay}"
+                            SelectedIndex="{Binding SelectedMaterialIdx}"         
+                            SelectedItem="{Binding SelectedDuctType, Mode=TwoWay}"
                              HorizontalOptions="FillAndExpand"/>
 
                     <Label Text="Duct Used :" />
@@ -84,6 +87,7 @@
                     <Label Text="Install Method :" />
                     <Picker Title="Select Install Method" ItemsSource="{Binding DuctInstallList}" ItemDisplayBinding="{Binding DuctInstallDesc}" 
                              SelectedItem="{Binding SelectedDuctInstallType,Mode=TwoWay}"
+                             SelectedIndex="{Binding SelectedDuctInstallTypeIdx}"
                              HorizontalOptions="FillAndExpand"/>
 
 

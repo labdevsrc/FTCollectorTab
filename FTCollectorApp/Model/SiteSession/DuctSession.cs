@@ -24,10 +24,10 @@ namespace FTCollectorApp.Model.SiteSession
         public string InUsePercent { get; set; }
         public string HostSiteKey { get; set; }
 
-
+        public int SessionDirCounter { get; set; }
         // Duct Type - Material
         public string DuctTypeKey { get; set; }
-        public string DuctTypeDesc { get; set; }
+        public int DuctMaterialIdx { get; set; }
 
         // Color atribut
         public string ColorKey { get; set; } = "1";
@@ -38,11 +38,14 @@ namespace FTCollectorApp.Model.SiteSession
 
         // Diameter / Duct Size
         public string DuctSizeKey { get; set; } 
-        public string DuctSizeDesc{ get; set; }
+        public int DuctSizeItemIdx { get; set; }
 
         // Compass Direction 
         public string CompasKey { get; set; }
         public string DirDesc { get; set; }
+        public int DirectionItemIdx { get; set; }
+
+        public int DuctInstallIdx { get; set; }
 
         public bool IsDuctPlug { get; set; }
         public bool IsOpen { get; set; }

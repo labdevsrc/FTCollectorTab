@@ -1862,7 +1862,7 @@ namespace FTCollectorApp.Services
 
 
         }
-
+        
         public static async Task<string> PostDuctSave(List<KeyValuePair<string, string>> keyValues)
         {
 
@@ -1877,7 +1877,7 @@ namespace FTCollectorApp.Services
 
                 try
                 {
-                    response = await client.PostAsync(Constants.ajaxSaveduct, content);
+                    response = await client.PostAsync(Constants.InsertNewDuct, content);
                     if (response.IsSuccessStatusCode)
                     {
                         var isi = await response.Content.ReadAsStringAsync();
@@ -1930,6 +1930,70 @@ namespace FTCollectorApp.Services
             return "FAIL";
         }
 
+        public static async Task<string> RemoveDuctAt(List<KeyValuePair<string, string>> keyValues)
+        {
+
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+            var json = JsonConvert.SerializeObject(keyValues);
+            Console.WriteLine($"RemoveDuctAt Json : {json}");
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+
+                try
+                {
+                    response = await client.PostAsync(Constants.InsertNewDuct, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[RemoveDuctAt] Response from  OK = 200 , content :" + isi);
+                        return isi;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                    return e.ToString();
+                }
+            }
+            else
+            {
+                // Put to Pending Sync
+                var app = Application.Current as App;
+                app.TaskCount += 1;
+                keyValues.Add(new KeyValuePair<string, string>("Status", "Pending"));
+
+
+                // Serialize 
+                var test = new Dictionary<string, List<KeyValuePair<string, string>>>();
+                test.Add($"Task-{app.TaskCount}", keyValues);
+
+                Console.WriteLine();
+                // To serialize the hashtable and its key/value pairs,
+                // you must first open a stream for writing.
+                // In this case, use a file stream.
+                using (FileStream fs = new FileStream(App.InternalStorageLocation, FileMode.Append, FileAccess.Write))
+                {
+                    // Construct a BinaryFormatter and use it to serialize the data to the stream.
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    try
+                    {
+                        formatter.Serialize(fs, test);
+                    }
+                    catch (SerializationException e)
+                    {
+                        Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                        throw;
+                    }
+                }
+
+
+            }
+            Session.Result = "DuctSaveFAIL";
+            return "FAIL";
+        }
 
         public static async Task<string> PostSheathMark(List<KeyValuePair<string, string>> keyValues)
         {
