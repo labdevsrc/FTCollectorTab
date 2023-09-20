@@ -15,6 +15,7 @@ using FTCollectorApp.Services;
 using Newtonsoft.Json;
 using FTCollectorApp.View;
 using FTCollectorApp.Model.SiteSession;
+using System.Linq;
 
 namespace FTCollectorApp.ViewModel
 {
@@ -28,7 +29,7 @@ namespace FTCollectorApp.ViewModel
 
         [ObservableProperty]
         bool isDuctLists;
-
+        [ObservableProperty] int selectedDuctSessionIdx = 0;
 
 
         DuctSession selectedDuctSession;
@@ -46,8 +47,9 @@ namespace FTCollectorApp.ViewModel
                         SelectedColor = newDuctColor;
 
                         var newDuctSize = new DuctSize { DuctKey = value.DuctSizeKey };
-                        SelectedDuctSizeItemIdx = value.DuctSizeItemIdx;
                         SelectedDuctSize = newDuctSize;
+                        SelectedDuctSizeItemIdx = value.DuctSizeItemIdx;
+                        Console.WriteLine($" SelectedDuctSizeItemIdx : {SelectedDuctSizeItemIdx}");
 
                         var newDuctMaterial = new DuctType { DucTypeKey = value.DuctTypeKey };                        
                         SelectedDuctType = newDuctMaterial;
@@ -55,7 +57,8 @@ namespace FTCollectorApp.ViewModel
 
                         //var newDirection = new CompassDirection { CompasKey = value.CompasKey, CompassDirDesc = value.DirDesc };
                         //SelectedDirection = newDirection;
-                        SelectedDirItemIdx = value.DuctMaterialIdx;
+                        SelectedDirItemIdx = value.DirectionItemIdx;
+                        Console.WriteLine($" SelectedDirItemIdx : {SelectedDirItemIdx}");
 
                         DirectionCounter = value.SessionDirCounter;
 
@@ -117,6 +120,23 @@ namespace FTCollectorApp.ViewModel
                         //await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Direction Count already used", "Warning"));
                         return;
                     }
+                    else if(DuctSessions?.Count > 0)
+                    {
+                        Console.WriteLine($"DuctSessions Size {DuctSessions?.Count}");
+
+                        var testDuct = new DuctSession { SessionDirCounter = DirectionCounter };
+                        if (DuctSessions.Contains(testDuct))
+                        {
+                            Console.WriteLine($"Already contain DuctSession num {DirectionCounter}");
+                            DuctSessions.RemoveAt(SelectedDuctSessionIdx);
+                            //DuctSessions.Add()
+                            //Duc
+                        }
+                        OnPropertyChanged(nameof(DuctSessionList));
+                        //return;
+
+                    }
+
                     try
                     {
                         var KVPair = keyvaluepair();
@@ -129,13 +149,11 @@ namespace FTCollectorApp.ViewModel
                             Console.WriteLine();
                             //var num = int.Parse(DirectionCounter) + 1;
                             //DirectionCounter = num.ToString();
-                            DirectionCounter++;
 
                             Session.DuctSaveCount++;
 
                             await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Update Success with key ="+ contentResponse.d.ToString(), "Success"));
                             //ResultPageCommand?.Execute();
-
                             DuctSessions.Add(
                                 new DuctSession
                                 {
@@ -161,6 +179,7 @@ namespace FTCollectorApp.ViewModel
                                 }
                                 );
                             OnPropertyChanged(nameof(DuctSessionList));
+                            DirectionCounter++;
 
 
                         }
@@ -194,12 +213,8 @@ namespace FTCollectorApp.ViewModel
             RemoveDuctItemCommand = new Command(
                 execute: async () =>
                 {
-                    //Check direction_count
-                    //if (string.IsNullOrEmpty(DirectionCounter))
-                    {
-                    //    await Application.Current.MainPage.DisplayAlert("Warning", "Direction must not empty", "BACK");
-                    //s    return;
-                    }
+                    DuctSessions.RemoveAt(SelectedDuctSessionIdx);
+
                     var KVPair = keyvaluepair();
                     string result = await CloudDBService.RemoveDuctAt(KVPair); // async upload to AWS table
                     

@@ -21,6 +21,7 @@
                             <local:Dropdown SelectedItem="{Binding SelectedDuctSession, Mode=TwoWay}"
                                             BackgroundColor="{Binding SelectedColor.ColorHex}"
                                         ItemDisplayBinding="{Binding Description}" 
+                                            SelectedIndex="{Binding SelectedDuctSessionIdx}"
                                         ItemsSource="{Binding DuctSessionList}" />
 
                             <Button Grid.Column="1" Text="{x:Static fa:FontAwesomeIcons.Recycle}"
