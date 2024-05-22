@@ -8,11 +8,14 @@ Purpose is to track time from start working to finish the day
 ## Over All UI
 ![UI](/assets/timetrackerUI.gif)
 
-## Login
+## 1. Login
 ![Login](/assets/Login.png)
 
+## 2. Select Job
+![Select Job](/assets/SelectJob.png)
+
 ### 6. Finish The Day and signature pad
-![Finish The Day and Signature](/assets/Finish The Day and sign.png)
+![Finish The Day and Signature](/assets/FinishTheDayandsign.png)
 
 
 	
