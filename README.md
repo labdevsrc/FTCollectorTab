@@ -1,4 +1,8 @@
 # Time Tracker with Signature
+
+This apps written with Xamarin.Forms/.NET MAUI clean architecture MVVM
+Purpose is to track time from start working to finish the day
+
 ![Flow](/assets/flowtimeTracker.png)
 
 ## Over All UI
