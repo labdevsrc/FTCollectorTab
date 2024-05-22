@@ -1,5 +1,5 @@
 # Time Tracker with Signature
-![TimeTracker](assets/flow time tracker.png)
+![TimeTracker](/assets/timetrackerUI.gif)
 
 ## Over All UI
 ![UI](/assets/time tracker UI.gif)
